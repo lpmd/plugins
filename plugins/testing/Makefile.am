@@ -1,0 +1,121 @@
+#
+#
+#
+
+plugindir = $(LPMDDIR)/lib/lpmd
+
+AM_CPPFLAGS = -Wall -pedantic
+
+plugin_LTLIBRARIES = angdist.la beeman.la berendsen.la buckingham.la cell.la cellscaling.la constantforce.la cordnum.la cordnumfunc.la \
+                     crystalbcc.la crystalfcc.la crystalhcp.la crystalsc.la densityprofile.la dlpoly.la energy.la euler.la extravel.la \
+                     fastlj.la gdr.la gupta.la harmonic.la leapfrog.la lennardjones.la linkedcell.la lpmd.la minimumimage.la mol2.la \
+                     moleculecm.la morse.la msd.la nosehoover.la nullintegrator.la nullpairpotential.la nullmetalpotential.la nullpotential.la pairdistances.la \
+                     povray.la pressure.la printatoms.la replicate.la selectatoms.la skewstart.la suttonchen.la temperature.la tempscaling.la \
+                     vacf.la vasp.la veldist.la velocityverlet.la verlet.la xyz.la
+
+angdist_la_LDFLAGS = -module -avoid-version
+beeman_la_LDFLAGS = -module -avoid-version
+berendsen_la_LDFLAGS = -module -avoid-version
+buckingham_la_LDFLAGS = -module -avoid-version
+cell_la_LDFLAGS = -module -avoid-version
+cellscaling_la_LDFLAGS = -module -avoid-version
+constantforce_la_LDFLAGS = -module -avoid-version
+cordnum_la_LDFLAGS = -module -avoid-version
+cordnumfunc_la_LDFLAGS = -module -avoid-version
+crystalbcc_la_LDFLAGS = -module -avoid-version
+crystalfcc_la_LDFLAGS = -module -avoid-version
+crystalhcp_la_LDFLAGS = -module -avoid-version
+crystalsc_la_LDFLAGS = -module -avoid-version
+densityprofile_la_LDFLAGS = -module -avoid-version
+dlpoly_la_LDFLAGS = -module -avoid-version
+energy_la_LDFLAGS = -module -avoid-version
+euler_la_LDFLAGS = -module -avoid-version
+extravel_la_LDFLAGS = -module -avoid-version
+fastlj_la_LDFLAGS = -module -avoid-version
+gdr_la_LDFLAGS = -module -avoid-version
+gupta_la_LDFLAGS = -module -avoid-version
+harmonic_la_LDFLAGS = -module -avoid-version
+leapfrog_la_LDFLAGS = -module -avoid-version
+lennardjones_la_LDFLAGS = -module -avoid-version
+linkedcell_la_LDFLAGS = -module -avoid-version
+lpmd_la_LDFLAGS = -module -avoid-version
+minimumimage_la_LDFLAGS = -module -avoid-version
+mol2_la_LDFLAGS = -module -avoid-version
+moleculecm_la_LDFLAGS = -module -avoid-version
+morse_la_LDFLAGS = -module -avoid-version
+msd_la_LDFLAGS = -module -avoid-version
+nosehoover_la_LDFLAGS = -module -avoid-version
+nullintegrator_la_LDFLAGS = -module -avoid-version
+nullpairpotential_la_LDFLAGS = -module -avoid-version
+nullmetalpotential_la_LDFLAGS = -module -avoid-version
+nullpotential_la_LDFLAGS = -module -avoid-version
+pairdistances_la_LDFLAGS = -module -avoid-version
+povray_la_LDFLAGS = -module -avoid-version
+pressure_la_LDFLAGS = -module -avoid-version
+printatoms_la_LDFLAGS = -module -avoid-version
+replicate_la_LDFLAGS = -module -avoid-version
+selectatoms_la_LDFLAGS = -module -avoid-version
+skewstart_la_LDFLAGS = -module -avoid-version
+suttonchen_la_LDFLAGS = -module -avoid-version
+temperature_la_LDFLAGS = -module -avoid-version
+tempscaling_la_LDFLAGS = -module -avoid-version
+vacf_la_LDFLAGS = -module -avoid-version
+vasp_la_LDFLAGS = -module -avoid-version
+veldist_la_LDFLAGS = -module -avoid-version
+velocityverlet_la_LDFLAGS = -module -avoid-version
+verlet_la_LDFLAGS = -module -avoid-version
+xyz_la_LDFLAGS = -module -avoid-version
+
+angdist_la_SOURCES = angdist.h angdist.cc 
+beeman_la_SOURCES = beeman.h beeman.cc
+berendsen_la_SOURCES = berendsen.h berendsen.cc
+buckingham_la_SOURCES = buckingham.h buckingham.cc
+cell_la_SOURCES = cell.h cell.cc
+cellscaling_la_SOURCES = cellscaling.h cellscaling.cc
+constantforce_la_SOURCES = constantforce.h constantforce.cc
+cordnum_la_SOURCES = cordnum.h cordnum.cc
+cordnumfunc_la_SOURCES = cordnumfunc.h cordnumfunc.cc
+crystalbcc_la_SOURCES = crystalbcc.h crystalbcc.cc
+crystalfcc_la_SOURCES = crystalfcc.h crystalfcc.cc
+crystalhcp_la_SOURCES = crystalhcp.h crystalhcp.cc
+crystalsc_la_SOURCES = crystalsc.h crystalsc.cc
+densityprofile_la_SOURCES = densityprofile.h densityprofile.cc
+dlpoly_la_SOURCES = dlpoly.h dlpoly.cc
+energy_la_SOURCES = energy.h energy.cc
+euler_la_SOURCES = euler.h euler.cc
+extravel_la_SOURCES = extravel.h extravel.cc
+fastlj_la_SOURCES = fastlj.h fastlj.cc
+gdr_la_SOURCES = gdr.h gdr.cc
+gupta_la_SOURCES = gupta.h gupta.cc
+harmonic_la_SOURCES = harmonic.h harmonic.cc
+leapfrog_la_SOURCES = leapfrog.h leapfrog.cc
+lennardjones_la_SOURCES = lennardjones.h lennardjones.cc
+linkedcell_la_SOURCES = linkedcell.h linkedcell.cc
+lpmd_la_SOURCES = lpmd.h lpmd.cc
+minimumimage_la_SOURCES = minimumimage.h minimumimage.cc
+mol2_la_SOURCES = mol2.h mol2.cc
+moleculecm_la_SOURCES = moleculecm.h moleculecm.cc
+morse_la_SOURCES = morse.h morse.cc
+msd_la_SOURCES = msd.h msd.cc
+nosehoover_la_SOURCES = nosehoover.h nosehoover.cc
+nullintegrator_la_SOURCES = nullintegrator.h nullintegrator.cc
+nullpairpotential_la_SOURCES = nullpairpotential.h nullpairpotential.cc
+nullmetalpotential_la_SOURCES = nullmetalpotential.h nullmetalpotential.cc
+nullpotential_la_SOURCES = nullpotential.h nullpotential.cc
+pairdistances_la_SOURCES = pairdistances.h pairdistances.cc
+povray_la_SOURCES = povray.h povray.cc
+pressure_la_SOURCES = pressure.h pressure.cc
+printatoms_la_SOURCES = printatoms.h printatoms.cc
+replicate_la_SOURCES = replicate.h replicate.cc
+selectatoms_la_SOURCES = selectatoms.h selectatoms.cc
+skewstart_la_SOURCES = skewstart.h skewstart.cc
+suttonchen_la_SOURCES = suttonchen.h suttonchen.cc
+temperature_la_SOURCES = temperature.h temperature.cc 
+tempscaling_la_SOURCES = tempscaling.h tempscaling.cc 
+vacf_la_SOURCES = vacf.h vacf.cc
+vasp_la_SOURCES = vasp.h vasp.cc
+veldist_la_SOURCES = veldist.h veldist.cc
+velocityverlet_la_SOURCES = velocityverlet.h velocityverlet.cc
+verlet_la_SOURCES = verlet.h verlet.cc
+xyz_la_SOURCES = xyz.h xyz.cc
+
