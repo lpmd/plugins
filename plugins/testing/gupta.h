@@ -15,7 +15,6 @@ class Gupta: public lpmd::MetalPotential , public lpmd::Module
   //Metodos Generales
   Gupta(std::string args);
   ~Gupta(){};
-  void SetParameter(std::string name);
   void ShowHelp() const;
   std::string Keywords() const;
 
