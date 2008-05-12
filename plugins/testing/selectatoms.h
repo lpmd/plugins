@@ -26,7 +26,8 @@ class SelectAtomsModifier: public lpmd::SystemModifier, public lpmd::Module
   void Apply(lpmd::MD & md);
 
   private:
-    lpmd::Vector vmin, vmax;
+    std::string mode;
+    lpmd::Vector vmin, vmax, vel;
     long p0, p1;
     bool outside;
 };

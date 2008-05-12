@@ -22,8 +22,13 @@ SelectAtomsModifier::SelectAtomsModifier(std::string args): Module("selectatoms"
  AssignParameter("ymax", "1.0");
  AssignParameter("zmin", "0.0");
  AssignParameter("zmax", "1.0");
+ AssignParameter("mode", "extract");
+ AssignParameter("vx", "0.0");
+ AssignParameter("vy", "0.0");
+ AssignParameter("vz", "0.0");
  // hasta aqui los valores por omision
  ProcessArguments(args);
+ mode = GetString("mode");
  p0 = GetInteger("from_index");
  p1 = GetInteger("to_index");
  vmin.Set(0, GetDouble("xmin"));
@@ -32,6 +37,9 @@ SelectAtomsModifier::SelectAtomsModifier(std::string args): Module("selectatoms"
  vmax.Set(1, GetDouble("ymax"));
  vmin.Set(2, GetDouble("zmin"));
  vmax.Set(2, GetDouble("zmax"));
+ vel.Set(0, GetDouble("vx"));
+ vel.Set(1, GetDouble("vy"));
+ vel.Set(2, GetDouble("vz"));
  outside = GetBool("outside");
 }
 
@@ -43,6 +51,21 @@ void SelectAtomsModifier::SetParameter(std::string name)
  {
   AssignParameter("from_index", GetNextWord());
   AssignParameter("to_index", GetNextWord());
+ }
+ else if (name == "x")
+ {
+  AssignParameter("xmin", GetNextWord());
+  AssignParameter("xmax", GetNextWord());
+ }
+ else if (name == "y")
+ {
+  AssignParameter("ymin", GetNextWord());
+  AssignParameter("ymax", GetNextWord());
+ }
+ else if (name == "z")
+ {
+  AssignParameter("zmin", GetNextWord());
+  AssignParameter("zmax", GetNextWord());
  }
  else if (name == "outside") AssignParameter("outside", "true");
  else if (name == "inside") AssignParameter("outside", "false");
@@ -59,11 +82,20 @@ void SelectAtomsModifier::Show(std::ostream & os) const
  }
  else
  {
-  if (outside) os << "Selecting atoms NOT inside range: " << '\n';
-  else os << "Selecting atoms inside range: " << '\n';
+  if (mode == "extract")
+  {
+   if (outside) os << "Extracting atoms NOT inside range: " << '\n';
+   else os << "Extracting atoms inside range: " << '\n';
+  }
+  if (mode == "setvelocity")
+  {
+   if (outside) os << "Setting velocity to atoms NOT inside range: " << '\n';
+   else os << "Setting velocity to atoms inside range: " << '\n';
+  }
   os << "  x between " << vmin.Get(0) << " and " << vmax.Get(0) << '\n';
   os << "  y between " << vmin.Get(1) << " and " << vmax.Get(1) << '\n';
   os << "  z between " << vmin.Get(2) << " and " << vmax.Get(2) << '\n';
+  if (mode == "setvelocity") os << "Velocity set to " << vel << '\n';
  }
 }
 
@@ -95,39 +127,66 @@ void SelectAtomsModifier::ShowHelp() const
 
 std::string SelectAtomsModifier::Keywords() const
 {
- return "index x y z";
+ return "index x y z mode vx vy vz";
 }
 
 void SelectAtomsModifier::Apply(SimulationCell & sc)
 {
- Particles tmp;
- tmp.Clear();
  const long n = sc.Size();
- if (p0 != -1)
+ if (mode == "extract")
  {
-  for (long i=p0;i<=p1;++i) tmp.AppendAtom(sc[i]);
- }
- else
- {
-  for (long i=0;i<n;++i)
+  Particles tmp;
+  tmp.Clear();
+  if (p0 != -1)
   {
-   const Vector & pos = sc[i].Position();
-   bool select_this = false;
-   if ((pos.Get(0) >= vmin.Get(0)) && (pos.Get(0) <= vmax.Get(0)))
+   for (long i=p0;i<=p1;++i) tmp.AppendAtom(sc[i]);
+  }
+  else
+  {
+   for (long i=0;i<n;++i)
    {
-    if ((pos.Get(1) >= vmin.Get(1)) && (pos.Get(1) <= vmax.Get(1)))
+    const Vector & pos = sc[i].Position();
+    bool select_this = false;
+    if ((pos.Get(0) >= vmin.Get(0)) && (pos.Get(0) <= vmax.Get(0)))
     {
-     if ((pos.Get(2) >= vmin.Get(2)) && (pos.Get(2) <= vmax.Get(2))) select_this = true;
+     if ((pos.Get(1) >= vmin.Get(1)) && (pos.Get(1) <= vmax.Get(1)))
+     {
+      if ((pos.Get(2) >= vmin.Get(2)) && (pos.Get(2) <= vmax.Get(2))) select_this = true;
+     }
     }
+    if (outside) select_this = (!select_this);
+    if (select_this) tmp.AppendAtom(sc[i]);
    }
-   if (outside) select_this = (!select_this);
-   if (select_this) tmp.AppendAtom(sc[i]);
+  }
+  sc.Clear();
+  for (long i=0;i<tmp.Size();++i) sc.AppendAtom(tmp[i]);
+  sc.NumEspec();
+  sc.AssignIndex();
+ }
+ else if (mode == "setvelocity")
+ {
+  if (p0 != -1) 
+  {
+   for (long i=p0;i<=p1;++i) sc.SetVelocity(i, vel);
+  } 
+  else
+  {
+   for (long i=0;i<n;++i)
+   {
+    const Vector & pos = sc[i].Position();
+    bool select_this = false;
+    if ((pos.Get(0) >= vmin.Get(0)) && (pos.Get(0) <= vmax.Get(0)))
+    {
+     if ((pos.Get(1) >= vmin.Get(1)) && (pos.Get(1) <= vmax.Get(1)))
+     {
+      if ((pos.Get(2) >= vmin.Get(2)) && (pos.Get(2) <= vmax.Get(2))) select_this = true;
+     }
+    }
+    if (outside) select_this = (!select_this);
+    if (select_this) sc.SetVelocity(i, vel);
+   }
   }
  }
- sc.Clear();
- for (long i=0;i<tmp.Size();++i) sc.AppendAtom(tmp[i]);
- sc.NumEspec();
- sc.AssignIndex();
 }
 
 void SelectAtomsModifier::Apply(MD & md) { Apply(md.GetCell()); }
