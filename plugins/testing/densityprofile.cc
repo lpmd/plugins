@@ -36,7 +36,7 @@ void DensityProfile::SetParameter(std::string name)
   std::string eje=GetString("axis");
   if((eje == "X" || eje == "x") || eje == "0") axis=0;
   else if((eje == "Y" || eje == "y") || eje == "1") axis=1;
-  else if((eje == "Z" || eje == "z") || eje == "1") axis=2;
+  else if((eje == "Z" || eje == "z") || eje == "2") axis=2;
   else 
   {
    axis=-1;
@@ -54,7 +54,7 @@ void DensityProfile::SetParameter(std::string name)
   std::string eje=GetNextWord();
   if((eje == "X" || eje == "x") || eje == "0") tmp=0;
   else if((eje == "Y" || eje == "y") || eje == "1") tmp=1;
-  else if((eje == "Z" || eje == "z") || eje == "1") tmp=2;
+  else if((eje == "Z" || eje == "z") || eje == "2") tmp=2;
   else 
   {
    tmp=-1;
@@ -220,7 +220,7 @@ void DensityProfile::Evaluate(SimulationCell & simcell, Potential & pot)
        else if(axis==1) pp = y;
        else if(axis==2) pp = z;
        else ShowWarning("plugin densityprofile", "Bad calculation of densityprofile, check your 'axis' option.");
-       int ir = (long) floor(x/dr);
+       int ir = (long) floor(pp/dr);
        rho[ir][s] += m/dvol;
       }
      }

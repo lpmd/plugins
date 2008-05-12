@@ -16,6 +16,7 @@ XYZFormat::XYZFormat(std::string args): Module("xyz")
  AssignParameter("each", "1");
  AssignParameter("coords", "positive");
  AssignParameter("inside", "false");
+ AssignParameter("external", "consider");
  // hasta aqui los valores por omision
  ProcessArguments(args);
  readfile = writefile = GetString("file");
@@ -23,6 +24,7 @@ XYZFormat::XYZFormat(std::string args): Module("xyz")
  level = GetInteger("level");
  coords = GetString("coords");
  inside = GetString("inside");
+ external = GetString("external");
 }
 
 XYZFormat::~XYZFormat() { delete linecounter; }
@@ -48,6 +50,8 @@ void XYZFormat::ShowHelp() const
  std::cout << "                      origen (centered/uncentered=default).                    \n";
  std::cout << "      inside        : Especifica si se deben reacomodar los atomos que         \n";
  std::cout << "                      se encuentran fuera de la celda (true/false=default).    \n";
+ std::cout << "      external      : Especifica si se deben ignorar o no los atomos que       \n";
+ std::cout << "                      se encuentran fuera de la celda(ignore/consider=default).\n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " Example                                                                       \n";
  std::cout << " Llamando al modulo :                                                          \n";
@@ -61,7 +65,7 @@ void XYZFormat::ShowHelp() const
 
 std::string XYZFormat::Keywords() const
 {
- return "file each level coords inside";
+ return "file each level coords inside external";
 }
 
 void XYZFormat::ReadHeader(std::istream & is) const
@@ -130,27 +134,30 @@ bool XYZFormat::ReadCell(std::istream & is, SimulationCell & sc) const
   else throw PluginError("xyz", "An unidentified line was found in the file \""+readfile+"\", line "+ToString<int>(*linecounter));
  }
  if (coords == "centered") sc.UnCenter();
- if (inside == "true")
+ if (external != "ignore")
  {
-  //Reubica los atomos dentro de la celda.
-  for(int i=0;i<natoms;i++)
+  if (inside == "true")
   {
-   Vector atompos = sc[i].Position();
-   sc.SetPosition(i,atompos);
+   //Reubica los atomos dentro de la celda.
+   for(int i=0;i<natoms;i++)
+   {
+    Vector atompos = sc[i].Position();
+    sc.SetPosition(i,atompos);
+   }
   }
- }
- //Chequea que todos los atomos que se han leido esten dentro de la "celda".
- else
- {
-  double lx = (sc.GetVector(0)).Mod();
-  double ly = (sc.GetVector(1)).Mod();
-  double lz = (sc.GetVector(2)).Mod();
-  for(int i=0;i<natoms;i++)
+  //Chequea que todos los atomos que se han leido esten dentro de la "celda".
+  else
   {
-   Vector pos=sc[i].Position();
-   if (pos.GetX()<0 || pos.GetX()>lx) throw PluginError("xyz", "The atom ["+ToString<int>(i)+"] was found outside the cell in the [a] Vector");
-   if (pos.GetY()<0 || pos.GetY()>ly) throw PluginError("xyz", "The atom ["+ToString<int>(i)+"] was found outside the cell in the [b] Vector");
-   if (pos.GetZ()<0 || pos.GetZ()>lz) throw PluginError("xyz", "The atom ["+ToString<int>(i)+"] was found outside the cell in the [c] Vector");
+   double lx = (sc.GetVector(0)).Mod();
+   double ly = (sc.GetVector(1)).Mod();
+   double lz = (sc.GetVector(2)).Mod();
+   for(int i=0;i<natoms;i++)
+   {
+    Vector pos=sc[i].Position();
+    if (pos.GetX()<0 || pos.GetX()>lx) throw PluginError("xyz", "The atom ["+ToString<int>(i)+"] was found outside the cell in the [a] Vector");
+    if (pos.GetY()<0 || pos.GetY()>ly) throw PluginError("xyz", "The atom ["+ToString<int>(i)+"] was found outside the cell in the [b] Vector");
+    if (pos.GetZ()<0 || pos.GetZ()>lz) throw PluginError("xyz", "The atom ["+ToString<int>(i)+"] was found outside the cell in the [c] Vector");
+   }
   }
  }
  return true;

@@ -30,6 +30,7 @@ class XYZFormat: public lpmd::CellFormat, public lpmd::Module
   long int level;
   std::string coords;
   std::string inside;
+  std::string external;
 };
 
 #endif
