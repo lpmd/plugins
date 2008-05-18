@@ -14,7 +14,6 @@ class BerendsenModifier: public lpmd::SystemModifier, public lpmd::Module
    //Metodos Generales
    BerendsenModifier(std::string args);
    ~BerendsenModifier();
-   void SetParameter(std::string name);
    void ShowHelp() const;
    std::string Keywords() const;
 
