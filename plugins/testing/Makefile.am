@@ -11,7 +11,7 @@ plugin_LTLIBRARIES = angdist.la beeman.la berendsen.la buckingham.la cell.la cel
                      fastlj.la gdr.la gupta.la harmonic.la leapfrog.la lennardjones.la linkedcell.la lpmd.la minimumimage.la mol2.la \
                      moleculecm.la morse.la msd.la nosehoover.la nullintegrator.la nullpairpotential.la nullmetalpotential.la nullpotential.la pairdistances.la \
                      povray.la pressure.la printatoms.la replicate.la selectatoms.la skewstart.la suttonchen.la temperature.la tempscaling.la \
-                     vacf.la vasp.la veldist.la velocityverlet.la verlet.la xyz.la
+                     vacf.la vasp.la veldist.la velocityverlet.la verlet.la xyz.la zlp.la
 
 angdist_la_LDFLAGS = -module -avoid-version
 beeman_la_LDFLAGS = -module -avoid-version
@@ -65,6 +65,7 @@ veldist_la_LDFLAGS = -module -avoid-version
 velocityverlet_la_LDFLAGS = -module -avoid-version
 verlet_la_LDFLAGS = -module -avoid-version
 xyz_la_LDFLAGS = -module -avoid-version
+zlp_la_LDFLAGS = -module -avoid-version -lz
 
 angdist_la_SOURCES = angdist.h angdist.cc 
 beeman_la_SOURCES = beeman.h beeman.cc
@@ -118,4 +119,5 @@ veldist_la_SOURCES = veldist.h veldist.cc
 velocityverlet_la_SOURCES = velocityverlet.h velocityverlet.cc
 verlet_la_SOURCES = verlet.h verlet.cc
 xyz_la_SOURCES = xyz.h xyz.cc
+zlp_la_SOURCES = zlp.h zlp.cc
 
