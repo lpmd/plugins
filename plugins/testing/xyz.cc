@@ -47,7 +47,7 @@ void XYZFormat::ShowHelp() const
  std::cout << "      level         : Se especifica el nivel del formato de xyz, estos son     \n";
  std::cout << "                      0/1/2 <-> pos/pos-vel/pos-vel-ace.                       \n";
  std::cout << "      coords        : Especifica si la celda esta o no centrada en el          \n";
- std::cout << "                      origen (centered/uncentered=default).                    \n";
+ std::cout << "                      origen (centered/positive=default).                      \n";
  std::cout << "      inside        : Especifica si se deben reacomodar los atomos que         \n";
  std::cout << "                      se encuentran fuera de la celda (true/false=default).    \n";
  std::cout << "      external      : Especifica si se deben ignorar o no los atomos que       \n";

@@ -30,6 +30,7 @@ class DensityProfile: public lpmd::ScalarTable, public lpmd::InstantProperty, pu
     int axis;
     double range[3][2];
     bool do_average;
+    long int counter;
 };
 
 #endif

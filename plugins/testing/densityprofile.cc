@@ -72,7 +72,7 @@ void DensityProfile::SetParameter(std::string name)
    range[tmp][0]=atof(smin.c_str());
    range[tmp][1]=atof(smax.c_str());
   }
-  if(range[tmp][0]>=range[tmp][1]) ShowWarning("plugin densityprofile", "min and max values are not consistent.");
+  if(range[tmp][0]>=range[tmp][1] &&  smin!="all" && smin!="ALL") ShowWarning("densityprofile", "min and max values are not consistent.");
  }
  if (name == "start")
  {
@@ -157,6 +157,10 @@ void DensityProfile::Evaluate(SimulationCell & simcell, Potential & pot)
  if(range[1][0]==0 && range[1][1]==0) {range[1][0]=0;range[1][1]=(simcell.GetVector(1)).Mod();}
  if(range[2][0]==0 && range[2][1]==0) {range[2][0]=0;range[2][1]=(simcell.GetVector(2)).Mod();}
 
+ if(range[0][0]==range[0][1]) throw PluginError("densityprofile", "Error in cell range in axis X.");
+ if(range[1][0]==range[1][1]) throw PluginError("densityprofile", "Error in cell range in axis Y.");
+ if(range[2][0]==range[2][1]) throw PluginError("densityprofile", "Error in cell range in axis Z.");
+
  Vector na = simcell.GetVector(0); na.Norm();
  Vector nb = simcell.GetVector(1); nb.Norm();
  Vector nc = simcell.GetVector(2); nc.Norm();
@@ -167,7 +171,11 @@ void DensityProfile::Evaluate(SimulationCell & simcell, Potential & pot)
 
  double dr=0.0e0,vol=0.0e0;
 
- dr = simcell.GetVector(axis).Mod()/double(bins);
+ if(axis==0) {dr=la.Mod()/double(bins);}
+ else if(axis==1) {dr=lb.Mod()/double(bins);}
+ else if(axis==2) {dr=lc.Mod()/double(bins);}
+ else {throw PluginError("densityprofile", "Error in axis setting to set 'dr'!.");}
+
  vol = fabs(Dot(lc,Crux(la,lb)));
 
  double dvol = vol/bins; //delta de volumen de cada rango.
@@ -244,12 +252,13 @@ void DensityProfile::Evaluate(SimulationCell & simcell, Potential & pot)
  // Output of rho(r)
  //
  if (m != NULL) delete m;
- m = new Matrix(2 + nsp, bins);
+ m = new Matrix(3 + nsp, bins);
 
  // Asigna los labels al objeto Matrix para cada columna
  m->SetLabel(0, "r");
- m->SetLabel(nsp+1, "total rho(r)");
- j=1;
+ m->SetLabel(1, "t");
+ m->SetLabel(nsp+2, "total rho(r)");
+ j=2;
  for (std::list<std::string>::const_iterator it=lst.begin();it!=lst.end();++it)
  {
   m->SetLabel(j, (*it)+" rho(r)");
@@ -259,15 +268,17 @@ void DensityProfile::Evaluate(SimulationCell & simcell, Potential & pot)
  for(int i=0;i<bins;i++)
  {
   m->Set(0, i, dr*i);
+  m->Set(1, i, counter);
   for(int j=0;j<(int)(nsp);j++)
   {
-   m->Set(j+1, i, rho[i][j]);
+   m->Set(j+2, i, rho[i][j]);
   }
-  m->Set(nsp+1, i, rhot[i]);
+  m->Set(nsp+2, i, rhot[i]);
  }
  delete [] rhot;
  for (int i=0;i<bins;i++) delete [] rho[i];
  delete [] rho;
+ counter++;
 }
 
 // Esto se incluye para que el modulo pueda ser cargado dinamicamente
