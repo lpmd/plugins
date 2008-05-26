@@ -74,7 +74,28 @@ void Mol2Format::WriteCell(std::ostream & out, SimulationCell & sc) const
  }
  out << "@<TRIPOS>BOND\n\n";
 }
+/*
+void Mol2Format::ReadHeader(std::istream & is) const
+{
+ // Mol2 no tiene header especial para leer
+}
 
+void Mol2Format::ReadCell(std::istream & is, SimulationCell & sc) const
+{
+ while(!is.eof())
+ {
+  std::string tmp;
+  getline(is,tmp);
+  if(tmp[0]!='#')
+  {
+   if(tmp=="@<TRIPOS>MOLECULE")
+   {
+    
+   }
+  }
+ }
+}
+*/
 // Esto se incluye para que el modulo pueda ser cargado dinamicamente
 Module * create(std::string args) { return new Mol2Format(args); }
 void destroy(Module * m) { delete m; }

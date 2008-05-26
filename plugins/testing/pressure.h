@@ -26,6 +26,7 @@ class Pressure: public lpmd::ScalarValue, public lpmd::InstantProperty, public l
 
  private:
    double press, kpress, vpress;
+   double s[3][3];
 };
 
 #endif
