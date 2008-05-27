@@ -73,7 +73,8 @@ bool LPMDFormat::ReadCell(std::istream & is, SimulationCell & sc) const
  (*linecounter)++;
  std::vector<std::string> words = SplitTextLine(tmp); 
  if (words.size() == 0) return false;
- sc.Initialize(atoi(words[0].c_str()));                // Clear and Reserve space for the atoms
+ long natoms = atoi(words[0].c_str());
+ sc.Initialize(natoms);                                // Clear and Reserve space for the atoms
  getline(is, tmp);                                     // Vectores de la celda
  (*linecounter)++;
  words = SplitTextLine(tmp); 
@@ -89,8 +90,9 @@ bool LPMDFormat::ReadCell(std::istream & is, SimulationCell & sc) const
  }
  else throw PluginError("lpmd", "Error ocurred when reading the base vectors, file \""+readfile+"\", line "+ToString<int>(*linecounter));
  long int atomcount = 0;
- while(getline(is, tmp))
+ for (long q=0;q<natoms;++q)
  {
+  getline(is, tmp);
   (*linecounter)++;
   words = SplitTextLine(tmp); 
   if (words.size() == 0) { }
