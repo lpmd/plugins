@@ -5,10 +5,10 @@
 #ifndef __MOL2MODULE_H__
 #define __MOL2MODULE_H__
 
-#include <lpmd/cellwriter.h>
+#include <lpmd/cellformat.h>
 #include <lpmd/plugin.h>
 
-class Mol2Format: public lpmd::CellWriter, public lpmd::Module
+class Mol2Format: public lpmd::CellFormat, public lpmd::Module
 {
  public:
    //Metodos Generales
@@ -19,7 +19,9 @@ class Mol2Format: public lpmd::CellWriter, public lpmd::Module
 
    //Metodos Propios de modulo mol2
    void WriteHeader(std::ostream & os) const;
+   void ReadHeader(std::istream & is) const;
    void WriteCell(std::ostream & os, lpmd::SimulationCell & sc) const;
+   bool ReadCell(std::istream & is, lpmd::SimulationCell & sc) const;
    
    long int GetInterval() const {return interval;}
 

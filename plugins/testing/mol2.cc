@@ -74,28 +74,61 @@ void Mol2Format::WriteCell(std::ostream & out, SimulationCell & sc) const
  }
  out << "@<TRIPOS>BOND\n\n";
 }
-/*
+
 void Mol2Format::ReadHeader(std::istream & is) const
 {
  // Mol2 no tiene header especial para leer
 }
 
-void Mol2Format::ReadCell(std::istream & is, SimulationCell & sc) const
+bool Mol2Format::ReadCell(std::istream & is, SimulationCell & sc) const
 {
+ long natoms=0;
+ if(is.eof()) return false;
  while(!is.eof())
  {
   std::string tmp;
   getline(is,tmp);
+  std::cerr << tmp << '\n';
   if(tmp[0]!='#')
   {
-   if(tmp=="@<TRIPOS>MOLECULE")
+   if (tmp=="@<TRIPOS>MOLECULE")
    {
-    
+    getline(is,tmp);
+    getline(is,tmp);
+    std::vector<std::string> linea = SplitTextLine(tmp,' ');
+    natoms = (long)atof(linea[0].c_str()); 
+    std::cerr << " numero de atomos >> " << natoms << '\n';
+   }
+   if (tmp=="@<TRIPOS>ATOM")
+   {
+    if (natoms <=0) throw PluginError("mol2","Atoms number in mol2 file was not be read!");
+    else
+    {
+     for (int i=0;i<natoms;i++)
+     {
+      getline(is,tmp);
+      std::vector<std::string> linea = SplitTextLine(tmp,' ');
+      std::string symb = linea[1];
+      lpmd::Vector pos(atof(linea[2].c_str()),atof(linea[3].c_str()),atof(linea[4].c_str()));
+      if(symb.length()>1)
+      {
+       for(unsigned int j=1;j<symb.length();j++)
+       {
+	symb[j]=tolower(symb[j]);
+       }
+      }
+      int elem=ElemNum(symb);
+      std::cerr << "Anadiendo atomo " << elem << " - " << pos << '\n';
+      sc.Create(new Atom(elem,pos));
+     }
+    }
+    return true;
    }
   }
  }
+ return false;
 }
-*/
+
 // Esto se incluye para que el modulo pueda ser cargado dinamicamente
 Module * create(std::string args) { return new Mol2Format(args); }
 void destroy(Module * m) { delete m; }
