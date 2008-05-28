@@ -2,70 +2,27 @@
 #
 #
 
-plugindir = $(LPMDDIR)/lib/lpmd
+plugindir = $(libdir)/lpmd
 
 AM_CPPFLAGS = -Wall -pedantic
+AM_LDFLAGS = -module -avoid-version
 
 plugin_LTLIBRARIES = angdist.la beeman.la berendsen.la buckingham.la cell.la cellscaling.la constantforce.la cordnum.la cordnumfunc.la \
                      crystalbcc.la crystalfcc.la crystalhcp.la crystalsc.la densityprofile.la dlpoly.la energy.la euler.la extravel.la \
                      fastlj.la gdr.la gupta.la harmonic.la leapfrog.la lennardjones.la linkedcell.la lpmd.la minimumimage.la mol2.la \
-                     moleculecm.la morse.la msd.la nosehoover.la nullintegrator.la nullpairpotential.la nullmetalpotential.la nullpotential.la pairdistances.la \
-                     povray.la pressure.la printatoms.la replicate.la selectatoms.la skewstart.la suttonchen.la temperature.la tempscaling.la \
-                     vacf.la vasp.la veldist.la velocityverlet.la verlet.la xyz.la zlp.la
+                     moleculecm.la morse.la msd.la nosehoover.la nullintegrator.la nullpairpotential.la nullmetalpotential.la nullpotential.la \
+                     pairdistances.la povray.la pressure.la printatoms.la replicate.la selectatoms.la skewstart.la suttonchen.la \
+                     temperature.la tempscaling.la vacf.la vasp.la veldist.la velocityverlet.la verlet.la xyz.la zlp.la
 
-angdist_la_LDFLAGS = -module -avoid-version
-beeman_la_LDFLAGS = -module -avoid-version
-berendsen_la_LDFLAGS = -module -avoid-version
-buckingham_la_LDFLAGS = -module -avoid-version
-cell_la_LDFLAGS = -module -avoid-version
-cellscaling_la_LDFLAGS = -module -avoid-version
-constantforce_la_LDFLAGS = -module -avoid-version
-cordnum_la_LDFLAGS = -module -avoid-version
-cordnumfunc_la_LDFLAGS = -module -avoid-version
-crystalbcc_la_LDFLAGS = -module -avoid-version
-crystalfcc_la_LDFLAGS = -module -avoid-version
-crystalhcp_la_LDFLAGS = -module -avoid-version
-crystalsc_la_LDFLAGS = -module -avoid-version
-densityprofile_la_LDFLAGS = -module -avoid-version
-dlpoly_la_LDFLAGS = -module -avoid-version
-energy_la_LDFLAGS = -module -avoid-version
-euler_la_LDFLAGS = -module -avoid-version
-extravel_la_LDFLAGS = -module -avoid-version
-fastlj_la_LDFLAGS = -module -avoid-version
-gdr_la_LDFLAGS = -module -avoid-version
-gupta_la_LDFLAGS = -module -avoid-version
-harmonic_la_LDFLAGS = -module -avoid-version
-leapfrog_la_LDFLAGS = -module -avoid-version
-lennardjones_la_LDFLAGS = -module -avoid-version
-linkedcell_la_LDFLAGS = -module -avoid-version
-lpmd_la_LDFLAGS = -module -avoid-version
-minimumimage_la_LDFLAGS = -module -avoid-version
-mol2_la_LDFLAGS = -module -avoid-version
-moleculecm_la_LDFLAGS = -module -avoid-version
-morse_la_LDFLAGS = -module -avoid-version
-msd_la_LDFLAGS = -module -avoid-version
-nosehoover_la_LDFLAGS = -module -avoid-version
-nullintegrator_la_LDFLAGS = -module -avoid-version
-nullpairpotential_la_LDFLAGS = -module -avoid-version
-nullmetalpotential_la_LDFLAGS = -module -avoid-version
-nullpotential_la_LDFLAGS = -module -avoid-version
-pairdistances_la_LDFLAGS = -module -avoid-version
-povray_la_LDFLAGS = -module -avoid-version
-pressure_la_LDFLAGS = -module -avoid-version
-printatoms_la_LDFLAGS = -module -avoid-version
-replicate_la_LDFLAGS = -module -avoid-version
-selectatoms_la_LDFLAGS = -module -avoid-version
-skewstart_la_LDFLAGS = -module -avoid-version
-suttonchen_la_LDFLAGS = -module -avoid-version
-temperature_la_LDFLAGS = -module -avoid-version
-tempscaling_la_LDFLAGS = -module -avoid-version
-vacf_la_LDFLAGS = -module -avoid-version
-vasp_la_LDFLAGS = -module -avoid-version
-veldist_la_LDFLAGS = -module -avoid-version
-velocityverlet_la_LDFLAGS = -module -avoid-version
-verlet_la_LDFLAGS = -module -avoid-version
-xyz_la_LDFLAGS = -module -avoid-version
+#
+#
+#
+
 zlp_la_LDFLAGS = -module -avoid-version -lz
+
+#
+#
+#
 
 angdist_la_SOURCES = angdist.h angdist.cc 
 beeman_la_SOURCES = beeman.h beeman.cc
