@@ -119,7 +119,7 @@ bool Mol2Format::ReadCell(std::istream & is, SimulationCell & sc) const
       }
       int elem=ElemNum(symb);
       std::cerr << "Anadiendo atomo " << elem << " - " << pos << '\n';
-      sc.Create(new Atom(elem,pos));
+      sc.AppendAtom(Atom(elem,pos));
      }
     }
     return true;
