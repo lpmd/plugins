@@ -12,7 +12,7 @@ plugin_LTLIBRARIES = angdist.la beeman.la berendsen.la buckingham.la cell.la cel
                      fastlj.la gdr.la gupta.la harmonic.la leapfrog.la lennardjones.la linkedcell.la lpmd.la minimumimage.la mol2.la \
                      moleculecm.la morse.la msd.la nosehoover.la nullintegrator.la nullpairpotential.la nullmetalpotential.la nullpotential.la \
                      pairdistances.la povray.la pressure.la printatoms.la replicate.la selectatoms.la skewstart.la suttonchen.la \
-                     temperature.la tempscaling.la vacf.la vasp.la veldist.la velocityverlet.la verlet.la xyz.la zlp.la
+                     temperature.la tempprofile.la tempscaling.la vacf.la vasp.la veldist.la velocityverlet.la verlet.la xyz.la zlp.la
 
 #
 #
@@ -68,7 +68,8 @@ replicate_la_SOURCES = replicate.h replicate.cc
 selectatoms_la_SOURCES = selectatoms.h selectatoms.cc
 skewstart_la_SOURCES = skewstart.h skewstart.cc
 suttonchen_la_SOURCES = suttonchen.h suttonchen.cc
-temperature_la_SOURCES = temperature.h temperature.cc 
+temperature_la_SOURCES = temperature.h temperature.cc
+tempprofile_la_SOURCES = tempprofile.h tempprofile.cc
 tempscaling_la_SOURCES = tempscaling.h tempscaling.cc 
 vacf_la_SOURCES = vacf.h vacf.cc
 vasp_la_SOURCES = vasp.h vasp.cc
