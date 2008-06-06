@@ -16,9 +16,13 @@ CellScalingModifier::CellScalingModifier(std::string args): Module("cellscaling"
  axis = -1;
  AssignParameter("percent", "0.0");
  AssignParameter("axis", "all");
+ AssignParameter("constant", "true");
+ AssignParameter("first", "true");
  // hasta aqui los valores por omision
  ProcessArguments(args);
  percent = GetDouble("percent");
+ constant = GetBool("constant");
+ first = GetBool("first");
  std::string ax = GetString("axis");
  if ((ax == "all") || (ax == "ALL")) axis = -1;
  if ((ax == "x") || (ax == "X")) axis = 0;
@@ -57,12 +61,15 @@ void CellScalingModifier::ShowHelp() const
  std::cout << "                      puede ser positivo(expandir) o negativo(comprimir).      \n";
  std::cout << "      axis          : Indica en que eje se va a comprimir la celda, en caso de \n";
  std::cout << "                      no indicarse se realiza compresion hidrostatica.         \n";
+ std::cout << "      constant      : true/false, la variacion porcentual es modificada segun  \n";
+ std::cout << "                      acomulativamente (constant=false) o no (constant=true).  \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " Example                                                                       \n";
  std::cout << " Cargando el Modulo :                                                          \n";
  std::cout << " use cellscaling                                                               \n";
  std::cout << "     precent 20                                                                \n";
  std::cout << "     axis X                                                                    \n";
+ std::cout << "     constant true                                                             \n";
  std::cout << " enduse                                                                        \n";
  std::cout << " Llamando al modulo :                                                          \n";
  std::cout << " apply cellscaling start=0 each=300 end=1000                                 \n\n";
@@ -79,15 +86,37 @@ std::string CellScalingModifier::Keywords() const
 
 void CellScalingModifier::Apply(SimulationCell & sc)
 {
- if (axis == -1)
+ if(constant==false)
  {
-  std::cerr << "-> Rescaling cell by " << percent << "%\n";  
-  sc.RescalePercent(percent); 
+  if (axis == -1)
+  {
+   std::cerr << "-> Rescaling cell by " << percent << "%\n";
+   sc.RescalePercent(percent); 
+  }
+  else
+  {
+   std::cerr<< "-> Rescaling axis " << axis << " in a " << percent << "%\n";
+   sc.RescalePercent(percent, axis);
+  }
  }
- else
+ else if(constant==true)
  {
-  std::cerr<< "-> Rescaling axis " << axis << " in a " << percent << "%\n";
-  sc.RescalePercent(percent, axis);
+  if(first==true)
+  {
+   for(int i=0;i<3;++i) s[i] = sc.GetVector(i)*percent/100;
+   first=false;
+  }
+
+  if (axis == -1)
+  {
+   std::cerr << "-> Rescaling constant by " << percent << "%\n";
+   sc.RescaleVector(s[0],s[1],s[2]);
+  }
+  else
+  {
+   std::cerr << "-> Rescaling axis " << axis <<" constant by " << percent << "%\n";
+   sc.RescaleVector(s[axis],axis);
+  }
  }
 }
 
