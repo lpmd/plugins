@@ -143,7 +143,7 @@ std::string TempProfile::Keywords() const { return "rcut bins start end step out
 
 void TempProfile::Evaluate(SimulationCell & simcell, Potential & pot)
 {
- if (bins == 0) throw PluginError("densityprofile", "Error in calculation: Wrong value for \"bins\".");
+ if (bins == 0) throw PluginError("tempprofile", "Error in calculation: Wrong value for \"bins\".");
 
  //Vectores base, celda de simulacion.
  if(range[0][0]==0 && range[0][1]==0) {range[0][0]=0;range[0][1]=(simcell.GetVector(0)).Mod();}
@@ -191,7 +191,7 @@ void TempProfile::Evaluate(SimulationCell & simcell, Potential & pot)
   int e = ElemNum(*it);
   //Cuenta los atomos de la especie e.
   int ne=0;
-  for(unsigned long int m=0;m<N;m++)
+  for(unsigned long int m=0;m<N;++m)
   {
    if(simcell[m].Species()==e) ne++;
   }
@@ -233,6 +233,7 @@ void TempProfile::Evaluate(SimulationCell & simcell, Potential & pot)
   for(int i=0;i<bins;i++)
   {
    temp[i][s] = ((2.0/3.0)*temp[i][s])/(KBOLTZMANN*double(nab[i]));
+   nab[i]=0;
   }
   s++;
  }
@@ -240,7 +241,7 @@ void TempProfile::Evaluate(SimulationCell & simcell, Potential & pot)
  int j=0;
  for(std::list<std::string>::const_iterator it=lst.begin();it!=lst.end();++it)
  {
-  for(int i=0;i<bins;i++)
+  for(int i=0;i<bins;++i)
   {
    tempt[i] += temp[i][j];
   }
@@ -263,7 +264,7 @@ void TempProfile::Evaluate(SimulationCell & simcell, Potential & pot)
   j++;
  }
  // 
- for(int i=0;i<bins;i++)
+ for(int i=0;i<bins;++i)
  {
   m->Set(0, i, dr*i);
   m->Set(1, i, counter);
@@ -276,6 +277,7 @@ void TempProfile::Evaluate(SimulationCell & simcell, Potential & pot)
  delete [] tempt;
  for (int i=0;i<bins;i++) delete [] temp[i];
  delete [] temp;
+ delete [] nab;
  counter++;
 }
 

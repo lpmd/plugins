@@ -7,7 +7,7 @@ plugindir = $(libdir)/lpmd
 AM_CPPFLAGS = -Wall -pedantic
 AM_LDFLAGS = -module -avoid-version
 
-plugin_LTLIBRARIES = angdist.la beeman.la berendsen.la buckingham.la cell.la cellscaling.la constantforce.la cordnum.la cordnumfunc.la \
+plugin_LTLIBRARIES = angdist.la beeman.la berendsen.la buckingham.la cell.la cellscaling.la constantforce.la cordnum.la cordnumfunc.la  crystal2d.la\
                      crystalbcc.la crystalfcc.la crystalhcp.la crystalsc.la densityprofile.la dlpoly.la energy.la euler.la extravel.la \
                      fastlj.la gdr.la gupta.la harmonic.la leapfrog.la lennardjones.la linkedcell.la lpmd.la minimumimage.la mol2.la \
                      moleculecm.la morse.la msd.la nosehoover.la nullintegrator.la nullpairpotential.la nullmetalpotential.la nullpotential.la \
@@ -33,6 +33,7 @@ cellscaling_la_SOURCES = cellscaling.h cellscaling.cc
 constantforce_la_SOURCES = constantforce.h constantforce.cc
 cordnum_la_SOURCES = cordnum.h cordnum.cc
 cordnumfunc_la_SOURCES = cordnumfunc.h cordnumfunc.cc
+crystal2d_la_SOURCES = crystal2d.h crystal2d.cc
 crystalbcc_la_SOURCES = crystalbcc.h crystalbcc.cc
 crystalfcc_la_SOURCES = crystalfcc.h crystalfcc.cc
 crystalhcp_la_SOURCES = crystalhcp.h crystalhcp.cc
