@@ -28,6 +28,7 @@ class XYZFormat: public lpmd::CellFormat, public lpmd::Module
   long int * linecounter;
   long int interval;
   long int level;
+  bool rcell;
   std::string coords;
   std::string inside;
   std::string external;

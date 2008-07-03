@@ -17,6 +17,7 @@ XYZFormat::XYZFormat(std::string args): Module("xyz")
  AssignParameter("coords", "positive");
  AssignParameter("inside", "false");
  AssignParameter("external", "consider");
+ AssignParameter("replacecell", "false");
  // hasta aqui los valores por omision
  ProcessArguments(args);
  readfile = writefile = GetString("file");
@@ -25,6 +26,7 @@ XYZFormat::XYZFormat(std::string args): Module("xyz")
  coords = GetString("coords");
  inside = GetString("inside");
  external = GetString("external");
+ rcell = GetBool("replacecell");
 }
 
 XYZFormat::~XYZFormat() { delete linecounter; }
@@ -65,7 +67,7 @@ void XYZFormat::ShowHelp() const
 
 std::string XYZFormat::Keywords() const
 {
- return "file each level coords inside external";
+ return "file each level coords inside external replacecell";
 }
 
 void XYZFormat::ReadHeader(std::istream & is) const
@@ -79,6 +81,7 @@ void XYZFormat::ReadHeader(std::istream & is) const
 //
 bool XYZFormat::ReadCell(std::istream & is, SimulationCell & sc) const
 {
+ if (rcell) throw PluginError("xyz", "This format does not contain any cell vectors.");
  std::string tmp;
 
  //
@@ -148,15 +151,15 @@ bool XYZFormat::ReadCell(std::istream & is, SimulationCell & sc) const
   //Chequea que todos los atomos que se han leido esten dentro de la "celda".
   else
   {
-   double lx = (sc.GetVector(0)).Mod();
-   double ly = (sc.GetVector(1)).Mod();
-   double lz = (sc.GetVector(2)).Mod();
-   for(int i=0;i<natoms;i++)
+   for (int i=0;i<natoms;i++)
    {
-    Vector pos=sc[i].Position();
-    if (pos.GetX()<0 || pos.GetX()>lx) throw PluginError("xyz", "The atom ["+ToString<int>(i)+"] was found outside the cell in the [a] Vector");
-    if (pos.GetY()<0 || pos.GetY()>ly) throw PluginError("xyz", "The atom ["+ToString<int>(i)+"] was found outside the cell in the [b] Vector");
-    if (pos.GetZ()<0 || pos.GetZ()>lz) throw PluginError("xyz", "The atom ["+ToString<int>(i)+"] was found outside the cell in the [c] Vector");
+    Vector pos = sc[i].Position();
+    sc.ConvertToInternal(pos);
+    Vector opos = pos;
+    for (int q=0;q<3;++q) pos.Set(q, pos.Get(q)/sc.GetVector(q).Mod());
+    if (pos.GetX()<0 || pos.GetX()>1.0) throw PluginError("xyz", "The atom ["+ToString<int>(i)+"] was found outside the cell in the [a] Vector");
+    if (pos.GetY()<0 || pos.GetY()>1.0) throw PluginError("xyz", "The atom ["+ToString<int>(i)+"] was found outside the cell in the [b] Vector");
+    if (pos.GetZ()<0 || pos.GetZ()>1.0) throw PluginError("xyz", "The atom ["+ToString<int>(i)+"] was found outside the cell in the [c] Vector");
    }
   }
  }

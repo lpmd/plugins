@@ -14,10 +14,12 @@ using namespace lpmd;
 Mol2Format::Mol2Format(std::string args): Module("mol2")
 {
  AssignParameter("each", "1");
+ AssignParameter("replacecell", "false");
  // hasta aqui los valores por omision
  ProcessArguments(args);
  writefile = GetString("file");
  interval = GetInteger("each");
+ rcell = GetBool("replacecell");
 }
 
 Mol2Format::~Mol2Format() { }
@@ -46,7 +48,7 @@ void Mol2Format::ShowHelp() const
 
 std::string Mol2Format::Keywords() const 
 {
- return "file each";
+ return "file each replacecell";
 }
 
 void Mol2Format::WriteHeader(std::ostream & os) const
@@ -82,6 +84,7 @@ void Mol2Format::ReadHeader(std::istream & is) const
 
 bool Mol2Format::ReadCell(std::istream & is, SimulationCell & sc) const
 {
+ if (rcell) throw PluginError("mol2", "This format does not contain any cell vectors.");
  long natoms=0;
  if(is.eof()) return false;
  while(!is.eof())

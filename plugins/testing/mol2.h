@@ -27,6 +27,7 @@ class Mol2Format: public lpmd::CellFormat, public lpmd::Module
 
  private:
    long int interval;
+   bool rcell;
 };
 
 #endif
