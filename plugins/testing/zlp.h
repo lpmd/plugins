@@ -30,6 +30,7 @@ class ZLPFormat: public lpmd::CellFormat, public lpmd::Module
    unsigned char * inbuf, * outbuf;
    long int interval;
    int level, blocksize, complev, *lastop;
+   bool rcell;
 };
 
 #endif

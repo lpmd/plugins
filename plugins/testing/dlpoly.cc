@@ -15,12 +15,14 @@ DlPolyFormat::DlPolyFormat(std::string args): Module("dlpoly")
  AssignParameter("each", "1");
  AssignParameter("level", "0");
  AssignParameter("periodicity", "1");
+ AssignParameter("replacecell", "false");
  // hasta aqui los valores por omision
  ProcessArguments(args);
  readfile = writefile = GetString("file");
  interval = GetInteger("each");
  level = GetInteger("level");
  pbkey = GetInteger("periodicity");
+ rcell = GetBool("replacecell");
 }
 
 DlPolyFormat::~DlPolyFormat() { }
@@ -55,7 +57,7 @@ void DlPolyFormat::ShowHelp() const
 
 std::string DlPolyFormat::Keywords() const
 {
- return "file each level periodicity";
+ return "file each level periodicity replacecell";
 }
 
 void DlPolyFormat::ReadHeader(std::istream & is) const
@@ -83,6 +85,7 @@ bool DlPolyFormat::ReadCell(std::istream & is, SimulationCell & sc) const
   std::istringstream vst(tmp);
   vst >> x >> y >> z;
   cv[i] = Vector(x, y, z);
+  if (rcell) sc.SetVector(i, cv[i]);
  } 
  long cc = 0;
  while (1)

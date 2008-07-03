@@ -16,6 +16,7 @@ VaspFormat::VaspFormat(std::string args): Module("vasp")
  AssignParameter("each", "1");
  AssignParameter("level", "0");
  AssignParameter("type", "Direct");
+ AssignParameter("replacecell", "false");
  ProcessArguments(args);
  readfile = writefile = GetString("file");
  interval = GetInteger("each");
@@ -23,6 +24,7 @@ VaspFormat::VaspFormat(std::string args): Module("vasp")
  speclist = GetString("species");
  satoms = SplitTextLine(speclist,',');
  tp = GetString("type");
+ rcell = GetBool("replacecell");
 }
 
 VaspFormat::~VaspFormat() { }
@@ -60,7 +62,7 @@ void VaspFormat::ShowHelp() const
 
 std::string VaspFormat::Keywords() const
 {
- return "file each level periodicity";
+ return "file each level periodicity replacecell";
 }
 
 void VaspFormat::ReadHeader(std::istream & is) const { }
@@ -88,6 +90,7 @@ bool VaspFormat::ReadCell(std::istream & is, SimulationCell & sc) const
   std::istringstream vst(tmp);
   vst >> x >> y >> z;
   cv[i] = scale*Vector(x, y, z);
+  if (rcell) sc.SetVector(i, cv[i]);
  } 
  //lee y chequea especies atomicas.
  getline(is,tmp);

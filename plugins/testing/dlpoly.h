@@ -27,6 +27,7 @@ class DlPolyFormat: public lpmd::CellFormat, public lpmd::Module
  private:
   long int interval;
   int level, pbkey;
+  bool rcell;
 };
 
 #endif

@@ -29,6 +29,7 @@ class LPMDFormat: public lpmd::CellFormat, public lpmd::Module
    long int * linecounter;
    long int interval;
    long int level;
+   bool rcell;
 };
 
 #endif

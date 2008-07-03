@@ -28,6 +28,7 @@ ZLPFormat::ZLPFormat(std::string args): Module("zlp")
  AssignParameter("level", "0");
  AssignParameter("blocksize", "1024");
  AssignParameter("compression", "6");
+ AssignParameter("replacecell", "false");
  // hasta aqui los valores por omision
  ProcessArguments(args);
  readfile = writefile = GetString("file");
@@ -35,6 +36,7 @@ ZLPFormat::ZLPFormat(std::string args): Module("zlp")
  level = GetInteger("level");
  blocksize = GetInteger("blocksize");
  complev = GetInteger("compression");
+ rcell = GetBool("replacecell");
  // inicializa la estructura z_stream
  zstr = (void *)(new z_stream);
  lastop = new int(ZLP_NONE);
@@ -83,7 +85,7 @@ void ZLPFormat::ShowHelp() const
 
 std::string ZLPFormat::Keywords() const 
 {
- return "file each level blocksize";
+ return "file each level blocksize replacecell";
 }
 
 void ZLPFormat::ReadHeader(std::istream & is) const
@@ -165,7 +167,7 @@ bool ZLPFormat::ReadCell(std::istream & is, SimulationCell & sc) const
    ibufstr >> vq[i];
    v.Set(i, vq[i]);
   }
-  sc.SetVector(j, v);
+  if (rcell) sc.SetVector(j, v);
  }
  for (long int i=0;i<natoms;++i) 
  {

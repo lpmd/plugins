@@ -14,11 +14,13 @@ LPMDFormat::LPMDFormat(std::string args): Module("lpmd")
  linecounter = new long int;
  AssignParameter("each", "1");
  AssignParameter("level", "0");
+ AssignParameter("replacecell", "false");
  // hasta aqui los valores por omision
  ProcessArguments(args);
  readfile = writefile = GetString("file");
  interval = GetInteger("each");
  level = GetInteger("level");
+ rcell = GetBool("replacecell");
 }
 
 LPMDFormat::~LPMDFormat() { delete linecounter; }
@@ -52,7 +54,7 @@ void LPMDFormat::ShowHelp() const
 
 std::string LPMDFormat::Keywords() const 
 {
- return "file each level";
+ return "file each level replacecell";
 }
 
 void LPMDFormat::ReadHeader(std::istream & is) const
@@ -80,13 +82,19 @@ bool LPMDFormat::ReadCell(std::istream & is, SimulationCell & sc) const
  words = SplitTextLine(tmp); 
  if(words.size()==9)
  {
-  sc.SetVector(0, Vector(atof(words[0].c_str()), atof(words[1].c_str()), atof(words[2].c_str())));
-  sc.SetVector(1, Vector(atof(words[3].c_str()), atof(words[4].c_str()), atof(words[5].c_str())));
-  sc.SetVector(2, Vector(atof(words[6].c_str()), atof(words[7].c_str()), atof(words[8].c_str())));
+  if (rcell)
+  {
+   sc.SetVector(0, Vector(atof(words[0].c_str()), atof(words[1].c_str()), atof(words[2].c_str())));
+   sc.SetVector(1, Vector(atof(words[3].c_str()), atof(words[4].c_str()), atof(words[5].c_str())));
+   sc.SetVector(2, Vector(atof(words[6].c_str()), atof(words[7].c_str()), atof(words[8].c_str())));
+  }
  }
  else if(words.size()==6)
  {
-  sc.ReSet(atof(words[0].c_str()),atof(words[1].c_str()),atof(words[2].c_str()),atof(words[3].c_str())*M_PI/180,atof(words[4].c_str())*M_PI/180,atof(words[5].c_str())*M_PI/180);
+  if (rcell)
+  {
+   sc.ReSet(atof(words[0].c_str()),atof(words[1].c_str()),atof(words[2].c_str()),atof(words[3].c_str())*M_PI/180,atof(words[4].c_str())*M_PI/180,atof(words[5].c_str())*M_PI/180);
+  }
  }
  else throw PluginError("lpmd", "Error ocurred when reading the base vectors, file \""+readfile+"\", line "+ToString<int>(*linecounter));
  long int atomcount = 0;

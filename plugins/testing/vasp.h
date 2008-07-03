@@ -27,6 +27,7 @@ class VaspFormat: public lpmd::CellFormat, public lpmd::Module
  public:
   long int interval;
   int level;
+  bool rcell;
   std::string speclist;
   std::vector<std::string> satoms; //simbolos atomicos
   std::string tp; // tipo de celda Direct/Cartesian
