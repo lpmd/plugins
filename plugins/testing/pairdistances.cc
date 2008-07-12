@@ -59,7 +59,7 @@ void PairDistances::Evaluate(SimulationCell & simcell, Potential & pot)
  for (long i=0;i<n;++i)
  {
   std::list<Neighbor> nlist;
-  simcell.BuildNeighborList(i, nlist, false);
+  simcell.BuildNeighborList(i, nlist, false, rcut);
   for(std::list<Neighbor>::const_iterator it=nlist.begin();it!=nlist.end();++it)
   {
    const Neighbor & nn = *it;

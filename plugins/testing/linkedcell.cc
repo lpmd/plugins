@@ -240,11 +240,11 @@ void LinkedCellCellManager::UpdateCell(SimulationCell & sc)
  lcm->FillCells(); 
 }
 
-void LinkedCellCellManager::BuildNeighborList(SimulationCell & sc, long i, std::list<Neighbor> & nlist, bool full)
+void LinkedCellCellManager::BuildNeighborList(SimulationCell & sc, long i, std::list<Neighbor> & nlist, bool full, double rcut)
 {
  nlist.clear();
  //lcm->FillCells();
- const double rcc = lcm->GetCutoff();
+ //const double rcc = lcm->GetCutoff();
  const Atom & this_atom = sc[i];
  SubCell & subcell = lcm->GetSubCellByAtom(i);
  for (AtomItem * ak = subcell.GetAtomList();ak!=NULL;ak=ak->next)
@@ -256,7 +256,7 @@ void LinkedCellCellManager::BuildNeighborList(SimulationCell & sc, long i, std::
    nn.j = &sc[ak->i];
    nn.rij = nn.j->Position() - this_atom.Position();
    nn.r = nn.rij.Mod();
-   if ((nn.r < rcc) && (nn.r > 0.001)) nlist.push_back(nn); // FIXME: hay un bug al usar integradores onestep
+   if ((nn.r < rcut) && (nn.r > 0.001)) nlist.push_back(nn); // FIXME: hay un bug al usar integradores onestep
   }
  }
  // 
@@ -273,7 +273,7 @@ void LinkedCellCellManager::BuildNeighborList(SimulationCell & sc, long i, std::
    const Vector newpos = nn.j->Position()+disp;
    nn.rij = newpos-this_atom.Position();
    nn.r = nn.rij.Mod();
-   if ((nn.r < rcc) && (nn.r > 0.001)) nlist.push_back(nn); // FIXME: hay un bug al usar integradores onestep
+   if ((nn.r < rcut) && (nn.r > 0.001)) nlist.push_back(nn); // FIXME: hay un bug al usar integradores onestep
   }
  }
  // 
@@ -292,7 +292,7 @@ void LinkedCellCellManager::BuildNeighborList(SimulationCell & sc, long i, std::
     const Vector newpos = nn.j->Position()+disp;
     nn.rij = newpos-this_atom.Position();
     nn.r = nn.rij.Mod();
-    if ((nn.r < rcc) && (nn.r > 0.001)) nlist.push_back(nn); // FIXME: hay un bug al usar integradores onestep
+    if ((nn.r < rcut) && (nn.r > 0.001)) nlist.push_back(nn); // FIXME: hay un bug al usar integradores onestep
 
    }
   }

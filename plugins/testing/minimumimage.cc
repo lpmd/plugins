@@ -32,7 +32,7 @@ void MinimumImageCellManager::Reset() { }
 
 void MinimumImageCellManager::UpdateCell(SimulationCell & sc) { }
 
-void MinimumImageCellManager::BuildNeighborList(SimulationCell & sc, long i, std::list<Neighbor> & nlist, bool full)
+void MinimumImageCellManager::BuildNeighborList(SimulationCell & sc, long i, std::list<Neighbor> & nlist, bool full, double rcu)
 {
  const long n = sc.Size();
  nlist.clear();

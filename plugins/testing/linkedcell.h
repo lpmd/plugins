@@ -120,7 +120,7 @@ class LinkedCellCellManager: public lpmd::CellManager, public lpmd::Module
 
    void Reset();
    void UpdateCell(SimulationCell & sc);
-   void BuildNeighborList(SimulationCell & sc, long i, std::list<Neighbor> & nlist, bool full);
+   void BuildNeighborList(SimulationCell & sc, long i, std::list<Neighbor> & nlist, bool full, double rcut);
 
  private:
    double rcut;

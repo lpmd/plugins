@@ -103,7 +103,7 @@ void Gdr::Evaluate(SimulationCell & simcell, Potential & pot)
    if(simcell[i].Species()==e1)
    {
     std::list<Neighbor> nlist;
-    simcell.BuildNeighborList (i,nlist,true);
+    simcell.BuildNeighborList (i,nlist,true, rcut);
     for(std::list<Neighbor>::const_iterator it=nlist.begin();it!=nlist.end();++it)
     {
      const Neighbor &nn = *it;

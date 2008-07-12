@@ -62,7 +62,7 @@ void MoleculeCMModifier::Apply(SimulationCell & sc)
   {
    cmpos += (sc[i].Mass()*sc[i].Position());
    m += sc[i].Mass();
-   sc.BuildNeighborList(i, nlist, true);
+   sc.BuildNeighborList(i, nlist, true, radius);
    Neighbor * closest = NULL;
    for (std::list<Neighbor>::iterator it=nlist.begin();it!=nlist.end();++it)
    {

@@ -233,7 +233,7 @@ void TempProfile::Evaluate(SimulationCell & simcell, Potential & pot)
   for(int i=0;i<bins;i++)
   {
    temp[i][s] = ((2.0/3.0)*temp[i][s])/(KBOLTZMANN*double(nab[i]));
-   nab[i]=0;
+//   nab[i]=0;
   }
   s++;
  }
