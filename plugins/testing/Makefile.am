@@ -11,7 +11,7 @@ plugin_LTLIBRARIES = angdist.la beeman.la berendsen.la buckingham.la cell.la cel
                      crystalbcc.la crystalfcc.la crystalhcp.la crystalsc.la densityprofile.la dlpoly.la energy.la euler.la extravel.la \
                      fastlj.la gdr.la gupta.la harmonic.la leapfrog.la lennardjones.la linkedcell.la lpmd.la minimumimage.la mol2.la \
                      moleculecm.la morse.la msd.la nosehoover.la nullintegrator.la nullpairpotential.la nullmetalpotential.la nullpotential.la \
-                     pairdistances.la povray.la pressure.la printatoms.la replicate.la rotate.la selectatoms.la skewstart.la suttonchen.la \
+                     pairdistances.la povray.la pressure.la printatoms.la quenchedmd.la replicate.la rotate.la selectatoms.la skewstart.la suttonchen.la \
                      temperature.la tempprofile.la tempscaling.la vacf.la vasp.la veldist.la velocityverlet.la verlet.la xyz.la zlp.la
 
 #
@@ -65,6 +65,7 @@ pairdistances_la_SOURCES = pairdistances.h pairdistances.cc
 povray_la_SOURCES = povray.h povray.cc
 pressure_la_SOURCES = pressure.h pressure.cc
 printatoms_la_SOURCES = printatoms.h printatoms.cc
+quenchedmd_la_SOURCES = quenchedmd.h quenchedmd.cc
 replicate_la_SOURCES = replicate.h replicate.cc
 rotate_la_SOURCES = rotate.h rotate.cc
 selectatoms_la_SOURCES = selectatoms.h selectatoms.cc
