@@ -71,20 +71,17 @@ void Crystal2DGenerator::Generate(SimulationCell & sc) const
  std::cerr << "gamma = " << gamma << " a = " << a << " b = " << b << '\n';
  std::cerr << "ax = " << ax << " ay = " << ay << " tan(gamma) = " << tan(gamma) << '\n';
  std::cerr << "sin(gamma) = " << sin(gamma) << " cos(gamma) = " << cos(gamma) << '\n';
- Vector baseA(a,0,0);
- Vector baseB(b*cos(gamma),b*sin(gamma),0);
+ Vector baseA(ax,0,0);
+ Vector baseB(ay*cos(gamma),ay*sin(gamma),0);
  std::cerr << "Vector A = " << baseA << '\n';
  std::cerr << "Vector B = " << baseB << '\n';
  for (long j=0;j<ny;++j)
  {
   for (long i=0;i<nx;++i)
   {
-//   if((j%2)!=0) p = Vector((double(i)*ax+double(j)*ay/tan(gamma)), (double(j))*ay, 0.0e0);
-//   else p = Vector((double(i)*ax),(double(j)*ay), 0.0e0);
-   p = Vector(double(i)*ax,double(j)*ay,0);
+   p = j*baseA + i*baseB;
    sc.AppendAtom(Atom(spc));
    sc.SetFracPosition(cc++, p);
-   p = Vector(double(i)*ax+(double(j)+0.5)*ay/tan(gamma),(double(j)+0.5)*ay,0);
   }
  }
 }
