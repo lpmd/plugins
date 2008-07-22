@@ -73,9 +73,9 @@ void Pressure::Evaluate(SimulationCell & sc, Potential & pot)
  press = kpress+vpress;
  for (int i=0;i<3;i++)
  {
-  s[0][i] = sc.StressTensor(0,i);
-  s[1][i] = sc.StressTensor(1,i);
-  s[2][i] = sc.StressTensor(2,i);
+  s[0][i] = (PRESSFACTOR/v)*sc.StressTensor(0,i);
+  s[1][i] = (PRESSFACTOR/v)*sc.StressTensor(1,i);
+  s[2][i] = (PRESSFACTOR/v)*sc.StressTensor(2,i);
  }
 }
 
