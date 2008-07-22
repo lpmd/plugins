@@ -9,7 +9,7 @@ AM_LDFLAGS = -module -avoid-version
 
 plugin_LTLIBRARIES = angdist.la beeman.la berendsen.la buckingham.la cell.la cellscaling.la constantforce.la cordnum.la cordnumfunc.la  crystal2d.la\
                      crystalbcc.la crystalfcc.la crystalhcp.la crystalsc.la densityprofile.la dlpoly.la energy.la euler.la extravel.la \
-                     fastlj.la gdr.la gupta.la harmonic.la leapfrog.la lennardjones.la linkedcell.la lpmd.la minimumimage.la mol2.la \
+                     fastlj.la gdr.la gupta.la harmonic.la leapfrog.la lennardjones.la linkedcell.la lpmd.la localpressure.la minimumimage.la mol2.la \
                      moleculecm.la morse.la msd.la nosehoover.la nullintegrator.la nullpairpotential.la nullmetalpotential.la nullpotential.la \
                      pairdistances.la povray.la pressure.la printatoms.la quenchedmd.la replicate.la rotate.la selectatoms.la skewstart.la suttonchen.la \
                      temperature.la tempprofile.la tempscaling.la vacf.la vasp.la veldist.la velocityverlet.la verlet.la xyz.la zlp.la
@@ -50,6 +50,7 @@ harmonic_la_SOURCES = harmonic.h harmonic.cc
 leapfrog_la_SOURCES = leapfrog.h leapfrog.cc
 lennardjones_la_SOURCES = lennardjones.h lennardjones.cc
 linkedcell_la_SOURCES = linkedcell.h linkedcell.cc
+localpressure_la_SOURCES = localpressure.h localpressure.cc
 lpmd_la_SOURCES = lpmd.h lpmd.cc
 minimumimage_la_SOURCES = minimumimage.h minimumimage.cc
 mol2_la_SOURCES = mol2.h mol2.cc
