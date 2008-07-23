@@ -118,19 +118,19 @@ void TempProfile::ShowHelp() const
  std::cout << " General Options   >>                                                          \n";
  std::cout << "      axis          : Especifica el eje en el que se realizara el calulo.      \n";
  std::cout << "      bins          : Especifica el numero de divisiones para el eje.          \n";
- std::cout << "      range         : Especifica el rango para calculo de densidad.            \n";
- std::cout << "      output        : Fichero en el que se graba la densidad.                  \n";
+ std::cout << "      range         : Especifica el rango para calculo de temperatura.         \n";
+ std::cout << "      output        : Fichero en el que se graba la temeratura.                \n";
  std::cout << "      average       : Setea si calcula o no el promedio de cada evaluacion.    \n";
  std::cout << '\n';
  std::cout << " Example                                                                       \n";
  std::cout << " Cargando el Modulo :                                                          \n";
- std::cout << " use densityprofile                                                            \n";
- std::cout << "     axis X                                                                     \n";
+ std::cout << " use tempprofile                                                               \n";
+ std::cout << "     axis X                                                                    \n";
  std::cout << "     bins 200                                                                  \n";
  std::cout << "     range Y 10 20                                                             \n";
  std::cout << "     range Z all                                                               \n";
  std::cout << "     range X all                                                               \n";
- std::cout << "     output filedensity.out                                                    \n";
+ std::cout << "     output filetemperature.out                                                \n";
  std::cout << "     average true                                                              \n";
  std::cout << " enduse                                                                        \n";
  std::cout << " Llamando al Modulo :                                                          \n";  
@@ -221,7 +221,7 @@ void TempProfile::Evaluate(SimulationCell & simcell, Potential & pot)
        else if(axis==2) pp = z;
        else ShowWarning("plugin tempprofile", "Bad calculation of tempprofile, check your 'axis' option.");
        int ir = (long) floor(pp/dr);
-       temp[ir][s] += (1/2)*m*velocity.Mod2()*KIN2EV; //Solo son los aportes a la energia cinetica.
+       temp[ir][s] += 0.5*m*velocity.Mod2()*KIN2EV; //Solo son los aportes a la energia cinetica.
        nab[ir]++;
       }
      }
