@@ -23,14 +23,23 @@ MinimumImageCellManager::~MinimumImageCellManager() { }
 void MinimumImageCellManager::Show(std::ostream & os) const
 {
  Module::Show(os);
- if (rcut <= 0.0) os << "   No cutoff was defined." << '\n';
+ if (fabs(rcut) < 1E-10) os << "   No cutoff was defined." << '\n';
 }
 
 std::string MinimumImageCellManager::Keywords() const { return "cutoff"; }
 
 void MinimumImageCellManager::Reset() { }
 
-void MinimumImageCellManager::UpdateCell(SimulationCell & sc) { }
+void MinimumImageCellManager::UpdateCell(SimulationCell & sc) 
+{ 
+ if (fabs(rcut) < 1E-10) 
+ {
+  for (int q=0;q<3;++q)
+   if (0.5*sc.GetVector(q).Mod() > rcut) rcut = 0.5*sc.GetVector(q).Mod();
+ }
+}
+
+double MinimumImageCellManager::Cutoff() const { return rcut; }
 
 void MinimumImageCellManager::BuildNeighborList(SimulationCell & sc, long i, std::list<Neighbor> & nlist, bool full, double rcu)
 {

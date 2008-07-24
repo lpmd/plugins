@@ -240,6 +240,8 @@ void LinkedCellCellManager::UpdateCell(SimulationCell & sc)
  lcm->FillCells(); 
 }
 
+double LinkedCellCellManager::Cutoff() const { return lcm->GetCutoff(); }
+
 void LinkedCellCellManager::BuildNeighborList(SimulationCell & sc, long i, std::list<Neighbor> & nlist, bool full, double rcut)
 {
  nlist.clear();
