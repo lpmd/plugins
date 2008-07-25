@@ -8,7 +8,7 @@ AM_CPPFLAGS = -Wall -pedantic
 AM_LDFLAGS = -module -avoid-version
 
 plugin_LTLIBRARIES = angdist.la beeman.la berendsen.la buckingham.la cell.la cellscaling.la constantforce.la cordnum.la cordnumfunc.la  crystal2d.la\
-                     crystalbcc.la crystalfcc.la crystalhcp.la crystalsc.la densityprofile.la dlpoly.la energy.la euler.la extravel.la \
+                     crystalbcc.la crystalfcc.la crystalhcp.la crystalsc.la densityprofile.la displace.la dlpoly.la energy.la euler.la extravel.la \
                      fastlj.la gdr.la gupta.la harmonic.la leapfrog.la lennardjones.la linkedcell.la lpmd.la localpressure.la minimumimage.la mol2.la \
                      moleculecm.la morse.la msd.la nosehoover.la nullintegrator.la nullpairpotential.la nullmetalpotential.la nullpotential.la \
                      pairdistances.la povray.la pressure.la printatoms.la quenchedmd.la replicate.la rotate.la selectatoms.la skewstart.la suttonchen.la \
@@ -39,6 +39,7 @@ crystalfcc_la_SOURCES = crystalfcc.h crystalfcc.cc
 crystalhcp_la_SOURCES = crystalhcp.h crystalhcp.cc
 crystalsc_la_SOURCES = crystalsc.h crystalsc.cc
 densityprofile_la_SOURCES = densityprofile.h densityprofile.cc
+displace_la_SOURCES = displace.h displace.cc
 dlpoly_la_SOURCES = dlpoly.h dlpoly.cc
 energy_la_SOURCES = energy.h energy.cc
 euler_la_SOURCES = euler.h euler.cc
