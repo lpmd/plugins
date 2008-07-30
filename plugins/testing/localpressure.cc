@@ -110,9 +110,12 @@ void LocalPressure::Evaluate(SimulationCell & simcell, Potential & pot)
    }
    catch (std::exception &e) { throw PluginError("localpressure", "Cannot calculate local stress with a non-pair potential."); }
   }
-  int k = ind[0]+n[1]*ind[1]+n[1]*n[2]*ind[2];
+  int k = ind[0]+n[0]*ind[1]+n[0]*n[1]*ind[2];
   for (int p=0;p<3;++p)
-   for (int q=0;q<3;++q) m->Set(3+(3*p+q), k, m->Get(3+(3*p+q), k)+(PRESSFACTOR/cv)*stress[p][q]);
+   for (int q=0;q<3;++q)
+   {
+    m->Set(3+(3*p+q), k, m->Get(3+(3*p+q), k)+(PRESSFACTOR/cv)*stress[p][q]);
+   }
  } 
 }
 
