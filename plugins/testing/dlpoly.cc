@@ -86,7 +86,7 @@ bool DlPolyFormat::ReadCell(std::istream & is, SimulationCell & sc) const
   std::istringstream vst(tmp);
   vst >> x >> y >> z;
   cv[i] = Vector(x, y, z);
-  if (rcell) sc.SetVector(i, cv[i]);
+  if (GetString("replacecell") == "true") sc.SetVector(i, cv[i]);
  } 
  long cc = 0;
  while (1)

@@ -81,7 +81,7 @@ void XYZFormat::ReadHeader(std::istream & is) const
 //
 bool XYZFormat::ReadCell(std::istream & is, SimulationCell & sc) const
 {
- if (rcell) throw PluginError("xyz", "This format does not contain any cell vectors.");
+ if (GetString("replacecell") == "true") throw PluginError("xyz", "This format does not contain any cell vectors.");
  std::string tmp;
 
  //

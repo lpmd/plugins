@@ -84,7 +84,7 @@ void Mol2Format::ReadHeader(std::istream & is) const
 
 bool Mol2Format::ReadCell(std::istream & is, SimulationCell & sc) const
 {
- if (rcell) throw PluginError("mol2", "This format does not contain any cell vectors.");
+ if (GetString("replacecell") == "true") throw PluginError("mol2", "This format does not contain any cell vectors.");
  long natoms=0;
  if(is.eof()) return false;
  while(!is.eof())

@@ -82,7 +82,7 @@ bool LPMDFormat::ReadCell(std::istream & is, SimulationCell & sc) const
  words = SplitTextLine(tmp); 
  if(words.size()==9)
  {
-  if (rcell)
+  if (GetString("replacecell") == "true")
   {
    sc.SetVector(0, Vector(atof(words[0].c_str()), atof(words[1].c_str()), atof(words[2].c_str())));
    sc.SetVector(1, Vector(atof(words[3].c_str()), atof(words[4].c_str()), atof(words[5].c_str())));
@@ -91,7 +91,7 @@ bool LPMDFormat::ReadCell(std::istream & is, SimulationCell & sc) const
  }
  else if(words.size()==6)
  {
-  if (rcell)
+  if (GetString("replacecell") == "true")
   {
    sc.ReSet(atof(words[0].c_str()),atof(words[1].c_str()),atof(words[2].c_str()),atof(words[3].c_str())*M_PI/180,atof(words[4].c_str())*M_PI/180,atof(words[5].c_str())*M_PI/180);
   }

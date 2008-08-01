@@ -167,7 +167,7 @@ bool ZLPFormat::ReadCell(std::istream & is, SimulationCell & sc) const
    ibufstr >> vq[i];
    v.Set(i, vq[i]);
   }
-  if (rcell) sc.SetVector(j, v);
+  if (GetString("replacecell") == "true") sc.SetVector(j, v);
  }
  for (long int i=0;i<natoms;++i) 
  {
