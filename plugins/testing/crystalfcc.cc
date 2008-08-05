@@ -68,16 +68,16 @@ void FCCGenerator::Generate(SimulationCell & sc) const
   {
    for (long i=0;i<nx;++i)
    {
-    p = Vector((double(i)+0.5)*ax, (double(j)+0.5)*ay, (double(k)+0.5)*az);
+    p = Vector((double(i)+0.51)*ax, (double(j)+0.5)*ay, (double(k)+0.5)*az);
     sc.AppendAtom(Atom(spc));
     sc.SetFracPosition(cc++, p);
-    p = Vector((double(i)+0.5)*ax, double(j)*ay, (double(k)+1.0)*az);
+    p = Vector((double(i)+0.51)*ax, double(j)*ay, (double(k)+1.0)*az);
     sc.AppendAtom(Atom(spc));
     sc.SetFracPosition(cc++, p);
-    p = Vector((double(i)+1.0)*ax, double(j)*ay, (double(k)+0.5)*az);
+    p = Vector((double(i)+1.01)*ax, double(j)*ay, (double(k)+0.5)*az);
     sc.AppendAtom(Atom(spc));
     sc.SetFracPosition(cc++, p);
-    p = Vector((double(i)+1.0)*ax, (double(j)+0.5)*ay, (double(k)+1.0)*az);
+    p = Vector((double(i)+1.01)*ax, (double(j)+0.5)*ay, (double(k)+1.0)*az);
     sc.AppendAtom(Atom(spc));
     sc.SetFracPosition(cc++, p);
    }
