@@ -8,11 +8,12 @@ AM_CPPFLAGS = -Wall -pedantic
 AM_LDFLAGS = -module -avoid-version
 
 plugin_LTLIBRARIES = angdist.la beeman.la berendsen.la buckingham.la cell.la cellscaling.la constantforce.la cordnum.la cordnumfunc.la  crystal2d.la\
-                     crystalbcc.la crystalfcc.la crystalhcp.la crystalsc.la densityprofile.la displace.la dispvol.la dlpoly.la energy.la euler.la extravel.la \
-                     fastlj.la gdr.la gupta.la harmonic.la leapfrog.la lennardjones.la linkedcell.la lpmd.la localpressure.la minimumimage.la mol2.la \
-                     moleculecm.la morse.la msd.la nosehoover.la nullintegrator.la nullpairpotential.la nullmetalpotential.la nullpotential.la \
-                     pairdistances.la povray.la pressure.la printatoms.la quenchedmd.la replicate.la rotate.la selectatoms.la skewstart.la suttonchen.la \
-                     temperature.la tempprofile.la tempscaling.la vacf.la vasp.la veldist.la velocityverlet.la verlet.la xyz.la zlp.la
+                     crystalbcc.la crystalfcc.la crystalhcp.la crystalsc.la densityprofile.la displace.la dispvol.la dlpoly.la energy.la euler.la \
+                     extravel.la fastlj.la gdr.la gupta.la harmonic.la leapfrog.la lennardjones.la linkedcell.la lpmd.la localpressure.la \
+                     minimumimage.la mol2.la moleculecm.la morse.la msd.la nosehoover.la nullintegrator.la nullpairpotential.la nullmetalpotential.la \
+                     nullpotential.la pairdistances.la povray.la pressure.la printatoms.la quenchedmd.la replicate.la rotate.la selectatoms.la \
+                     shear.la skewstart.la suttonchen.la temperature.la tempprofile.la tempscaling.la vacf.la vasp.la veldist.la velocityverlet.la \
+                     verlet.la xyz.la zlp.la
 
 #
 #
@@ -72,6 +73,7 @@ quenchedmd_la_SOURCES = quenchedmd.h quenchedmd.cc
 replicate_la_SOURCES = replicate.h replicate.cc
 rotate_la_SOURCES = rotate.h rotate.cc
 selectatoms_la_SOURCES = selectatoms.h selectatoms.cc
+shear_la_SOURCES = shear.h shear.cc
 skewstart_la_SOURCES = skewstart.h skewstart.cc
 suttonchen_la_SOURCES = suttonchen.h suttonchen.cc
 temperature_la_SOURCES = temperature.h temperature.cc
