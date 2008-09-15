@@ -7,13 +7,13 @@ plugindir = $(libdir)/lpmd
 AM_CPPFLAGS = -Wall -pedantic
 AM_LDFLAGS = -module -avoid-version
 
-plugin_LTLIBRARIES = angdist.la beeman.la berendsen.la buckingham.la cell.la cellscaling.la cna.la constantforce.la cordnum.la cordnumfunc.la crystal2d.la\
-                     crystalbcc.la crystalfcc.la crystalhcp.la crystalsc.la densityprofile.la displace.la dispvol.la dlpoly.la energy.la euler.la \
-                     extravel.la fastlj.la gdr.la gupta.la harmonic.la leapfrog.la lennardjones.la linkedcell.la lpmd.la localpressure.la \
-                     minimumimage.la mol2.la moleculecm.la morse.la msd.la nosehoover.la nullintegrator.la nullpairpotential.la nullmetalpotential.la \
-                     nullpotential.la pairdistances.la povray.la pressure.la printatoms.la quenchedmd.la replicate.la rotate.la selectatoms.la \
-                     shear.la skewstart.la suttonchen.la temperature.la tempprofile.la tempscaling.la vacf.la vasp.la veldist.la velocityverlet.la \
-                     verlet.la xyz.la zlp.la
+plugin_LTLIBRARIES =	angdist.la beeman.la berendsen.la buckingham.la cell.la cellscaling.la constantforce.la cordnum.la cordnumfunc.la \
+						crystal2d.la crystalbcc.la crystalfcc.la crystalhcp.la crystalsc.la densityprofile.la displace.la dlpoly.la energy.la \
+						euler.la extravel.la fastlj.la finnissinclair.la gdr.la gupta.la harmonic.la leapfrog.la lennardjones.la linkedcell.la \
+						lpmd.la localpressure.la minimumimage.la mol2.la moleculecm.la morse.la msd.la nosehoover.la nullintegrator.la \
+						nullpairpotential.la nullmetalpotential.la nullpotential.la pairdistances.la povray.la pressure.la printatoms.la \
+						quenchedmd.la replicate.la rotate.la selectatoms.la skewstart.la suttonchen.la temperature.la tempprofile.la tempscaling.la \
+						vacf.la vasp.la veldist.la velocityverlet.la verlet.la xyz.la zlp.la
 
 #
 #
@@ -31,7 +31,6 @@ berendsen_la_SOURCES = berendsen.h berendsen.cc
 buckingham_la_SOURCES = buckingham.h buckingham.cc
 cell_la_SOURCES = cell.h cell.cc
 cellscaling_la_SOURCES = cellscaling.h cellscaling.cc
-cna_la_SOURCES = cna.h cna.cc
 constantforce_la_SOURCES = constantforce.h constantforce.cc
 cordnum_la_SOURCES = cordnum.h cordnum.cc
 cordnumfunc_la_SOURCES = cordnumfunc.h cordnumfunc.cc
@@ -42,12 +41,12 @@ crystalhcp_la_SOURCES = crystalhcp.h crystalhcp.cc
 crystalsc_la_SOURCES = crystalsc.h crystalsc.cc
 densityprofile_la_SOURCES = densityprofile.h densityprofile.cc
 displace_la_SOURCES = displace.h displace.cc
-dispvol_la_SOURCES = dispvol.h dispvol.cc
 dlpoly_la_SOURCES = dlpoly.h dlpoly.cc
 energy_la_SOURCES = energy.h energy.cc
 euler_la_SOURCES = euler.h euler.cc
 extravel_la_SOURCES = extravel.h extravel.cc
 fastlj_la_SOURCES = fastlj.h fastlj.cc
+finnissinclair_la_SOURCES = finnissinclair.h finnissinclair.cc
 gdr_la_SOURCES = gdr.h gdr.cc
 gupta_la_SOURCES = gupta.h gupta.cc
 harmonic_la_SOURCES = harmonic.h harmonic.cc
@@ -74,12 +73,11 @@ quenchedmd_la_SOURCES = quenchedmd.h quenchedmd.cc
 replicate_la_SOURCES = replicate.h replicate.cc
 rotate_la_SOURCES = rotate.h rotate.cc
 selectatoms_la_SOURCES = selectatoms.h selectatoms.cc
-shear_la_SOURCES = shear.h shear.cc
 skewstart_la_SOURCES = skewstart.h skewstart.cc
 suttonchen_la_SOURCES = suttonchen.h suttonchen.cc
 temperature_la_SOURCES = temperature.h temperature.cc
 tempprofile_la_SOURCES = tempprofile.h tempprofile.cc
-tempscaling_la_SOURCES = tempscaling.h tempscaling.cc 
+tempscaling_la_SOURCES = tempscaling.h tempscaling.cc
 vacf_la_SOURCES = vacf.h vacf.cc
 vasp_la_SOURCES = vasp.h vasp.cc
 veldist_la_SOURCES = veldist.h veldist.cc
