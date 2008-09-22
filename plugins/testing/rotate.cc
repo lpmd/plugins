@@ -77,13 +77,14 @@ void RotateModifier::Apply(SimulationCell & sc)
  for (long int i=0;i<sc.Size();++i)
  {
   // translate so that the center of the cell is (0, 0, 0)
-  Vector pos = sc.GetAtom(i).Position() - center; 
+  Vector pos0 = sc.GetAtom(i).Position() - center; 
+  Vector pos = pos0;
   // rotate
   double rv[3];
   for (int j=0;j<3;++j)
   {
    rv[j] = 0.0;
-   for (int i=0;i<3;++i) rv[j] += rotmat[j][i]*pos.Get(i);
+   for (int i=0;i<3;++i) rv[j] += rotmat[j][i]*pos0.Get(i);
    pos.Set(j, rv[j]);
   }
   // untranslate
