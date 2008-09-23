@@ -1,22 +1,15 @@
 #
 #
 #
-
-def condreducer(x):
-    try: return int(x)
-    except:
-      try: return float(x)
-      except: return x
-
 class LPMDFormat:
 
-  def __init__(self, args={}): pass
+  def __init__(self, dc, args={}): pass
 
   def Show(self): print "*** lpmd plugin information ***"
 
   def ReadHeader(self, f):
       h = f.readline()
-      if not h.startswith('LPMD '): raise Exception('File is not in LPMD format')
+      if not h.startswith('LPMD '): raise self.dc.WrongFormat('lpmd', 'File is not in LPMD format')
 
   def ReadConfig(self, f):
       config = {'NATOMS': 0, 'AX': 1.0, 'AY': 0.0, 'AZ': 0.0, 'BX': 0.0, 'BY': 1.0, 'BZ': 0.0, 'CX': 0.0, 'CY': 0.0, 'CZ': 1.0}
@@ -31,11 +24,12 @@ class LPMDFormat:
       nats = 0
       while True:
             line = f.readline()
+            if line == '': break
             if line.startswith(': END'): break
             if line.startswith(': '):
                lspl = line.split()
                tag, value = lspl[1], lspl[3]
-               config[tag] = condreducer(value)
+               config[tag] = self.dc.condreducer(value)
             else: 
                lspl = line.split()
                config['CHEMSYMBOL_%d' % nats] = lspl.pop(0)
@@ -95,6 +89,5 @@ class LPMDFormat:
 #
 #
 #
-
-def pluginLoader(args={}): return LPMDFormat(args)
+def pluginLoader(dc, args={}): return LPMDFormat(dc, args)
 
