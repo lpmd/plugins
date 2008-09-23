@@ -139,7 +139,7 @@ bool LPMDFormat::ReadCell(std::istream & is, SimulationCell & sc) const
  return true;
 }
 
-void LPMDFormat::WriteHeader(std::ostream & os) const
+void LPMDFormat::WriteHeader(std::ostream & os, std::vector<lpmd::SimulationCell> *cell) const
 {
  os << "LPMD 1.0" << std::endl;
 }

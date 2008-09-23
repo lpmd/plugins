@@ -20,7 +20,7 @@ class VaspFormat: public lpmd::CellFormat, public lpmd::Module
   //Metodos propios de modulo dlpoly
   void ReadHeader(std::istream & is) const;
   bool ReadCell(std::istream & is, lpmd::SimulationCell & sc) const;
-  void WriteHeader(std::ostream & os) const;
+  void WriteHeader(std::ostream & os, std::vector<lpmd::SimulationCell> *cell) const;
   void WriteCell(std::ostream & os, lpmd::SimulationCell & sc) const;
   long int GetInterval() const { return interval; }
 

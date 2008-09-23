@@ -51,7 +51,7 @@ std::string Mol2Format::Keywords() const
  return "file each replacecell";
 }
 
-void Mol2Format::WriteHeader(std::ostream & os) const
+void Mol2Format::WriteHeader(std::ostream & os, std::vector<lpmd::SimulationCell> *cell) const
 {
  // Mol2 no tiene ningun header especial
 }

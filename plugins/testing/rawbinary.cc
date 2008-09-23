@@ -112,7 +112,7 @@ bool RawBinFormat::ReadCell(std::istream & is, SimulationCell & sc) const
  return true;
 }
 
-void RawBinFormat::WriteHeader(std::ostream & os) const
+void RawBinFormat::WriteHeader(std::ostream & os, std::vector<lpmd::SimulationCell> *cell) const
 {
  // El formato RawBinary no tiene ningun header especial
 }

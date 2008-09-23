@@ -184,7 +184,7 @@ bool XYZFormat::ReadCell(std::istream & is, SimulationCell & sc) const
  return true;
 }
 
-void XYZFormat::WriteHeader(std::ostream & os) const
+void XYZFormat::WriteHeader(std::ostream & os, std::vector<lpmd::SimulationCell> *cell) const
 {
  // El formato XYZ no tiene ningun header especial
 }

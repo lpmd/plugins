@@ -148,7 +148,7 @@ bool VaspFormat::ReadCell(std::istream & is, SimulationCell & sc) const
  return true;
 }
 
-void VaspFormat::WriteHeader(std::ostream & os) const
+void VaspFormat::WriteHeader(std::ostream & os, std::vector<lpmd::SimulationCell> *cell) const
 {
 }
 
