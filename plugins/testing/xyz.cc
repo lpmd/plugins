@@ -17,6 +17,7 @@ XYZFormat::XYZFormat(std::string args): Module("xyz")
  AssignParameter("coords", "positive");
  AssignParameter("inside", "false");
  AssignParameter("external", "consider");
+ AssignParameter("zerocm", "false");
  AssignParameter("replacecell", "false");
  // hasta aqui los valores por omision
  ProcessArguments(args);
@@ -25,8 +26,14 @@ XYZFormat::XYZFormat(std::string args): Module("xyz")
  level = GetInteger("level");
  coords = GetString("coords");
  inside = GetString("inside");
+ zerocm = GetString("zerocm");
  external = GetString("external");
  rcell = GetBool("replacecell");
+ if ((zerocm == "true") && (coords == "positive"))
+ {
+  coords = "centered";
+  ShowWarning("plugin xyz", "Option zerocm=true automatically sets coords=centered !");
+ }
 }
 
 XYZFormat::~XYZFormat() { delete linecounter; }
@@ -50,6 +57,9 @@ void XYZFormat::ShowHelp() const
  std::cout << "                      0/1/2 <-> pos/pos-vel/pos-vel-ace.                       \n";
  std::cout << "      coords        : Especifica si la celda esta o no centrada en el          \n";
  std::cout << "                      origen (centered/positive=default).                      \n";
+ std::cout << "      zerocm        : Especifica si se debe fijar el centro de masa del sistema \n";
+ std::cout << "                      en (0, 0, 0) cuando se leen las posiciones. Esta opcion  \n";
+ std::cout << "                      automaticamente pone coords=centered).                   \n";
  std::cout << "      inside        : Especifica si se deben reacomodar los atomos que         \n";
  std::cout << "                      se encuentran fuera de la celda (true/false=default).    \n";
  std::cout << "      external      : Especifica si se deben ignorar o no los atomos que       \n";
@@ -67,7 +77,7 @@ void XYZFormat::ShowHelp() const
 
 std::string XYZFormat::Keywords() const
 {
- return "file each level coords inside external replacecell";
+ return "file each level coords inside external replacecell zerocm";
 }
 
 void XYZFormat::ReadHeader(std::istream & is) const
@@ -105,6 +115,7 @@ bool XYZFormat::ReadCell(std::istream & is, SimulationCell & sc) const
  (*linecounter)++;
 
  // 
+ Vector cm(0.0, 0.0, 0.0);
  for (long i=0;i<natoms;++i)
  { 
   getline(is, tmp);
@@ -135,8 +146,15 @@ bool XYZFormat::ReadCell(std::istream & is, SimulationCell & sc) const
    sc.AppendAtom(a);
   }
   else throw PluginError("xyz", "An unidentified line was found in the file \""+readfile+"\", line "+ToString<int>(*linecounter));
+  cm = cm + sc[i].Position();
  }
- if (coords == "centered") sc.UnCenter();
+ cm = cm*(1.0/double(natoms));
+ if (coords == "centered")
+ {
+  if (zerocm == "true")
+      for (long i=0;i<natoms;++i) sc.SetPosition(i, sc[i].Position()-cm);   
+  sc.UnCenter();
+ }
  if (external != "ignore")
  {
   if (inside == "true")
