@@ -7,13 +7,25 @@ plugindir = $(libdir)/lpmd
 AM_CPPFLAGS = -Wall -pedantic
 AM_LDFLAGS = -module -avoid-version
 
+#
+# plugin_SCRIPTS contiene la lista de plugins en Python para lpmd-datacenter
+#
+# plugin_SCRIPTS contains the list of Python plugins for lpmd-datacenter 
+#
+plugin_SCRIPTS = dc_lpmd.py dc_table.py
+
+#
+# plugin_LTLIBRARIES contiene la lista de plugins de liblpmd (como librerias de libtool)
+#
+# plugin_LTLIBRARIES contains the list of liblpmd plugins (as libtool libraries)
+#
 plugin_LTLIBRARIES =	angdist.la beeman.la berendsen.la buckingham.la cell.la cellscaling.la constantforce.la cordnum.la cordnumfunc.la \
-						crystal2d.la crystalbcc.la crystalfcc.la crystalhcp.la crystalsc.la densityprofile.la displace.la dlpoly.la energy.la \
-						euler.la extravel.la fastlj.la finnissinclair.la gdr.la gupta.la harmonic.la leapfrog.la lennardjones.la linkedcell.la \
-						lpmd.la localpressure.la minimumimage.la mol2.la moleculecm.la morse.la msd.la nosehoover.la nullintegrator.la \
-						nullpairpotential.la nullmetalpotential.la nullpotential.la pairdistances.la povray.la pressure.la printatoms.la \
-						quenchedmd.la rawbinary.la replicate.la rotate.la selectatoms.la skewstart.la suttonchen.la temperature.la tempprofile.la tempscaling.la \
-						vacf.la vasp.la veldist.la velocityverlet.la verlet.la xyz.la zlp.la
+			crystal2d.la crystalbcc.la crystalfcc.la crystalhcp.la crystalsc.la densityprofile.la displace.la dlpoly.la energy.la \
+			euler.la extravel.la fastlj.la finnissinclair.la gdr.la gupta.la harmonic.la leapfrog.la lennardjones.la linkedcell.la \
+			lpmd.la localpressure.la minimumimage.la mol2.la moleculecm.la morse.la msd.la nosehoover.la nullintegrator.la \
+			nullpairpotential.la nullmetalpotential.la nullpotential.la pairdistances.la povray.la pressure.la printatoms.la \
+			quenchedmd.la rawbinary.la replicate.la rotate.la selectatoms.la skewstart.la suttonchen.la temperature.la tempprofile.la \
+                        tempscaling.la vacf.la vasp.la veldist.la velocityverlet.la verlet.la xyz.la zlp.la
 
 #
 #
