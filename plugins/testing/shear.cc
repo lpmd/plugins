@@ -63,6 +63,14 @@ std::string ShearModifier::Keywords() const
 
 void ShearModifier::Apply(SimulationCell & sc)
 {
+ // primero cambia la forma de la celda...
+ Vector deformation(0.0, 0.0, 0.0);
+ deformation.Set(shear_axis, strain*sc.GetVector(perp_axis).Mod()); 
+ Vector newaxis = sc.GetVector(perp_axis)+deformation;
+ newaxis = newaxis*double(sc.GetVector(perp_axis).Mod())/double(newaxis.Mod());
+ sc.SetVector(perp_axis, newaxis);
+ 
+ // luego desplaza los atomos
  Vector offset(0.0, 0.0, 0.0);
  for (long int i=0;i<sc.Size();++i)
  {
