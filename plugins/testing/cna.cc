@@ -112,20 +112,20 @@ void CommonNeighborAnalysis::Evaluate(SimulationCell & simcell, Potential & pot)
 {
  const long n = simcell.Size();
  std::vector<BondedPair> data;
+ std::list<Neighbor> * neighbormatrix = new std::list<Neighbor>[n];
+ for (long i=0;i<n;++i) simcell.BuildNeighborList(i, neighbormatrix[i], true, rcut);
  for (long i=0;i<n;++i)
  {
-  std::list<Neighbor> nlist;
-  simcell.BuildNeighborList(i, nlist, true, rcut);
+  std::list<Neighbor> & nlist = neighbormatrix[i];
   for(std::list<Neighbor>::const_iterator it=nlist.begin();it!=nlist.end();++it)
   {
    const Neighbor & nn = *it;
    if (nn.r >= rcut) continue;  
    unsigned int cna_indices[3];
-   std::list<Neighbor> jlist;
+   long int j = nn.j->Index();
+   std::list<Neighbor> & jlist = neighbormatrix[j];
    std::list<long int> cn;
    std::vector<long int> cnm;
-   long int j = nn.j->Index();
-   simcell.BuildNeighborList(j, jlist, true, rcut);
    for (std::list<Neighbor>::const_iterator jt=jlist.begin();jt!=jlist.end();++jt)
    {
     if ((*jt).r >= rcut) continue;
@@ -171,6 +171,7 @@ void CommonNeighborAnalysis::Evaluate(SimulationCell & simcell, Potential & pot)
    data.push_back(BondedPair(cna_indices[0], cna_indices[1], cna_indices[2], nn.r));
   }
  }
+ delete [] neighbormatrix;
  unsigned long int npairs = data.size();
  if (m != NULL) delete m;
  if (mode == 0)
