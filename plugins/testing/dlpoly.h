@@ -25,10 +25,11 @@ class DlPolyFormat: public lpmd::CellFormat, public lpmd::Module
   long int GetInterval() const { return interval; }
 
  private:
-  long int interval;
+  long int interval, *stepcnt;
   int level, pbkey;
   std::string ftype;
   bool rcell;
+  double dt;
 };
 
 #endif
