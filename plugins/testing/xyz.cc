@@ -64,6 +64,7 @@ void XYZFormat::ShowHelp() const
  std::cout << "                      se encuentran fuera de la celda (true/false=default).    \n";
  std::cout << "      external      : Especifica si se deben ignorar o no los atomos que       \n";
  std::cout << "                      se encuentran fuera de la celda(ignore/consider=default).\n";
+ std::cout << "                      Los atomos externos se puden eliminar si external=delete.\n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " Example                                                                       \n";
  std::cout << " Llamando al modulo :                                                          \n";
@@ -167,17 +168,29 @@ bool XYZFormat::ReadCell(std::istream & is, SimulationCell & sc) const
    }
   }
   //Chequea que todos los atomos que se han leido esten dentro de la "celda".
-  else
+  //if external==delte los borra de la simulacion
+  else if(inside != "true")
   {
    for (int i=0;i<natoms;i++)
    {
     Vector pos = sc[i].Position();
-    sc.ConvertToInternal(pos);
     Vector opos = pos;
-    for (int q=0;q<3;++q) pos.Set(q, pos.Get(q)/sc.GetVector(q).Mod());
-    if (pos.GetX()<0 || pos.GetX()>1.0) throw PluginError("xyz", "The atom ["+ToString<int>(i)+"] was found outside the cell in the [a] Vector");
-    if (pos.GetY()<0 || pos.GetY()>1.0) throw PluginError("xyz", "The atom ["+ToString<int>(i)+"] was found outside the cell in the [b] Vector");
-    if (pos.GetZ()<0 || pos.GetZ()>1.0) throw PluginError("xyz", "The atom ["+ToString<int>(i)+"] was found outside the cell in the [c] Vector");
+    for (int q=0;q<3;++q) pos.Set(q, opos.Get(q)/sc.GetVector(q).Mod());
+    if (pos.GetX()<0 || pos.GetX()>1.0)
+    {
+     if (external=="delete") {sc.DeleteAtom(i);} 
+     else {throw PluginError("xyz", "The atom ["+ToString<int>(i)+"] was found outside the cell in the [a] Vector");}
+    }
+    if (pos.GetY()<0 || pos.GetY()>1.0) 
+    {
+     if(external=="delete") {sc.DeleteAtom(i);}
+     else {throw PluginError("xyz", "The atom ["+ToString<int>(i)+"] was found outside the cell in the [b] Vector");}
+    }
+    if (pos.GetZ()<0 || pos.GetZ()>1.0) 
+    {
+     if(external=="delete") {sc.DeleteAtom(i);}
+     else {throw PluginError("xyz", "The atom ["+ToString<int>(i)+"] was found outside the cell in the [c] Vector");}
+    }
    }
   }
  }
@@ -198,6 +211,27 @@ void XYZFormat::WriteCell(std::ostream & out, SimulationCell & sc) const
   {
    Vector atompos = sc[i].Position();
    sc.SetPosition(i,atompos);
+  }
+ }
+ if(external == "delete")
+ {
+  for (int i=0;i<sc.Size();i++)
+  {
+   Vector pos = sc[i].Position();
+   Vector opos = pos;
+   for (int q=0;q<3;++q) pos.Set(q, opos.Get(q)/sc.GetVector(q).Mod());
+   if (pos.GetX()<0 || pos.GetX()>1.0)
+   {
+    sc.DeleteAtom(i);
+   }
+   if (pos.GetY()<0 || pos.GetY()>1.0) 
+   {
+    sc.DeleteAtom(i);
+   }
+   if (pos.GetZ()<0 || pos.GetZ()>1.0) 
+   {
+    sc.DeleteAtom(i);
+   }
   }
  }
  out << sc.Size() << std::endl;
