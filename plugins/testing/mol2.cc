@@ -91,7 +91,6 @@ bool Mol2Format::ReadCell(std::istream & is, SimulationCell & sc) const
  {
   std::string tmp;
   getline(is,tmp);
-  std::cerr << tmp << '\n';
   if(tmp[0]!='#')
   {
    if (tmp=="@<TRIPOS>MOLECULE")
@@ -100,7 +99,6 @@ bool Mol2Format::ReadCell(std::istream & is, SimulationCell & sc) const
     getline(is,tmp);
     std::vector<std::string> linea = SplitTextLine(tmp,' ');
     natoms = (long)atof(linea[0].c_str()); 
-    std::cerr << " numero de atomos >> " << natoms << '\n';
    }
    if (tmp=="@<TRIPOS>ATOM")
    {
@@ -121,7 +119,6 @@ bool Mol2Format::ReadCell(std::istream & is, SimulationCell & sc) const
        }
       }
       int elem=ElemNum(symb);
-      std::cerr << "Anadiendo atomo " << elem << " - " << pos << '\n';
       sc.AppendAtom(Atom(elem,pos));
      }
     }
