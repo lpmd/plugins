@@ -19,7 +19,7 @@ plugin_SCRIPTS = dc_lpmd.py dc_table.py
 #
 # plugin_LTLIBRARIES contains the list of liblpmd plugins (as libtool libraries)
 #
-plugin_LTLIBRARIES =	angdist.la beeman.la berendsen.la buckingham.la cell.la cellscaling.la constantforce.la cordnum.la cordnumfunc.la \
+plugin_LTLIBRARIES =	angdist.la beeman.la berendsen.la buckingham.la cell.la cellscaling.la cna.la constantforce.la cordnum.la cordnumfunc.la \
 			crystal2d.la crystalbcc.la crystalfcc.la crystalhcp.la crystalsc.la densityprofile.la displace.la dlpoly.la energy.la \
 			euler.la extravel.la fastlj.la finnissinclair.la gdr.la gupta.la harmonic.la leapfrog.la lennardjones.la linkedcell.la \
 			lpmd.la localpressure.la minimumimage.la mol2.la moleculecm.la morse.la msd.la nosehoover.la nullintegrator.la \
@@ -43,6 +43,7 @@ berendsen_la_SOURCES = berendsen.h berendsen.cc
 buckingham_la_SOURCES = buckingham.h buckingham.cc
 cell_la_SOURCES = cell.h cell.cc
 cellscaling_la_SOURCES = cellscaling.h cellscaling.cc
+cna_la_SOURCES = cna.h cna.cc
 constantforce_la_SOURCES = constantforce.h constantforce.cc
 cordnum_la_SOURCES = cordnum.h cordnum.cc
 cordnumfunc_la_SOURCES = cordnumfunc.h cordnumfunc.cc

@@ -17,9 +17,10 @@ using namespace lpmd;
 class BondedPair
 {
  public:
-  BondedPair(unsigned int j0, unsigned int k0, unsigned int l0, double r0): j(j0), k(k0), l(l0), r(r0) { }
+  BondedPair(unsigned int j0, unsigned int k0, unsigned int l0, double r0, const Vector & c): j(j0), k(k0), l(l0), r(r0), center(c) { }
   unsigned int j, k, l;
   double r;
+  Vector center;
 };
 
 CommonNeighborAnalysis::CommonNeighborAnalysis(std::string args): Module("cna")
@@ -168,7 +169,7 @@ void CommonNeighborAnalysis::Evaluate(SimulationCell & simcell, Potential & pot)
     }
     cna_indices[2] = longest.size()-1;
    }
-   data.push_back(BondedPair(cna_indices[0], cna_indices[1], cna_indices[2], nn.r));
+   data.push_back(BondedPair(cna_indices[0], cna_indices[1], cna_indices[2], nn.r, simcell[i].Position()+nn.rij*0.5));
   }
  }
  delete [] neighbormatrix;
@@ -177,18 +178,24 @@ void CommonNeighborAnalysis::Evaluate(SimulationCell & simcell, Potential & pot)
  if (mode == 0)
  {
   // Full mode
-  m = new Matrix(4, npairs);
+  m = new Matrix(7, npairs);
   // Asigna los labels al objeto Matrix para cada columna
   m->SetLabel(0, "j");
   m->SetLabel(1, "k");
   m->SetLabel(2, "l");
   m->SetLabel(3, "r");
+  m->SetLabel(4, "x0");
+  m->SetLabel(5, "y0");
+  m->SetLabel(6, "z0");
   for (unsigned long int q=0;q<npairs;++q)
   {
    m->Set(0, q, data[q].j);
    m->Set(1, q, data[q].k);
    m->Set(2, q, data[q].l);
    m->Set(3, q, data[q].r);
+   m->Set(4, q, data[q].center.Get(0));
+   m->Set(5, q, data[q].center.Get(1));
+   m->Set(6, q, data[q].center.Get(2));
   }
  } 
  else if (mode == 1)
