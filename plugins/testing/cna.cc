@@ -14,11 +14,11 @@
 
 using namespace lpmd;
 
-class BondedPair
+class BondedPair: public IndexTrio
 {
  public:
-  BondedPair(unsigned int j0, unsigned int k0, unsigned int l0, double r0, const Vector & c): j(j0), k(k0), l(l0), r(r0), center(c) { }
-  unsigned int j, k, l;
+  BondedPair(unsigned int j0, unsigned int k0, unsigned int l0, unsigned long int ii, unsigned long int jj, double r0, const Vector & c): IndexTrio(j0, k0, l0), ati(ii), atj(jj), r(r0), center(c) { }
+  unsigned int ati, atj; // index of atoms involved in the pair
   double r;
   Vector center;
 };
@@ -31,7 +31,20 @@ CommonNeighborAnalysis::CommonNeighborAnalysis(std::string args): Module("cna")
  std::string m = GetString("mode");
  if (m == "full") mode = 0;
  else if (m == "statistics") mode = 1;
+ else if (m == "defects") mode = 2;
  rcut = GetDouble("rcut");
+ std::string rfs = GetString("reference");
+ if (rfs == "fcc") refmap[IndexTrio(4, 2, 1)] = 1;
+ else if (rfs == "bcc")
+ {
+  refmap[IndexTrio(4, 4, 4)] = 1;
+  refmap[IndexTrio(6, 6, 6)] = 1;
+ }
+ else if (rfs == "hcp")
+ {
+  refmap[IndexTrio(4, 2, 1)] = 1;
+  refmap[IndexTrio(4, 2, 2)] = 1;
+ }
  start_step = GetInteger("start");
  end_step = GetInteger("end");
  interval = GetInteger("each");
@@ -64,7 +77,7 @@ void CommonNeighborAnalysis::ShowHelp() const
  std::cout << "      El radio de corte (rcut) recomendado es el primer minimo de la g(r)      \n\n";
  std::cout << " General Options   >>                                                          \n";
  std::cout << "      rcut          : Especifica el radio maximo para el conteo de pares       \n";
- std::cout << "      mode          : Especifica el modo de salida (full/statistics)           \n";
+ std::cout << "      mode          : Especifica el modo de salida (full/statistics/defects)   \n";
  std::cout << "      output        : Fichero en el que se graba la salida                     \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " Example                                                                       \n";
@@ -169,7 +182,7 @@ void CommonNeighborAnalysis::Evaluate(SimulationCell & simcell, Potential & pot)
     }
     cna_indices[2] = longest.size()-1;
    }
-   data.push_back(BondedPair(cna_indices[0], cna_indices[1], cna_indices[2], nn.r, simcell[i].Position()+nn.rij*0.5));
+   data.push_back(BondedPair(cna_indices[0], cna_indices[1], cna_indices[2], i, nn.j->Index(), nn.r, simcell[i].Position()+nn.rij*0.5));
   }
  }
  delete [] neighbormatrix;
@@ -226,6 +239,43 @@ void CommonNeighborAnalysis::Evaluate(SimulationCell & simcell, Potential & pot)
    m->Set(3, nk, 100.0*(double(stat[s])/double(npairs)));
    nk++;
   }
+ }
+ else if (mode == 2)
+ {
+  // Defects mode
+  unsigned long int * regcnt = new unsigned long int[simcell.Size()];
+  unsigned long int * defcnt = new unsigned long int[simcell.Size()];
+  for (long int q=0;q<simcell.Size();++q) regcnt[q] = defcnt[q] = 0;
+  for (unsigned long int q=0;q<npairs;++q)
+  {
+   if (refmap.count(IndexTrio(data[q].j, data[q].k, data[q].l)) > 0) 
+   {
+    regcnt[data[q].ati]++;
+    regcnt[data[q].atj]++;
+   }
+   else
+   {
+    defcnt[data[q].ati]++;
+    defcnt[data[q].atj]++;
+   }
+  }
+  m = new Matrix(6, simcell.Size());
+  m->SetLabel(0, "x");
+  m->SetLabel(1, "y");
+  m->SetLabel(2, "z");
+  m->SetLabel(3, "reference");
+  m->SetLabel(4, "defects");
+  m->SetLabel(5, "%defect");
+  for (long int q=0;q<simcell.Size();++q)
+  {
+   const Vector & pos = simcell[q].Position();
+   for (int pp=0;pp<3;++pp) m->Set(pp, q, pos.Get(pp));
+   m->Set(3, q, regcnt[q]);
+   m->Set(4, q, defcnt[q]);
+   m->Set(5, q, 100.0*defcnt[q]/(regcnt[q]+defcnt[q]));
+  }
+  delete [] regcnt;
+  delete [] defcnt;
  }
 }
 
