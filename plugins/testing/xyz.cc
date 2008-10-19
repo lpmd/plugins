@@ -117,6 +117,7 @@ bool XYZFormat::ReadCell(std::istream & is, SimulationCell & sc) const
 
  // 
  Vector cm(0.0, 0.0, 0.0);
+ double tmass = 0.0;
  for (long i=0;i<natoms;++i)
  { 
   getline(is, tmp);
@@ -147,9 +148,10 @@ bool XYZFormat::ReadCell(std::istream & is, SimulationCell & sc) const
    sc.AppendAtom(a);
   }
   else throw PluginError("xyz", "An unidentified line was found in the file \""+readfile+"\", line "+ToString<int>(*linecounter));
-  cm = cm + sc[i].Position();
+  cm = cm + sc[i].Mass()*sc[i].Position();
+  tmass += sc[i].Mass();
  }
- cm = cm*(1.0/double(natoms));
+ cm = cm / tmass;
  if (coords == "centered")
  {
   if (zerocm == "true")
@@ -160,12 +162,8 @@ bool XYZFormat::ReadCell(std::istream & is, SimulationCell & sc) const
  {
   if (inside == "true")
   {
-   //Reubica los atomos dentro de la celda.
-   for(int i=0;i<natoms;i++)
-   {
-    Vector atompos = sc[i].Position();
-    sc.SetPosition(i,atompos);
-   }
+   // Reubica los atomos dentro de la celda.
+   for (int i=0;i<natoms;i++) sc.SetPosition(i, sc[i].Position());
   }
   //Chequea que todos los atomos que se han leido esten dentro de la "celda".
   //if external==delte los borra de la simulacion
@@ -206,47 +204,41 @@ void XYZFormat::WriteCell(std::ostream & out, SimulationCell & sc) const
 {
  if (inside == "true")
  {
-  //Reubica los atomos dentro de la celda.
-  for(int i=0;i<sc.Size();i++)
-  {
-   Vector atompos = sc[i].Position();
-   sc.SetPosition(i,atompos);
-  }
+  // Reubica los atomos dentro de la celda.
+  for (int i=0;i<sc.Size();i++) sc.SetPosition(i, sc[i].Position());
  }
- if(external == "delete")
+ if (external == "delete")
  {
   for (int i=0;i<sc.Size();i++)
   {
    Vector pos = sc[i].Position();
    Vector opos = pos;
    for (int q=0;q<3;++q) pos.Set(q, opos.Get(q)/sc.GetVector(q).Mod());
-   if (pos.GetX()<0 || pos.GetX()>1.0)
-   {
-    sc.DeleteAtom(i);
-   }
-   if (pos.GetY()<0 || pos.GetY()>1.0) 
-   {
-    sc.DeleteAtom(i);
-   }
-   if (pos.GetZ()<0 || pos.GetZ()>1.0) 
-   {
-    sc.DeleteAtom(i);
-   }
+   if (pos.GetX()<0 || pos.GetX()>1.0) sc.DeleteAtom(i);
+   if (pos.GetY()<0 || pos.GetY()>1.0) sc.DeleteAtom(i);
+   if (pos.GetZ()<0 || pos.GetZ()>1.0) sc.DeleteAtom(i);
   }
  }
  out << sc.Size() << std::endl;
  out << '\n';
- if(level == 0)
+ Vector cm(0.0, 0.0, 0.0);
+ if (coords == "centered")
  {
-  for(int i=0;i<sc.Size();i++) out << (sc.GetAtom(i)).Symb() << " " << (sc.GetAtom(i)).Position() << std::endl;
+  double tmass = 0.0;
+  for (long int i=0;i<sc.Size();++i) 
+  {
+   cm = cm + sc[i].Mass()*sc[i].Position();
+   tmass += sc[i].Mass();
+  }
+  cm = cm / tmass;
  }
- else if(level == 1)
+ for (long int i=0;i<sc.Size();++i)
  {
-  for(int i=0;i<sc.Size();i++) out << (sc.GetAtom(i)).Symb() << " " << (sc.GetAtom(i)).Position() << " " << (sc.GetAtom(i)).Velocity() << std::endl;
- }
- else if(level == 2)
- {
-  for(int i=0;i<sc.Size();i++) out << (sc.GetAtom(i)).Symb() << " " << (sc.GetAtom(i)).Position() << " " << (sc.GetAtom(i)).Velocity() << " " << (sc.GetAtom(i)).Acceleration() << std::endl;
+  if (coords == "centered") out << sc[i].Symb() << " " << sc[i].Position()-cm;
+  else out << sc[i].Symb() << " " << sc[i].Position();
+  if (level > 0) out << " " << sc[i].Velocity();
+  if (level > 1) out << " " << sc[i].Acceleration();
+  out << '\n';
  }
 }
 
