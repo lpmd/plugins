@@ -94,7 +94,7 @@ Vector FinnisSinclair::ManyBodies(const Vector &rij, const double &rhoi, const d
 }
 
 // No longer-ranged corrections apply beyond cutoffs c and d (neither for deltarhoi, for deltaU1, for deltaU2 nor for virial)
-double FinnisSinclair::deltarhoi(const double &rhobar) const{	return 0.0;}
+double FinnisSinclair::deltarhoi(const double &rhobar, const int &N) const{	return 0.0;}
 double FinnisSinclair::deltaU1(const double &rhobar, const int &N) const{	return 0.0;}
 double FinnisSinclair::deltaU2(const double &rhobar, const int &N, const double &rhoi) const { return 0.0; }
 

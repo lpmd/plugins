@@ -44,7 +44,7 @@ Vector NullMetalPotential::PairForce(const Vector &rij) const { return Vector(0.
 
 Vector NullMetalPotential::ManyBodies(const Vector &rij, const double &rhoi, const double &rhoj) const { return Vector(0.0, 0.0, 0.0); }
 
-double NullMetalPotential::deltarhoi(const double &rhobar) const { return 0.0; }
+double NullMetalPotential::deltarhoi(const double &rhobar, const int &N) const { return 0.0; }
 
 double NullMetalPotential::deltaU1(const double &rhobar, const int &N) const { return 0.0; }
 

@@ -91,24 +91,21 @@ Vector SuttonChen::ManyBodies(const Vector &rij, const double &rhoi, const doubl
  return tmp*ff;
 }
 
-double SuttonChen::deltarhoi(const double &rhobar) const
+double SuttonChen::deltarhoi(const double &rhobar, const int &n) const
 {
- return (4*M_PI*rhobar*a*a*a/(m-3))*pow(a/rcut,m-3);
+ return 0;
 }
 
 double SuttonChen::deltaU1(const double &rhobar, const int &N) const
 {
- double f = 2*M_PI*N*rhobar*e*a*a*a/(n-3);
- return f*pow(a/rcut,n-3);
+ return 0;
 }
 
 double SuttonChen::deltaU2(const double &rhobar, const int &N, const double &rhoi) const { return 0.0e0; }
 
 double SuttonChen::VirialCorrection(const double &rhobar, const int &N, const double &rhoi) const
 {
- double dV1 = (n/(n-3))*pow(a/rcut, n-3);
- double dV2 = (2.0*m/(m-3))*pow(a/rcut, n-3)*c/(2.0*sqrt(rhoi));
- return -(2.0*M_PI*rhobar*N*e*pow(a, 3.0)*(dV1-dV2));
+ return 0;
 }
 
 // Esto se inlcuye para que el modulo pueda ser cargado dinamicamente

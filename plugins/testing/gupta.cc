@@ -91,17 +91,14 @@ Vector Gupta::ManyBodies(const Vector &rij, const double &rhoi, const double &rh
  return tmp*ff;
 }
 
-double Gupta::deltarhoi(const double &rhobar) const
+double Gupta::deltarhoi(const double &rhobar, const int &N) const
 {
- double tmp =r0/qij;
- return (2*M_PI*rhobar*tmp)*(rcut*rcut+2*rcut*tmp+2*tmp*tmp)*exp(-2*(rcut-r0)/tmp);
+ return 0;
 }
 
 double Gupta::deltaU1(const double &rhobar, const int &N) const
 {
- double tmp = r0/p;
- double f = 2*M_PI*N*rhobar*A*tmp;
- return f*(rcut*rcut+2*rcut*tmp+2*tmp*tmp)*exp(-(rcut-r0)/tmp);
+ return 0;
 }
 
 double Gupta::deltaU2(const double &rhobar, const int &N, const double &rhoi) const
@@ -113,11 +110,7 @@ double Gupta::VirialContribution(const double &r, const double &rhoi, const doub
 
 double Gupta::VirialCorrection(const double &rhobar, const int &N, const double &rhoi) const
 {
- double tmp = r0/p;
- double tmq = r0/qij;
- double dV1 = N*A*(rcut*rcut*rcut+3*rcut*rcut*tmp+6*rcut*tmp*tmp+6*tmp*tmp*tmp)*exp(-(rcut-r0)/tmp);
- double dV2 = (rcut*rcut*rcut+3*rcut*rcut*tmq+6*rcut*tmq*tmq+6*tmq*tmq*tmq)*exp(-2*(rcut-r0)/tmq)*(N*B/(2.0*sqrt(rhoi)));
- return -(2.0*M_PI*rhobar*(dV1-dV2));
+ return 0;
 }
 
 // Esto se inlcuye para que el modulo pueda ser cargado dinamicamente
