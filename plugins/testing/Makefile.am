@@ -52,7 +52,7 @@ plugin_LTLIBRARIES =	angdist.la beeman.la berendsen.la buckingham.la cell.la \
                         nullpotential.la pairdistances.la povray.la pressure.la printatoms.la \
 			quenchedmd.la rawbinary.la replicate.la rotate.la selectatoms.la shear.la \
                         skewstart.la suttonchen.la thermalneedle.la temperature.la tempprofile.la \
-                        tempscaling.la vacf.la vasp.la veldist.la velocityverlet.la verlet.la xyz.la zlp.la \
+                        tempscaling.la vacf.la vasp.la veldist.la velocityverlet.la verlet.la xyz.la zlp.la
 
 #
 #
