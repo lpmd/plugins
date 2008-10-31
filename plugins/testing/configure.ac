@@ -1,11 +1,13 @@
 
 AC_INIT
 AM_CONFIG_HEADER(config.h)
-AM_INIT_AUTOMAKE(lpmd-plugins, 0.5.2)
+AM_INIT_AUTOMAKE(lpmd-plugins, 0.5.3)
 AC_PROG_CXX
 AC_PROG_INSTALL
 AC_PROG_LIBTOOL
 AC_STDC_HEADERS
+
+#AC_DEFINE([NUMBERED_RELEASE], [0], [Marks this revision as a numbered release])
 
 AC_ARG_WITH(lpmd,
     [  --with-lpmd=DIR         liblpmd installation directory (default /usr)],

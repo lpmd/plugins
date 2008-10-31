@@ -2,8 +2,13 @@
 #
 #
 
+
 version.h:
 	./update-svnrev.sh .
+
+all:
+	$(MAKE) version.h
+	$(MAKE) all-am
 
 install:
 	./update-svnrev.sh .
@@ -15,11 +20,12 @@ install-exec:
 
 CLEANFILES = version.h
 
-#
-#
-#
 noinst_LTLIBRARIES = plugincommon.la
 plugincommon_la_SOURCES = plugincommon.h plugincommon.cc version.h
+
+#
+#
+#
 
 #
 #
