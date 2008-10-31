@@ -58,7 +58,7 @@ plugin_LTLIBRARIES =	angdist.la beeman.la berendsen.la buckingham.la cell.la \
 #
 #
 
-zlp_la_LDFLAGS = $(AM_LDFLAGS) -lz
+zlp_la_LDFLAGS = -module -avoid-version -lz
 
 #
 #
