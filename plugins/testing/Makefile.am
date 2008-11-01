@@ -2,6 +2,7 @@
 #
 #
 
+EXTRA_DIST = update-svnrev.sh
 
 version.h:
 	./update-svnrev.sh .
@@ -26,21 +27,10 @@ plugincommon_la_SOURCES = plugincommon.h plugincommon.cc version.h
 #
 #
 #
-
-#
-#
-#
 plugindir = $(libdir)/lpmd
 
 AM_CPPFLAGS = -Wall -pedantic
 AM_LDFLAGS = -module -avoid-version plugincommon.lo
-
-#
-# plugin_SCRIPTS contiene la lista de plugins en Python para lpmd-datacenter
-#
-# plugin_SCRIPTS contains the list of Python plugins for lpmd-datacenter 
-#
-plugin_SCRIPTS = dc_lpmd.py dc_table.py
 
 #
 # plugin_LTLIBRARIES contiene la lista de plugins de liblpmd (como librerias de libtool)
