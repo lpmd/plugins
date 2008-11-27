@@ -184,7 +184,7 @@ void CordNum::Evaluate(SimulationCell & simcell, Potential & pot)
      const Neighbor &nn = *it;
      if(nn.j->Species()==e2)
      {
-      if(nn.r<=rc12*rc12)
+      if(nn.r<=rc12)
       {
        histo[s][i]++;
       }
