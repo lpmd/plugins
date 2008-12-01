@@ -23,6 +23,7 @@ class Vacf: public lpmd::ScalarTable, public lpmd::TemporalProperty, public lpmd
 
  private:
   lpmd::Matrix * m;
+  double dt;
 };
 
 #endif

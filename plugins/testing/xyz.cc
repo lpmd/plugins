@@ -94,6 +94,7 @@ bool XYZFormat::ReadCell(std::istream & is, SimulationCell & sc) const
 {
  if (GetString("replacecell") == "true") throw PluginError("xyz", "This format does not contain any cell vectors.");
  std::string tmp;
+ sc.MetaData().AssignParameter("level",ToString<int>(level));
 
  //
  getline(is, tmp);              // This reads the "number of atoms" line
@@ -202,6 +203,7 @@ void XYZFormat::WriteHeader(std::ostream & os, std::vector<lpmd::SimulationCell>
 
 void XYZFormat::WriteCell(std::ostream & out, SimulationCell & sc) const
 {
+ sc.MetaData().AssignParameter("level",ToString<int>(level));
  if (inside == "true")
  {
   // Reubica los atomos dentro de la celda.
