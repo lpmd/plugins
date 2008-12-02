@@ -70,6 +70,7 @@ void LPMDFormat::ReadHeader(std::istream & is) const
 //
 bool LPMDFormat::ReadCell(std::istream & is, SimulationCell & sc) const
 {
+ sc.MetaData().AssignParameter("level",ToString<int>(level));
  std::string tmp;
  getline(is, tmp);                                     // Numero de atomos
  (*linecounter)++;
@@ -146,6 +147,7 @@ void LPMDFormat::WriteHeader(std::ostream & os, std::vector<lpmd::SimulationCell
 
 void LPMDFormat::WriteCell(std::ostream & out, SimulationCell & sc) const
 {
+ sc.MetaData().AssignParameter("level",ToString<int>(level));
  out << sc.Size() << std::endl;
  out << sc.GetVector(0) << " " << sc.GetVector(1) << " " << sc.GetVector(2) << std::endl;
  if(level == 0)

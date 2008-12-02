@@ -76,8 +76,16 @@ void MSD::Evaluate(const std::vector<SimulationCell> & simcell, Potential & pot)
  // Output MSD
  //
  m = new Matrix(nsp+1, (int)(N-1)/2);
+ const std::list<std::string> lst = simcell[0].SpeciesList();
+
+ int k=1;
+ for (std::list<std::string>::const_iterator it=lst.begin();it!=lst.end();++it)
+ {
+  m->SetLabel(k, (*it));
+  k++;
+ }
  m->SetLabel(0, "time");
- for (int j=0;j<nsp;++j) m->SetLabel(j+1, "MSD");
+
  for(int i=0;i<(int)(N-1)/2;++i)
  {
   m->Set(0, i, i);

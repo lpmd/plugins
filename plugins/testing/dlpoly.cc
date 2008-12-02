@@ -93,6 +93,7 @@ void DlPolyFormat::ReadHeader(std::istream & is) const
 //
 bool DlPolyFormat::ReadCell(std::istream & is, SimulationCell & sc) const
 {
+ sc.MetaData().AssignParameter("level",ToString<int>(level));
  int fkey, pbk;
  std::string tmp;
  Vector cv[3];
@@ -199,6 +200,7 @@ void DlPolyFormat::WriteHeader(std::ostream & os, std::vector<lpmd::SimulationCe
 
 void DlPolyFormat::WriteCell(std::ostream & out, SimulationCell & sc) const
 {
+ sc.MetaData().AssignParameter("level",ToString<int>(level));
  char * buf = new char[512];
  if (ftype=="CONFIG")
  {

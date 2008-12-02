@@ -66,6 +66,7 @@ void RawBinFormat::ReadHeader(std::istream & is) const
 //
 bool RawBinFormat::ReadCell(std::istream & is, SimulationCell & sc) const
 {
+ sc.MetaData().AssignParameter("level",ToString<int>(level));
  if (GetString("replacecell") == "true") throw PluginError("rawbinary", "This format does not contain any cell vectors.");
  long int s = 0;
  int lvl = level;
@@ -119,6 +120,7 @@ void RawBinFormat::WriteHeader(std::ostream & os, std::vector<lpmd::SimulationCe
 
 void RawBinFormat::WriteCell(std::ostream & out, SimulationCell & sc) const
 {
+ sc.MetaData().AssignParameter("level",ToString<int>(level));
  long int totsize = 0, expsize;
  long int s = sc.Size();
  expsize = sizeof(long int)+sizeof(int)+s*(sizeof(int)+3*sizeof(double)*(level+1));
