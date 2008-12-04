@@ -210,7 +210,6 @@ bool ZLPFormat::ReadCell(std::istream & is, SimulationCell & sc) const
 
 void ZLPFormat::WriteHeader(std::ostream & os, std::vector<lpmd::SimulationCell> *cell) const
 {
- sc.MetaData().AssignParameter("level",ToString<int>(level));
  char hdr[10] = {'Z', '4', 'L', '2', 'P', 1, 0, 0, 0, 0};
  // Z4L2P es la firma que marca el archivo como formato ZLP
  // los tres bytes siguientes son los numeros de version del formato
@@ -232,6 +231,7 @@ void ZLPFormat::WriteHeader(std::ostream & os, std::vector<lpmd::SimulationCell>
 //
 void ZLPFormat::WriteCell(std::ostream & out, SimulationCell & sc) const
 {
+ sc.MetaData().AssignParameter("level",ToString<int>(level));
  *lastop = ZLP_WRITE;
  z_stream & stream = *((z_stream *)(zstr));
  std::ostringstream * ostr = new std::ostringstream();
