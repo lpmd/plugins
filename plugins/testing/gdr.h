@@ -8,6 +8,7 @@
 #include <lpmd/scalartable.h>
 #include <lpmd/instantproperty.h>
 #include <lpmd/plugin.h>
+#include <plugincommon.h>
 
 class Gdr: public lpmd::ScalarTable, public lpmd::InstantProperty, public lpmd::Module
 {

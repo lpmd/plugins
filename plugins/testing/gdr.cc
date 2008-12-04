@@ -68,6 +68,8 @@ void Gdr::Evaluate(SimulationCell & simcell, Potential & pot)
 {
  // fabs(rcut) < 1e-05 used to avoid comparing doubles
  if (nb == 0 || fabs(rcut) < 1e-05) throw PluginError("gdr", "Error in calculation: Cutoff or bins have wrong value.");
+ m=gdr(simcell,pot,nb,rcut);
+ /*
  double dr = rcut/ double(nb);
 
  int nsp = simcell.NEspec();
@@ -173,6 +175,7 @@ void Gdr::Evaluate(SimulationCell & simcell, Potential & pot)
  delete [] gt;
  for (int i=0;i<nb;i++) delete [] g[i];
  delete [] g;
+ */
 }
 
 // Esto se incluye para que el modulo pueda ser cargado dinamicamente
