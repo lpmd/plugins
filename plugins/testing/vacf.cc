@@ -3,6 +3,7 @@
 //
 
 #include "vacf.h"
+#include "plugincommon.h"
 
 using namespace lpmd;
 
@@ -20,102 +21,8 @@ std::string Vacf::Keywords() const { return "dt"; }
 
 void Vacf::Evaluate(const std::vector<SimulationCell> & simcell, Potential & pot)
 {
- int N = simcell.size();
- int nsp = simcell[0].NEspec();
- int *sp = simcell[0].Espec();
- int nat = simcell[0].Size();
-
- double **vaf=new double*[(int)(N-1)/2];
- for(int i=0;i<(int)(N-1)/2;i++) {vaf[i]=new double[nsp];for(int j=0;j<nsp;j++) vaf[i][j]=0.0e0;}
-
- Vector ** velocities = new Vector*[N];
- for (int t=0;t<N;++t)  velocities[t] = new Vector[nat];
- if(simcell[0].MetaData().GetInteger("level")==0)
- {
-  //
-  // Undo periodicity 
-  //
-  SimulationCell scratch(simcell[0]);
-  Vector ** noperiodic = new Vector*[N];
-  for (int t=0;t<N;++t) noperiodic[t] = new Vector[nat];
-  for (int i=0;i<nat;++i) noperiodic[0][i] = simcell[0].GetAtom(i).Position();
-  
-  for (int t=1;t<N;++t)
-   for (int i=0;i<nat;++i)
-   {
-    scratch.SetPosition(0, simcell[t-1].GetAtom(i).Position());
-    scratch.SetPosition(1, simcell[t].GetAtom(i).Position());
-    noperiodic[t][i] = noperiodic[t-1][i] + scratch.VectorDistance(0, 1);
-   }
-  //
-  //Evaluate and set velocities
-  //
-  for (int i=0;i<nat;++i) velocities[0][i]=(noperiodic[0][i]-noperiodic[N-1][i])/dt;
-
-  for (int t=1;t<N;++t)
-   for (int i=0;i<nat;++i)
-   {
-    Vector vel = (noperiodic[t][i]-noperiodic[t-1][i])/dt;
-    velocities[t][i] = vel;
-   }
- }
- if(simcell[0].MetaData().GetInteger("level")>=1)
- {
-  for (int t=0;t<N;++t)
-   for (int i=0;i<nat;++i)
-   {
-    velocities[t][i] = simcell[t].GetAtom(i).Velocity();
-   }
- }
- 
- int s=0;
- for(int e1=0;e1<nsp;e1++)	   
- {		 	
-   int ne=0;
-   for(int i=0;i<nat;i++) {if(simcell[0].GetAtom(i).Species() == sp[e1]) ne++;}
-   for(int t0=0;t0<(int)(N-1)/2;t0++)
-   {
-     for(int t=0;t<(int)(N-1)/2;t++)
-     {
-      for(int i=0;i<nat;i++)
-      {
-       Vector v0n = velocities[t0][i];//simcell[t0].GetAtom(i).Velocity();
-       Vector v1n = velocities[t0+t][i];//simcell[t0+t].GetAtom(i).Velocity();
-       if(simcell[t0].GetAtom(i).Species() == sp[e1])
-       {
-	  vaf[t][e1]+=Dot(v0n,v1n)/(ne*(int)(N-1)/2);
-       }
-      }
-     }
-   }
-   s++;
- }
-
- for (int i=0;i<N;++i) delete[] velocities[i];
- delete [] velocities;
-
- //
- // Output of vacf
- //
- m = new Matrix(nsp+1, (int)(N-1)/2);
- const std::list<std::string> lst = simcell[0].SpeciesList();
-
- int k=1;
- for (std::list<std::string>::const_iterator it=lst.begin();it!=lst.end();++it)
- {
-  m->SetLabel(k, (*it));
-  k++;
- }
- m->SetLabel(0,"time");
-
- for(int i=0;i<(int)(N-1)/2;++i)
- {
-  m->Set(0, i, dt*i);
-  for (int j=0;j<nsp;++j)
-  {
-   m->Set(j+1, i, vaf[i][j]);
-  }
- }
+ if(m!=NULL) delete[]m;
+ m=vacf(simcell,pot,dt);
 }
 
 // Esto se incluye para que el modulo pueda ser cargado dinamicamente
