@@ -200,6 +200,7 @@ void DlPolyFormat::WriteHeader(std::ostream & os, std::vector<lpmd::SimulationCe
 
 void DlPolyFormat::WriteCell(std::ostream & out, SimulationCell & sc) const
 {
+ sc.SortBySpecies();
  sc.MetaData().AssignParameter("level",ToString<int>(level));
  char * buf = new char[512];
  if (ftype=="CONFIG")
