@@ -90,7 +90,7 @@ void LocalPressure::Evaluate(SimulationCell & simcell, Potential & pot)
     for (int q=0;q<3;++q) stress[p][q]=0.0e0;
   s1 = simcell.GetAtom(i).Species();
   std::list<Neighbor> nlist;
-  simcell.BuildNeighborList(i, nlist, false, rcut);
+  simcell.BuildNeighborList(i, nlist, true, rcut);
   Vector fpos = simcell.FracPosition(i);
   for (int q=0;q<3;++q) 
   {
