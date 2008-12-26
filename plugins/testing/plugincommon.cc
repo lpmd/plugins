@@ -23,6 +23,36 @@ const char * PluginVersion()
  return lver.c_str();
 }
 
+//---------------------------------------------------------------//
+// AZAR
+//
+// 11Nov99 primera version
+// 30Nov99 header externo y sobrecarga de randomize
+//________________________
+//JR//
+
+void randomize(unsigned int seed)
+{
+  srandom(seed);	// Inicializa el random
+}
+
+void randomize()
+{
+  srandom(time(0) * getpid());	// Inicializa el random
+}
+  
+double dazar(double inf, double sup)
+{
+  return (sup-inf)* double(random())/double(0x7fffffff)+inf ;
+}
+
+int iazar(int inf, int sup)
+{
+  return int(floor(dazar(inf, sup+1))) ;
+}
+//---------------------------------------------------------------//
+
+
 lpmd::Matrix* gdr(SimulationCell & simcell,Potential & pot,long int nb,double rcut)
 {
  // fabs(rcut) < 1e-05 used to avoid comparing doubles
@@ -236,4 +266,130 @@ lpmd::Matrix* vacf(const std::vector<SimulationCell> & simcell, Potential & Pot,
  for(int i=0;i<(int)(N-1)/2;++i) delete [] vaf[i];
  delete [] vaf;
  return m;
+}
+
+void Replicate(SimulationCell & sc, unsigned long nx, unsigned long ny, unsigned long nz)
+{
+ int Ntmp = sc.Size();
+ Atom *atomos;
+ atomos = new Atom[Ntmp];
+ for(int i=0;i<Ntmp;i++) atomos[i]=sc.GetAtom(i);
+ sc.Initialize(nx*Ntmp);
+ for(int i=0;i<Ntmp;i++){sc.AppendAtom(atomos[i]);}
+
+ for(unsigned long i=1;i<nx;i++)
+ {
+  for(int j=0;j<Ntmp;j++)
+  {
+   Atom tmp=atomos[j];
+   tmp.SetPos(atomos[j].Position()+sc.GetVector(0)*i);
+   sc.AppendAtom(tmp);
+  }
+ }
+ delete[] atomos;
+ Ntmp = sc.Size();
+ atomos = new Atom[Ntmp];
+ for(int i=0;i<Ntmp;i++) atomos[i]=sc.GetAtom(i);
+ sc.Initialize(ny*Ntmp);
+ for(int i=0;i<Ntmp;i++){sc.AppendAtom(atomos[i]);}
+ for(unsigned long i=1;i<ny;i++)
+ {
+  for(int j=0;j<Ntmp;j++)
+  {
+   Atom tmp=atomos[j];
+   tmp.SetPos(atomos[j].Position()+sc.GetVector(1)*i);
+   sc.AppendAtom(tmp);
+  }
+ }
+ delete[] atomos;
+ Ntmp = sc.Size();
+ atomos = new Atom[Ntmp];
+ for(int i=0;i<Ntmp;i++) atomos[i]=sc.GetAtom(i);
+ sc.Initialize(nz*Ntmp);
+ for(int i=0;i<Ntmp;i++) { sc.AppendAtom(atomos[i]);}
+ for(unsigned long i=1;i<nz;i++)
+ {
+  for(int j=0;j<Ntmp;j++)
+  {
+   Atom tmp=atomos[j];
+   tmp.SetPos(atomos[j].Position()+sc.GetVector(2)*i);
+   sc.AppendAtom(tmp);
+  }
+ }
+ delete[] atomos;
+ //Resetea los vectores base de la celda.
+ Vector a=sc.GetVector(0);
+ sc.SetVector(0, a*nx);
+ Vector b=sc.GetVector(1);
+ sc.SetVector(1, b*ny);
+ Vector c=sc.GetVector(2);
+ sc.SetVector(2, c*nz);
+ //Asigna el index() a cada atomo de la celda.
+ sc.AssignIndex();
+ sc.ClearForces();
+}
+
+void Rotate(SimulationCell & sc)
+{
+ // arbitrary rotation matrix
+ double rotmat[3][3];
+ // Eulerian Angles
+ double phi=dazar(0,2*M_PI), psi=dazar(0,2*M_PI), theta=dazar(0,2*M_PI);
+// double phi=0, psi=0, theta=0;
+ // Eulerian Matrix
+ rotmat[0][0] = (cos(phi)*cos(psi)-cos(theta)*sin(phi)*sin(psi));
+ rotmat[0][1] = (cos(psi)*sin(phi)+cos(theta)*cos(phi)*sin(psi));
+ rotmat[0][2] = (sin(theta)*sin(psi));
+ rotmat[1][0] = (-cos(theta)*cos(psi)*sin(phi)-cos(phi)*sin(psi));
+ rotmat[1][1] = ( cos(theta)*cos(phi)*cos(psi)-sin(phi)*sin(psi));
+ rotmat[1][2] = (cos(psi)*sin(theta));
+ rotmat[2][0] = (sin(theta)*sin(phi));
+ rotmat[2][1] = (-cos(phi)*sin(theta));
+ rotmat[2][2] = ( cos(theta));
+
+ // We rotate the simulation cell vectors
+ for (int n=0; n<3; n++)
+ {
+  double v1=sc.GetVector(n).Get(0), v2=sc.GetVector(n).Get(1), v3=sc.GetVector(n).Get(2);
+  Vector newvec;
+  for (int i=0; i<3; i++) newvec.Set(i, v1*rotmat[i][0]+v2*rotmat[i][1]+v3*rotmat[i][2]);
+  sc.SetVector(n,newvec);
+ }
+ // We rotate the atoms of the cell
+// std::cout <<"nuevos vectores base de la celda replicada:\n";
+// std::cout << sc.GetVector(0) <<"\n";
+// std::cout << sc.GetVector(1) <<"\n";
+// std::cout << sc.GetVector(2) <<"\n";
+ Vector center = (sc.GetVector(0)+sc.GetVector(1)+sc.GetVector(2))*0.5;
+// std::cout << "centro en "<<center <<"\n";
+ for (long n=0;n<sc.Size();n++)
+ {
+//  std::cout <<"rotando los atomos de la celda replicada.\n";
+  Vector pos0 = sc.GetAtom(n).Position();
+  double v1=pos0.Get(0), v2=pos0.Get(1), v3=pos0.Get(2);
+  Vector newvec;
+  for (int i=0; i<3; i++) newvec.Set(i, v1*rotmat[i][0]+v2*rotmat[i][1]+v3*rotmat[i][2]);
+//  std::cout <<"antes de rotar, pos.atom "<<n<<" = "<<pos0<<" de componentes "<<v1<<v2<<v3<<"\n";
+  sc.SetPosition(n, newvec);
+//  std::cout <<"despues de rotar, newvec = pos.atom("<<n<<")= "<<newvec<<"\n";
+//  std::cout <<"asignando lo anterior al atom "<<n<<" = "<<sc.GetAtom(n).Position()<<", .\n";
+ }
+}
+
+void ReplicateRotate(const SimulationCell basecell, lpmd::Vector &centro, unsigned long na, unsigned long nb, unsigned long nc, SimulationCell & simcell)
+{
+ SimulationCell tmpSC=basecell;
+ Replicate(tmpSC,na,nb,nc);
+ Rotate(tmpSC);
+ unsigned long N = tmpSC.Size();
+ Atom *atomos = new Atom[N];
+ for(unsigned long i=0;i<N;i++)
+ {
+  atomos[i]=tmpSC.GetAtom(i);
+  lpmd::Vector vct=atomos[i].Position()+centro;
+  Atom tmp(atomos[i].Species(),vct);
+  simcell.AppendAtom(tmp);
+ }
+ delete[] atomos;
+
 }

@@ -37,18 +37,19 @@ AM_LDFLAGS = -module -avoid-version plugincommon.lo
 #
 # plugin_LTLIBRARIES contains the list of liblpmd plugins (as libtool libraries)
 #
-plugin_LTLIBRARIES =	angdist.la beeman.la berendsen.la buckingham.la cell.la \
+plugin_LTLIBRARIES =		angdist.la beeman.la berendsen.la buckingham.la cell.la \
                         cellscaling.la cna.la constantforce.la cordnum.la cordnumfunc.la \
-			crystal2d.la crystalbcc.la crystalfcc.la crystalhcp.la crystalsc.la \
+								crystal2d.la crystalbcc.la crystalfcc.la crystalhcp.la crystalsc.la \
                         densityprofile.la displace.la dispvol.la dlpoly.la energy.la \
-			euler.la extravel.la fastlj.la finnissinclair.la gdr.la gupta.la \
+								euler.la extravel.la fastlj.la finnissinclair.la gdr.la gupta.la \
                         harmonic.la leapfrog.la lennardjones.la linkedcell.la lpmd.la \
                         localpressure.la minimumimage.la mol2.la moleculecm.la morse.la msd.la \
                         nosehoover.la nullintegrator.la nullpairpotential.la nullmetalpotential.la \
                         nullpotential.la pairdistances.la povray.la pressure.la printatoms.la \
-			quenchedmd.la rawbinary.la replicate.la rotate.la selectatoms.la shear.la \
+								quenchedmd.la rawbinary.la replicate.la rotate.la selectatoms.la shear.la \
                         skewstart.la suttonchen.la thermalneedle.la temperature.la tempprofile.la \
-                        tempscaling.la vacf.la vasp.la veldist.la velocityverlet.la verlet.la xyz.la zlp.la
+                        tempscaling.la vacf.la vasp.la veldist.la velocityverlet.la verlet.la \
+                        voronoi.la xyz.la zlp.la
 
 #
 #
@@ -123,6 +124,7 @@ vasp_la_SOURCES = vasp.h vasp.cc
 veldist_la_SOURCES = veldist.h veldist.cc
 velocityverlet_la_SOURCES = velocityverlet.h velocityverlet.cc
 verlet_la_SOURCES = verlet.h verlet.cc
+voronoi_la_SOURCES = voronoi.h voronoi.cc
 xyz_la_SOURCES = xyz.h xyz.cc
 zlp_la_SOURCES = zlp.h zlp.cc
 

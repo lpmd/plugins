@@ -76,7 +76,7 @@ void RotateModifier::Apply(SimulationCell & sc)
  Vector center = (sc.GetVector(0)+sc.GetVector(1)+sc.GetVector(2))*0.5;
  for (long int i=0;i<sc.Size();++i)
  {
-  // translate so that the center of the cell is (0, 0, 0)
+  // translate such that the center of the cell be (0, 0, 0)
   Vector pos0 = sc.GetAtom(i).Position() - center; 
   Vector pos = pos0;
   // rotate
