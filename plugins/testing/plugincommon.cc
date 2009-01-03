@@ -331,11 +331,11 @@ void Replicate(SimulationCell & sc, unsigned long nx, unsigned long ny, unsigned
 
 void Rotate(SimulationCell & sc)
 {
- // arbitrary rotation matrix
+ // euler rotation matrix
  double rotmat[3][3];
  // Eulerian Angles
  double phi=dazar(0,2*M_PI), psi=dazar(0,2*M_PI), theta=dazar(0,2*M_PI);
-// double phi=0, psi=0, theta=0;
+// double phi=M_PI/8.4, psi=M_PI/8.4, theta=0;
  // Eulerian Matrix
  rotmat[0][0] = (cos(phi)*cos(psi)-cos(theta)*sin(phi)*sin(psi));
  rotmat[0][1] = (cos(psi)*sin(phi)+cos(theta)*cos(phi)*sin(psi));
@@ -356,23 +356,23 @@ void Rotate(SimulationCell & sc)
   sc.SetVector(n,newvec);
  }
  // We rotate the atoms of the cell
-// std::cout <<"nuevos vectores base de la celda replicada:\n";
-// std::cout << sc.GetVector(0) <<"\n";
-// std::cout << sc.GetVector(1) <<"\n";
-// std::cout << sc.GetVector(2) <<"\n";
+// std::cerr <<"nuevos vectores base de la celda replicada:\n";
+// std::cerr << sc.GetVector(0) <<"\n";
+// std::cerr << sc.GetVector(1) <<"\n";
+// std::cerr << sc.GetVector(2) <<"\n";
  Vector center = (sc.GetVector(0)+sc.GetVector(1)+sc.GetVector(2))*0.5;
-// std::cout << "centro en "<<center <<"\n";
+// std::cerr << "centro en "<<center <<"\n";
  for (long n=0;n<sc.Size();n++)
  {
-//  std::cout <<"rotando los atomos de la celda replicada.\n";
+//  std::cerr <<"rotando los atomos de la celda replicada.\n";
   Vector pos0 = sc.GetAtom(n).Position();
   double v1=pos0.Get(0), v2=pos0.Get(1), v3=pos0.Get(2);
   Vector newvec;
   for (int i=0; i<3; i++) newvec.Set(i, v1*rotmat[i][0]+v2*rotmat[i][1]+v3*rotmat[i][2]);
-//  std::cout <<"antes de rotar, pos.atom "<<n<<" = "<<pos0<<" de componentes "<<v1<<v2<<v3<<"\n";
+//  std::cerr <<"antes de rotar, pos.atom "<<n<<" = "<<pos0<<" de componentes "<<v1<<v2<<v3<<"\n";
   sc.SetPosition(n, newvec);
-//  std::cout <<"despues de rotar, newvec = pos.atom("<<n<<")= "<<newvec<<"\n";
-//  std::cout <<"asignando lo anterior al atom "<<n<<" = "<<sc.GetAtom(n).Position()<<", .\n";
+//  std::cerr <<"despues de rotar, newvec = pos.atom("<<n<<")= "<<newvec<<"\n";
+//  std::cerr <<"asignando lo anterior al atom "<<n<<" = "<<sc.GetAtom(n).Position()<<", .\n";
  }
 }
 
@@ -383,13 +383,14 @@ void ReplicateRotate(const SimulationCell basecell, lpmd::Vector &centro, unsign
  Rotate(tmpSC);
  unsigned long N = tmpSC.Size();
  Atom *atomos = new Atom[N];
+ double r=dazar(0,1), g=dazar(0,1), b=dazar(0,1);
  for(unsigned long i=0;i<N;i++)
  {
   atomos[i]=tmpSC.GetAtom(i);
   lpmd::Vector vct=atomos[i].Position()+centro;
   Atom tmp(atomos[i].Species(),vct);
+  tmp.SetColor(r*e1+g*e2+b*e3);
   simcell.AppendAtom(tmp);
  }
  delete[] atomos;
-
 }
