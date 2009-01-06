@@ -117,26 +117,26 @@ void VoronoiGenerator::Generate(SimulationCell & sc) const
 // for (int i=0; i<sc.Size(); i++) std::cerr << "posicion atomo "<<i<<"="<<sc.GetAtom(i).Position()<<"\n";
 
  // FIRST ELIMINATION: NOW THAT THE CELL IS FULL OF CELLS FILLED WITH ATOMS, WE ELIMINATE THE CLOSEST ATOMS
- for (int i=0; i<sc.Size(); i++)
+ std::vector<long int> tokill;
+ for (int i=0;i<sc.Size()-1;i++)
  {
-//  std::cerr<<"F. Elim: Particula "<< i <<".\n";
-  bool eliminated=false;
   Vector posi=sc.GetAtom(i).Position();
-  for (int j=0; j<sc.Size(); j++)
+  for (int j=i+1;j<sc.Size();j++)
   {
    Vector posj=sc.GetAtom(j).Position();
-   if (i!=j && (posi-posj).Mod()<rmin)
+   if ((posi-posj).Mod()<rmin)
    {
     int coin=iazar(0,1);
 //    std::cerr<<"para i<j, i="<<i<<",j="<<j<<", eliminamos part ";
-    if (coin==0)     { sc.DeleteAtom(j); /*std::cerr<<j*/; j--;}
-    else if (coin==1){ sc.DeleteAtom(i); /*std::cerr<<i*/; i--; eliminated=true;}
+    if (coin==0)     { tokill.push_back(j); /*std::cerr<<j;*/ }
+    else if (coin==1){ tokill.push_back(i); /*std::cerr<<i*/;}
 //    std::cerr<<", ya que rmin="<<rmin<<" y posi-posj="<<fabs((posi-posj).Mod())<<":\n posi="<<posi<<",\n posj="<<posj<<"\n";
    }
-   if (eliminated) break;
   }
  }
-// std::cerr << "despues de la primera eliminacion, la sc tiene un total de "<<sc.Size() << " atomos"<<std::endl;
+ std::cerr << tokill.size() << " atomos listos para ser eliminados...\n";
+ for (int i=tokill.size()-1;i>=0;--i) sc.DeleteAtom(tokill[i]); 
+ std::cerr << "despues de la primera eliminacion, la sc tiene un total de "<<sc.Size() << " atomos"<<std::endl;
  // SECOND ELIMINATION: NOW THAT THE CLOSEST ATOMS WERE DELETED, WE CHOOSE THE SUBCELL WHERE THEY BELONG
  for (int i=0; i<sc.Size(); i++)
  {
