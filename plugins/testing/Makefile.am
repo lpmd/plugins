@@ -41,7 +41,7 @@ plugin_LTLIBRARIES =		angdist.la beeman.la berendsen.la buckingham.la cell.la \
                         cellscaling.la cna.la constantforce.la cordnum.la cordnumfunc.la \
 								crystal2d.la crystalbcc.la crystalfcc.la crystalhcp.la crystalsc.la \
                         densityprofile.la displace.la dispvol.la dlpoly.la energy.la \
-								euler.la extravel.la fastlj.la finnissinclair.la gdr.la gupta.la \
+								euler.la ewald.la extravel.la fastlj.la finnissinclair.la gdr.la gupta.la \
                         harmonic.la leapfrog.la lennardjones.la linkedcell.la lpmd.la \
                         localpressure.la minimumimage.la mol2.la moleculecm.la morse.la msd.la \
                         nosehoover.la nullintegrator.la nullpairpotential.la nullmetalpotential.la \
@@ -82,6 +82,7 @@ dispvol_la_SOURCES = dispvol.h dispvol.cc
 dlpoly_la_SOURCES = dlpoly.h dlpoly.cc
 energy_la_SOURCES = energy.h energy.cc
 euler_la_SOURCES = euler.h euler.cc
+ewald_la_SOURCES = ewald.h ewald.cc
 extravel_la_SOURCES = extravel.h extravel.cc
 fastlj_la_SOURCES = fastlj.h fastlj.cc
 finnissinclair_la_SOURCES = finnissinclair.h finnissinclair.cc
