@@ -27,6 +27,7 @@ CommonNeighborAnalysis::CommonNeighborAnalysis(std::string args): Module("cna")
 {
  m = NULL;
  AssignParameter("mode", "statistics");
+ AssignParameter("species", "all");
  ProcessArguments(args);
  std::string m = GetString("mode");
  if (m == "full") mode = 0;
@@ -44,6 +45,14 @@ CommonNeighborAnalysis::CommonNeighborAnalysis(std::string args): Module("cna")
  {
   refmap[IndexTrio(4, 2, 1)] = 1;
   refmap[IndexTrio(4, 2, 2)] = 1;
+ }
+ std::string species = GetString("species");
+ spc1 = spc2 = -1;
+ if (species != "all")
+ {
+  std::vector<std::string> tmp = SplitTextLine(species, '-');
+  spc1 = ElemNum(tmp[0]); 
+  spc2 = ElemNum(tmp[1]);
  }
  start_step = GetInteger("start");
  end_step = GetInteger("end");
@@ -92,7 +101,7 @@ void CommonNeighborAnalysis::ShowHelp() const
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
 }
 
-std::string CommonNeighborAnalysis::Keywords() const { return "rcut start end step output"; }
+std::string CommonNeighborAnalysis::Keywords() const { return "rcut mode reference species start end step output"; }
 
 std::vector<long int> AddSegmentToChain(std::vector<long int> & cnm, std::map<long int, std::vector<long int> > & bonds, std::vector<long int> & chain, std::vector<long int> & longest)
 {
@@ -127,13 +136,21 @@ void CommonNeighborAnalysis::Evaluate(SimulationCell & simcell, Potential & pot)
  const long n = simcell.Size();
  std::vector<BondedPair> data;
  std::list<Neighbor> * neighbormatrix = new std::list<Neighbor>[n];
+ std::cerr << "-> Building neighbor lists\n";
  for (long i=0;i<n;++i) simcell.BuildNeighborList(i, neighbormatrix[i], true, rcut);
+ std::cerr << "-> Searching for pairs, species = " << GetString("species") << '\n'; 
  for (long i=0;i<n;++i)
  {
   std::list<Neighbor> & nlist = neighbormatrix[i];
   for(std::list<Neighbor>::const_iterator it=nlist.begin();it!=nlist.end();++it)
   {
    const Neighbor & nn = *it;
+   if (spc1 != -1)
+   {
+    bool rightpair = (simcell[i].Species() == spc1) && (nn.j->Species() == spc2);
+    rightpair = (rightpair || ((simcell[i].Species() == spc2) && (nn.j->Species() == spc1)));
+    if (!rightpair) continue;
+   }
    if (nn.r >= rcut) continue;  
    unsigned int cna_indices[3];
    long int j = nn.j->Index();
@@ -215,28 +232,42 @@ void CommonNeighborAnalysis::Evaluate(SimulationCell & simcell, Potential & pot)
  {
   // Statistics mode
   std::map<std::string, unsigned long int> stat;
+  std::map<std::string, double> stat_rav;
+  std::map<std::string, double> stat_r2av;
   for (unsigned long int q=0;q<npairs;++q)
   {
    std::string s = ToString<int>(data[q].j)+"-"+ToString<int>(data[q].k)+"-"+ToString<int>(data[q].l);
-   if (stat.count(s) == 0) stat[s] = 0;
+   if (stat.count(s) == 0) 
+   {
+    stat[s] = 0;
+    stat_rav[s] = 0.0;
+    stat_r2av[s] = 0.0;
+   }
    stat[s]++;
+   stat_rav[s] += data[q].r;
+   stat_r2av[s] += pow(data[q].r, 2.0);
   }
   int nkeys = 0;
   for (std::map<std::string, unsigned long int>::const_iterator qt=stat.begin();qt!=stat.end();++qt) nkeys++;
-  m = new Matrix(4, nkeys);
+  m = new Matrix(6, nkeys);
   m->SetLabel(0, "j");
   m->SetLabel(1, "k");
   m->SetLabel(2, "l");
   m->SetLabel(3, "percentage");
+  m->SetLabel(4, "R_average");
+  m->SetLabel(5, "R_stddev");
   int nk = 0;
   for (std::map<std::string, unsigned long int>::const_iterator qt=stat.begin();qt!=stat.end();++qt)
   {
    std::string s = (*qt).first;
+   double ns = double(stat[s]);
    std::vector<std::string> splt = SplitTextLine(s, '-');
    m->Set(0, nk, atoi(splt[0].c_str()));
    m->Set(1, nk, atoi(splt[1].c_str()));
    m->Set(2, nk, atoi(splt[2].c_str()));
-   m->Set(3, nk, 100.0*(double(stat[s])/double(npairs)));
+   m->Set(3, nk, 100.0*(ns/double(npairs)));
+   m->Set(4, nk, stat_rav[s]/ns);
+   m->Set(5, nk, sqrt(stat_r2av[s]/ns-pow(stat_rav[s]/ns, 2.0)));
    nk++;
   }
  }

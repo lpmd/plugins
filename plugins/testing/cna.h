@@ -43,7 +43,7 @@ class CommonNeighborAnalysis: public lpmd::ScalarTable, public lpmd::InstantProp
 
  private:
     lpmd::Matrix * m;
-    int mode;
+    int mode, spc1, spc2;
     double rcut;
     std::map<IndexTrio, int> refmap;
 };
