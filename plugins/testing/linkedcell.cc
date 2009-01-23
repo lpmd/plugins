@@ -301,6 +301,18 @@ void LinkedCellCellManager::BuildNeighborList(SimulationCell & sc, long i, std::
  }
 }
 
+void LinkedCellCellManager::BuildList(SimulationCell &sc, bool full, double rc)
+{
+ for (long int i=0;i<sc.Size();++i)
+ {
+  sc.GetAtom(i).CleanNeighbors();
+  std::list<Neighbor> tmp;
+  BuildNeighborList(sc, i, tmp, full, rc);
+  for (std::list<Neighbor>::const_iterator it=tmp.begin();it!=tmp.end();++it) 
+      sc.GetAtom(i).Neighbors().Add(*it);
+ }
+}
+
 // Esto se incluye para que el modulo pueda ser cargado dinamicamente
 Module * create(std::string args) { return new LinkedCellCellManager(args); }
 void destroy(Module * m) { delete m; }
