@@ -4,6 +4,8 @@
 
 #include "voronoi.h"
 #include "plugincommon.h"
+#include <algorithm>
+#include <functional>
 
 #include <lpmd/atom.h>
 #include <lpmd/simulationcell.h>
@@ -11,7 +13,30 @@
 #include <cmath>
 
 using namespace lpmd;
-double rmin;			// minimum separation between atoms
+double rmin;					// Minimum separation between atoms
+
+void SkewStart(int n, double x, double y, double z, Vector *centers)
+{
+ SimulationCell cell(x,y,z,true,true,true);
+ int h, k, l;
+ double dx, dy, dz;
+ h = int(pow(double(n), 2.0/3.0));
+ k = int(pow(double(n), 1.0/3.0));
+ l = 1;
+ dx = h / double(n);
+ dy = k / double(n);
+ dz = l / double(n);
+ for (long i=0;i<n;++i)
+ {
+  Atom a(18, Vector());
+  cell.AppendAtom(a);
+  cell.SetFracPosition(i, Vector(dx*double(i)+0.25, dy*double(i)+0.25, dz*double(i)+0.25));
+ }
+ for (long i=0;i<n;++i)
+ {
+  centers[i]=x*cell.GetAtom(i).Position().GetX()*e1+y*cell.GetAtom(i).Position().GetY()*e2+z*cell.GetAtom(i).Position().GetZ()*e3;
+ }
+}
 
 VoronoiGenerator::VoronoiGenerator(std::string args): Module("voronoi") 
 {
@@ -89,73 +114,55 @@ void VoronoiGenerator::Generate(SimulationCell & sc) const
   Vector t[2];
   t[0]=0*e1; t[1]=0.5*a*(e1+e2+e3);
   for (int i=0; i<2; i++){ atm[i].SetSpc(spc); atm[i].SetPos(t[i]); basecell.AppendAtom(atm[i]);}
-//  for (int i=0; i<3; i++) std::cerr << "el vect "<<i<<" de la basecell es "<<basecell.GetVector(i)<<"\n";
-//  for (int i=0; i<4; i++){ std::cerr<<"atomo "<<i<<" de la basecell tiene color: "<<basecell.GetAtom(i).Color()<<"\n";}
-//  for (int i=0; i<4; i++){ std::cerr<<"atomo "<<i<<" de la basecell esta en: "<<basecell.GetAtom(i).Position()<<"\n";}
  }
 
  unsigned long nx,ny,nz;
- Vector cellcenter;
+ double V=Dot(Crux(sc.GetVector(0), sc.GetVector(1)), sc.GetVector(2)); // Volume of the sc
+ double x=sc.GetVector(0).Mod();
+ double y=sc.GetVector(1).Mod();
+ double z=sc.GetVector(2).Mod();
+ nx=int(2.2*pow(V/(double)Ncell,1.0/3.0)/a); ny=nx; nz=nx;
  Vector *centers=new Vector [Ncell];
+ Vector *CellColor=new Vector [Ncell];
 
  randomize();
+ // CHOOSE CENTERS AND REPLICATE CELLS
+ SkewStart(Ncell, x, y, z, centers);
  for (int i=0; i<Ncell; i++)
  {
-  // Random "cellcenter" and amount of replications "nx", "ny", "nz".
-  cellcenter=(dazar(0,1)*sc.GetVector(0)+dazar(0,1)*sc.GetVector(1)+dazar(0,1)*sc.GetVector(2));
-//  cellcenter=(25-4.3*i)*e1+25*e2+(25+4.3*i)*e3;
-//  cellcenter=0.0*(sc.GetVector(0)+sc.GetVector(1)+sc.GetVector(2));
-//  std::cerr<<"centro de celda: "<<cellcenter<<"\n";
-  centers[i]=cellcenter;
-  nx=int(sc.GetVector(0).Mod()/a); ny=nx; nz=nx;
-//  std::cerr << "voy a replicar "<< nx << " por cada eje"<< std::endl;
+  Vector rotate=dazar(0,2*M_PI)*e1+dazar(0,2*M_PI)*e2+dazar(0,2*M_PI)*e3;
   // We put a new replicated cell in "cellcenter"
-//  std::cerr << "antes, la celda grande tenia un total de "<<sc.Size() << " atomos"<<std::endl;
-  ReplicateRotate(basecell, cellcenter, nx, ny, nz, sc);
-//  std::cerr << "ahora, la celda grande tiene un total de "<<sc.Size() << " atomos"<<std::endl;
+  ReplicateRotate(basecell, centers[i], CellColor[i], nx, ny, nz, rotate, sc);
  }
-// for (int i=0; i<sc.Size(); i++) std::cerr << "posicion atomo "<<i<<"="<<sc.GetAtom(i).Position()<<"\n";
 
- // FIRST ELIMINATION: NOW THAT THE CELL IS FULL OF CELLS FILLED WITH ATOMS, WE ELIMINATE THE CLOSEST ATOMS
- std::vector<long int> tokill;
- for (int i=0;i<sc.Size()-1;i++)
+ // OUTSIDE ELIMINATION: ELIMINATE OUTSIDE ATOMS
+ for (int i=0;i<sc.Size();i++)
  {
-  Vector posi=sc.GetAtom(i).Position();
-  for (int j=i+1;j<sc.Size();j++)
-  {
-   Vector posj=sc.GetAtom(j).Position();
-   if ((posi-posj).Mod()<rmin)
-   {
-    int coin=iazar(0,1);
-//    std::cerr<<"para i<j, i="<<i<<",j="<<j<<", eliminamos part ";
-    if (coin==0)     { tokill.push_back(j); /*std::cerr<<j;*/ }
-    else if (coin==1){ tokill.push_back(i); /*std::cerr<<i*/;}
-//    std::cerr<<", ya que rmin="<<rmin<<" y posi-posj="<<fabs((posi-posj).Mod())<<":\n posi="<<posi<<",\n posj="<<posj<<"\n";
-   }
-  }
+  bool kill=false;
+  Vector pos = sc.GetAtom(i).Position();
+  if 		 (pos.GetX()<0 || pos.GetX()>sc.GetVector(0).Mod()) {sc.DeleteAtom(i); kill=true;}
+  else if (pos.GetY()<0 || pos.GetY()>sc.GetVector(1).Mod()) {sc.DeleteAtom(i); kill=true;}
+  else if (pos.GetZ()<0 || pos.GetZ()>sc.GetVector(2).Mod()) {sc.DeleteAtom(i); kill=true;}
+  
+  if (kill) i--;
  }
- std::cerr << tokill.size() << " atomos listos para ser eliminados...\n";
- for (int i=tokill.size()-1;i>=0;--i) sc.DeleteAtom(tokill[i]); 
- std::cerr << "despues de la primera eliminacion, la sc tiene un total de "<<sc.Size() << " atomos"<<std::endl;
- // SECOND ELIMINATION: NOW THAT THE CLOSEST ATOMS WERE DELETED, WE CHOOSE THE SUBCELL WHERE THEY BELONG
+
+
+ // ELIMINATION BY CUTTING PLANE
  for (int i=0; i<sc.Size(); i++)
  {
-//  std::cerr<<"S. Elim: Particula "<< j <<".\n";
   bool eliminated=false;
-  Vector posj=sc.GetAtom(i).Position();
   for(int n=0; n<Ncell; n++)
   {
    for(int m=0; m<Ncell; m++)
    {
-    if(n!=m)
-    {
-     double in=(posj-centers[n]).Mod();
-     double im=(posj-centers[m]).Mod();
-     if (fabs(in-im)<1.0e-1)
+    if(n!=m){
+     Vector sep=centers[m]-centers[n];
+     Vector pos=sc.GetAtom(i).Position()-centers[n];
+     Vector atmclr=sc.GetAtom(i).Color();
+     if ( Dot(pos,sep/sep.Mod())>0.5*sep.Mod() && atmclr==CellColor[n])
      {
-//      std::cerr<<"el atomo "<<j<<" esta a "<<jn<<" de la celda "<<n <<" y a "<<jm<<" de la "<<m<<". Eliminando.\n";
       sc.DeleteAtom(i); eliminated=true; i--;
-//      std::cerr<<"atomo "<<j<<" eliminado.\n";
      }
     }
     if (eliminated) break;
@@ -163,11 +170,26 @@ void VoronoiGenerator::Generate(SimulationCell & sc) const
    if (eliminated) break;
   }
  }
-// std::cerr << "Ahora la celda quedo con "<<sc.Size()<< " atomos.\n";
- delete [] centers;
+
+
+ // PAIRS ELIMINATION: NOW THAT THE CELL IS FULL OF CELLS FILLED WITH ATOMS, WE ELIMINATE THE CLOSEST ATOMS
+ for (long i=0; i<sc.Size(); i++)
+ {
+  for (long j=i+1; j<sc.Size(); j++)
+  {
+   if(sc.Distance(i,j)<rmin)
+   {
+    sc.DeleteAtom(i);
+    i=0; break;
+   }
+  }
+ }
+
  // Updating positions (impose periodic boudary conditions)
- for (long i=0; i<sc.Size(); i++) sc.SetPosition(i,sc.GetAtom(i).Position());
-// for (long i=0; i<sc.Size(); i++) std::cerr << "con cbp, posicion atomo "<<i<<"="<<sc.GetAtom(i).Position()<<"\n";
+ for (long i=0; i<sc.Size(); i++) sc.SetPosition(i,sc.GetAtom(i).Position()+1.5*(x*e1+y*e2+z*e3));
+
+ delete [] CellColor;
+ delete [] centers;
 }
 
 // Esto se incluye para que el modulo pueda ser cargado dinamicamente

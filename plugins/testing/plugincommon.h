@@ -33,5 +33,5 @@ lpmd::Matrix* vacf(const std::vector<SimulationCell> & simcell, Potential & pot,
 // Replicate replica la celda de simulacion SC dentro de la celda sc,
 // ReplicateBase toma la celda replicada y la pone dentro de una mas grande
 void Replicate(SimulationCell & sc, unsigned long nx, unsigned long ny, unsigned long nz);void Rotate(SimulationCell & sc);
-void Rotate(SimulationCell & sc);
-void ReplicateRotate(const SimulationCell basecell, lpmd::Vector &center, unsigned long na, unsigned long nb, unsigned long nc, SimulationCell & simcell);
+void Rotate(SimulationCell & sc, lpmd::Vector rotate);
+void ReplicateRotate(const SimulationCell basecell, lpmd::Vector &center, lpmd::Vector &CellColor, unsigned long na, unsigned long nb, unsigned long nc, lpmd::Vector rotate, SimulationCell & simcell);

@@ -329,12 +329,12 @@ void Replicate(SimulationCell & sc, unsigned long nx, unsigned long ny, unsigned
  sc.ClearForces();
 }
 
-void Rotate(SimulationCell & sc)
+void Rotate(SimulationCell & sc, lpmd::Vector rotate)
 {
  // euler rotation matrix
  double rotmat[3][3];
  // Eulerian Angles
- double phi=dazar(0,2*M_PI), psi=dazar(0,2*M_PI), theta=dazar(0,2*M_PI);
+ double phi=rotate.GetX(), psi=rotate.GetY(), theta=rotate.GetZ();
 // double phi=M_PI/8.4, psi=M_PI/8.4, theta=0;
  // Eulerian Matrix
  rotmat[0][0] = (cos(phi)*cos(psi)-cos(theta)*sin(phi)*sin(psi));
@@ -376,18 +376,30 @@ void Rotate(SimulationCell & sc)
  }
 }
 
-void ReplicateRotate(const SimulationCell basecell, lpmd::Vector &centro, unsigned long na, unsigned long nb, unsigned long nc, SimulationCell & simcell)
+void ReplicateRotate(const SimulationCell basecell, lpmd::Vector &cellcenter, lpmd::Vector &CellColor, unsigned long na, unsigned long nb, unsigned long nc, lpmd::Vector rotate, SimulationCell & simcell)
 {
  SimulationCell tmpSC=basecell;
  Replicate(tmpSC,na,nb,nc);
- Rotate(tmpSC);
+/* // CONVERT tmpSC IN A CIRCLE
+ for (long i=0; i<tmpSC.Size(); i++)
+ {
+  Vector dist=0.5*(tmpSC.GetVector(0)+tmpSC.GetVector(1)+tmpSC.GetVector(2))-tmpSC.GetAtom(i).Position();
+  if (dist.Mod()>0.4*tmpSC.GetVector(0).Mod())
+  {
+   tmpSC.DeleteAtom(i);  i--;
+  }
+ }
+*/
+ Rotate(tmpSC, rotate);
+ Vector centro=0.5*(tmpSC.GetVector(0)+tmpSC.GetVector(1)+tmpSC.GetVector(2));
  unsigned long N = tmpSC.Size();
  Atom *atomos = new Atom[N];
  double r=dazar(0,1), g=dazar(0,1), b=dazar(0,1);
+ CellColor=r*e1+g*e2+b*e3;
  for(unsigned long i=0;i<N;i++)
  {
   atomos[i]=tmpSC.GetAtom(i);
-  lpmd::Vector vct=atomos[i].Position()+centro;
+  Vector vct=atomos[i].Position()+(cellcenter-centro);
   Atom tmp(atomos[i].Species(),vct);
   tmp.SetColor(r*e1+g*e2+b*e3);
   simcell.AppendAtom(tmp);
