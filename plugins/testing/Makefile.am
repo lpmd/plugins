@@ -37,16 +37,16 @@ AM_LDFLAGS = -module -avoid-version plugincommon.lo
 #
 # plugin_LTLIBRARIES contains the list of liblpmd plugins (as libtool libraries)
 #
-plugin_LTLIBRARIES =		angdist.la beeman.la berendsen.la buckingham.la cell.la \
+plugin_LTLIBRARIES =    angdist.la beeman.la berendsen.la buckingham.la cell.la \
                         cellscaling.la cna.la constantforce.la cordnum.la cordnumfunc.la \
-			crystal2d.la crystalbcc.la crystalfcc.la crystalhcp.la crystalsc.la \
+                        crystal2d.la crystalbcc.la crystalfcc.la crystalhcp.la crystalsc.la \
                         densityprofile.la displace.la dispvol.la dlpoly.la energy.la \
-			euler.la ewald.la extravel.la fastlj.la finnissinclair.la gdr.la gupta.la \
-                        harmonic.la leapfrog.la lennardjones.la linkedcell.la lpmd.la \
+                        euler.la ewald.la extravel.la fastlj.la finnissinclair.la gdr.la \
+                        gupta.la harmonic.la leapfrog.la lennardjones.la linkedcell.la lpmd.la \
                         localpressure.la minimumimage.la mol2.la moleculecm.la morse.la msd.la \
                         nosehoover.la nullintegrator.la nullpairpotential.la nullmetalpotential.la \
                         nullpotential.la pairdistances.la povray.la pressure.la printatoms.la \
-			quenchedmd.la rawbinary.la replicate.la rotate.la selectatoms.la shear.la \
+                        quenchedmd.la rawbinary.la replicate.la rotate.la rvcorr.la selectatoms.la shear.la \
                         skewstart.la suttonchen.la thermalneedle.la temperature.la tempprofile.la \
                         tempscaling.la vacf.la vasp.la veldist.la velocityverlet.la verlet.la \
                         verletlist.la voronoi.la xyz.la zlp.la
@@ -112,6 +112,7 @@ quenchedmd_la_SOURCES = quenchedmd.h quenchedmd.cc
 rawbinary_la_SOURCES = rawbinary.h rawbinary.cc
 replicate_la_SOURCES = replicate.h replicate.cc
 rotate_la_SOURCES = rotate.h rotate.cc
+rvcorr_la_SOURCES = rvcorr.h rvcorr.cc
 selectatoms_la_SOURCES = selectatoms.h selectatoms.cc
 shear_la_SOURCES = shear.h shear.cc
 skewstart_la_SOURCES = skewstart.h skewstart.cc
