@@ -2,18 +2,18 @@
 //
 //
 
-#ifndef __MOL2MODULE_H__
-#define __MOL2MODULE_H__
+#ifndef __PDBMODULE_H__
+#define __PDBMODULE_H__
 
 #include <lpmd/cellformat.h>
 #include <lpmd/plugin.h>
 
-class Mol2Format: public lpmd::CellFormat, public lpmd::Module
+class PDBFormat: public lpmd::CellFormat, public lpmd::Module
 {
  public:
    //Metodos Generales
-   Mol2Format(std::string args);
-   virtual ~Mol2Format();
+   PDBFormat(std::string args);
+   virtual ~PDBFormat();
    void ShowHelp() const;
 
    //Metodos Propios de modulo mol2
@@ -26,7 +26,6 @@ class Mol2Format: public lpmd::CellFormat, public lpmd::Module
 
  private:
    long int interval;
-   bool rcell;
 };
 
 #endif

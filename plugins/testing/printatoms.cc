@@ -13,8 +13,15 @@ using namespace lpmd;
 
 PrintAtomsVisualizer::PrintAtomsVisualizer(std::string args): Module("printatoms")
 {
- AssignParameter("from", "-1");
- AssignParameter("to", "-1");
+ AssignParameter("version", "1.0"); 
+ AssignParameter("apirequired", "1.1"); 
+ AssignParameter("bugreport", "gnm@gnm.cl"); 
+ //
+ DefineKeyword("start");
+ DefineKeyword("end");
+ DefineKeyword("each");
+ DefineKeyword("from", "-1");
+ DefineKeyword("to", "-1");
  ProcessArguments(args);
  from_at = GetInteger("from");
  to_at = GetInteger("to");
@@ -27,15 +34,9 @@ PrintAtomsVisualizer::~PrintAtomsVisualizer() { }
 
 void PrintAtomsVisualizer::ShowHelp() const
 {
- std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
- std::cout << " Module Name        = printatoms                                               \n";
- std::cout << " Module Version     = 1.0                                                      \n";
- std::cout << " Support API lpmd   = 1.0.0                                                    \n";
- std::cout << " Problems Report to = gnm@gnm.cl                                               \n";
- std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
  std::cout << " General Options   >>                                                          \n";
- std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+ std::cout << '\n';
  std::cout << " Example                                                                       \n";
  std::cout << " Cargando el Modulo :                                                          \n";
  std::cout << " use printatoms                                                                \n";
@@ -44,18 +45,12 @@ void PrintAtomsVisualizer::ShowHelp() const
  std::cout << " enduse                                                                        \n";
  std::cout << " Llamando al modulo :                                                          \n";
  std::cout << " visualize printatoms start=1 end=1000 each=50                               \n\n";
- std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
-}
-
-std::string PrintAtomsVisualizer::Keywords() const
-{
- return "from to";
 }
 
 void PrintAtomsVisualizer::Apply(const MD & md) 
 { 
  SimulationCell & sc = md.GetCell();
- for (long i=0;i<sc.Size();++i) 
+ for (unsigned long int i=0;i<sc.size();++i) 
  {  
   if ((i >= from_at) && (i <= to_at)) 
   {

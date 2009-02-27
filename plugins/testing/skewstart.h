@@ -15,7 +15,6 @@ class SkewStartGenerator: public lpmd::CellGenerator, public lpmd::Module
   SkewStartGenerator(std::string args); 
   virtual ~SkewStartGenerator();
   void ShowHelp() const;
-  std::string Keywords() const;
 
   //Metodos propios del modulo skewstart
   void Generate(lpmd::SimulationCell & sc) const;

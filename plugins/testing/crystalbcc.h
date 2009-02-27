@@ -15,7 +15,6 @@ class BCCGenerator: public lpmd::CellGenerator, public lpmd::Module
    BCCGenerator(std::string args);
    virtual ~BCCGenerator();
    void ShowHelp() const;
-   std::string Keywords() const;
 
    //Metodos Propios del modulo fccgenerator
    void Generate(lpmd::SimulationCell & sc) const;

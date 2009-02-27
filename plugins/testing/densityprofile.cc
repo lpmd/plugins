@@ -13,14 +13,30 @@
 
 using namespace lpmd;
 
-DensityProfile::DensityProfile(std::string args): Module("densityprofile")
+DensityProfile::DensityProfile(std::string args): Module("densityprofile", false)
 {
  m = NULL;
- do_average = false;
+ AssignParameter("version", "1.0"); 
+ AssignParameter("apirequired", "1.1"); 
+ AssignParameter("bugreport", "gnm@gnm.cl"); 
+ //
+ DefineKeyword("start");
+ DefineKeyword("end");
+ DefineKeyword("each");
+ DefineKeyword("rcut");
+ DefineKeyword("output");
+ DefineKeyword("bins", "200");
+ DefineKeyword("average", "false");
  range[0][0]=0.0e0;range[0][1]=0.0e0;
  range[1][0]=0.0e0;range[1][1]=0.0e0;
  range[2][0]=0.0e0;range[2][1]=0.0e0;
  ProcessArguments(args);
+ bins = GetInteger("bins");
+ start_step = GetInteger("start");
+ end_step = GetInteger("end");
+ interval = GetInteger("each");
+ outputfile = GetString("output");
+ do_average = GetBool("average");
 }
 
 DensityProfile::~DensityProfile()
@@ -43,12 +59,7 @@ void DensityProfile::SetParameter(std::string name)
    ShowWarning("plugin densityprofile", "Wrong setting of axis.");
   }
  }
- if (name == "bins")
- {
-  AssignParameter("bins", GetNextWord());
-  bins = GetInteger("bins");
- }
- if (name == "range")
+ else if (name == "range")
  {
   int tmp=0;
   std::string eje=GetNextWord();
@@ -74,31 +85,7 @@ void DensityProfile::SetParameter(std::string name)
   }
   if(range[tmp][0]>=range[tmp][1] &&  smin!="all" && smin!="ALL") ShowWarning("densityprofile", "min and max values are not consistent.");
  }
- if (name == "start")
- {
-  AssignParameter("start", GetNextWord());
-  start_step = GetInteger("start");
- }
- if (name == "end")
- {
-  AssignParameter("end", GetNextWord());
-  end_step = GetInteger("end");
- }
- if (name == "each")
- {
-  AssignParameter("each", GetNextWord());
-  interval = GetInteger("each");
- }
- if (name == "output")
- {
-  AssignParameter("output", GetNextWord());
-  outputfile = GetString("output");
- }
- if (name == "average")
- {
-  AssignParameter("average", GetNextWord());
-  do_average = GetBool("average");
- }
+ else Module::SetParameter(name);
 }
 
 void DensityProfile::Show(std::ostream & os) const
@@ -112,12 +99,6 @@ void DensityProfile::Show(std::ostream & os) const
 
 void DensityProfile::ShowHelp() const
 {
- std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
- std::cout << " Module Name        = densityprofile                                           \n";
- std::cout << " Module Version     = 1.0                                                      \n";
- std::cout << " Support API lpmd   = 1.0.0                                                    \n";
- std::cout << " Problems Report to = gnm@gnm.cl                                               \n";
- std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
  std::cout << "      Modulo utilizado para calcular el perfil de la densidad de la celda de   \n";
  std::cout << " simulacion, actualmente solo unidimensionalmente.                             \n";
@@ -127,7 +108,7 @@ void DensityProfile::ShowHelp() const
  std::cout << "      range         : Especifica el rango para calculo de densidad.            \n";
  std::cout << "      output        : Fichero en el que se graba la densidad.                  \n";
  std::cout << "      average       : Setea si calcula o no el promedio de cada evaluacion.    \n";
- std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+ std::cout << '\n';
  std::cout << " Example                                                                       \n";
  std::cout << " Cargando el Modulo :                                                          \n";
  std::cout << " use densityprofile                                                            \n";
@@ -143,10 +124,7 @@ void DensityProfile::ShowHelp() const
  std::cout << " property densityprofile start=1 each=10 end=100                             \n\n";
  std::cout << "      De esta forma calculamos la funcion de distribucion radial de pares en   \n";
  std::cout << " la simulacion entre 1 y 100 cada 10 pasos.                                    \n";
- std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
 }
-
-std::string DensityProfile::Keywords() const { return "rcut bins start end step output average"; }
 
 void DensityProfile::Evaluate(SimulationCell & simcell, Potential & pot)
 {
@@ -180,8 +158,8 @@ void DensityProfile::Evaluate(SimulationCell & simcell, Potential & pot)
 
  double dvol = vol/bins; //delta de volumen de cada rango.
 
- int nsp = simcell.NEspec();
- int N = simcell.Size();
+ int nsp = simcell.SpeciesList().size();
+ unsigned long int N = simcell.size();
  double **rho, *rhot;
  rho = new double*[bins];
  for(int i=0;i<bins;i++) { rho[i]=new double[(int)(nsp)]; }
@@ -200,12 +178,12 @@ void DensityProfile::Evaluate(SimulationCell & simcell, Potential & pot)
   int e = ElemNum(*it);
   //Cuenta los atomos de la especie e.
   int ne=0;
-  for(int m=0;m<N;m++)
+  for(unsigned long int m=0;m<N;m++)
   {
-   if(simcell.GetAtom(m).Species()==e) ne++;
+   if(simcell[m].Species()==e) ne++;
   }
   //Comienza la iteracion principal para el calculo.
-  for(int i=0;i<N;++i)
+  for(unsigned long int i=0;i<N;++i)
   {
    if(simcell[i].Species()==e)
    {

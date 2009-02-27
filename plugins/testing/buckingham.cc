@@ -10,6 +10,14 @@ using namespace lpmd;
 
 Buckingham::Buckingham(std::string args): Module("buckingham")
 {
+ AssignParameter("version", "1.0"); 
+ AssignParameter("apirequired", "1.1"); 
+ AssignParameter("bugreport", "gnm@gnm.cl"); 
+ //
+ DefineKeyword("B1");
+ DefineKeyword("B2");
+ DefineKeyword("Ro");
+ DefineKeyword("cutoff");
  ProcessArguments(args);
  B1 = GetDouble("B1");
  B2 = GetDouble("B2");
@@ -20,12 +28,6 @@ Buckingham::Buckingham(std::string args): Module("buckingham")
 
 void Buckingham::ShowHelp() const
 {
- std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
- std::cout << " Module Name        = buckingham                                               \n";
- std::cout << " Module Version     = 1.0                                                      \n";
- std::cout << " Support API lpmd   = 1.0.0                                                    \n";
- std::cout << " Problems Report to = gnm@gnm.cl                                               \n";
- std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
  std::cout << "      El modulo implementa el potencial de buckingham SIN PARTE COULOMBIANA,   \n";
  std::cout << " para interaccion de pares.                                                    \n";
@@ -38,7 +40,7 @@ void Buckingham::ShowHelp() const
  std::cout << "      B1            : Especifica el valor para la constante B1 del potencial.  \n";
  std::cout << "      B2            : Especifica el valor para la constante B2 del potencial.  \n";
  std::cout << "      cutoff        : Radio de corte para el potencial.                        \n";
- std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+ std::cout << '\n';
  std::cout << " Example                                                                       \n";
  std::cout << " Cargando el Modulo :                                                          \n";
  std::cout << " use buckingham as BK1                                                         \n";
@@ -53,10 +55,7 @@ void Buckingham::ShowHelp() const
  std::cout << " y O con las constantes usadas en BK1.                                         \n";
  std::cout << "      Note la ventaja de definir mas de un tipo de potencial para un par de    \n";
  std::cout << " especies atomicas.                                                            \n";
- std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
 }
-
-std::string Buckingham::Keywords() const { return "B1 B2 Ro cutoff"; }
 
 double Buckingham::pairEnergy(const double & r) const
 {

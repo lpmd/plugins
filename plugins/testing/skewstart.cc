@@ -13,6 +13,12 @@ using namespace lpmd;
 
 SkewStartGenerator::SkewStartGenerator(std::string args): Module("skewstart") 
 { 
+ AssignParameter("version", "1.0"); 
+ AssignParameter("apirequired", "1.1"); 
+ AssignParameter("bugreport", "gnm@gnm.cl"); 
+ //
+ DefineKeyword("atoms");
+ DefineKeyword("symbol", "H");
  ProcessArguments(args); 
  spc = ElemNum(GetString("symbol"));
  n = GetInteger("atoms");
@@ -22,30 +28,18 @@ SkewStartGenerator::~SkewStartGenerator() { }
 
 void SkewStartGenerator::ShowHelp() const
 {
- std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
- std::cout << " Module Name        = skewstart                                                \n";
- std::cout << " Module Version     = 1.0                                                      \n";
- std::cout << " Support API lpmd   = 1.0.0                                                    \n";
- std::cout << " Problems Report to = gnm@gnm.cl                                               \n";
- std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
  std::cout << "      El modulo es utilizado para generar una celda inicial con el metodo      \n";
  std::cout << " skewstart disenado por Keith Refson para moldy.                               \n";
  std::cout << " General Options   >>                                                          \n";
  std::cout << "      atoms         : Especifica el numero de atomos para la celda a generar   \n";
  std::cout << "      symbol        : Especifica el simbolo atomico de la especie a generar.   \n";
- std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+ std::cout << '\n';
  std::cout << " Example                                                                       \n";
  std::cout << " Llamando al modulo :                                                          \n";
  std::cout << " input module=skewstart atoms=108 symbol=Ar                                    \n";
  std::cout << "      De esta forma podemos generar una celda inicial con el metodo skewstart  \n";
  std::cout << " de 108 atomos de Ar.                                                          \n";
- std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
-}
-
-std::string SkewStartGenerator::Keywords() const
-{
- return "symbol atoms";
 }
 
 //
@@ -64,8 +58,7 @@ void SkewStartGenerator::Generate(SimulationCell & sc) const
  dz = l / double(n);
  for (long i=0;i<n;++i)
  {
-  Atom a(spc, Vector());
-  sc.AppendAtom(a);
+  sc.Create(new Atom(spc));
   sc.SetFracPosition(i, Vector(dx*double(i), dy*double(i), dz*double(i)));
  }
 }

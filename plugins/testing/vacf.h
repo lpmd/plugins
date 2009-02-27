@@ -15,7 +15,6 @@ class Vacf: public lpmd::ScalarTable, public lpmd::TemporalProperty, public lpmd
   //Metodos Generales
   Vacf(std::string args);
   ~Vacf();
-  std::string Keywords() const;
 
   //Metodos propios de modulo vacf
   const lpmd::Matrix & Value() const { return *m; }
@@ -23,7 +22,6 @@ class Vacf: public lpmd::ScalarTable, public lpmd::TemporalProperty, public lpmd
 
  private:
   lpmd::Matrix * m;
-  double dt;
 };
 
 #endif

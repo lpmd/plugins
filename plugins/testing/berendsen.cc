@@ -15,9 +15,16 @@ using namespace lpmd;
 
 BerendsenModifier::BerendsenModifier(std::string args): Module("berendsen")
 {
- AssignParameter("from", "300.0");
- AssignParameter("to", "300.0");
- AssignParameter("tau", "400.0");
+ AssignParameter("version", "1.0"); 
+ AssignParameter("apirequired", "1.1"); 
+ AssignParameter("bugreport", "gnm@gnm.cl"); 
+ //
+ DefineKeyword("start");
+ DefineKeyword("end");
+ DefineKeyword("each");
+ DefineKeyword("from", "300.0");
+ DefineKeyword("to", "300.0");
+ DefineKeyword("tau", "400.0");
  // hasta aqui los valores por omision
  ProcessArguments(args);
  fromtemp = GetDouble("from");
@@ -34,12 +41,6 @@ BerendsenModifier::~BerendsenModifier() { }
 
 void BerendsenModifier::ShowHelp() const
 {
- std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
- std::cout << " Module Name        = berendsen                                                \n";
- std::cout << " Module Version     = 1.0                                                      \n";
- std::cout << " Support API lpmd   = 1.0.0                                                    \n";
- std::cout << " Problems Report to = gnm@gnm.cl                                               \n";
- std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
  std::cout << "      El modulo es utilizado para escalar la temperatura del sistema utilizando\n";
  std::cout << " el termostato de berendsen.                                                   \n";
@@ -49,7 +50,7 @@ void BerendsenModifier::ShowHelp() const
  std::cout << "      from          : Temperatura inicial para el escalamiento.                \n";
  std::cout << "      to            : Temperatura final para el sistema.                       \n";
  std::cout << "      tau           : Intervalo del termostato.                                \n";
- std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+ std::cout << '\n';
  std::cout << " Example                                                                       \n";
  std::cout << " Cargando el Modulo :                                                          \n";
  std::cout << " use berendsen                                                                 \n";
@@ -60,12 +61,6 @@ void BerendsenModifier::ShowHelp() const
  std::cout << " Llamando al modulo                                                            \n";
  std::cout << " apply berendsen start=0 each=10 end=100                                     \n\n";
  std::cout << "      De esta forma aplicamos el termostato entre 0 y 100 cada 10 steps.       \n";
- std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
-}
-
-std::string BerendsenModifier::Keywords() const 
-{
- return "from to tau start end each";
 }
 
 void BerendsenModifier::Apply(SimulationCell & sc)
@@ -81,7 +76,7 @@ void BerendsenModifier::Apply(MD & md)
  if (stop_thermostat == -1)
  {
   stop_thermostat = long(double(md.CurrentStep()) + tau/timestep);
-  std::cerr << "-> Berendsen thermostat activated (stops in step " << stop_thermostat << "), rescaling temperature to T = " << set_temp << '\n';
+  DebugStream() << "-> Berendsen thermostat activated (stops in step " << stop_thermostat << "), rescaling temperature to T = " << set_temp << '\n';
   old_step = interval;
   interval = 1;
  }
@@ -94,7 +89,7 @@ void BerendsenModifier::Apply(MD & md)
   else
   {
    stop_thermostat = -1;
-   std::cerr << "-> Berendsen thermostat stopped." << '\n';
+   DebugStream() << "-> Berendsen thermostat stopped." << '\n';
    interval = old_step;
   }
  }

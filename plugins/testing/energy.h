@@ -17,7 +17,6 @@ class Energy: public lpmd::ScalarValue, public lpmd::InstantProperty, public lpm
   Energy(std::string args);
   virtual ~Energy();
   void ShowHelp() const;
-  std::string Keywords() const;
 
   //Metodos Propios del modulo energy
   std::string Provides() const;

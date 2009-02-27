@@ -80,7 +80,7 @@ void Crystal2DGenerator::Generate(SimulationCell & sc) const
   for (long i=0;i<nx;++i)
   {
    p = j*baseA + i*baseB;
-   sc.AppendAtom(Atom(spc));
+   sc.Create(new Atom(spc));
    sc.SetFracPosition(cc++, p);
   }
  }

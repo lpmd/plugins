@@ -133,16 +133,16 @@ std::vector<long int> AddSegmentToChain(std::vector<long int> & cnm, std::map<lo
 
 void CommonNeighborAnalysis::Evaluate(SimulationCell & simcell, Potential & pot)
 {
- const long n = simcell.Size();
+ const long n = simcell.size();
  std::vector<BondedPair> data;
- std::list<Neighbor> * neighbormatrix = new std::list<Neighbor>[n];
+ std::vector<Neighbor> * neighbormatrix = new std::vector<Neighbor>[n];
  std::cerr << "-> Building neighbor lists\n";
  for (long i=0;i<n;++i) simcell.BuildNeighborList(i, neighbormatrix[i], true, rcut);
  std::cerr << "-> Searching for pairs, species = " << GetString("species") << '\n'; 
  for (long i=0;i<n;++i)
  {
-  std::list<Neighbor> & nlist = neighbormatrix[i];
-  for(std::list<Neighbor>::const_iterator it=nlist.begin();it!=nlist.end();++it)
+  std::vector<Neighbor> & nlist = neighbormatrix[i];
+  for(std::vector<Neighbor>::const_iterator it=nlist.begin();it!=nlist.end();++it)
   {
    const Neighbor & nn = *it;
    if (spc1 != -1)
@@ -154,17 +154,17 @@ void CommonNeighborAnalysis::Evaluate(SimulationCell & simcell, Potential & pot)
    if (nn.r >= rcut) continue;  
    unsigned int cna_indices[3];
    long int j = nn.j->Index();
-   std::list<Neighbor> & jlist = neighbormatrix[j];
+   std::vector<Neighbor> & jlist = neighbormatrix[j];
    std::list<long int> cn;
    std::vector<long int> cnm;
-   for (std::list<Neighbor>::const_iterator jt=jlist.begin();jt!=jlist.end();++jt)
+   for (std::vector<Neighbor>::const_iterator jt=jlist.begin();jt!=jlist.end();++jt)
    {
     if ((*jt).r >= rcut) continue;
     if (((*jt).j->Index() != i) && ((*jt).j->Index() != j)) cn.push_back((*jt).j->Index());
    }
    for (std::list<long int>::const_iterator qt=cn.begin();qt!=cn.end();++qt)
    {
-    for (std::list<Neighbor>::const_iterator kt=nlist.begin();kt!=nlist.end();++kt)
+    for (std::vector<Neighbor>::const_iterator kt=nlist.begin();kt!=nlist.end();++kt)
      if (((*kt).j->Index() == (*qt)) || ((*kt).i->Index() == (*qt)))
      {
       cnm.push_back(*qt);
@@ -274,9 +274,9 @@ void CommonNeighborAnalysis::Evaluate(SimulationCell & simcell, Potential & pot)
  else if (mode == 2)
  {
   // Defects mode
-  unsigned long int * regcnt = new unsigned long int[simcell.Size()];
-  unsigned long int * defcnt = new unsigned long int[simcell.Size()];
-  for (long int q=0;q<simcell.Size();++q) regcnt[q] = defcnt[q] = 0;
+  unsigned long int * regcnt = new unsigned long int[simcell.size()];
+  unsigned long int * defcnt = new unsigned long int[simcell.size()];
+  for (unsigned long int q=0;q<simcell.size();++q) regcnt[q] = defcnt[q] = 0;
   for (unsigned long int q=0;q<npairs;++q)
   {
    if (refmap.count(IndexTrio(data[q].j, data[q].k, data[q].l)) > 0) 
@@ -290,14 +290,14 @@ void CommonNeighborAnalysis::Evaluate(SimulationCell & simcell, Potential & pot)
     defcnt[data[q].atj]++;
    }
   }
-  m = new Matrix(6, simcell.Size());
+  m = new Matrix(6, simcell.size());
   m->SetLabel(0, "x");
   m->SetLabel(1, "y");
   m->SetLabel(2, "z");
   m->SetLabel(3, "reference");
   m->SetLabel(4, "defects");
   m->SetLabel(5, "%defect");
-  for (long int q=0;q<simcell.Size();++q)
+  for (unsigned long int q=0;q<simcell.size();++q)
   {
    const Vector & pos = simcell[q].Position();
    for (int pp=0;pp<3;++pp) m->Set(pp, q, pos.Get(pp));

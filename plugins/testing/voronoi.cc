@@ -28,13 +28,12 @@ void SkewStart(int n, double x, double y, double z, Vector *centers)
  dz = l / double(n);
  for (long i=0;i<n;++i)
  {
-  Atom a(18, Vector());
-  cell.AppendAtom(a);
+  cell.Create(new Atom(18, Vector()));
   cell.SetFracPosition(i, Vector(dx*double(i)+0.25, dy*double(i)+0.25, dz*double(i)+0.25));
  }
  for (long i=0;i<n;++i)
  {
-  centers[i]=x*cell.GetAtom(i).Position().GetX()*e1+y*cell.GetAtom(i).Position().GetY()*e2+z*cell.GetAtom(i).Position().GetZ()*e3;
+  centers[i]=x*cell[i].Position().GetX()*e1+y*cell[i].Position().GetY()*e2+z*cell[i].Position().GetZ()*e3;
  }
 }
 
@@ -95,7 +94,7 @@ void VoronoiGenerator::Generate(SimulationCell & sc) const
  {
   rmin=0.9*a;
   Atom atm;
-  atm.SetSpc(spc); atm.SetPos(0*e1); basecell.AppendAtom(atm);
+  atm.SetSpc(spc); atm.SetPos(0*e1); basecell.Create(new Atom(atm));
  }
  //-- Face-centered cubic lattices --//
  else if (type=="fcc")
@@ -104,7 +103,7 @@ void VoronoiGenerator::Generate(SimulationCell & sc) const
   Atom atm[4];
   Vector t[4];
   t[0]=0*e1; t[1]=0.5*a*(e2+e3); t[2]=0.5*a*(e1+e3); t[3]=0.5*a*(e1+e2);
-  for (int i=0; i<4; i++){ atm[i].SetSpc(spc); atm[i].SetPos(t[i]); basecell.AppendAtom(atm[i]);}
+  for (int i=0; i<4; i++){ atm[i].SetSpc(spc); atm[i].SetPos(t[i]); basecell.Create(new Atom(atm[i]));}
  }
  //-- Body-centered cubic lattices --//
  else if (type=="bcc")
@@ -113,7 +112,7 @@ void VoronoiGenerator::Generate(SimulationCell & sc) const
   Atom atm[2];
   Vector t[2];
   t[0]=0*e1; t[1]=0.5*a*(e1+e2+e3);
-  for (int i=0; i<2; i++){ atm[i].SetSpc(spc); atm[i].SetPos(t[i]); basecell.AppendAtom(atm[i]);}
+  for (int i=0; i<2; i++){ atm[i].SetSpc(spc); atm[i].SetPos(t[i]); basecell.Create(new Atom(atm[i]));}
  }
 
  unsigned long nx,ny,nz;
@@ -136,20 +135,20 @@ void VoronoiGenerator::Generate(SimulationCell & sc) const
  }
 
  // OUTSIDE ELIMINATION: ELIMINATE OUTSIDE ATOMS
- for (int i=0;i<sc.Size();i++)
+ for (unsigned long i=0;i<sc.size();i++)
  {
   bool kill=false;
-  Vector pos = sc.GetAtom(i).Position();
-  if 		 (pos.GetX()<0 || pos.GetX()>sc.GetVector(0).Mod()) {sc.DeleteAtom(i); kill=true;}
-  else if (pos.GetY()<0 || pos.GetY()>sc.GetVector(1).Mod()) {sc.DeleteAtom(i); kill=true;}
-  else if (pos.GetZ()<0 || pos.GetZ()>sc.GetVector(2).Mod()) {sc.DeleteAtom(i); kill=true;}
+  Vector pos = sc[i].Position();
+  if 		 (pos.GetX()<0 || pos.GetX()>sc.GetVector(0).Mod()) {sc.Destroy(&sc[i]); kill=true;}
+  else if (pos.GetY()<0 || pos.GetY()>sc.GetVector(1).Mod()) {sc.Destroy(&sc[i]); kill=true;}
+  else if (pos.GetZ()<0 || pos.GetZ()>sc.GetVector(2).Mod()) {sc.Destroy(&sc[i]); kill=true;}
   
   if (kill) i--;
  }
 
 
  // ELIMINATION BY CUTTING PLANE
- for (int i=0; i<sc.Size(); i++)
+ for (unsigned long int i=0; i<sc.size(); i++)
  {
   bool eliminated=false;
   for(int n=0; n<Ncell; n++)
@@ -158,11 +157,11 @@ void VoronoiGenerator::Generate(SimulationCell & sc) const
    {
     if(n!=m){
      Vector sep=centers[m]-centers[n];
-     Vector pos=sc.GetAtom(i).Position()-centers[n];
-     Vector atmclr=sc.GetAtom(i).Color();
+     Vector pos=sc[i].Position()-centers[n];
+     Vector atmclr=sc[i].Color();
      if ( Dot(pos,sep/sep.Mod())>0.5*sep.Mod() && atmclr==CellColor[n])
      {
-      sc.DeleteAtom(i); eliminated=true; i--;
+      sc.Destroy(&sc[i]); eliminated=true; i--;
      }
     }
     if (eliminated) break;
@@ -173,20 +172,20 @@ void VoronoiGenerator::Generate(SimulationCell & sc) const
 
 
  // PAIRS ELIMINATION: NOW THAT THE CELL IS FULL OF CELLS FILLED WITH ATOMS, WE ELIMINATE THE CLOSEST ATOMS
- for (long i=0; i<sc.Size(); i++)
+ for (unsigned long i=0; i<sc.size(); i++)
  {
-  for (long j=i+1; j<sc.Size(); j++)
+  for (unsigned long j=i+1; j<sc.size(); j++)
   {
    if(sc.Distance(i,j)<rmin)
    {
-    sc.DeleteAtom(i);
+    sc.Destroy(&sc[i]);
     i=0; break;
    }
   }
  }
 
  // Updating positions (impose periodic boudary conditions)
- for (long i=0; i<sc.Size(); i++) sc.SetPosition(i,sc.GetAtom(i).Position()+1.5*(x*e1+y*e2+z*e3));
+ for (unsigned long i=0; i<sc.size(); i++) sc.SetPosition(i,sc[i].Position()+1.5*(x*e1+y*e2+z*e3));
 
  delete [] CellColor;
  delete [] centers;

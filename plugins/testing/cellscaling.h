@@ -18,7 +18,6 @@ class CellScalingModifier: public lpmd::SystemModifier, public lpmd::Module
   ~CellScalingModifier();
   void Show(std::ostream & os) const;
   void ShowHelp() const;
-  std::string Keywords() const;
 
   //Metodos Propios de modulo cellscaling
   void Apply(lpmd::SimulationCell & sc);

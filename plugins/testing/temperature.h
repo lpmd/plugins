@@ -16,7 +16,6 @@ class TemperatureModifier: public lpmd::SystemModifier, public lpmd::Module
   ~TemperatureModifier();
 
   void ShowHelp() const;
-  std::string Keywords() const;
 
   //Metodos Propios
   void Apply(lpmd::SimulationCell & sc);

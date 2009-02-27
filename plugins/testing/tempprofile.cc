@@ -8,19 +8,36 @@
 #include <lpmd/util.h>
 #include <lpmd/neighbor.h>
 #include <lpmd/simulationcell.h>
-#include <lpmd/physunits.h>
+#include <lpmd/session.h>
 
 #include <sstream>
 
 using namespace lpmd;
 
-TempProfile::TempProfile(std::string args): Module("tempprofile")
+TempProfile::TempProfile(std::string args): Module("tempprofile", false)
 {
  m = NULL;
+ AssignParameter("version", "1.0"); 
+ AssignParameter("apirequired", "1.1"); 
+ AssignParameter("bugreport", "gnm@gnm.cl");
+ //
+ DefineKeyword("start");
+ DefineKeyword("end");
+ DefineKeyword("each");
+ DefineKeyword("rcut");
+ DefineKeyword("output");
+ DefineKeyword("bins", "200");
+ DefineKeyword("average", "false");
  range[0][0]=0.0e0;range[0][1]=0.0e0;
  range[1][0]=0.0e0;range[1][1]=0.0e0;
  range[2][0]=0.0e0;range[2][1]=0.0e0;
  ProcessArguments(args);
+ bins = GetInteger("bins");
+ start_step = GetInteger("start");
+ end_step = GetInteger("end");
+ interval = GetInteger("each");
+ outputfile = GetString("output");
+ do_average = GetBool("average");
 }
 
 TempProfile::~TempProfile()
@@ -43,12 +60,7 @@ void TempProfile::SetParameter(std::string name)
    ShowWarning("plugin tempprofile", "Wrong setting of axis.");
   }
  }
- if (name == "bins")
- {
-  AssignParameter("bins", GetNextWord());
-  bins = GetInteger("bins");
- }
- if (name == "range")
+ else if (name == "range")
  {
   int tmp=0;
   std::string eje=GetNextWord();
@@ -74,31 +86,7 @@ void TempProfile::SetParameter(std::string name)
   }
   if(range[tmp][0]>=range[tmp][1] &&  smin!="all" && smin!="ALL") ShowWarning("tempprofile", "min and max values are not consistent.");
  }
- if (name == "start")
- {
-  AssignParameter("start", GetNextWord());
-  start_step = GetInteger("start");
- }
- if (name == "end")
- {
-  AssignParameter("end", GetNextWord());
-  end_step = GetInteger("end");
- }
- if (name == "each")
- {
-  AssignParameter("each", GetNextWord());
-  interval = GetInteger("each");
- }
- if (name == "output")
- {
-  AssignParameter("output", GetNextWord());
-  outputfile = GetString("output");
- }
- if (name == "average")
- {
-  AssignParameter("average", GetNextWord());
-  do_average = GetBool("average");
- }
+ else Module::SetParameter(name);
 }
 
 void TempProfile::Show(std::ostream & os) const
@@ -118,14 +106,14 @@ void TempProfile::ShowHelp() const
  std::cout << " General Options   >>                                                          \n";
  std::cout << "      axis          : Especifica el eje en el que se realizara el calulo.      \n";
  std::cout << "      bins          : Especifica el numero de divisiones para el eje.          \n";
- std::cout << "      range         : Especifica el rango para calculo de temperatura.         \n";
- std::cout << "      output        : Fichero en el que se graba la temeratura.                \n";
+ std::cout << "      range         : Especifica el rango para calculo de densidad.            \n";
+ std::cout << "      output        : Fichero en el que se graba la densidad.                  \n";
  std::cout << "      average       : Setea si calcula o no el promedio de cada evaluacion.    \n";
  std::cout << '\n';
  std::cout << " Example                                                                       \n";
  std::cout << " Cargando el Modulo :                                                          \n";
- std::cout << " use tempprofile                                                               \n";
- std::cout << "     axis X                                                                    \n";
+ std::cout << " use tempprofile                                                            \n";
+ std::cout << "     axis X                                                                     \n";
  std::cout << "     bins 200                                                                  \n";
  std::cout << "     range Y 10 20                                                             \n";
  std::cout << "     range Z all                                                               \n";
@@ -138,8 +126,6 @@ void TempProfile::ShowHelp() const
  std::cout << "      De esta forma calculamos la funcion de distribucion radial de pares en   \n";
  std::cout << " la simulacion entre 1 y 100 cada 10 pasos.                                    \n";
 }
-
-std::string TempProfile::Keywords() const { return "rcut bins start end step output average"; }
 
 void TempProfile::Evaluate(SimulationCell & simcell, Potential & pot)
 {
@@ -170,7 +156,7 @@ void TempProfile::Evaluate(SimulationCell & simcell, Potential & pot)
  else {throw PluginError("tempprofile", "Error in axis setting to set 'dr'!.");}
 
  int nsp = simcell.SpeciesList().size();
- unsigned long int N = simcell.Size();
+ unsigned long int N = simcell.size();
  long int *nab = new long int[bins];
  double **temp, *tempt;
  temp = new double*[bins];
@@ -185,13 +171,15 @@ void TempProfile::Evaluate(SimulationCell & simcell, Potential & pot)
  int s=0;
  const std::list<std::string> lst = simcell.SpeciesList();
 
+ const double kin2ev = GlobalSession.GetDouble("kin2ev");
+ const double kboltzmann = GlobalSession.GetDouble("kboltzmann");
  for (std::list<std::string>::const_iterator it=lst.begin();it!=lst.end();++it)	   
  {
   //Asigna la especie correspondiente.
   int e = ElemNum(*it);
   //Cuenta los atomos de la especie e.
   int ne=0;
-  for(unsigned long int m=0;m<N;++m)
+  for(unsigned long int m=0;m<N;m++)
   {
    if(simcell[m].Species()==e) ne++;
   }
@@ -221,7 +209,7 @@ void TempProfile::Evaluate(SimulationCell & simcell, Potential & pot)
        else if(axis==2) pp = z;
        else ShowWarning("plugin tempprofile", "Bad calculation of tempprofile, check your 'axis' option.");
        int ir = (long) floor(pp/dr);
-       temp[ir][s] += 0.5*m*velocity.Mod2()*KIN2EV; //Solo son los aportes a la energia cinetica.
+       temp[ir][s] += (1/2)*m*velocity.Mod2()*kin2ev; //Solo son los aportes a la energia cinetica.
        nab[ir]++;
       }
      }
@@ -232,8 +220,7 @@ void TempProfile::Evaluate(SimulationCell & simcell, Potential & pot)
   //en cada bins (nab).
   for(int i=0;i<bins;i++)
   {
-   temp[i][s] = ((2.0/3.0)*temp[i][s])/(KBOLTZMANN*double(nab[i]));
-//   nab[i]=0;
+   temp[i][s] = ((2.0/3.0)*temp[i][s])/(kboltzmann*double(nab[i]));
   }
   s++;
  }
@@ -241,7 +228,7 @@ void TempProfile::Evaluate(SimulationCell & simcell, Potential & pot)
  int j=0;
  for(std::list<std::string>::const_iterator it=lst.begin();it!=lst.end();++it)
  {
-  for(int i=0;i<bins;++i)
+  for(int i=0;i<bins;i++)
   {
    tempt[i] += temp[i][j];
   }
@@ -264,7 +251,7 @@ void TempProfile::Evaluate(SimulationCell & simcell, Potential & pot)
   j++;
  }
  // 
- for(int i=0;i<bins;++i)
+ for(int i=0;i<bins;i++)
  {
   m->Set(0, i, dr*i);
   m->Set(1, i, counter);
@@ -277,7 +264,7 @@ void TempProfile::Evaluate(SimulationCell & simcell, Potential & pot)
  delete [] tempt;
  for (int i=0;i<bins;i++) delete [] temp[i];
  delete [] temp;
- delete [] nab;
+ delete [] nab; 
  counter++;
 }
 

@@ -7,6 +7,7 @@
 
 #include <lpmd/systemmodifier.h>
 #include <lpmd/plugin.h>
+#include <lpmd/vector.h>
 
 class ThermalNeedleModifier: public lpmd::SystemModifier, public lpmd::Module
 {

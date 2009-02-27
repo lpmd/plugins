@@ -73,15 +73,15 @@ void ThermalNeedleModifier::Apply(MD & md)
  SimulationCell & sc = md.GetCell();
  std::vector<int> idatoms;
  //Nuevo Set de particulas dentro de la region
- Particles parts;
- long int i=0;
- for(i=0;i<=sc.Size();++i)
+ SimulationCell parts;              // FIXME 0.5
+ // long int i=0;
+ for(unsigned long i=0;i<=sc.size();++i)
  {
   const Vector & pos = sc[i].Position();
   double r = sc.Displacement(center, pos).Mod();
   if ( r < radius ) 
   {
-   parts.AppendAtom(sc[i]);
+   parts.Create(new Atom(sc[i]));   // FIXME 0.5 
    idatoms.push_back(i);
   }
  }
@@ -89,10 +89,10 @@ void ThermalNeedleModifier::Apply(MD & md)
  parts.SetTemperature(temperature); 
  //Reemplazamos las particulas de la lista idatoms
  //con las de parts.
- for(long int i=0 ; i < parts.Size() ; ++i)
+ for(unsigned long int i=0 ;i<parts.size() ; ++i)
  {
   int id = idatoms[i];
-  sc.SetAtom(parts.GetAtom(i),id);
+  sc[id] = parts[i];    // FIXME 0.5
  }
  std::cerr << "-> Apply ThemralNeedle to T = " << temperature << '\n';  
 }

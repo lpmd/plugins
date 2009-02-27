@@ -16,7 +16,6 @@ class Verlet: public lpmd::OneStepIntegrator, public lpmd::IApplicable, public l
   Verlet(std::string args);
   ~Verlet();
   void ShowHelp() const;
-  std::string Keywords() const;
 
   //Metodos propios modulo verlet
   void Initialize(lpmd::SimulationCell & sc, lpmd::Potential & p);

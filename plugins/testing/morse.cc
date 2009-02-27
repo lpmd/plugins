@@ -10,6 +10,13 @@ using namespace lpmd;
 
 Morse::Morse(std::string args): Module("morse") 
 { 
+ AssignParameter("version", "1.0"); 
+ AssignParameter("apirequired", "1.1"); 
+ AssignParameter("bugreport", "gnm@gnm.cl"); 
+ //
+ DefineKeyword("depth");
+ DefineKeyword("a");
+ DefineKeyword("re");
  ProcessArguments(args);
  depth = GetDouble("depth");
  a = GetDouble("a");
@@ -18,12 +25,6 @@ Morse::Morse(std::string args): Module("morse")
 
 void Morse::ShowHelp() const
 {
- std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
- std::cout << " Module Name        = morse                                                    \n";
- std::cout << " Module Version     = 1.0                                                      \n";
- std::cout << " Support API lpmd   = 1.0.0                                                    \n";
- std::cout << " Problems Report to = gnm@gnm.cl                                               \n";
- std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
  std::cout << "      El modulo implementa el potencial de Morse para la interaccion de        \n";
  std::cout << " de pares.                                                                     \n";
@@ -32,7 +33,7 @@ void Morse::ShowHelp() const
  std::cout << "      depth         : Especifica la profundidad del pozo de potencial.         \n";
  std::cout << "      a             : Especifica el valor de a (ancho)para el potencial.       \n";
  std::cout << "      re            : Especifica valor de re (distancia eq) para el potencial. \n";
- std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+ std::cout << '\n';
  std::cout << " Example                                                                       \n";
  std::cout << " Cargando el Modulo :                                                          \n";
  std::cout << " use morse as MO                                                               \n";
@@ -44,11 +45,7 @@ void Morse::ShowHelp() const
  std::cout << " potential MO Ar Ar                                                          \n\n";
  std::cout << "      De esta forma seteamos el potencial de Morse entre los atomos            \n";
  std::cout << " de Ar con las constantes usadas en MO.                                        \n";
- std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
-
 }
-
-std::string Morse::Keywords() const { return "depth a re"; }
 
 double Morse::pairEnergy(const double & r) const
 {

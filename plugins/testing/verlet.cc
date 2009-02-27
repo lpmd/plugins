@@ -12,8 +12,12 @@ using namespace lpmd;
 
 Verlet::Verlet(std::string args): Module("verlet")
 {
- AssignParameter("dt", "1.0");
- AssignParameter("start", "1");
+ AssignParameter("version", "1.0"); 
+ AssignParameter("apirequired", "1.1"); 
+ AssignParameter("bugreport", "gnm@gnm.cl"); 
+ //
+ DefineKeyword("dt", "1.0");
+ DefineKeyword("start", "1");
  // hasta aqui los valores por omision
  ProcessArguments(args);
  dt = GetDouble("dt");
@@ -24,18 +28,12 @@ Verlet::~Verlet() { }
 
 void Verlet::ShowHelp() const
 {
- std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
- std::cout << " Module Name        = verlet                                                   \n";
- std::cout << " Module Version     = 1.0                                                      \n";
- std::cout << " Support API lpmd   = 1.0.0                                                    \n";
- std::cout << " Problems Report to = gnm@gnm.cl                                               \n";
- std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
  std::cout << "      El modulo es utilizado para integrar utilizando el metodo de verlet.     \n";
  std::cout << " General Options   >>                                                          \n";
  std::cout << "      dt            : Especifica el tiempo en femto-segundos para el           \n" ;
  std::cout << "                      integrador.                                              \n";
- std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+ std::cout << '\n';
  std::cout << " Example                                                                       \n";
  std::cout << " Cargando el Modulo :                                                          \n";
  std::cout << " use verlet                                                                    \n";
@@ -46,15 +44,9 @@ void Verlet::ShowHelp() const
  std::cout << "      El integrador puede ser llamado desde el principio (sin usar start) o en \n";
  std::cout << " otro instante de tiempo, para poder modificar el integrador durante la        \n";
  std::cout << " simulacion.                                                                   \n";
- std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
 }
 
-std::string Verlet::Keywords() const { return "dt start"; }
-
-void Verlet::Initialize(SimulationCell & sc, Potential & p)
-{
- UseOldCell(sc);
-}
+void Verlet::Initialize(SimulationCell & sc, Potential & p) { UseOldCell(sc); }
 
 void Verlet::Advance(SimulationCell & sc, long i)
 {
@@ -65,7 +57,7 @@ void Verlet::Advance(SimulationCell & sc, long i)
  oldsc.SetPosition(i, now.Position());
  oldsc.SetVelocity(i, now.Velocity());
  sc.SetPosition(i, newpos);
- Vector newvel = sc.Displacement(oldpos, sc.GetAtom(i).Position())/(2.0*dt);
+ const Vector newvel = sc.Displacement(oldpos, sc[i].Position())/(2.0*dt);
  sc.SetVelocity(i, newvel);
 }
 

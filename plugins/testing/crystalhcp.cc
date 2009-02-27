@@ -11,10 +11,14 @@ using namespace lpmd;
 
 HCPGenerator::HCPGenerator(std::string args): Module("crystalhcp")
 {
- AssignParameter("nx", "1");
- AssignParameter("ny", "1");
- AssignParameter("nz", "1");
- AssignParameter("symbol", "H");
+ AssignParameter("version", "1.0"); 
+ AssignParameter("apirequired", "1.1"); 
+ AssignParameter("bugreport", "gnm@gnm.cl"); 
+ //
+ DefineKeyword("nx", "1");
+ DefineKeyword("ny", "1");
+ DefineKeyword("nz", "1");
+ DefineKeyword("symbol", "H");
  // hasta aqui los valores por omision
  ProcessArguments(args);
  spc = ElemNum(GetString("symbol"));
@@ -27,12 +31,6 @@ HCPGenerator::~HCPGenerator() { }
 
 void HCPGenerator::ShowHelp() const
 {
- std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
- std::cout << " Module Name        = crystalhcp                                               \n";
- std::cout << " Module Version     = 1.0                                                      \n";
- std::cout << " Support API lpmd   = 1.0.0                                                    \n";
- std::cout << " Problems Report to = gnm@gnm.cl                                               \n";
- std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
  std::cout << "      El modulo es utilizado para crear celdas del tipo hexagonal close-packed \n";
  std::cout << "      (HCP).                                                                   \n";
@@ -41,18 +39,12 @@ void HCPGenerator::ShowHelp() const
  std::cout << "      nx            : Repeticiones en la direccion X.                          \n";
  std::cout << "      ny            : Repeticiones en la direccion Y.                          \n";
  std::cout << "      nz            : Repeticiones en la direccion Z.                          \n";
- std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+ std::cout << '\n';
  std::cout << " Example                                                                       \n";
  std::cout << " Utilizando el Modulo :                                                        \n";
  std::cout << " input crystalhcp symbol=Fe nx=3 ny=3 nz=3                                     \n";
  std::cout << " input crystalhcp Fe 3 3 3                                                     \n\n";
  std::cout << "      De esta forma creamos una celda de entrada de tipo HCP en la simulacion. \n";
- std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
-}
-
-std::string HCPGenerator::Keywords() const
-{
- return "symbol nx ny nz";
 }
 
 void HCPGenerator::Generate(SimulationCell & sc) const
@@ -62,7 +54,7 @@ void HCPGenerator::Generate(SimulationCell & sc) const
  double ax = 1.0/double(nx);
  double ay = 1.0/double(ny);
  double az = 1.0/double(nz);
- std::cerr << "-> Generating HCP cell, c/a ratio is " << (nx*sc.GetVector(2).Mod())/(nz*sc.GetVector(0).Mod()) << '\n';
+ DebugStream() << "-> Generating HCP cell, c/a ratio is " << (nx*sc.GetVector(2).Mod())/(nz*sc.GetVector(0).Mod()) << '\n';
  for (long k=0;k<nz;++k)
  {
   for (long j=0;j<ny;++j)
@@ -70,10 +62,10 @@ void HCPGenerator::Generate(SimulationCell & sc) const
    for (long i=0;i<nx;++i)
    {
     p = Vector((double(i)+(2.0/3.0))*ax, (double(j)+(1.0/3.0))*ay, (double(k)+(3.0/4.0))*az);
-    sc.AppendAtom(Atom(spc));
+    sc.Create(new Atom(spc));
     sc.SetFracPosition(cc++, p);
     p = Vector((double(i)+(1.0/3.0))*ax, (double(j)+(2.0/3.0))*ay, (double(k)+(1.0/4.0))*az);
-    sc.AppendAtom(Atom(spc));
+    sc.Create(new Atom(spc));
     sc.SetFracPosition(cc++, p);
    }
   }

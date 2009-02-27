@@ -16,7 +16,6 @@ class VelDist: public lpmd::ScalarTable, public lpmd::InstantProperty, public lp
   VelDist(std::string args);
   ~VelDist();
   void ShowHelp() const;
-  std::string Keywords() const;
 
   //Metodos Propios de modulo veldist
   const lpmd::Matrix & Value() const { return *m; }

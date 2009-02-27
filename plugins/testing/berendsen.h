@@ -15,7 +15,6 @@ class BerendsenModifier: public lpmd::SystemModifier, public lpmd::Module
    BerendsenModifier(std::string args);
    ~BerendsenModifier();
    void ShowHelp() const;
-   std::string Keywords() const;
 
    //Metodos Propios del Modulo Berendsen
    void Apply(lpmd::SimulationCell & sc);

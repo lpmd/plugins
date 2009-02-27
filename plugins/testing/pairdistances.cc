@@ -16,6 +16,15 @@ using namespace lpmd;
 PairDistances::PairDistances(std::string args): Module("pairdistances")
 {
  m = NULL;
+ AssignParameter("version", "1.0"); 
+ AssignParameter("apirequired", "1.1"); 
+ AssignParameter("bugreport", "gnm@gnm.cl"); 
+ //
+ DefineKeyword("rcut");
+ DefineKeyword("start");
+ DefineKeyword("end");
+ DefineKeyword("each");
+ DefineKeyword("output");
  ProcessArguments(args);
  rcut = GetDouble("rcut");
  start_step = GetInteger("start");
@@ -28,17 +37,11 @@ PairDistances::~PairDistances() { if (m != NULL) delete m; }
 
 void PairDistances::ShowHelp() const
 {
- std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
- std::cout << " Module Name        = pairdistances                                            \n";
- std::cout << " Module Version     = 1.0                                                      \n";
- std::cout << " Support API lpmd   = 1.0.0                                                    \n";
- std::cout << " Problems Report to = gnm@gnm.cl                                               \n";
- std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
  std::cout << " General Options   >>                                                          \n";
  std::cout << "      rcut          : Especifica el radio maximo para el conteo de pares       \n";
  std::cout << "      output        : Fichero en el que se graba la salida                     \n";
- std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+ std::cout << '\n';
  std::cout << " Example                                                                       \n";
  std::cout << " Cargando el Modulo :                                                          \n";
  std::cout << " use pairdistances                                                             \n";
@@ -47,22 +50,19 @@ void PairDistances::ShowHelp() const
  std::cout << " enduse                                                                        \n";
  std::cout << " Llamando al Modulo :                                                          \n";  
  std::cout << " property pairdistances start=1 each=10 end=100                                \n\n";
- std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
 }
-
-std::string PairDistances::Keywords() const { return "rcut start end step output"; }
 
 void PairDistances::Evaluate(SimulationCell & simcell, Potential & pot)
 {
- const long n = simcell.Size();
+ const unsigned long int n = simcell.size();
  std::list<Neighbor> total_list;
- for (long i=0;i<n;++i)
+ for (unsigned long int i=0;i<n;++i)
  {
-  std::list<Neighbor> nlist;
+  std::vector<Neighbor> nlist;
   simcell.BuildNeighborList(i, nlist, false, rcut);
-  for(std::list<Neighbor>::const_iterator it=nlist.begin();it!=nlist.end();++it)
+  for (unsigned long int k=0;k<nlist.size();++k)
   {
-   const Neighbor & nn = *it;
+   const Neighbor & nn = nlist[k];
    if (nn.r < rcut) total_list.push_back(nn); 
   }
  } 

@@ -16,7 +16,6 @@ class PairDistances: public lpmd::ScalarTable, public lpmd::InstantProperty, pub
   PairDistances(std::string args);
   ~PairDistances();
   void ShowHelp() const;
-  std::string Keywords() const;
 
   //Metodos Propios de modulo pairdistances
   const lpmd::Matrix & Value() const { return *m; }

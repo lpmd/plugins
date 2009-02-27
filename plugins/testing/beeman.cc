@@ -11,8 +11,12 @@ using namespace lpmd;
 
 Beeman::Beeman(std::string args): Module("beeman")
 {
- AssignParameter("dt", "1.0");
- AssignParameter("start", "1");
+ AssignParameter("version", "1.0"); 
+ AssignParameter("apirequired", "1.1"); 
+ AssignParameter("bugreport", "gnm@gnm.cl"); 
+ //
+ DefineKeyword("dt", "1.0");
+ DefineKeyword("start", "1");
  // hasta aqui los valores por omision
  ProcessArguments(args);
  dt = GetDouble("dt");
@@ -23,18 +27,12 @@ Beeman::~Beeman() { }
 
 void Beeman::ShowHelp() const
 {
- std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
- std::cout << " Module Name        = beeman                                                   \n";
- std::cout << " Module Version     = 1.0                                                      \n";
- std::cout << " Support API lpmd   = 1.0.0                                                    \n";
- std::cout << " Problems Report to = gnm@gnm.cl                                               \n";
- std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
  std::cout << "      El modulo es utilizado para integrar utilizando el metodo de beeman.     \n";
  std::cout << " General Options   >>                                                          \n";
  std::cout << "      dt            : Especifica el tiempo en femto-segundos para el           \n" ;
  std::cout << "                      integrador.                                              \n";
- std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+ std::cout << '\n';
  std::cout << " Example                                                                       \n";
  std::cout << " Cargando el Modulo :                                                          \n";
  std::cout << " use beeman                                                                    \n";
@@ -45,14 +43,11 @@ void Beeman::ShowHelp() const
  std::cout << "      El integrador puede ser llamado desde el principio (sin usar start) o en \n";
  std::cout << " otro instante de tiempo, para poder modificar el integrador durante la        \n";
  std::cout << " simulacion.                                                                   \n";
- std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
 }
-
-std::string Beeman::Keywords() const { return "dt start"; }
 
 void Beeman::Initialize(SimulationCell & sc, Potential & p)
 {
- for (long i=0;i<sc.Size();++i) auxlist.push_back(Vector());
+ for (unsigned long int i=0;i<sc.size();++i) auxlist.push_back(Vector());
  UseOldCell(sc);
  SimulationCell & oldsc = OldCell();
  p.UpdateForces(oldsc);

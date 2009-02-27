@@ -12,7 +12,11 @@ using namespace lpmd;
 
 MinimumImageCellManager::MinimumImageCellManager(std::string args): Module("minimumimage")
 { 
- AssignParameter("cutoff", "0.0");
+ AssignParameter("version", "1.0"); 
+ AssignParameter("apirequired", "1.1"); 
+ AssignParameter("bugreport", "gnm@gnm.cl"); 
+ //
+ DefineKeyword("cutoff", "0.0");
  // hasta aqui los valores por omision
  ProcessArguments(args);
  rcut = GetDouble("cutoff");
@@ -25,8 +29,6 @@ void MinimumImageCellManager::Show(std::ostream & os) const
  Module::Show(os);
  if (fabs(rcut) < 1E-10) os << "   No cutoff was defined." << '\n';
 }
-
-std::string MinimumImageCellManager::Keywords() const { return "cutoff"; }
 
 void MinimumImageCellManager::Reset() { }
 
@@ -41,14 +43,14 @@ void MinimumImageCellManager::UpdateCell(SimulationCell & sc)
 
 double MinimumImageCellManager::Cutoff() const { return rcut; }
 
-void MinimumImageCellManager::BuildNeighborList(SimulationCell & sc, long i, std::list<Neighbor> & nlist, bool full, double rcu)
+void MinimumImageCellManager::BuildNeighborList(SimulationCell & sc, long i, std::vector<Neighbor> & nlist, bool full, double rcu)
 {
- const long n = sc.Size();
+ const long int n = sc.size();
  nlist.clear();
  if (full)
  {
   //
-  for (long j=0;j<n;++j)
+  for (long int j=0;j<n;++j)
   {
    if (i != j)
    {
@@ -58,14 +60,14 @@ void MinimumImageCellManager::BuildNeighborList(SimulationCell & sc, long i, std
     nn.rij = sc.VectorDistance(i, j);
     nn.r = nn.rij.Mod();
     if (rcut < 1E-30) nlist.push_back(nn);
-    else if (nn.r < rcu) nlist.push_back(nn);
+    else if (nn.r < rcut) nlist.push_back(nn);
    }
   }
  }
  else
  {
   //
-  for (long j=i+1;j<n;++j)
+  for (long int j=i+1;j<n;++j)
   {
    Neighbor nn;
    nn.i = &sc[i];
@@ -73,20 +75,8 @@ void MinimumImageCellManager::BuildNeighborList(SimulationCell & sc, long i, std
    nn.rij = sc.VectorDistance(i, j);
    nn.r = nn.rij.Mod();
    if (rcut < 1E-30) nlist.push_back(nn);
-   else if (nn.r < rcu) nlist.push_back(nn);
+   else if (nn.r < rcut) nlist.push_back(nn);
   }
- }
-}
-
-void MinimumImageCellManager::BuildList(SimulationCell &sc, bool full, double rc)
-{
- for (long int i=0;i<sc.Size();++i)
- {
-  sc.GetAtom(i).CleanNeighbors();
-  std::list<Neighbor> tmp;
-  BuildNeighborList(sc, i, tmp, full, rc);
-  for (std::list<Neighbor>::const_iterator it=tmp.begin();it!=tmp.end();++it) 
-      sc.GetAtom(i).Neighbors().Add(*it);
  }
 }
 

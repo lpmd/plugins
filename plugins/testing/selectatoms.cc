@@ -101,15 +101,9 @@ void SelectAtomsModifier::Show(std::ostream & os) const
 
 void SelectAtomsModifier::ShowHelp() const
 {
- std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
- std::cout << " Module Name        = selectatoms                                              \n";
- std::cout << " Module Version     = 1.0                                                      \n";
- std::cout << " Support API lpmd   = 1.0.0                                                    \n";
- std::cout << " Problems Report to = gnm@gnm.cl                                               \n";
- std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
  std::cout << " General Options   >>                                                          \n";
- std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+ std::cout << '\n';
  std::cout << " Example                                                                       \n";
  std::cout << " Cargando el Modulo :                                                          \n";
  std::cout << " use selectatoms                                                               \n";
@@ -122,24 +116,18 @@ void SelectAtomsModifier::ShowHelp() const
  std::cout << " enduse                                                                        \n\n";
  std::cout << " Llamando al modulo :                                                          \n";
  std::cout << " apply selectatoms                                                             \n\n";
- std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
-}
-
-std::string SelectAtomsModifier::Keywords() const
-{
- return "index x y z mode vx vy vz";
 }
 
 void SelectAtomsModifier::Apply(SimulationCell & sc)
 {
- const long n = sc.Size();
+ const long n = sc.size();
  if (mode == "extract")
  {
-  Particles tmp;
-  tmp.Clear();
+  ParticleSet tmp;
+  tmp.clear();
   if (p0 != -1)
   {
-   for (long i=p0;i<=p1;++i) tmp.AppendAtom(sc[i]);
+   for (long i=p0;i<=p1;++i) tmp.Create(new Atom(sc[i]));
   }
   else
   {
@@ -155,11 +143,11 @@ void SelectAtomsModifier::Apply(SimulationCell & sc)
      }
     }
     if (outside) select_this = (!select_this);
-    if (select_this) tmp.AppendAtom(sc[i]);
+    if (select_this) tmp.Create(new Atom(sc[i]));
    }
   }
-  sc.Clear();
-  for (long i=0;i<tmp.Size();++i) sc.AppendAtom(tmp[i]);
+  sc.clear();
+  for (unsigned long i=0;i<tmp.size();++i) sc.Create(new Atom(tmp[i]));
   sc.NumEspec();
   sc.AssignIndex();
  }

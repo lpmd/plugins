@@ -19,7 +19,6 @@ class SelectAtomsModifier: public lpmd::SystemModifier, public lpmd::Module
   void SetParameter(std::string name);
   void Show(std::ostream & os) const;
   void ShowHelp() const;
-  std::string Keywords() const;
 
   //Metodos Propios de modulo selectatoms
   void Apply(lpmd::SimulationCell & sc);
@@ -27,7 +26,8 @@ class SelectAtomsModifier: public lpmd::SystemModifier, public lpmd::Module
 
   private:
     std::string mode;
-    lpmd::Vector vmin, vmax, vel;
+    lpmd::Vector vmin, vmax, center, vel, acc;
+    double radius;
     long p0, p1;
     bool outside;
 };

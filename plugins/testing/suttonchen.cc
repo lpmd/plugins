@@ -10,6 +10,16 @@ using namespace lpmd;
 
 SuttonChen::SuttonChen(std::string args): Module("suttonchen")
 {
+ AssignParameter("version", "1.0"); 
+ AssignParameter("apirequired", "1.1"); 
+ AssignParameter("bugreport", "gnm@gnm.cl"); 
+ //
+ DefineKeyword("e");
+ DefineKeyword("a");
+ DefineKeyword("n");
+ DefineKeyword("m");
+ DefineKeyword("c");
+ DefineKeyword("cutoff");
  ProcessArguments(args); 
  e = GetDouble("e");
  a = GetDouble("a");
@@ -21,12 +31,6 @@ SuttonChen::SuttonChen(std::string args): Module("suttonchen")
 
 void SuttonChen::ShowHelp() const
 {
- std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
- std::cout << " Module Name        = suttonchen                                               \n";
- std::cout << " Module Version     = 1.0                                                      \n";
- std::cout << " Support API lpmd   = 1.0.0                                                    \n";
- std::cout << " Problems Report to = gnm@gnm.cl                                               \n";
- std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
  std::cout << "      El modulo implementa el potencial de SuttonChen para interaccion de      \n";
  std::cout << " atomo metalicos.                                                              \n";
@@ -38,7 +42,7 @@ void SuttonChen::ShowHelp() const
  std::cout << "      m             : Especifica el valor para la constante a del potencial.   \n";
  std::cout << "      c             : Especifica el valor para la constante a del potencial.   \n";
  std::cout << "      cutoff        : Radio de corte para el potencial.                        \n";
- std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+ std::cout << '\n';
  std::cout << " Example                                                                       \n";
  std::cout << " Cargando el Modulo :                                                          \n";
  std::cout << " use suttonchen as SC                                                          \n";
@@ -52,26 +56,13 @@ void SuttonChen::ShowHelp() const
  std::cout << " potential SC Cu Cu                                                          \n\n";
  std::cout << "      De esta forma seteamos el potencial de suttonchen entre los atomos de    \n";
  std::cout << " Cu con las constantes seteadas en SC.                                         \n";
- std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
-
 }
 
-std::string SuttonChen::Keywords() const { return " e a n m c cutoff "; }
+double SuttonChen::pairEnergy(const double &r) const { return e*pow((a/r),n); }
 
-double SuttonChen::pairEnergy(const double &r) const
-{
- return e*pow((a/r),n);
-}
+double SuttonChen::rhoij(const double &r) const { return pow((a/r),m); }
 
-double SuttonChen::rhoij(const double &r) const
-{
- return pow((a/r),m);
-}
-
-double SuttonChen::F(const double &rhoi) const
-{
- return -c*e*sqrt(rhoi);
-}
+double SuttonChen::F(const double &rhoi) const { return -c*e*sqrt(rhoi); }
 
 Vector SuttonChen::PairForce(const Vector &rij) const
 {
@@ -91,21 +82,24 @@ Vector SuttonChen::ManyBodies(const Vector &rij, const double &rhoi, const doubl
  return tmp*ff;
 }
 
-double SuttonChen::deltarhoi(const double &rhobar, const int &n) const
+double SuttonChen::deltarhoi(const double &rhobar) const
 {
- return 0;
+ return (4*M_PI*rhobar*a*a*a/(m-3))*pow(a/rcut,m-3);
 }
 
 double SuttonChen::deltaU1(const double &rhobar, const int &N) const
 {
- return 0;
+ double f = 2*M_PI*N*rhobar*e*a*a*a/(n-3);
+ return f*pow(a/rcut,n-3);
 }
 
 double SuttonChen::deltaU2(const double &rhobar, const int &N, const double &rhoi) const { return 0.0e0; }
 
 double SuttonChen::VirialCorrection(const double &rhobar, const int &N, const double &rhoi) const
 {
- return 0;
+ double dV1 = (n/(n-3))*pow(a/rcut, n-3);
+ double dV2 = (2.0*m/(m-3))*pow(a/rcut, m-3)*c/(2.0*sqrt(rhoi));
+ return -(2.0*M_PI*rhobar*N*e*pow(a, 3.0)*(dV1-dV2));
 }
 
 // Esto se inlcuye para que el modulo pueda ser cargado dinamicamente

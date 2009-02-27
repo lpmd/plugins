@@ -16,13 +16,12 @@ class PrintAtomsVisualizer: public lpmd::Visualizer, public lpmd::Module
   PrintAtomsVisualizer(std::string args);
   ~PrintAtomsVisualizer();
   void ShowHelp() const;
-  std::string Keywords() const;
 
   //Metodos Propios de modulo printatoms
   void Apply(const lpmd::MD & md);
 
  private:
-   long from_at, to_at;
+   unsigned long int from_at, to_at;
 };
 
 #endif

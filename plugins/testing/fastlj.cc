@@ -10,7 +10,14 @@ using namespace lpmd;
 
 FastLJ::FastLJ(std::string args): Module("fastlj") 
 { 
- AssignParameter("bins", "500");
+ AssignParameter("version", "1.0"); 
+ AssignParameter("apirequired", "1.1"); 
+ AssignParameter("bugreport", "gnm@gnm.cl"); 
+ //
+ DefineKeyword("sigma");
+ DefineKeyword("epsilon");
+ DefineKeyword("cutoff");
+ DefineKeyword("bins", "500");
  // hasta aqui los valores por omision
  ProcessArguments(args);
  sigma = GetDouble("sigma");
@@ -29,12 +36,6 @@ FastLJ::~FastLJ()
 
 void FastLJ::ShowHelp() const
 {
- std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
- std::cout << " Module Name        = fastlj                                                   \n";
- std::cout << " Module Version     = 1.0                                                      \n";
- std::cout << " Support API lpmd   = 1.0.0                                                    \n";
- std::cout << " Problems Report to = gnm@gnm.cl                                               \n";
- std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
  std::cout << "      El modulo implementa el potencial de Lennard Jones para interaccion de   \n";
  std::cout << " de pares.                                                                     \n";
@@ -45,7 +46,7 @@ void FastLJ::ShowHelp() const
  std::cout << "      epsilon       : Especifica el valor para epsilon del potencial.          \n";
  std::cout << "      cutoff        : Radio de corte para el potencial interatomico.           \n";
  std::cout << "      bins          : Numero de celdas para tabla de potencial.                \n";
- std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+ std::cout << '\n';
  std::cout << " Example                                                                       \n";
  std::cout << " Cargando el Modulo :                                                          \n";
  std::cout << " use fastlj as FLJARAR                                                         \n";
@@ -58,17 +59,14 @@ void FastLJ::ShowHelp() const
  std::cout << " potential FLJARAR Ar Ar                                                     \n\n";
  std::cout << "      De esta forma seteamos el potencial de Lennard Jones entre los atomos    \n";
  std::cout << " de Ar con las constantes usadas en FLJARAR.                                   \n";
- std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
 }
-
-std::string FastLJ::Keywords() const { return "sigma epsilon cutoff bins"; }
 
 void FastLJ::Tabulate()
 {
  double r, e, ff, r6, r12;
  etable = new double[bins];
  fftable = new double[bins];
- std::cerr << "-> Building table for Fast LJ potential, " << bins << " bins" << '\n';
+ DebugStream() << "-> Building table for Fast LJ potential, " << bins << " bins" << '\n';
  for (long i=0;i<bins;++i)
  {
   r = cutoff*double(i)/double(bins);
@@ -79,7 +77,7 @@ void FastLJ::Tabulate()
   etable[i] = e;
   fftable[i] = ff;
  }
- std::cerr << "-> Table finished." << '\n';
+ DebugStream() << "-> Table finished." << '\n';
 }
 
 double FastLJ::pairEnergy(const double & r) const

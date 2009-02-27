@@ -19,7 +19,6 @@ class Beeman: public lpmd::TwoStepIntegrator, public lpmd::IApplicable, public l
    Beeman(std::string args);
    ~Beeman();
    void ShowHelp() const;
-   std::string Keywords() const;
 
    //Metodos Propios del Modulo Beeman
    void Initialize(lpmd::SimulationCell & sc, lpmd::Potential & p);

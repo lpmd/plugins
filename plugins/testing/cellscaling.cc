@@ -13,9 +13,16 @@ using namespace lpmd;
 
 CellScalingModifier::CellScalingModifier(std::string args): Module("cellscaling")
 {
+ AssignParameter("version", "1.0"); 
+ AssignParameter("apirequired", "1.1"); 
+ AssignParameter("bugreport", "gnm@gnm.cl"); 
+ //
  axis = -1;
- AssignParameter("percent", "0.0");
- AssignParameter("axis", "all");
+ DefineKeyword("start");
+ DefineKeyword("end");
+ DefineKeyword("each");
+ DefineKeyword("percent", "0.0");
+ DefineKeyword("axis", "all");
  AssignParameter("constant", "true");
  AssignParameter("first", "true");
  // hasta aqui los valores por omision
@@ -46,12 +53,6 @@ void CellScalingModifier::Show(std::ostream & os) const
 
 void CellScalingModifier::ShowHelp() const
 {
- std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
- std::cout << " Module Name        = cellscaling                                              \n";
- std::cout << " Module Version     = 1.0                                                      \n";
- std::cout << " Support API lpmd   = 1.0.0                                                    \n";
- std::cout << " Problems Report to = gnm@gnm.cl                                               \n";
- std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
  std::cout << "      El modulo es utilizado para escalar el tamano de la celda, puede         \n";
  std::cout << " utilizarse para escalar un eje de la celda, o realizar un esacalado           \n";
@@ -75,33 +76,26 @@ void CellScalingModifier::ShowHelp() const
  std::cout << " apply cellscaling start=0 each=300 end=1000                                 \n\n";
  std::cout << "      De esta forma escalamos la celda de simulacion en un 20% cada 300 pasos  \n";
  std::cout << " en el eje X, terminando el escalado enel paso 1000.                           \n";
- std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
-
-}
-
-std::string CellScalingModifier::Keywords() const
-{
- return "percent axis start end each";
 }
 
 void CellScalingModifier::Apply(SimulationCell & sc)
 {
- if(constant==false)
+ if (constant == false)
  {
   if (axis == -1)
   {
-   std::cerr << "-> Rescaling cell by " << percent << "%\n";
+   DebugStream() << "-> Rescaling cell by " << percent << "%\n";
    sc.RescalePercent(percent); 
   }
   else
   {
-   std::cerr<< "-> Rescaling axis " << axis << " in a " << percent << "%\n";
+   DebugStream() << "-> Rescaling axis " << axis << " in a " << percent << "%\n";
    sc.RescalePercent(percent, axis);
   }
  }
- else if(constant==true)
+ else if (constant == true)
  {
-  if(first==true)
+  if (first == true)
   {
    for(int i=0;i<3;++i) s[i] = sc.GetVector(i)*percent/100;
    first=false;
@@ -109,12 +103,12 @@ void CellScalingModifier::Apply(SimulationCell & sc)
 
   if (axis == -1)
   {
-   std::cerr << "-> Rescaling constant by " << percent << "%\n";
+   DebugStream() << "-> Rescaling constant by " << percent << "%\n";
    sc.RescaleVector(s[0],s[1],s[2]);
   }
   else
   {
-   std::cerr << "-> Rescaling axis " << axis <<" constant by " << percent << "%\n";
+   DebugStream() << "-> Rescaling axis " << axis <<" constant by " << percent << "%\n";
    sc.RescaleVector(s[axis],axis);
   }
  }

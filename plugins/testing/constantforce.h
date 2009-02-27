@@ -16,7 +16,6 @@ class ConstantForcePotential: public lpmd::Potential, public lpmd::Module
   ~ConstantForcePotential();
   void SetParameter(std::string name);
   void ShowHelp() const;
-  std::string Keywords() const;
 
   //Metodos Propios del modulo constantforce
   double energy(lpmd::SimulationCell & sc);

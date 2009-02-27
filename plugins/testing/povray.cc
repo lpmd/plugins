@@ -9,6 +9,7 @@
 #include <lpmd/inputfile.h>
 #include <lpmd/md.h>
 
+#include <fstream>
 #include <sstream>
 
 using namespace lpmd;
@@ -127,8 +128,6 @@ class POVLogo
 
 POVRAY::POVRAY(std::string args): Module("povray")
 {
- direct = "povray";
- header = "movie-";
  counter = 0;
  level=0;
  ntext=0;
@@ -137,39 +136,34 @@ POVRAY::POVRAY(std::string args): Module("povray")
  pos_logo = "<ur>" ;
  scale_logo = 1.0 ;
  file_logo = "";
- campos=true;
+ AssignParameter("version", "1.0"); 
+ AssignParameter("apirequired", "1.1"); 
+ AssignParameter("bugreport", "gnm@gnm.cl"); 
+ //
+ DefineKeyword("start");
+ DefineKeyword("end");
+ DefineKeyword("each");
+ DefineKeyword("text");
+ DefineKeyword("logo");
+ DefineKeyword("rotate");
+ DefineKeyword("box");
+ DefineKeyword("background");
+ DefineKeyword("header", "movie-");
+ DefineKeyword("direct", "povray");
+ DefineKeyword("camera", "true");
  ProcessArguments(args);
+ start_step = GetInteger("start");
+ end_step = GetInteger("end");
+ interval = GetInteger("each");
+ header = GetString("header");
+ direct = GetString("direct");
+ campos = GetBool("camera");
 }
 
 POVRAY::~POVRAY() { }
 
 void POVRAY::SetParameter(std::string name)
 {
- if (name == "start")
- {
-  AssignParameter("start", GetNextWord());
-  start_step = GetInteger("start");
- }
- if (name == "end")
- {
-  AssignParameter("end", GetNextWord());
-  end_step = GetInteger("end");
- }
- if (name == "each")
- {
-  AssignParameter("each", GetNextWord());
-  interval = GetInteger("each");
- }
- if (name == "header")
- {
-  AssignParameter("header", GetNextWord());
-  header = GetString("header");
- }
- if (name == "direct")
- {
-  AssignParameter("direct", GetNextWord());
-  direct = GetString("direct");
- }
  if (name == "text")
  {
   std::string texto = GetNextWord('"');
@@ -189,7 +183,7 @@ void POVRAY::SetParameter(std::string name)
   extras[ntext].erase(extras[ntext].size()-1,1);
   ntext++;
  }
- if (name == "logo")
+ else if (name == "logo")
  {
   AssignParameter("logo-file",GetNextWord('"'));
   AssignParameter("logo-scale",GetNextWord());
@@ -198,12 +192,12 @@ void POVRAY::SetParameter(std::string name)
   scale_logo = GetDouble("logo-scale");
   pos_logo = GetString("logo-pos");
  }
- if (name == "rotate")
+ else if (name == "rotate")
  {
   AssignParameter("rotate",GetNextWord('<'));
   angle_cell = GetString("rotate");
  }
- if (name == "box")
+ else if (name == "box")
  {
   AssignParameter("cell-show",GetNextWord());
   if(GetBool("cell-show")!=false)
@@ -217,26 +211,16 @@ void POVRAY::SetParameter(std::string name)
   scale_cell = GetDouble("cell-scale");
   }
  }
- if (name == "background")
+ else if (name == "background")
  {
   AssignParameter("background",GetNextWord('<'));
   background = GetString("background");
  }
- if (name == "camera")
- {
-  AssignParameter("camera",GetNextWord());
-  campos = GetBool("camera");
- }
+ else Module::SetParameter(name);
 }
 
 void POVRAY::ShowHelp() const
 {
- std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
- std::cout << " Module Name        = povray                                                   \n";
- std::cout << " Module Version     = 1.0                                                      \n";
- std::cout << " Support API lpmd   = 1.0.0                                                    \n";
- std::cout << " Problems Report to = gnm@gnm.cl                                               \n";
- std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
  std::cout << "      El modulo es utilizado para generar un set de ficheros pov que pueden    \n";
  std::cout << " ser utilizados en una etapa posterior para generar peliculas o fotos de la    \n";
@@ -254,7 +238,7 @@ void POVRAY::ShowHelp() const
  std::cout << "                      box true type <color> scale                              \n";
  std::cout << "      camera        : Posicion de la camara, es recomendable usar el default.  \n";
  std::cout << "                      camera <pos>                                             \n";
- std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+ std::cout << '\n';
  std::cout << " Example                                                                       \n";
  std::cout << " Cargando el Modulo :                                                          \n";
  std::cout << " use povray                                                                    \n";
@@ -271,11 +255,7 @@ void POVRAY::ShowHelp() const
  std::cout << " visualize povray start=0 each=100 end=10000                                 \n\n";
  std::cout << "      De esta forma generamos un fichero pov cada 100 pasos desde el paso 0    \n";
  std::cout << " y el paso 10000 de la simulacion de lpmd.                                     \n";
- std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
-
 }
-
-std::string POVRAY::Keywords() const { return "start end step header direct texti logo rotate box background camera"; }
 
 void POVRAY::Apply(const MD & md)
 {
@@ -408,7 +388,7 @@ void POVRAY::Apply(const MD & md)
  Vector p0(0,0,0);
  Vector p1=a,p2=b,p3=c;
  Vector p4=p1+p2,p5=p1+p3,p6=p3+p2,p7=p1+p2+p3;
- double rad = ElemRad[sc.GetAtom(0).Species()];
+ double rad = ElemRad[sc[0].Species()];
  POVCylinder C1(p0,p1,rad*0.1,red);output << C1.GetCode();
  POVCylinder C2(p0,p2,rad*0.1,red);output << C2.GetCode();
  POVCylinder C3(p0,p3,rad*0.1,red);output << C3.GetCode();
@@ -424,20 +404,17 @@ void POVRAY::Apply(const MD & md)
  //Set atoms.
  if(level==0)
  {
-  for(int i=0;i<sc.Size();i++)
+  for(unsigned long int i=0;i<sc.size();i++)
   {
-   Vector pos = sc.GetAtom(i).Position();
-   rad = ElemRad[sc.GetAtom(i).Species()];
-   double mas = ElemMass[sc.GetAtom(i).Species()];
+   const Vector & pos = sc[i].Position();
+   rad = ElemRad[sc[i].Species()];
+   double mas = ElemMass[sc[i].Species()];
    Vector col(mas,1/rad+1/mas,rad);
    POVSphere S(pos,rad,col);
    output << S.GetCode();
   }
  }
- else
- {
-  std::cerr << "NIVEL NO IMPLEMENTADO!!!" << std::endl;
- }
+ else throw PluginError("povray", "Level "+ToString<int>(level)+" not implemented.");
  output << "}";
  output << "object { cell ";
  output << "rotate "<<angle_cell<<'\n';

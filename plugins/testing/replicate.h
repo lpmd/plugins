@@ -16,7 +16,6 @@ class ReplicateModifier: public lpmd::SystemModifier, public lpmd::Module
   ReplicateModifier(std::string args);
   ~ReplicateModifier();
   void ShowHelp() const;
-  std::string Keywords() const;
 
   //Metodos Propios de modulo cellscaling
   void Apply(lpmd::SimulationCell & sc);

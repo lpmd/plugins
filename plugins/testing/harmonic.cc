@@ -10,6 +10,12 @@ using namespace lpmd;
 
 Harmonic::Harmonic(std::string args): Module("harmonic") 
 { 
+ AssignParameter("version", "1.0"); 
+ AssignParameter("apirequired", "1.1"); 
+ AssignParameter("bugreport", "gnm@gnm.cl"); 
+ //
+ DefineKeyword("k");
+ DefineKeyword("a");
  ProcessArguments(args);
  k = GetDouble("k");
  a = GetDouble("a");
@@ -17,12 +23,6 @@ Harmonic::Harmonic(std::string args): Module("harmonic")
 
 void Harmonic::ShowHelp() const
 {
- std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
- std::cout << " Module Name        = harmonic                                                 \n";
- std::cout << " Module Version     = 1.0                                                      \n";
- std::cout << " Support API lpmd   = 1.0.0                                                    \n";
- std::cout << " Problems Report to = gnm@gnm.cl                                               \n";
- std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
  std::cout << "      El modulo implementa el potencial Harmonico para la interaccion de       \n";
  std::cout << " de pares.                                                                     \n";
@@ -30,7 +30,7 @@ void Harmonic::ShowHelp() const
  std::cout << " General Options   >>                                                          \n";
  std::cout << "      k             : Especifica la constante del resorte interatomico.        \n";
  std::cout << "      a             : Especifica el valor para el largo interatomico.          \n";
- std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+ std::cout << '\n';
  std::cout << " Example                                                                       \n";
  std::cout << " Cargando el Modulo :                                                          \n";
  std::cout << " use harmonic as HP                                                            \n";
@@ -41,10 +41,7 @@ void Harmonic::ShowHelp() const
  std::cout << " potential HP Ar Ar                                                          \n\n";
  std::cout << "      De esta forma seteamos el potencial de Harmonic entre los atomos         \n";
  std::cout << " de Ar con las constantes usadas en HP.                                        \n";
- std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
 }
-
-std::string Harmonic::Keywords() const { return "k a cutoff"; }
 
 double Harmonic::pairEnergy(const double & r) const
 {

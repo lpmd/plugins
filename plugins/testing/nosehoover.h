@@ -19,7 +19,6 @@ class NoseHoover: public lpmd::TwoStepIntegrator, public lpmd::IApplicable, publ
    NoseHoover(std::string args);
    ~NoseHoover();
    void ShowHelp() const;
-   std::string Keywords() const;
 
    //Metodos Propios del Modulo NoseHoover
    void Initialize(lpmd::SimulationCell & sc, lpmd::Potential & p);

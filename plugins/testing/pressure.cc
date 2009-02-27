@@ -4,27 +4,28 @@
 
 #include "pressure.h"
 
-#include <lpmd/physunits.h>
 #include <lpmd/simulationcell.h>
+#include <lpmd/session.h>
 
 using namespace lpmd;
 
-Pressure::Pressure(std::string args): Module("pressure") { ProcessArguments(args); }
+Pressure::Pressure(std::string args): Module("pressure") 
+{ 
+ AssignParameter("version", "1.0"); 
+ AssignParameter("apirequired", "1.1"); 
+ AssignParameter("bugreport", "gnm@gnm.cl"); 
+ //
+ ProcessArguments(args); 
+}
 
 Pressure::~Pressure() { }
 
 void Pressure::ShowHelp() const
 {
- std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
- std::cout << " Module Name        = pressure                                                 \n";
- std::cout << " Module Version     = 1.0                                                      \n";
- std::cout << " Support API lpmd   = 1.0.0                                                    \n";
- std::cout << " Problems Report to = gnm@gnm.cl                                               \n";
- std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
  std::cout << "      El modulo es utilizado para calcular la presion en la celda.             \n";
  std::cout << " General Options   >> No Requiere                                              \n";
- std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+ std::cout << '\n';
  std::cout << " Example                                                                       \n";
  std::cout << " Cargando el Modulo :                                                          \n";
  std::cout << " use pressure                                                                  \n";
@@ -32,10 +33,7 @@ void Pressure::ShowHelp() const
  std::cout << " Llamando al modulo                                                            \n";
  std::cout << " -----------------------------                                               \n\n";
  std::cout << "      De esta forma activa el calculo de la presion utilizando pressure.       \n";
- std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
 }
-
-std::string Pressure::Keywords() const { return ""; }
 
 std::string Pressure::Provides() const { return "pressure virial-pressure kinetic-pressure sxx sxy sxz syx syy syz szx szy szz"; }
 
@@ -58,24 +56,26 @@ double Pressure::GetProperty(const std::string & name)
 
 void Pressure::Evaluate(SimulationCell & sc, Potential & pot)
 {
+ const double pressfactor = GlobalSession.GetDouble("pressfactor");
+ const double kin2ev = GlobalSession.GetDouble("kin2ev");
  double v = sc.Volume();
  double K=0.0e0;
- for (long i=0;i<sc.Size();++i)
+ for (unsigned long int i=0;i<sc.size();++i)
  {
-  Atom a = sc.GetAtom(i);
+  const Atom & a = sc[i];
   double m = a.Mass();
   Vector vel = a.Velocity();
   K += m*vel.Mod2();
  }
  K = 0.5*K;
- kpress = (PRESSFACTOR/v)*(2.0/3.0)*K*KIN2EV;
- vpress = (PRESSFACTOR/v)*(1.0/3.0)*sc.Virial();
+ kpress = (pressfactor/v)*(2.0/3.0)*K*kin2ev;
+ vpress = (pressfactor/v)*(1.0/3.0)*sc.Virial();
  press = kpress+vpress;
  for (int i=0;i<3;i++)
  {
-  s[0][i] = (PRESSFACTOR/v)*sc.StressTensor(0,i);
-  s[1][i] = (PRESSFACTOR/v)*sc.StressTensor(1,i);
-  s[2][i] = (PRESSFACTOR/v)*sc.StressTensor(2,i);
+  s[0][i] = (pressfactor/v)*sc.StressTensor(0,i);
+  s[1][i] = (pressfactor/v)*sc.StressTensor(1,i);
+  s[2][i] = (pressfactor/v)*sc.StressTensor(2,i);
  }
 }
 

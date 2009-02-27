@@ -72,9 +72,9 @@ void ShearModifier::Apply(SimulationCell & sc)
  
  // luego desplaza los atomos
  Vector offset(0.0, 0.0, 0.0);
- for (long int i=0;i<sc.Size();++i)
+ for (unsigned long int i=0;i<sc.size();++i)
  {
-  Vector pos = sc.GetAtom(i).Position(); 
+  Vector pos = sc[i].Position(); 
   offset.Set(shear_axis, pos.Get(perp_axis)*strain); 
   sc.SetPosition(i, pos+offset);
  }

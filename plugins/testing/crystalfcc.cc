@@ -11,10 +11,14 @@ using namespace lpmd;
 
 FCCGenerator::FCCGenerator(std::string args): Module("crystalfcc")
 {
- AssignParameter("nx", "1");
- AssignParameter("ny", "1");
- AssignParameter("nz", "1");
- AssignParameter("symbol", "H");
+ AssignParameter("version", "1.0"); 
+ AssignParameter("apirequired", "1.1"); 
+ AssignParameter("bugreport", "gnm@gnm.cl"); 
+ //
+ DefineKeyword("nx", "1");
+ DefineKeyword("ny", "1");
+ DefineKeyword("nz", "1");
+ DefineKeyword("symbol", "H");
  // hasta aqui los valores por omision
  ProcessArguments(args);
  spc = ElemNum(GetString("symbol"));
@@ -27,12 +31,6 @@ FCCGenerator::~FCCGenerator() { }
 
 void FCCGenerator::ShowHelp() const
 {
- std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
- std::cout << " Module Name        = crystalfcc                                               \n";
- std::cout << " Module Version     = 1.0                                                      \n";
- std::cout << " Support API lpmd   = 1.0.0                                                    \n";
- std::cout << " Problems Report to = gnm@gnm.cl                                               \n";
- std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
  std::cout << "      El modulo es utilizado para crear celdas del tipo cubica centrada en las \n";
  std::cout << "      caras (FCC).                                                             \n";
@@ -41,18 +39,12 @@ void FCCGenerator::ShowHelp() const
  std::cout << "      nx            : Repeticiones en la direccion X.                          \n";
  std::cout << "      ny            : Repeticiones en la direccion Y.                          \n";
  std::cout << "      nz            : Repeticiones en la direccion Z.                          \n";
- std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+ std::cout << '\n';
  std::cout << " Example                                                                       \n";
  std::cout << " Utilizando el Modulo :                                                        \n";
  std::cout << " input crystalfcc symbol=Ar nx=3 ny=3 nz=3                                     \n";
  std::cout << " input crystalfcc Ar 3 3 3                                                   \n\n";
  std::cout << "      De esta forma creamos una celda de entrada de tipo FCC en la simulacion. \n";
- std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
-}
-
-std::string FCCGenerator::Keywords() const
-{
- return "symbol nx ny nz";
 }
 
 void FCCGenerator::Generate(SimulationCell & sc) const
@@ -69,16 +61,16 @@ void FCCGenerator::Generate(SimulationCell & sc) const
    for (long i=0;i<nx;++i)
    {
     p = Vector((double(i)+0.51)*ax, (double(j)+0.5)*ay, (double(k)+0.5)*az);
-    sc.AppendAtom(Atom(spc));
+    sc.Create(new Atom(spc));
     sc.SetFracPosition(cc++, p);
     p = Vector((double(i)+0.51)*ax, double(j)*ay, (double(k)+1.0)*az);
-    sc.AppendAtom(Atom(spc));
+    sc.Create(new Atom(spc));
     sc.SetFracPosition(cc++, p);
     p = Vector((double(i)+1.01)*ax, double(j)*ay, (double(k)+0.5)*az);
-    sc.AppendAtom(Atom(spc));
+    sc.Create(new Atom(spc));
     sc.SetFracPosition(cc++, p);
     p = Vector((double(i)+1.01)*ax, (double(j)+0.5)*ay, (double(k)+1.0)*az);
-    sc.AppendAtom(Atom(spc));
+    sc.Create(new Atom(spc));
     sc.SetFracPosition(cc++, p);
    }
   }

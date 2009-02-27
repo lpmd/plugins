@@ -16,13 +16,11 @@ class MinimumImageCellManager: public lpmd::CellManager, public lpmd::Module
    ~MinimumImageCellManager();
 
    void Show(std::ostream & os) const;
-   std::string Keywords() const;
 
    void Reset();
    void UpdateCell(SimulationCell & sc);
+   void BuildNeighborList(SimulationCell & sc, long i, std::vector<Neighbor> & nlist, bool full, double);
    double Cutoff() const;
-   void BuildNeighborList(SimulationCell & sc, long i, std::list<Neighbor> & nlist, bool full, double);
-   void BuildList(SimulationCell &sc, bool full, double rc);
 
  private:
    double rcut;

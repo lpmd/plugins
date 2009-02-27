@@ -16,7 +16,6 @@ class SCGenerator: public lpmd::CellGenerator, public lpmd::Module
   SCGenerator(std::string args);
   virtual ~SCGenerator();
   void ShowHelp() const;
-  std::string Keywords() const;
 
   //Metodos Propios del module scgnerator
   void Generate(lpmd::SimulationCell & sc) const;

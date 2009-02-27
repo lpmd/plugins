@@ -16,7 +16,6 @@ class VelocityVerlet: public lpmd::TwoStepIntegrator, public lpmd::IApplicable, 
   VelocityVerlet(std::string args);
   ~VelocityVerlet();
   void ShowHelp() const;
-  std::string Keywords() const;
 
   //Metodos Propios modulo velocityverlet
   void Initialize(lpmd::SimulationCell & sc, lpmd::Potential & p);

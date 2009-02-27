@@ -15,7 +15,6 @@ class HCPGenerator: public lpmd::CellGenerator, public lpmd::Module
    HCPGenerator(std::string args);
    virtual ~HCPGenerator();
    void ShowHelp() const;
-   std::string Keywords() const;
 
    //Metodos Propios del modulo crystalhcp
    void Generate(lpmd::SimulationCell & sc) const;

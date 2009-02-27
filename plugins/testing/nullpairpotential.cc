@@ -8,20 +8,21 @@
 
 using namespace lpmd;
 
-NullPairPotential::NullPairPotential(std::string args): Module("nullpairpotential") { ProcessArguments(args); }
+NullPairPotential::NullPairPotential(std::string args): Module("nullpairpotential") 
+{ 
+ AssignParameter("version", "1.0"); 
+ AssignParameter("apirequired", "1.1"); 
+ AssignParameter("bugreport", "gnm@gnm.cl"); 
+ //
+ ProcessArguments(args); 
+}
 
 void NullPairPotential::ShowHelp() const
 {
- std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
- std::cout << " Module Name        = nullpairpotential                                        \n";
- std::cout << " Module Version     = 1.0                                                      \n";
- std::cout << " Support API lpmd   = 1.0.0                                                    \n";
- std::cout << " Problems Report to = gnm@gnm.cl                                               \n";
- std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
  std::cout << "      El modulo activa un potencial de pares nulo.                             \n";
  std::cout << " General Options   >> No Requiere                                              \n";
- std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+ std::cout << '\n';
  std::cout << " Example                                                                       \n";
  std::cout << " Cargando el Modulo :                                                          \n";
  std::cout << " use nullpairpotential                                                         \n";
@@ -29,10 +30,7 @@ void NullPairPotential::ShowHelp() const
  std::cout << " Llamando al modulo                                                            \n";
  std::cout << " potential nullpairpotential Ar Kr                                           \n\n";
  std::cout << "      De esta forma activa el potencial de pares nulos entre Ar y Kr.          \n";
- std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
 }
-
-std::string NullPairPotential::Keywords() const { return ""; }
 
 double NullPairPotential::pairEnergy(const double & r) const { return 0.0; }
 

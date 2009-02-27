@@ -16,7 +16,6 @@ class MoleculeCMModifier: public lpmd::SystemModifier, public lpmd::Module
   MoleculeCMModifier(std::string args);
   ~MoleculeCMModifier();
   void ShowHelp() const;
-  std::string Keywords() const;
 
   //Metodos Propios de modulo cellscaling
   void Apply(lpmd::SimulationCell & sc);

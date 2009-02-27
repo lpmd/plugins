@@ -10,6 +10,13 @@ using namespace lpmd;
 
 LennardJones::LennardJones(std::string args): Module("lennardjones") 
 { 
+ AssignParameter("version", "1.0"); 
+ AssignParameter("apirequired", "1.1"); 
+ AssignParameter("bugreport", "gnm@gnm.cl"); 
+ //
+ DefineKeyword("sigma");
+ DefineKeyword("epsilon");
+ DefineKeyword("cutoff");
  ProcessArguments(args);
  sigma = GetDouble("sigma");
  epsilon = GetDouble("epsilon");
@@ -19,12 +26,6 @@ LennardJones::LennardJones(std::string args): Module("lennardjones")
 
 void LennardJones::ShowHelp() const
 {
- std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
- std::cout << " Module Name        = lennardjones                                             \n";
- std::cout << " Module Version     = 1.0                                                      \n";
- std::cout << " Support API lpmd   = 1.0.0                                                    \n";
- std::cout << " Problems Report to = gnm@gnm.cl                                               \n";
- std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
  std::cout << "      El modulo implementa el potencial de LenardJones para interaccion de     \n";
  std::cout << " pares.                                                                        \n";
@@ -33,7 +34,7 @@ void LennardJones::ShowHelp() const
  std::cout << "      sigma         : Especifica el valor de sigma para el potencial.          \n";
  std::cout << "      epsilon       : Especifica el valor para epsilon del potencial.          \n";
  std::cout << "      cutoff        : Radio de corte para el potencial.                        \n";
- std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+ std::cout << '\n';
  std::cout << " Example                                                                       \n";
  std::cout << " Cargando el Modulo :                                                          \n";
  std::cout << " use lennardjones as LJ1                                                       \n";
@@ -45,10 +46,7 @@ void LennardJones::ShowHelp() const
  std::cout << " potential LJ1 Ar Ar                                                         \n\n";
  std::cout << "      De esta forma seteamos el potencial de lennardjones entre los atomos de  \n";
  std::cout << " Ar con las constantes seteadas en LJ1.                                        \n";
- std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
 }
-
-std::string LennardJones::Keywords() const { return "sigma epsilon cutoff"; }
 
 double LennardJones::pairEnergy(const double & r) const
 {

@@ -16,7 +16,6 @@ class Pressure: public lpmd::ScalarValue, public lpmd::InstantProperty, public l
   Pressure(std::string args);
   virtual ~Pressure();
   void ShowHelp() const;
-  std::string Keywords() const;
 
   //Metodos Propios del modulo pressure
   std::string Provides() const;

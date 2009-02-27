@@ -15,8 +15,6 @@ class MSD: public lpmd::ScalarTable, public lpmd::TemporalProperty, public lpmd:
   MSD(std::string args);
   ~MSD();
 
-  std::string Keywords() const;
-
   const lpmd::Matrix & Value() const { return *m; }
   void Evaluate(const std::vector<lpmd::SimulationCell> & simcell, lpmd::Potential & pot);
 

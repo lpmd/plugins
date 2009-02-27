@@ -10,7 +10,7 @@
 #include <lpmd/simulationcell.h>
 #include <lpmd/pairpotential.h>
 #include <lpmd/potentialarray.h>
-#include <lpmd/physunits.h>
+#include <lpmd/session.h>
 
 #include <sstream>
 
@@ -82,22 +82,22 @@ void LocalPressure::Evaluate(SimulationCell & simcell, Potential & pot)
      ++l;
     }
 
- for (long int i=0;i<simcell.Size();++i)
+ for (unsigned long int i=0;i<simcell.size();++i)
  {
   int s1, ind[3];
   double stress[3][3];
   for (int p=0;p<3;++p)
     for (int q=0;q<3;++q) stress[p][q]=0.0e0;
-  s1 = simcell.GetAtom(i).Species();
-  std::list<Neighbor> nlist;
-  simcell.BuildNeighborList(i, nlist, true, rcut);
+  s1 = simcell[i].Species();
+  std::vector<Neighbor> nlist;
+  simcell.BuildNeighborList(i, nlist, false, rcut);
   Vector fpos = simcell.FracPosition(i);
   for (int q=0;q<3;++q) 
   {
    ind[q] = int(floor(fpos.Get(q)*n[q]));
    if (ind[q] == n[q]) ind[q]--;
   }
-  for (std::list<Neighbor>::const_iterator it=nlist.begin();it!=nlist.end();++it)
+  for (std::vector<Neighbor>::const_iterator it=nlist.begin();it!=nlist.end();++it)
   {
    try
    {
@@ -111,10 +111,11 @@ void LocalPressure::Evaluate(SimulationCell & simcell, Potential & pot)
    catch (std::exception &e) { throw PluginError("localpressure", "Cannot calculate local stress with a non-pair potential."); }
   }
   int k = ind[0]+n[0]*ind[1]+n[0]*n[1]*ind[2];
+  const double pressfactor = GlobalSession.GetDouble("pressfactor");
   for (int p=0;p<3;++p)
    for (int q=0;q<3;++q)
    {
-    m->Set(3+(3*p+q), k, m->Get(3+(3*p+q), k)+(PRESSFACTOR/cv)*stress[p][q]);
+    m->Set(3+(3*p+q), k, m->Get(3+(3*p+q), k)+(pressfactor/cv)*stress[p][q]);
    }
  } 
 }

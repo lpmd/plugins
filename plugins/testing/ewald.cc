@@ -4,7 +4,7 @@
 
 #include "ewald.h"
 
-#include <lpmd/physunits.h>
+#include <lpmd/session.h>
 #include <lpmd/simulationcell.h>
 
 using namespace lpmd;
@@ -79,21 +79,24 @@ void Ewald::RealSpace(SimulationCell & sc, Vector * forces, double & e)
  int nrep = 0;
  double ep, e0;
  Vector ff;
+ const double Q2a2EV = GlobalSession.GetDouble("q2a2ev");
+ const double Q2a2FORCE = GlobalSession.GetDouble("q2a2force");
+
  e0 = 1.1/Q2a2EV;
  while (1)
  {
   //
   ep = 0.0;
-  for (long int i=0;i<sc.Size();++i) forces[i] = Vector(0.0, 0.0, 0.0);
+  for (unsigned long int i=0;i<sc.size();++i) forces[i] = Vector(0.0, 0.0, 0.0);
   for (int pp=-nrep;pp<nrep;++pp)
    for (int qq=-nrep;qq<nrep;++qq)
     for (int rr=-nrep;rr<nrep;++rr)
     {
      Vector n = pp*sc.GetVector(0)+qq*sc.GetVector(1)+rr*sc.GetVector(2);
-     for (long int i=0;i<sc.Size()-1;++i)
+     for (unsigned long int i=0;i<sc.size()-1;++i)
      {
       const double qi = sc[i].Charge();
-      for (long int j=i+1;j<sc.Size();++j)
+      for (unsigned long int j=i+1;j<sc.size();++j)
       {
        if ((((pp == qq) && (qq == rr)) && (rr == 0)) && (i == j)) continue; // FIXME nunca se cumple, con la suma como esta def.
        else
@@ -118,28 +121,30 @@ void Ewald::RealSpace(SimulationCell & sc, Vector * forces, double & e)
   e0 = ep; 
   nrep++;
  }
- for (long int i=0;i<sc.Size();++i) sc.SetAcceleration(i, sc[i].Acceleration()+forces[i]*Q2a2FORCE);
+ for (unsigned long int i=0;i<sc.size();++i) sc.SetAcceleration(i, sc[i].Acceleration()+forces[i]*Q2a2FORCE);
  e = ep*Q2a2EV;
 }
 
 void Ewald::ReciprocalSpace(SimulationCell & sc, Vector * forces, double & e)
 {
+ const double Q2a2EV = GlobalSession.GetDouble("q2a2ev");
+ const double Q2a2FORCE = GlobalSession.GetDouble("q2a2force");
  double ep = 0.0;
- for (long int i=0;i<sc.Size();++i) forces[i] = Vector(0.0, 0.0, 0.0);
+ for (unsigned long int i=0;i<sc.size();++i) forces[i] = Vector(0.0, 0.0, 0.0);
  if (kpoints == NULL) BuildKPointMesh(sc);
  for (unsigned int nk=0;nk<kpoints->size();++nk)
  {
   const Vector & k = (*kpoints)[nk];
   double kfac = 4.0*M_PI*(1.0/k.Mod2())*(1.0/sc.Volume())*exp(-k.Mod2()/(4.0*alpha*alpha));
   double sumqcos = 0.0, sumqsin = 0.0;
-  for (long int i=0;i<sc.Size();++i)
+  for (unsigned long int i=0;i<sc.size();++i)
   {
    double dkr = Dot(k, sc[i].Position());
    double qi = sc[i].Charge();
    sumqcos += qi*cos(dkr);
    sumqsin += qi*sin(dkr);
   }  
-  for (long int i=0;i<sc.Size();++i)
+  for (unsigned long int i=0;i<sc.size();++i)
   {
    const double qi = sc[i].Charge();
    const Vector ri = sc[i].Position();
@@ -147,37 +152,40 @@ void Ewald::ReciprocalSpace(SimulationCell & sc, Vector * forces, double & e)
   }
   ep += kfac*(pow(sumqcos, 2.0)+pow(sumqsin, 2.0));
  }
- for (long int i=0;i<sc.Size();++i)
+ for (unsigned long int i=0;i<sc.size();++i)
   sc.SetAcceleration(i, sc[i].Acceleration()+forces[i]*(Q2a2FORCE/sc[i].Mass())); 
  e = ep*Q2a2EV;
 }
 
 void Ewald::SurfaceDipole(SimulationCell & sc, Vector * forces, double & e)
 {
+ const double Q2a2EV = GlobalSession.GetDouble("q2a2ev");
+ const double Q2a2FORCE = GlobalSession.GetDouble("q2a2force");
  e = 0.0;
  Vector v(0.0, 0.0, 0.0), sf(0.0, 0.0, 0.0);
- for (long int i=0;i<sc.Size();++i)
+ for (unsigned long int i=0;i<sc.size();++i)
  {
   forces[i].Zero();
   sf += sc[i].Charge()*sc[i].Position();
  }
- for (long int i=0;i<sc.Size();++i)
+ for (unsigned long int i=0;i<sc.size();++i)
  {
   v += sc[i].Charge()*sc[i].Position();
   forces[i] -= 4.0*M_PI/(6.0*sc.Volume())*sc[i].Charge()*sf;
  }
- for (long int i=0;i<sc.Size();++i)
+ for (unsigned long int i=0;i<sc.size();++i)
   sc.SetAcceleration(i, sc[i].Acceleration()+forces[i]*Q2a2FORCE); 
  e = 4.0*M_PI*v.Mod2()/(6.0*sc.Volume())*Q2a2EV;
 }
 
 double Ewald::EnergyConstantCorrection(SimulationCell & sc)
 {
+ const double Q2a2EV = GlobalSession.GetDouble("q2a2ev");
  double e = 0.0;
- for (long int i=0;i<sc.Size();++i) e += pow(sc[i].Charge(), 2.0);
+ for (unsigned long int i=0;i<sc.size();++i) e += pow(sc[i].Charge(), 2.0);
  e *= -alpha*(1.0/sqrt(M_PI));
  double totch = 0.0;
- for (long int i=0;i<sc.Size();++i) totch += sc[i].Charge();
+ for (unsigned long int i=0;i<sc.size();++i) totch += sc[i].Charge();
  e -= pow(totch, 2.0)*M_PI/(4.0*sc.Volume()*alpha*alpha);
  return e*Q2a2EV;
 }
@@ -191,7 +199,7 @@ double Ewald::energy(SimulationCell & sc)
 void Ewald::UpdateForces(SimulationCell & sc) 
 { 
  double ereal=0.0, erecip=0.0, edip=0.0, ecorr=0.0;
- Vector * forces = new Vector[sc.Size()];
+ Vector * forces = new Vector[sc.size()];
  RealSpace(sc, forces, ereal);
  ReciprocalSpace(sc, forces, erecip); 
  if (surfdip) SurfaceDipole(sc, forces, edip);

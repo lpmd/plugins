@@ -11,10 +11,14 @@ using namespace lpmd;
 
 SCGenerator::SCGenerator(std::string args): Module("crystalsc")
 {
- AssignParameter("nx", "1");
- AssignParameter("ny", "1");
- AssignParameter("nz", "1");
- AssignParameter("symbol", "H");
+ AssignParameter("version", "1.0"); 
+ AssignParameter("apirequired", "1.1"); 
+ AssignParameter("bugreport", "gnm@gnm.cl"); 
+ //
+ DefineKeyword("nx", "1");
+ DefineKeyword("ny", "1");
+ DefineKeyword("nz", "1");
+ DefineKeyword("symbol", "H");
  // hasta aqui los valores por omision
  ProcessArguments(args);
  spc = ElemNum(GetString("symbol"));
@@ -27,12 +31,6 @@ SCGenerator::~SCGenerator() { }
 
 void SCGenerator::ShowHelp() const
 {
- std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
- std::cout << " Module Name        = crystalsc                                                \n";
- std::cout << " Module Version     = 1.0                                                      \n";
- std::cout << " Support API lpmd   = 1.0.0                                                    \n";
- std::cout << " Problems Report to = gnm@gnm.cl                                               \n";
- std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
  std::cout << "      El modulo es utilizado para crear celdas del tipo cubica simple (SC).    \n";
  std::cout << " General Options   >>                                                          \n";
@@ -40,18 +38,12 @@ void SCGenerator::ShowHelp() const
  std::cout << "      nx            : Repeticiones en la direccion X.                          \n";
  std::cout << "      ny            : Repeticiones en la direccion Y.                          \n";
  std::cout << "      nz            : Repeticiones en la direccion Z.                          \n";
- std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+ std::cout << '\n';
  std::cout << " Example                                                                       \n";
  std::cout << " Utilizando el Modulo :                                                        \n";
  std::cout << " input crystalfcc symbol=Ar nx=2 ny=2 nz=2                                     \n";
  std::cout << " input crystalfcc Ar 2 2 2                                                   \n\n";
  std::cout << "      De esta forma creamos una celda de entrada de tipo SC en la simulacion.  \n";
- std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
-}
-
-std::string SCGenerator::Keywords() const
-{
- return "symbol nx ny nz";
 }
 
 void SCGenerator::Generate(SimulationCell & sc) const
@@ -68,7 +60,7 @@ void SCGenerator::Generate(SimulationCell & sc) const
    for (long i=0;i<nx;++i)
    {
     p = Vector(double(i)*ax, double(j)*ay, double(k)*az);
-    sc.AppendAtom(Atom(spc));
+    sc.Create(new Atom(spc));
     sc.SetFracPosition(cc++, p);
    }
   }

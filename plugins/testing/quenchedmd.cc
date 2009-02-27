@@ -48,7 +48,7 @@ std::string QuenchedMDModifier::Keywords() const
 void QuenchedMDModifier::Apply(SimulationCell & sc)
 {
  //
- for (long int i=0;i<sc.Size();++i)
+ for (unsigned long int i=0;i<sc.size();++i)
  {
   if (Dot(sc[i].Acceleration(), sc[i].Velocity()) < 0.0) sc.SetVelocity(i, Vector(0.0, 0.0, 0.0));
  }

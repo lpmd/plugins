@@ -13,9 +13,13 @@ using namespace lpmd;
 
 ReplicateModifier::ReplicateModifier(std::string args): Module("replicate")
 {
- AssignParameter("nx", "1");
- AssignParameter("ny", "1");
- AssignParameter("nz", "1");
+ AssignParameter("version", "1.0"); 
+ AssignParameter("apirequired", "1.1"); 
+ AssignParameter("bugreport", "gnm@gnm.cl"); 
+ //
+ DefineKeyword("nx", "1");
+ DefineKeyword("ny", "1");
+ DefineKeyword("nz", "1");
  // hasta aqui los valores por omision
  ProcessArguments(args);
  nx = GetInteger("nx");
@@ -27,73 +31,56 @@ ReplicateModifier::~ReplicateModifier() { }
 
 void ReplicateModifier::ShowHelp() const
 {
- std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
- std::cout << " Module Name        = replicate                                                \n";
- std::cout << " Module Version     = 1.0                                                      \n";
- std::cout << " Support API lpmd   = 1.0.0                                                    \n";
- std::cout << " Problems Report to = gnm@gnm.cl                                               \n";
- std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
  std::cout << " General Options   >>                                                          \n";
- std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+ std::cout << '\n';
  std::cout << " Example                                                                       \n";
  std::cout << "  Aplicando el Modulo                                                          \n";
  std::cout << " prepare replicate nx=3 ny=3 nz=3                                              \n";
- std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
-}
-
-std::string ReplicateModifier::Keywords() const
-{
- return "nx ny nz";
 }
 
 void ReplicateModifier::Apply(SimulationCell & sc)
 {
- int Ntmp = sc.Size();
- Atom *atomos;
+ unsigned long int Ntmp = sc.size();
+ Atom * atomos;
  atomos = new Atom[Ntmp];
- for(int i=0;i<Ntmp;i++) atomos[i]=sc.GetAtom(i);
- sc.Initialize(nx*Ntmp);
- //int counter = 0;
- for(int i=0;i<Ntmp;i++){sc.AppendAtom(atomos[i]);}//counter++;}
-
- for(unsigned long i=1;i<nx;i++)
+ for (unsigned long int i=0;i<Ntmp;i++) atomos[i]=sc[i];
+ for (unsigned long int i=0;i<Ntmp;i++) { sc.Create(new Atom(atomos[i]));}
+ for (unsigned long i=1;i<nx;i++)
  {
-  for(int j=0;j<Ntmp;j++)
+  for (unsigned long int j=0;j<Ntmp;j++)
   {
-   Atom tmp=atomos[j];
-   tmp.SetPos(atomos[j].Position()+sc.GetVector(0)*i);
-   sc.AppendAtom(tmp);
+   Atom * tmp = new Atom(atomos[j]);
+   tmp->SetPos(atomos[j].Position()+sc.GetVector(0)*i);
+   sc.Create(tmp);
   }
  }
  delete[] atomos;
- Ntmp = sc.Size();
+ Ntmp = sc.size();
  atomos = new Atom[Ntmp];
- for(int i=0;i<Ntmp;i++) atomos[i]=sc.GetAtom(i);
- sc.Initialize(ny*Ntmp);
- for(int i=0;i<Ntmp;i++){sc.AppendAtom(atomos[i]);}
- for(unsigned long i=1;i<ny;i++)
+ for (unsigned long int i=0;i<Ntmp;i++) atomos[i]=sc[i];
+ for (unsigned long int i=0;i<Ntmp;i++) { sc.Create(new Atom(atomos[i]));}
+ for (unsigned long i=1;i<ny;i++)
  {
-  for(int j=0;j<Ntmp;j++)
+  for(unsigned long int j=0;j<Ntmp;j++)
   {
-   Atom tmp=atomos[j];
-   tmp.SetPos(atomos[j].Position()+sc.GetVector(1)*i);
-   sc.AppendAtom(tmp);
+   Atom * tmp = new Atom(atomos[j]);
+   tmp->SetPos(atomos[j].Position()+sc.GetVector(1)*i);
+   sc.Create(tmp);
   }
  }
  delete[] atomos;
- Ntmp = sc.Size();
+ Ntmp = sc.size();
  atomos = new Atom[Ntmp];
- for(int i=0;i<Ntmp;i++) atomos[i]=sc.GetAtom(i);
- sc.Initialize(nz*Ntmp);
- for(int i=0;i<Ntmp;i++) { sc.AppendAtom(atomos[i]);}
- for(unsigned long i=1;i<nz;i++)
+ for (unsigned long int i=0;i<Ntmp;i++) atomos[i]=sc[i];
+ for (unsigned long int i=0;i<Ntmp;i++) { sc.Create(new Atom(atomos[i]));}
+ for (unsigned long i=1;i<nz;i++)
  {
-  for(int j=0;j<Ntmp;j++)
+  for (unsigned long int j=0;j<Ntmp;j++)
   {
-   Atom tmp=atomos[j];
-   tmp.SetPos(atomos[j].Position()+sc.GetVector(2)*i);
-   sc.AppendAtom(tmp);
+   Atom * tmp = new Atom(atomos[j]);
+   tmp->SetPos(atomos[j].Position()+sc.GetVector(2)*i);
+   sc.Create(tmp);
   }
  }
  delete[] atomos;

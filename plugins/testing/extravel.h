@@ -15,7 +15,6 @@ class ExtraVelModifier: public lpmd::SystemModifier, public lpmd::Module
   ExtraVelModifier(std::string args);
   ~ExtraVelModifier();
   void ShowHelp() const;
-  std::string Keywords() const;
 
   //Metodos Propios
   void Apply(lpmd::SimulationCell & sc);

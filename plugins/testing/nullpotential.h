@@ -15,7 +15,6 @@ class NullPotential: public lpmd::Potential, public lpmd::Module
   NullPotential(std::string args); 
   ~NullPotential();
   void ShowHelp() const;
-  std::string Keywords() const;
 
   //Metodos Proopios de modulo nullpotential
   double energy(lpmd::SimulationCell & sc);

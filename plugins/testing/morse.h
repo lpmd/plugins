@@ -15,7 +15,6 @@ class Morse: public lpmd::PairPotential, public lpmd::Module
   Morse(std::string args); 
   ~Morse() { };
   void ShowHelp() const;
-  std::string Keywords() const;
 
   //Metodos propios modulo morse
   double pairEnergy(const double & r) const;

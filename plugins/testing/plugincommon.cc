@@ -58,8 +58,8 @@ lpmd::Matrix* gdr(SimulationCell & simcell,Potential & pot,long int nb,double rc
  // fabs(rcut) < 1e-05 used to avoid comparing doubles
  double dr = rcut/ double(nb);
 
- int nsp = simcell.NEspec();
- int N = simcell.Size();
+ int nsp = simcell.SpeciesList().size();
+ int N = simcell.size();
  double **g, *gt;
  g = new double*[nb];
  for(int i=0;i<nb;i++) { g[i]=new double[(int)(nsp*(nsp+1)/2)]; }
@@ -82,17 +82,17 @@ lpmd::Matrix* gdr(SimulationCell & simcell,Potential & pot,long int nb,double rc
   int ne1=0,ne2=0;
   for(int m=0;m<N;m++)
   {
-   if(simcell.GetAtom(m).Species()==e1) ne1++;
-   if(simcell.GetAtom(m).Species()==e2) ne2++;
+   if(simcell[m].Species()==e1) ne1++;
+   if(simcell[m].Species()==e2) ne2++;
   }
   //Comienza la iteracion principal para el calculo de g(r).
   for(int i=0;i<N;++i)
   {
    if(simcell[i].Species()==e1)
    {
-    std::list<Neighbor> nlist;
-    simcell.BuildNeighborList (i,nlist,true, rcut);
-    for(std::list<Neighbor>::const_iterator it=nlist.begin();it!=nlist.end();++it)
+    std::vector<Neighbor> nlist;
+    simcell.BuildNeighborList(i, nlist, true, rcut);
+    for(std::vector<Neighbor>::const_iterator it=nlist.begin();it!=nlist.end();++it)
     {
      const Neighbor &nn = *it;
      if(nn.j->Species()==e2)
@@ -120,8 +120,8 @@ lpmd::Matrix* gdr(SimulationCell & simcell,Potential & pot,long int nb,double rc
   int ne1=0,ne2=0;
   for(int m=0;m<N;m++)
   {
-   if(simcell.GetAtom(m).Species()==e1) ne1++;
-   if(simcell.GetAtom(m).Species()==e2) ne2++;
+   if(simcell[m].Species()==e1) ne1++;
+   if(simcell[m].Species()==e2) ne2++;
   }
   double ce1 = (double)ne1/(double)N;
   double ce2 = (double)ne2/(double)N;
@@ -167,9 +167,12 @@ lpmd::Matrix* gdr(SimulationCell & simcell,Potential & pot,long int nb,double rc
 lpmd::Matrix* vacf(const std::vector<SimulationCell> & simcell, Potential & Pot, double dt)
 {
  int N = simcell.size();
- int nsp = simcell[0].NEspec();
- int *sp = simcell[0].Espec();
- int nat = simcell[0].Size();
+ int nsp = simcell[0].SpeciesList().size();
+ std::list<std::string> species = simcell[0].SpeciesList();
+ int * sp = new int[nsp];
+ int q = 0;
+ for (std::list<std::string>::const_iterator it=species.begin();it!=species.end();++it) sp[q++] = ElemNum(*it);
+ int nat = simcell[0].size();
 
  double **vaf=new double*[(int)(N-1)/2];
  for(int i=0;i<(int)(N-1)/2;i++) {vaf[i]=new double[nsp];for(int j=0;j<nsp;j++) vaf[i][j]=0.0e0;}
@@ -184,13 +187,13 @@ lpmd::Matrix* vacf(const std::vector<SimulationCell> & simcell, Potential & Pot,
   SimulationCell scratch(simcell[0]);
   Vector ** noperiodic = new Vector*[N];
   for (int t=0;t<N;++t) noperiodic[t] = new Vector[nat];
-  for (int i=0;i<nat;++i) noperiodic[0][i] = simcell[0].GetAtom(i).Position();
+  for (int i=0;i<nat;++i) noperiodic[0][i] = simcell[0][i].Position();
   
   for (int t=1;t<N;++t)
    for (int i=0;i<nat;++i)
    {
-    scratch.SetPosition(0, simcell[t-1].GetAtom(i).Position());
-    scratch.SetPosition(1, simcell[t].GetAtom(i).Position());
+    scratch.SetPosition(0, simcell[t-1][i].Position());
+    scratch.SetPosition(1, simcell[t][i].Position());
     noperiodic[t][i] = noperiodic[t-1][i] + scratch.VectorDistance(0, 1);
    }
   //
@@ -210,7 +213,7 @@ lpmd::Matrix* vacf(const std::vector<SimulationCell> & simcell, Potential & Pot,
   for (int t=0;t<N;++t)
    for (int i=0;i<nat;++i)
    {
-    velocities[t][i] = simcell[t].GetAtom(i).Velocity();
+    velocities[t][i] = simcell[t][i].Velocity();
    }
  }
  
@@ -218,16 +221,16 @@ lpmd::Matrix* vacf(const std::vector<SimulationCell> & simcell, Potential & Pot,
  for(int e1=0;e1<nsp;e1++)	   
  {		 	
    int ne=0;
-   for(int i=0;i<nat;i++) {if(simcell[0].GetAtom(i).Species() == sp[e1]) ne++;}
+   for(int i=0;i<nat;i++) {if(simcell[0][i].Species() == sp[e1]) ne++;}
    for(int t0=0;t0<(int)(N-1)/2;t0++)
    {
      for(int t=0;t<(int)(N-1)/2;t++)
      {
       for(int i=0;i<nat;i++)
       {
-       Vector v0n = velocities[t0][i];//simcell[t0].GetAtom(i).Velocity();
-       Vector v1n = velocities[t0+t][i];//simcell[t0+t].GetAtom(i).Velocity();
-       if(simcell[t0].GetAtom(i).Species() == sp[e1])
+       Vector v0n = velocities[t0][i];//simcell[t0][i].Velocity();
+       Vector v1n = velocities[t0+t][i];//simcell[t0+t][i].Velocity();
+       if(simcell[t0][i].Species() == sp[e1])
        {
 	  vaf[t][e1]+=Dot(v0n,v1n)/(ne*(int)(N-1)/2);
        }
@@ -270,12 +273,12 @@ lpmd::Matrix* vacf(const std::vector<SimulationCell> & simcell, Potential & Pot,
 
 void Replicate(SimulationCell & sc, unsigned long nx, unsigned long ny, unsigned long nz)
 {
- int Ntmp = sc.Size();
+ int Ntmp = sc.size();
  Atom *atomos;
  atomos = new Atom[Ntmp];
- for(int i=0;i<Ntmp;i++) atomos[i]=sc.GetAtom(i);
- sc.Initialize(nx*Ntmp);
- for(int i=0;i<Ntmp;i++){sc.AppendAtom(atomos[i]);}
+ for(int i=0;i<Ntmp;i++) atomos[i]=sc[i];
+ // FIXME from 0.5: sc.Initialize(nx*Ntmp);
+ for(int i=0;i<Ntmp;i++){sc.Create(new Atom(atomos[i]));}
 
  for(unsigned long i=1;i<nx;i++)
  {
@@ -283,37 +286,37 @@ void Replicate(SimulationCell & sc, unsigned long nx, unsigned long ny, unsigned
   {
    Atom tmp=atomos[j];
    tmp.SetPos(atomos[j].Position()+sc.GetVector(0)*i);
-   sc.AppendAtom(tmp);
+   sc.Create(new Atom(tmp));
   }
  }
  delete[] atomos;
- Ntmp = sc.Size();
+ Ntmp = sc.size();
  atomos = new Atom[Ntmp];
- for(int i=0;i<Ntmp;i++) atomos[i]=sc.GetAtom(i);
- sc.Initialize(ny*Ntmp);
- for(int i=0;i<Ntmp;i++){sc.AppendAtom(atomos[i]);}
+ for(int i=0;i<Ntmp;i++) atomos[i]=sc[i];
+ // FIXME from 0.5: sc.Initialize(ny*Ntmp);
+ for(int i=0;i<Ntmp;i++){sc.Create(new Atom(atomos[i]));}
  for(unsigned long i=1;i<ny;i++)
  {
   for(int j=0;j<Ntmp;j++)
   {
    Atom tmp=atomos[j];
    tmp.SetPos(atomos[j].Position()+sc.GetVector(1)*i);
-   sc.AppendAtom(tmp);
+   sc.Create(new Atom(tmp));
   }
  }
  delete[] atomos;
- Ntmp = sc.Size();
+ Ntmp = sc.size();
  atomos = new Atom[Ntmp];
- for(int i=0;i<Ntmp;i++) atomos[i]=sc.GetAtom(i);
- sc.Initialize(nz*Ntmp);
- for(int i=0;i<Ntmp;i++) { sc.AppendAtom(atomos[i]);}
+ for(int i=0;i<Ntmp;i++) atomos[i]=sc[i];
+ // FIXME from 0.5: sc.Initialize(nz*Ntmp);
+ for(int i=0;i<Ntmp;i++) { sc.Create(new Atom(atomos[i]));}
  for(unsigned long i=1;i<nz;i++)
  {
   for(int j=0;j<Ntmp;j++)
   {
    Atom tmp=atomos[j];
    tmp.SetPos(atomos[j].Position()+sc.GetVector(2)*i);
-   sc.AppendAtom(tmp);
+   sc.Create(new Atom(tmp));
   }
  }
  delete[] atomos;
@@ -362,17 +365,17 @@ void Rotate(SimulationCell & sc, lpmd::Vector rotate)
 // std::cerr << sc.GetVector(2) <<"\n";
  Vector center = (sc.GetVector(0)+sc.GetVector(1)+sc.GetVector(2))*0.5;
 // std::cerr << "centro en "<<center <<"\n";
- for (long n=0;n<sc.Size();n++)
+ for (unsigned long n=0;n<sc.size();n++)
  {
 //  std::cerr <<"rotando los atomos de la celda replicada.\n";
-  Vector pos0 = sc.GetAtom(n).Position();
+  Vector pos0 = sc[n].Position();
   double v1=pos0.Get(0), v2=pos0.Get(1), v3=pos0.Get(2);
   Vector newvec;
   for (int i=0; i<3; i++) newvec.Set(i, v1*rotmat[i][0]+v2*rotmat[i][1]+v3*rotmat[i][2]);
 //  std::cerr <<"antes de rotar, pos.atom "<<n<<" = "<<pos0<<" de componentes "<<v1<<v2<<v3<<"\n";
   sc.SetPosition(n, newvec);
 //  std::cerr <<"despues de rotar, newvec = pos.atom("<<n<<")= "<<newvec<<"\n";
-//  std::cerr <<"asignando lo anterior al atom "<<n<<" = "<<sc.GetAtom(n).Position()<<", .\n";
+//  std::cerr <<"asignando lo anterior al atom "<<n<<" = "<<sc[n].Position()<<", .\n";
  }
 }
 
@@ -381,9 +384,9 @@ void ReplicateRotate(const SimulationCell basecell, lpmd::Vector &cellcenter, lp
  SimulationCell tmpSC=basecell;
  Replicate(tmpSC,na,nb,nc);
 /* // CONVERT tmpSC IN A CIRCLE
- for (long i=0; i<tmpSC.Size(); i++)
+ for (long i=0; i<tmpSC.size(); i++)
  {
-  Vector dist=0.5*(tmpSC.GetVector(0)+tmpSC.GetVector(1)+tmpSC.GetVector(2))-tmpSC.GetAtom(i).Position();
+  Vector dist=0.5*(tmpSC.GetVector(0)+tmpSC.GetVector(1)+tmpSC.GetVector(2))-tmpSC[i].Position();
   if (dist.Mod()>0.4*tmpSC.GetVector(0).Mod())
   {
    tmpSC.DeleteAtom(i);  i--;
@@ -392,17 +395,17 @@ void ReplicateRotate(const SimulationCell basecell, lpmd::Vector &cellcenter, lp
 */
  Rotate(tmpSC, rotate);
  Vector centro=0.5*(tmpSC.GetVector(0)+tmpSC.GetVector(1)+tmpSC.GetVector(2));
- unsigned long N = tmpSC.Size();
+ unsigned long N = tmpSC.size();
  Atom *atomos = new Atom[N];
  double r=dazar(0,1), g=dazar(0,1), b=dazar(0,1);
  CellColor=r*e1+g*e2+b*e3;
  for(unsigned long i=0;i<N;i++)
  {
-  atomos[i]=tmpSC.GetAtom(i);
+  atomos[i]=tmpSC[i];
   Vector vct=atomos[i].Position()+(cellcenter-centro);
   Atom tmp(atomos[i].Species(),vct);
   tmp.SetColor(r*e1+g*e2+b*e3);
-  simcell.AppendAtom(tmp);
+  simcell.Create(new Atom(tmp));
  }
  delete[] atomos;
 }

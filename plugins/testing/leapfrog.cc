@@ -13,8 +13,12 @@ using namespace lpmd;
 
 Leapfrog::Leapfrog(std::string args): Module("leapfrog")
 {
- AssignParameter("dt", "1.0");
- AssignParameter("start", "1");
+ AssignParameter("version", "1.0"); 
+ AssignParameter("apirequired", "1.1"); 
+ AssignParameter("bugreport", "gnm@gnm.cl"); 
+ //
+ DefineKeyword("dt", "1.0");
+ DefineKeyword("start", "1");
  // hasta aqui los valores por omision
  ProcessArguments(args);
  dt = GetDouble("dt");
@@ -25,18 +29,12 @@ Leapfrog::~Leapfrog() { }
 
 void Leapfrog::ShowHelp() const
 {
- std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
- std::cout << " Module Name        = leapfrog                                                 \n";
- std::cout << " Module Version     = 1.0                                                      \n";
- std::cout << " Support API lpmd   = 1.0.0                                                    \n";
- std::cout << " Problems Report to = gnm@gnm.cl                                               \n";
- std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
  std::cout << "      El modulo es utilizado para integrar utilizando el algoritmo leapfrog.   \n";
  std::cout << " General Options   >>                                                          \n";
  std::cout << "      dt            : Especifica el tiempo en femtosegundos para el            \n";
  std::cout << "                      integrador.                                              \n";
- std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+ std::cout << '\n';
  std::cout << " Example                                                                       \n";
  std::cout << " Cargando el Modulo :                                                          \n";
  std::cout << " use leapfrog                                                                  \n";
@@ -47,10 +45,7 @@ void Leapfrog::ShowHelp() const
  std::cout << "      El integrador puede ser llamado desde el principio (sin usar start) o en \n";
  std::cout << " otro instante de tiempo, para poder modificar el integrador durante la        \n";
  std::cout << " simulacion.                                                                   \n";
- std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
 }
-
-std::string Leapfrog::Keywords() const { return "dt start"; }
 
 void Leapfrog::Initialize(SimulationCell & sc, Potential & p)
 {
@@ -58,9 +53,9 @@ void Leapfrog::Initialize(SimulationCell & sc, Potential & p)
  SimulationCell & oldsc = OldCell();
  p.UpdateForces(oldsc);
  // Necesitamos las velocidades al tiempo -0.5*dt, no -dt
- for (long i=0;i<oldsc.Size();++i)
+ for (unsigned long int i=0;i<oldsc.size();++i)
  {
-  const Atom old = oldsc.GetAtom(i);
+  const Atom & old = oldsc[i];
   oldsc.SetVelocity(i, old.Velocity() + old.Acceleration()*0.5*dt);
  } 
 }

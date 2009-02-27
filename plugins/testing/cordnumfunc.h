@@ -18,7 +18,6 @@ class CordNumFunc: public lpmd::ScalarTable, public lpmd::InstantProperty, publi
   void SetParameter(std::string name);
   void Show(std::ostream & os) const;
   void ShowHelp() const;
-  std::string Keywords() const;
 
   //Metodos Propios de la clase cordnumfunc
   const lpmd::Matrix & Value() const { return *m; }

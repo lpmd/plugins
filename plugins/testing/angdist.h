@@ -21,7 +21,6 @@ class AngDist: public lpmd::ScalarTable, public lpmd::InstantProperty, public lp
     void SetParameter(std::string name);
     void Show(std::ostream & os) const;
     void ShowHelp() const;
-    std::string Keywords() const;
 
     //Metodos Propios del modulo angdist
     const lpmd::Matrix & Value() const { return *m; }

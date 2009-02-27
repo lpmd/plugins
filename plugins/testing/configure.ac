@@ -1,7 +1,7 @@
 
 AC_INIT
 AM_CONFIG_HEADER(config.h)
-AM_INIT_AUTOMAKE(lpmd-plugins, 0.5.3)
+AM_INIT_AUTOMAKE(lpmd-plugins, 0.6.0alpha)
 AC_PROG_CXX
 AC_PROG_INSTALL
 AC_PROG_LIBTOOL
@@ -16,7 +16,7 @@ AC_ARG_WITH(lpmd,
         LPMDDIR="${with_lpmd}"
       fi ])
 
-PKG_CHECK_MODULES(LPMD, liblpmd-1.0 > 1.0.1,
+PKG_CHECK_MODULES(LPMD, liblpmd-2.0 >= 1.1.0,
                   CPPFLAGS="$CPPFLAGS $LPMD_CFLAGS";
                   LDFLAGS="$LDFLAGS $LPMD_LIBS";
                   LPMDDIR="$LPMD_PREFIX", 

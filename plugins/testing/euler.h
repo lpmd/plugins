@@ -16,7 +16,6 @@ class Euler: public lpmd::OneStepIntegrator, public lpmd::IApplicable, public lp
   Euler(std::string args);
   ~Euler();
   void ShowHelp() const;
-  std::string Keywords() const;
 
   //Metodos Propios del modulo euler
   void Advance(lpmd::SimulationCell & sc, long i);

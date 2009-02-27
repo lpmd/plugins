@@ -73,42 +73,35 @@ bool RawBinFormat::ReadCell(std::istream & is, SimulationCell & sc) const
  is.read((char *)(&s), sizeof(long int));
  if (is.eof()) return false;
  is.read((char *)(&lvl), sizeof(int));
- sc.Initialize(s);
  for (long int i=0;i<s;++i)
  {
   double p;
   int symbol = 0; 
   is.read((char *)(&symbol), sizeof(int));
   if (is.eof()) throw PluginError("rawbinary", "Unexpected end of file on reading");
-  Atom at(symbol);
-  Vector pos;
+  Vector pos, vel, acc;
   for (int q=0;q<3;++q)
   {
    is.read((char *)(&p), sizeof(double));
    pos.Set(q, p);
   }
-  at.SetPos(pos);
   if (lvl > 0)
   {
-   Vector vel;
    for (int q=0;q<3;++q)
    {
     is.read((char *)(&p), sizeof(double));
     vel.Set(q, p);
    }
-   at.SetVel(vel);
   }
   if (lvl > 1)
   {
-   Vector acc;
    for (int q=0;q<3;++q)
    {
     is.read((char *)(&p), sizeof(double));
     acc.Set(q, p);
    }
-   at.SetAccel(acc);
   }
-  sc.AppendAtom(at);
+  sc.Create(new Atom(symbol, pos, vel, acc));
  }
  return true;
 }
@@ -122,7 +115,7 @@ void RawBinFormat::WriteCell(std::ostream & out, SimulationCell & sc) const
 {
  sc.MetaData().AssignParameter("level",ToString<int>(level));
  long int totsize = 0, expsize;
- long int s = sc.Size();
+ long int s = sc.size();
  expsize = sizeof(long int)+sizeof(int)+s*(sizeof(int)+3*sizeof(double)*(level+1));
  char * buffer = new char[expsize];
  memcpy((void *)(&buffer[totsize]), (void *)(&s), sizeof(long int));

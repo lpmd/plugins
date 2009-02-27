@@ -15,7 +15,6 @@ class FastLJ: public lpmd::PairPotential, public lpmd::Module
   FastLJ(std::string args); 
   ~FastLJ();
   void ShowHelp() const;
-  std::string Keywords() const;
 
   //Metodos propios del modulo fastlj
   double pairEnergy(const double & r) const;

@@ -15,15 +15,14 @@ class ZLPFormat: public lpmd::CellFormat, public lpmd::Module
    ZLPFormat(std::string args);
    virtual ~ZLPFormat();
    void ShowHelp() const;
-   std::string Keywords() const;
 
    //Metodos Propios de modulo zlp
    void ReadHeader(std::istream & is) const;
    bool ReadCell(std::istream & is, lpmd::SimulationCell & sc) const;
-   void WriteHeader(std::ostream & os, std::vector<lpmd::SimulationCell> *cell=NULL) const;
+   void WriteHeader(std::ostream & os, std::vector<lpmd::SimulationCell> *) const;
    void WriteCell(std::ostream & os, lpmd::SimulationCell & sc) const;
    
-   long int GetInterval() const {return interval;}
+   long int GetInterval() const { return interval; }
 
  private:
    void * zstr;            // z_stream structure, used with zlib 

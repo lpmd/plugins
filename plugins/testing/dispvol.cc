@@ -22,7 +22,7 @@ std::string DispVol::Keywords() const { return "t output"; }
 void DispVol::Evaluate(const std::vector<SimulationCell> & simcell, Potential & pot)
 {
  int N = simcell.size();
- int nat = simcell[0].Size();
+ int nat = simcell[0].size();
 
  //
  // Undo periodicity 
@@ -30,13 +30,13 @@ void DispVol::Evaluate(const std::vector<SimulationCell> & simcell, Potential & 
  SimulationCell scratch(simcell[0]);
  Vector ** noperiodic = new Vector*[N];
  for (int t=0;t<N;++t) noperiodic[t] = new Vector[nat];
- for (int i=0;i<nat;++i) noperiodic[0][i] = simcell[0].GetAtom(i).Position();
+ for (int i=0;i<nat;++i) noperiodic[0][i] = simcell[0][i].Position();
  
  for (int t=1;t<N;++t)
   for (int i=0;i<nat;++i)
   {
-   scratch.SetPosition(0, simcell[t-1].GetAtom(i).Position());
-   scratch.SetPosition(1, simcell[t].GetAtom(i).Position());
+   scratch.SetPosition(0, simcell[t-1][i].Position());
+   scratch.SetPosition(1, simcell[t][i].Position());
    noperiodic[t][i] = noperiodic[t-1][i] + scratch.VectorDistance(0, 1);
   }
 

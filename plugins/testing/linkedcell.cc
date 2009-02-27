@@ -173,8 +173,8 @@ LinkedCellManager::~LinkedCellManager()
 void LinkedCellManager::FillCells() 
 {
  for (long i=0;i<NumberOfSubCells();++i) subcells[i].ClearAtoms();
- long n = realcell.Size();
- for (long i=0;i<n;++i) GetSubCellByAtom(i).AddAtom(i);
+ unsigned long int n = realcell.size();
+ for (unsigned long int i=0;i<n;++i) GetSubCellByAtom(i).AddAtom(i);
 }
 
 SubCell * LinkedCellManager::GetSubCellList() const { return subcells; }
@@ -200,9 +200,14 @@ SubCell & LinkedCellManager::GetSubCellByAtom(long i) const
 
 LinkedCellCellManager::LinkedCellCellManager(std::string args): Module("linkedcell"), lcm(NULL) 
 { 
- AssignParameter("nx", "7");
- AssignParameter("ny", "7");
- AssignParameter("nz", "7");
+ AssignParameter("version", "1.0"); 
+ AssignParameter("apirequired", "1.1"); 
+ AssignParameter("bugreport", "gnm@gnm.cl"); 
+ //
+ DefineKeyword("cutoff");
+ DefineKeyword("nx", "7");
+ DefineKeyword("ny", "7");
+ DefineKeyword("nz", "7");
  // hasta aqui los parametros por omision
  ProcessArguments(args); 
  rcut = GetDouble("cutoff");
@@ -226,8 +231,6 @@ void LinkedCellCellManager::Show(std::ostream & os) const
  }
 }
 
-std::string LinkedCellCellManager::Keywords() const { return "cutoff nx ny nz"; }
-
 void LinkedCellCellManager::Reset()
 {
  //if (lcm != NULL) delete lcm;
@@ -242,7 +245,7 @@ void LinkedCellCellManager::UpdateCell(SimulationCell & sc)
 
 double LinkedCellCellManager::Cutoff() const { return lcm->GetCutoff(); }
 
-void LinkedCellCellManager::BuildNeighborList(SimulationCell & sc, long i, std::list<Neighbor> & nlist, bool full, double rcut)
+void LinkedCellCellManager::BuildNeighborList(SimulationCell & sc, long i, std::vector<Neighbor> & nlist, bool full, double rcut)
 {
  nlist.clear();
  //lcm->FillCells();
@@ -298,18 +301,6 @@ void LinkedCellCellManager::BuildNeighborList(SimulationCell & sc, long i, std::
 
    }
   }
- }
-}
-
-void LinkedCellCellManager::BuildList(SimulationCell &sc, bool full, double rc)
-{
- for (long int i=0;i<sc.Size();++i)
- {
-  sc.GetAtom(i).CleanNeighbors();
-  std::list<Neighbor> tmp;
-  BuildNeighborList(sc, i, tmp, full, rc);
-  for (std::list<Neighbor>::const_iterator it=tmp.begin();it!=tmp.end();++it) 
-      sc.GetAtom(i).Neighbors().Add(*it);
  }
 }
 

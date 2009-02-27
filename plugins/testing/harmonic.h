@@ -15,7 +15,6 @@ class Harmonic: public lpmd::PairPotential, public lpmd::Module
   Harmonic(std::string args); 
   ~Harmonic() { };
   void ShowHelp() const;
-  std::string Keywords() const;
 
   //Metodos Propios de modulo harmonic
   double pairEnergy(const double & r) const;

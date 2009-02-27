@@ -15,7 +15,6 @@ class NullPairPotential: public lpmd::PairPotential, public lpmd::Module
   NullPairPotential(std::string args); 
   ~NullPairPotential() { };
   void ShowHelp() const;
-  std::string Keywords() const;
 
   //Metodos Propios modulo nullpairpotential
   double pairEnergy(const double & r) const;

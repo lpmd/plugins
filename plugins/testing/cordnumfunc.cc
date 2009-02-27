@@ -15,8 +15,26 @@ using namespace lpmd;
 CordNumFunc::CordNumFunc(std::string args): Module("cordnumfunc")
 {
  m = NULL;
- do_average = false;
+ AssignParameter("version", "1.0"); 
+ AssignParameter("apirequired", "1.1"); 
+ AssignParameter("bugreport", "gnm@gnm.cl"); 
+ //
+ DefineKeyword("atoms");
+ DefineKeyword("start");
+ DefineKeyword("end");
+ DefineKeyword("each");
+ DefineKeyword("rcut");
+ DefineKeyword("output");
+ DefineKeyword("bins", "200");
+ DefineKeyword("average", "false");
  ProcessArguments(args);
+ cut = GetDouble("rcut");
+ nb = GetInteger("bins");
+ start_step = GetInteger("start");
+ end_step = GetInteger("end");
+ interval = GetInteger("each");
+ outputfile = GetString("output");
+ do_average = GetBool("average");
 }
 
 CordNumFunc::~CordNumFunc()
@@ -30,46 +48,9 @@ void CordNumFunc::SetParameter(std::string name)
  {
   AssignParameter("atoms", GetNextWord());
   na = GetInteger("atoms");
-  for(int i=0;i<na;i++) 
-  {
-     satoms.push_back(GetNextWord());
-  }
+  for(int i=0;i<na;i++) { satoms.push_back(GetNextWord()); }
  }
- if (name == "rcut") 
- {
-  AssignParameter("rcut",GetNextWord());
-  cut = GetDouble("rcut");
- }
- if (name == "bins")
- {
-  AssignParameter("bins", GetNextWord());
-  nb = GetInteger("bins");
- }
- if (name == "start")
- {
-  AssignParameter("start", GetNextWord());
-  start_step = GetInteger("start");
- }
- if (name == "end")
- {
-  AssignParameter("end", GetNextWord());
-  end_step = GetInteger("end");
- }
- if (name == "each")
- {
-  AssignParameter("each", GetNextWord());
-  interval = GetInteger("each");
- }
- if (name == "output")
- {
-  AssignParameter("output", GetNextWord());
-  outputfile = GetString("output");
- }
- if (name == "average")
- {
-  AssignParameter("average", GetNextWord());
-  do_average = GetBool("average");
- }
+ else Module::SetParameter(name);
 }
 
 void CordNumFunc::Show(std::ostream & os) const
@@ -83,12 +64,6 @@ void CordNumFunc::Show(std::ostream & os) const
 
 void CordNumFunc::ShowHelp() const
 {
- std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
- std::cout << " Module Name        = cordnumfunc                                              \n";
- std::cout << " Module Version     = 1.0                                                      \n";
- std::cout << " Support API lpmd   = 1.0.0                                                    \n";
- std::cout << " Problems Report to = gnm@gnm.cl                                               \n";
- std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
  std::cout << "      El modulo es utilizado para calcular el numero de cordinacion de una     \n";
  std::cout << " celda de simulacion, utilizando el metodo clasico, no el histograma.          \n";
@@ -103,7 +78,7 @@ void CordNumFunc::ShowHelp() const
  std::cout << "                      funcion.                                                 \n";
  std::cout << "      output        : Archivo de salida para la informacion de la distribucion.\n";
  std::cout << "      average       : True/False Para promediar o no las distribuciones.       \n";
- std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+ std::cout << '\n';
  std::cout << " Example                                                                       \n";
  std::cout << " Cargando el Modulo :                                                          \n";
  std::cout << " use cordnumfunc                                                               \n";
@@ -117,17 +92,13 @@ void CordNumFunc::ShowHelp() const
  std::cout << " property cordnumfunc start=0 each=1 end=100                                 \n\n";
  std::cout << "      De esta forma calculamos el numero de cordinacion de nuestra celda cada  \n";
  std::cout << " un paso entre los pasos 0 y 100 de la simulacion de lpmd.                     \n";
- std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
-
 }
-
-std::string CordNumFunc::Keywords() const { return "atoms rcut bins start end each output average"; } 
 
 void CordNumFunc::Evaluate(SimulationCell & simcell, Potential & pot)
 {
  if (nb <= 0 || na <=0) throw PluginError("cordnumfunc", "Error in calculation.");
  int nsp = na;
- int N = simcell.Size();
+ unsigned long int N = simcell.size();
  double **histo;
  double **cnfun;
  histo = new double*[nsp*nsp];
@@ -152,17 +123,17 @@ void CordNumFunc::Evaluate(SimulationCell & simcell, Potential & pot)
   int e2 = ElemNum(loa[1]); 
   //Cuenta los atomos de la especie 1.
   int ne1=0;
-  for(int i=0;i<N;i++) {if(simcell.GetAtom(i).Species()==e1) ne1++;}
+  for (unsigned long int i=0;i<N;i++) {if (simcell[i].Species()==e1) ne1++;}
   //Comienzan las iteraciones.
-  for(int i=0;i<N;i++)
+  for (unsigned long int i=0;i<N;i++)
   {
    if(simcell[i].Species()==e1)
    {
-    std::list<Neighbor> nlist;
+    std::vector<Neighbor> nlist;
     simcell.BuildNeighborList(i,nlist,true, rcut);
-    for(std::list<Neighbor>::const_iterator it=nlist.begin();it!=nlist.end();++it)
+    for(unsigned long int k=0;k<nlist.size();++k)
     {
-     const Neighbor &nn = *it;
+     const Neighbor &nn = nlist[k];
      if(nn.j->Species()==e2)
      {
       if(nn.r*nn.r<rcut*rcut)

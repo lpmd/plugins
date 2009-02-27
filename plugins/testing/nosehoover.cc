@@ -6,16 +6,20 @@
 
 #include <lpmd/simulationcell.h>
 #include <lpmd/potential.h>
-#include <lpmd/physunits.h>
+#include <lpmd/session.h>
 
 using namespace lpmd;
 
 NoseHoover::NoseHoover(std::string args): Module("nosehoover")
 {
- AssignParameter("dt", "1.0");
- AssignParameter("start", "1");
- AssignParameter("fmass", "1000000.0");
- AssignParameter("t", "300.0");
+ AssignParameter("version", "1.0"); 
+ AssignParameter("apirequired", "1.1"); 
+ AssignParameter("bugreport", "gnm@gnm.cl"); 
+ //
+ DefineKeyword("fmass");
+ DefineKeyword("dt", "1.0");
+ DefineKeyword("start", "1");
+ DefineKeyword("t", "300.0");
  // hasta aqui los valores por omision
  ProcessArguments(args);
  dt = GetDouble("dt");
@@ -28,12 +32,6 @@ NoseHoover::~NoseHoover() { }
 
 void NoseHoover::ShowHelp() const
 {
- std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
- std::cout << " Module Name        = nosehoover                                               \n";
- std::cout << " Module Version     = 1.0                                                      \n";
- std::cout << " Support API lpmd   = 1.0.0                                                    \n";
- std::cout << " Problems Report to = gnm@gnm.cl                                               \n";
- std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
  std::cout << "      El modulo es utilizado para simular ensemble NVT.                        \n";
  std::cout << " General Options   >>                                                          \n";
@@ -41,7 +39,7 @@ void NoseHoover::ShowHelp() const
  std::cout << "                      integrador.                                              \n";
  std::cout << "      fmass         : Masa ficticia Q                                          \n";
  std::cout << "      t             : Temperatura fijada por el integrador                     \n";
- std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+ std::cout << '\n';
  std::cout << " Example                                                                       \n";
  std::cout << " Cargando el Modulo :                                                          \n";
  std::cout << " use nosehoover                                                                \n";
@@ -54,14 +52,11 @@ void NoseHoover::ShowHelp() const
  std::cout << "      El integrador puede ser llamado desde el principio (sin usar start) o en \n";
  std::cout << " otro instante de tiempo, para poder modificar el integrador durante la        \n";
  std::cout << " simulacion.                                                                   \n";
- std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
 }
-
-std::string NoseHoover::Keywords() const { return "dt fmass t start"; }
 
 void NoseHoover::Initialize(SimulationCell & sc, Potential & p)
 {
- for (long i=0;i<sc.Size();++i) auxlist.push_back(Vector());
+ for (unsigned long int i=0;i<sc.size();++i) auxlist.push_back(Vector());
  UseOldCell(sc);
  SimulationCell & oldsc = OldCell();
  p.UpdateForces(oldsc);
@@ -70,11 +65,12 @@ void NoseHoover::Initialize(SimulationCell & sc, Potential & p)
 
 void NoseHoover::AdvancePosition(SimulationCell & sc, long i)
 {
+ const double kboltzmann = GlobalSession.GetDouble("kboltzmann");
  SimulationCell & oldsc = OldCell();
  const Atom & now = sc[i];
  const Atom & old = oldsc[i];
  auxlist[i] = old.Acceleration();
- friction += ((3.0*sc.Size()/q)*KBOLTZMANN*(sc.Temperature()-temp)*dt);
+ friction += ((3.0*sc.size()/q)*kboltzmann*(sc.Temperature()-temp)*dt);
  const Vector newacc = now.Acceleration() - now.Velocity()*friction;
  sc.SetAcceleration(i, newacc);
  Vector newpos = now.Position() + now.Velocity()*dt + (2.0/3.0)*newacc*dt*dt - (1.0/6.0)*old.Acceleration()*dt*dt;

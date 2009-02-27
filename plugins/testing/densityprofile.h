@@ -18,7 +18,6 @@ class DensityProfile: public lpmd::ScalarTable, public lpmd::InstantProperty, pu
   void SetParameter(std::string name);
   void Show(std::ostream & os) const;
   void ShowHelp() const;
-  std::string Keywords() const;
 
   //Metodos Propios de modulo gdr
   const lpmd::Matrix & Value() const { return *m; }

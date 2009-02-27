@@ -14,6 +14,13 @@ using namespace lpmd;
 
 ExtraVelModifier::ExtraVelModifier(std::string args): Module("extravel") 
 { 
+ AssignParameter("version", "1.0"); 
+ AssignParameter("apirequired", "1.1"); 
+ AssignParameter("bugreport", "gnm@gnm.cl"); 
+ //
+ DefineKeyword("start");
+ DefineKeyword("end");
+ DefineKeyword("each");
  ProcessArguments(args); 
  start_step = GetInteger("start");
  end_step = GetInteger("end");
@@ -24,15 +31,9 @@ ExtraVelModifier::~ExtraVelModifier() { }
 
 void ExtraVelModifier::ShowHelp() const
 {
- std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
- std::cout << " Module Name        = extravel                                                 \n";
- std::cout << " Module Version     = 1.0                                                      \n";
- std::cout << " Support API lpmd   = 1.0.0                                                    \n";
- std::cout << " Problems Report to = gnm@gnm.cl                                               \n";
- std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
  std::cout << "      El modulo es utilizado para ...                                          \n";
- std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+ std::cout << '\n';
  std::cout << " Example                                                                       \n";
  std::cout << " Cargando el Modulo :                                                          \n";
  std::cout << " use extravel                                                                  \n";
@@ -40,18 +41,12 @@ void ExtraVelModifier::ShowHelp() const
  std::cout << " Llamando al modulo                                                            \n";
  std::cout << " apply extravel start=0 each=10 end=100                                      \n\n";
  std::cout << "      De esta forma aplicamos extravel entre 0 y 100 cada 10 steps.            \n";
- std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
-}
-
-std::string ExtraVelModifier::Keywords() const
-{
- return "start end each";
 }
 
 void ExtraVelModifier::Apply(SimulationCell & sc)
 {
- std::cerr << "-> Applying extravel modifier!" << '\n';
- for (long i=0;i<sc.Size();++i)
+ DebugStream() << "-> Applying extravel modifier!" << '\n';
+ for (unsigned long int i=0;i<sc.size();++i)
  {
   const Atom & at = sc[i];
   if (at.IsTypeSet() && at.Type().GetBool("extravel"))

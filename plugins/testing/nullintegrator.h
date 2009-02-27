@@ -16,7 +16,6 @@ class NullIntegrator: public lpmd::Integrator, public lpmd::IApplicable, public 
   NullIntegrator(std::string args);
   ~NullIntegrator();
   void ShowHelp() const;
-  std::string Keywords() const;
 
   //Metodos propios de modulo nullintegrator
   void Advance(lpmd::SimulationCell & sc, lpmd::Potential & p);

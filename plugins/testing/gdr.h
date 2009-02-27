@@ -8,7 +8,6 @@
 #include <lpmd/scalartable.h>
 #include <lpmd/instantproperty.h>
 #include <lpmd/plugin.h>
-#include <plugincommon.h>
 
 class Gdr: public lpmd::ScalarTable, public lpmd::InstantProperty, public lpmd::Module
 {
@@ -17,7 +16,6 @@ class Gdr: public lpmd::ScalarTable, public lpmd::InstantProperty, public lpmd::
   Gdr(std::string args);
   ~Gdr();
   void ShowHelp() const;
-  std::string Keywords() const;
 
   //Metodos Propios de modulo gdr
   const lpmd::Matrix & Value() const { return *m; }

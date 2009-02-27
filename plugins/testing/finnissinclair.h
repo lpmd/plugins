@@ -21,6 +21,7 @@ class FinnisSinclair: public lpmd::MetalPotential , public lpmd::Module
   //Metodos Propios de modulo FinnisSinclair
   double pairEnergy(const double &r) const;
   double rhoij(const double &r) const;
+  double deltarhoi(const double&) const { return 0.0; }
   double F(const double &rhoi) const;
   lpmd::Vector PairForce(const lpmd::Vector &rij) const;
   lpmd::Vector ManyBodies(const lpmd::Vector &rij, const double &rhoi, const double &rhoj) const;

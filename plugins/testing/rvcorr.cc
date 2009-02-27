@@ -66,7 +66,7 @@ void RVCorr::Evaluate(SimulationCell & simcell, Potential & pot)
  if (nb == 0 || fabs(rcut) < 1e-05) throw PluginError("rvcorr", "Error in calculation: Cutoff or bins have wrong value.");
  double dr = rcut/ double(nb);
  int nsp = simcell.SpeciesList().size();
- unsigned long int N = simcell.Size();
+ unsigned long int N = simcell.size();
  double **g;
  long **nr;
  g = new double*[nb];

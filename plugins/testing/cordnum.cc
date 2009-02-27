@@ -15,8 +15,25 @@ using namespace lpmd;
 CordNum::CordNum(std::string args): Module("cordnum")
 {
  m = NULL;
- do_average = false;
+ AssignParameter("version", "1.0"); 
+ AssignParameter("apirequired", "1.1"); 
+ AssignParameter("bugreport", "gnm@gnm.cl"); 
+ //
+ DefineKeyword("atoms");
+ DefineKeyword("start");
+ DefineKeyword("end");
+ DefineKeyword("each");
+ DefineKeyword("rcut");
+ DefineKeyword("maxn");
+ DefineKeyword("output");
+ DefineKeyword("average", "false");
  ProcessArguments(args);
+ nb = GetInteger("maxn");
+ start_step = GetInteger("start");
+ end_step = GetInteger("end");
+ interval = GetInteger("each");
+ outputfile = GetString("output");
+ do_average = GetBool("average");
 }
 
 CordNum::~CordNum()
@@ -30,12 +47,9 @@ void CordNum::SetParameter(std::string name)
  {
   AssignParameter("atoms", GetNextWord());
   na = GetInteger("atoms");
-  for(int i=0;i<na;i++) 
-  {
-     satoms.push_back(GetNextWord());
-  }
+  for(int i=0;i<na;i++) { satoms.push_back(GetNextWord()); }
  }
- if (name == "rcut") 
+ else if (name == "rcut") 
  {
   std::string atom1 = GetNextWord();
   std::string atom2 = GetNextWord();
@@ -44,36 +58,7 @@ void CordNum::SetParameter(std::string name)
   rcut[atom1+"-"+atom2] = cutoff;
   rcut[atom2+"-"+atom1] = cutoff;
  }
- if (name == "maxn")
- {
-  AssignParameter("maxn", GetNextWord());
-  nb = GetInteger("maxn");
- }
- if (name == "start")
- {
-  AssignParameter("start", GetNextWord());
-  start_step = GetInteger("start");
- }
- if (name == "end")
- {
-  AssignParameter("end", GetNextWord());
-  end_step = GetInteger("end");
- }
- if (name == "each")
- {
-  AssignParameter("each", GetNextWord());
-  interval = GetInteger("each");
- }
- if (name == "output")
- {
-  AssignParameter("output", GetNextWord());
-  outputfile = GetString("output");
- }
- if (name == "average")
- {
-  AssignParameter("average", GetNextWord());
-  do_average = GetBool("average");
- }
+ else Module::SetParameter(name);
 }
 
 void CordNum::Show(std::ostream & os) const
@@ -103,12 +88,6 @@ void CordNum::Show(std::ostream & os) const
 
 void CordNum::ShowHelp() const
 {
- std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
- std::cout << " Module Name        = cordnum                                                  \n";
- std::cout << " Module Version     = 1.0                                                      \n";
- std::cout << " Support API lpmd   = 1.0.0                                                    \n";
- std::cout << " Problems Report to = gnm@gnm.cl                                               \n";
- std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
  std::cout << "      El modulo es utilizado para calcular el numero de cordinacion de una     \n";
  std::cout << " celda de simulacion, utilizando los radios de corte entregados por el usuario.\n";
@@ -123,7 +102,7 @@ void CordNum::ShowHelp() const
  std::cout << "                      radio de corte.                                          \n";
  std::cout << "      output        : Archivo de salida para la informacion de la distribucion.\n";
  std::cout << "      average       : True/False Para promediar o no las distribuciones.       \n";
- std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+ std::cout << '\n';
  std::cout << " Example                                                                       \n";
  std::cout << " Cargando el Modulo :                                                          \n";
  std::cout << " use cordnum                                                                   \n";
@@ -137,16 +116,13 @@ void CordNum::ShowHelp() const
  std::cout << " property cordnum start=0 each=1 end=100                                     \n\n";
  std::cout << "      De esta forma calculamos el numeo de cordinacion de nuestra celda cada un\n";
  std::cout << " paso entre los pasos 0 y 100 de la simulacion de lpmd.                        \n";
- std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
 }
-
-std::string CordNum::Keywords() const { return "atoms rcut maxn start end each output average"; } 
 
 void CordNum::Evaluate(SimulationCell & simcell, Potential & pot)
 {
  if (nb <= 0 || na <=0) throw PluginError("cordnum", "Error in coordination number calculation.");
  int nsp = na;
- int N = simcell.Size();
+ unsigned long int N = simcell.size();
  int **histo;
  double **cnfun;
  histo = new int*[nsp*nsp];
@@ -155,7 +131,7 @@ void CordNum::Evaluate(SimulationCell & simcell, Potential & pot)
  for(int i=0;i<nsp*nsp;i++) { cnfun[i]=new double[nb];}
  for (int i=0;i<nsp*nsp;i++)
  { 
-  for (int j=0;j<N;j++) histo[i][j]=0;
+  for (unsigned long int j=0;j<N;j++) histo[i][j]=0;
   for (int j=0;j<nb;j++) cnfun[i][j]=0.0e0;
  }
 
@@ -171,20 +147,20 @@ void CordNum::Evaluate(SimulationCell & simcell, Potential & pot)
   double rc12 = rcut[loa[0]+"-"+loa[1]];
   //Cuenta los atomos de la especie 1.
   int ne1=0;
-  for(int i=0;i<N;i++) {if(simcell[i].Species()==e1) ne1++;}
+  for (unsigned long int i=0;i<N;i++) {if(simcell[i].Species()==e1) ne1++;}
   //Comienzan las iteraciones.
-  for(int i=0;i<N;++i)
+  for (unsigned long int i=0;i<N;++i)
   {
    if(simcell[i].Species()==e1)
    {
-    std::list<Neighbor> nlist;
+    std::vector<Neighbor> nlist;
     simcell.BuildNeighborList(i,nlist,true,simcell.CMCutoff());
-    for(std::list<Neighbor>::const_iterator it=nlist.begin();it!=nlist.end();++it)
+    for(unsigned long int k=0;k<nlist.size();++k)
     {
-     const Neighbor &nn = *it;
+     const Neighbor &nn = nlist[k];
      if(nn.j->Species()==e2)
      {
-      if(nn.r<=rc12)
+      if(nn.r<=rc12*rc12)
       {
        histo[s][i]++;
       }
@@ -192,7 +168,7 @@ void CordNum::Evaluate(SimulationCell & simcell, Potential & pot)
     }
    }
   }
-  for(int i=0;i<N;i++)
+  for (unsigned long int i=0;i<N;i++)
   {
    if(simcell[i].Species()==e1 && histo[s][i]<nb)
    {

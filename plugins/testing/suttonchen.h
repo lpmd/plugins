@@ -16,7 +16,6 @@ class SuttonChen: public lpmd::MetalPotential , public lpmd::Module
   SuttonChen(std::string args);
   ~SuttonChen(){};
   void ShowHelp() const;
-  std::string Keywords() const;
 
   //Metodos Propios de modulo suttonchen
   double pairEnergy(const double &r) const;
@@ -24,7 +23,7 @@ class SuttonChen: public lpmd::MetalPotential , public lpmd::Module
   double F(const double &rhoi) const;
   lpmd::Vector PairForce(const lpmd::Vector &rij) const;
   lpmd::Vector ManyBodies(const lpmd::Vector &rij, const double &rhoi, const double &rhoj) const;
-  double deltarhoi(const double & rhobar, const int & N) const;
+  double deltarhoi(const double & rhobar) const;
   double deltaU1(const double & rhobar, const int & N) const;
   double deltaU2(const double & rhobar, const int & N, const double & rhoi) const;
   double VirialCorrection(const double &rhobar, const int &N, const double &rhoi) const;

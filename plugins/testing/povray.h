@@ -21,7 +21,6 @@ class POVRAY: public lpmd::Visualizer, public lpmd::Module
   ~POVRAY();
   void SetParameter(std::string name);
   void ShowHelp() const;
-  std::string Keywords() const;
   
   //Metodos Propios de modulo povray
   void Apply(const lpmd::MD & md);

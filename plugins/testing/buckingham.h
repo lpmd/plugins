@@ -16,7 +16,6 @@ class Buckingham: public lpmd::PairPotential , public lpmd::Module
   Buckingham(std::string args); 
   ~Buckingham() { };
   void ShowHelp() const;
-  std::string Keywords() const;
 
   //Metodos Propios de Modulo Buckingham
   double pairEnergy(const double & r) const;

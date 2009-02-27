@@ -74,17 +74,16 @@ std::string RotateModifier::Keywords() const
 void RotateModifier::Apply(SimulationCell & sc)
 {
  Vector center = (sc.GetVector(0)+sc.GetVector(1)+sc.GetVector(2))*0.5;
- for (long int i=0;i<sc.Size();++i)
+ for (unsigned long int i=0;i<sc.size();++i)
  {
-  // translate such that the center of the cell be (0, 0, 0)
-  Vector pos0 = sc.GetAtom(i).Position() - center; 
-  Vector pos = pos0;
+  // translate so that the center of the cell is (0, 0, 0)
+  Vector pos = sc[i].Position() - center; 
   // rotate
   double rv[3];
   for (int j=0;j<3;++j)
   {
    rv[j] = 0.0;
-   for (int i=0;i<3;++i) rv[j] += rotmat[j][i]*pos0.Get(i);
+   for (int i=0;i<3;++i) rv[j] += rotmat[j][i]*pos.Get(i);
    pos.Set(j, rv[j]);
   }
   // untranslate

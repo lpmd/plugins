@@ -16,7 +16,6 @@ class CellProp: public lpmd::ScalarValue, public lpmd::InstantProperty, public l
   CellProp(std::string args);
   virtual ~CellProp();
   void ShowHelp() const;
-  std::string Keywords() const;
 
   //Metodos Propios del modulo cell
   std::string Provides() const;

@@ -17,8 +17,26 @@ using namespace lpmd;
 AngDist::AngDist(std::string args): Module("angdist")
 {
  m = NULL;
- do_average = false;
+ //
+ AssignParameter("version", "1.0");
+ AssignParameter("apirequired", "1.1");
+ AssignParameter("bugreport", "gnm@gnm.cl");
+ //
+ DefineKeyword("atoms");
+ DefineKeyword("rcut");
+ DefineKeyword("end");
+ DefineKeyword("each");
+ DefineKeyword("output");
+ DefineKeyword("bins", "200");
+ DefineKeyword("average", "false");
+ // 
  ProcessArguments(args);
+ nb = GetInteger("bins");
+ start_step = GetInteger("start");
+ end_step = GetInteger("end");
+ interval = GetInteger("each");
+ outputfile = GetString("output");
+ do_average = GetBool("average");
 }
 
 AngDist::~AngDist()
@@ -32,12 +50,9 @@ void AngDist::SetParameter(std::string name)
  {
   AssignParameter("atoms", GetNextWord());
   na = GetInteger("atoms");
-  for(int i=0;i<na;i++) 
-  {
-     satoms.push_back(GetNextWord());
-  }
+  for(int i=0;i<na;i++) { satoms.push_back(GetNextWord()); }
  }
- if (name == "rcut") 
+ else if (name == "rcut") 
  {
   std::string atom1 = GetNextWord();
   std::string atom2 = GetNextWord();
@@ -46,36 +61,7 @@ void AngDist::SetParameter(std::string name)
   rcut[atom1+"-"+atom2] = cutoff;
   rcut[atom2+"-"+atom1] = cutoff;
  }
- if (name == "bins")
- {
-  AssignParameter("bins", GetNextWord());
-  nb = GetInteger("bins");
- }
- if (name == "start")
- {
-  AssignParameter("start", GetNextWord());
-  start_step = GetInteger("start");
- }
- if (name == "end")
- {
-  AssignParameter("end", GetNextWord());
-  end_step = GetInteger("end");
- }
- if (name == "each")
- {
-  AssignParameter("each", GetNextWord());
-  interval = GetInteger("each");
- }
- if (name == "output")
- {
-  AssignParameter("output", GetNextWord());
-  outputfile = GetString("output");
- }
- if (name == "average")
- {
-  AssignParameter("average", GetNextWord());
-  do_average = GetBool("average");
- }
+ else Module::SetParameter(name);
 }
 
 void AngDist::Show(std::ostream & os) const
@@ -104,12 +90,6 @@ void AngDist::Show(std::ostream & os) const
 
 void AngDist::ShowHelp() const
 {
- std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
- std::cout << " Module Name        = angdist                                                  \n";
- std::cout << " Module Version     = 1.0                                                      \n";
- std::cout << " Support API lpmd   = 1.0.0                                                    \n";
- std::cout << " Problems Report to = gnm@gnm.cl                                               \n";
- std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
  std::cout << "      El modulo es utilizado para calcular la distribucion angular de una celda\n";
  std::cout << " de simulacion, utilizando los radios de corte entregados por el usuario.      \n";
@@ -124,7 +104,7 @@ void AngDist::ShowHelp() const
  std::cout << "                      radio de corte.                                          \n";
  std::cout << "      output        : Archivo de salida para la informacion de la distribucion.\n";
  std::cout << "      average       : True/False Para promediar o no las distribuciones.       \n";
- std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+ std::cout << '\n';
  std::cout << " Example                                                                       \n";
  std::cout << " Cargando el Modulo :                                                          \n";
  std::cout << " use angdist                                                                   \n";
@@ -140,16 +120,13 @@ void AngDist::ShowHelp() const
  std::cout << " property angdist start=0 each=1 end=100                                     \n\n";
  std::cout << "      De esta forma calculamos la distribucion angular de nuestra celda cada un\n";
  std::cout << " paso entre los pasos 0 y 100 de la simulacion de lpmd.                        \n";
- std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
 }
-
-std::string AngDist::Keywords() const { return "atoms rcut bins start end each output average"; }
 
 void AngDist::Evaluate(SimulationCell & simcell, Potential & pot)
 {
  if (nb <= 0 ||  na <=0) throw PluginError("angdist", "Error with angular distribution calculation.");
  int nsp = na;
- int N = simcell.Size();
+ unsigned long int N = simcell.size();
  double **ang;
  ang = new double*[nb];
  for(int i=0;i<nb;i++) { ang[i]=new double[(int)(nsp*nsp*nsp)]; }
@@ -169,20 +146,20 @@ void AngDist::Evaluate(SimulationCell & simcell, Potential & pot)
   int e3 = ElemNum(loa[2]);
   double rc12 = rcut[loa[0]+"-"+loa[1]];
   double rc23 = rcut[loa[1]+"-"+loa[2]];
-  for(int i=0;i<N;++i)
+  for(unsigned long int i=0;i<N;++i)
   {
-   if(simcell[i].Species()==e2)
+   if (simcell[i].Species()==e2)
    {
-    std::list<Neighbor> nlist;
+    std::vector<Neighbor> nlist;
     simcell.BuildNeighborList(i,nlist,true, simcell.CMCutoff());
-    for(std::list<Neighbor>::const_iterator it=nlist.begin() ; it!=nlist.end() ; ++it)
+    for (unsigned long int k=0;k<nlist.size();++k)
     {
-     const Neighbor & nn = *it;
+     const Neighbor & nn = nlist[k];
      if(nn.j->Species()==e1 && nn.r*nn.r <= rc12*rc12)
      {
-      for(std::list<Neighbor>::const_iterator jt=nlist.begin() ; jt!=nlist.end() ; ++jt)
+      for (unsigned long int l=0;l<nlist.size();++l)
       {
-       const Neighbor & mm = *jt;
+       const Neighbor & mm = nlist[l];
        if(&mm!=&nn)
        {
 	if(mm.j->Species()==e3 && mm.r*mm.r <= rc23*rc23)

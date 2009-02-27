@@ -51,23 +51,23 @@ void VerletListCellManager::BuildList(SimulationCell & sc, bool full, double rcu
  std::cerr << "cutoff = "  << cutoff << '\n';
  std::cerr << "rcu = " << rcu << '\n';
  if (rcu > cutoff) throw PluginError("verletlist", "Error in cutoff at verletlist, please check that the cutoff is major in plugin");
- const long n = sc.Size();
+ const unsigned long n = sc.size();
  if (calls == 0)
  {
   oldposition.reserve(n);
-  for(int i=0;i<n;++i) oldposition[i]=sc[i].Position();
+  for(unsigned long int i=0;i<n;++i) oldposition[i]=sc[i].Position();
  }
  if(sc.MetaData().GetInteger("step") % 10 == 0 || evaluate==true)
  {
   std::cerr << "remake the build in step = " << sc.MetaData().GetInteger("step") << '\n';
   evaluate=false;
-  for(long i=0;i<n;++i)
+  for(unsigned long i=0;i<n;++i)
   {
-   sc.GetAtom(i).CleanNeighbors();
+   sc[i].CleanNeighbors();
    if (full)
    {
     //
-    for (long j=0;j<n;++j)
+    for (unsigned long j=0;j<n;++j)
     {
      if (i != j)
      {
@@ -76,23 +76,23 @@ void VerletListCellManager::BuildList(SimulationCell & sc, bool full, double rcu
       nn.j = &sc[j];
       nn.rij = sc.VectorDistance(i, j);
       nn.r = nn.rij.Mod();
-      if (cutoff < 1E-30) sc.GetAtom(i).AddNeighbor(nn);
-      else if (nn.r < cutoff) sc.GetAtom(i).AddNeighbor(nn);
+      if (cutoff < 1E-30) sc[i].AddNeighbor(nn);
+      else if (nn.r < cutoff) sc[i].AddNeighbor(nn);
      }
     }
    }
    else
    {
     //
-    for (long j=i+1;j<n;++j)
+    for (unsigned long j=i+1;j<n;++j)
     {
      Neighbor nn;
      nn.i = &sc[i];
      nn.j = &sc[j];
      nn.rij = sc.VectorDistance(i, j);
      nn.r = nn.rij.Mod();
-     if (cutoff < 1E-30) sc.GetAtom(i).AddNeighbor(nn);
-     else if (nn.r < cutoff) sc.GetAtom(i).AddNeighbor(nn);
+     if (cutoff < 1E-30) sc[i].AddNeighbor(nn);
+     else if (nn.r < cutoff) sc[i].AddNeighbor(nn);
     }
    }
   }
@@ -100,7 +100,7 @@ void VerletListCellManager::BuildList(SimulationCell & sc, bool full, double rcu
   double tolerance = cutoff - rcu;
   if(calls!=0)
   {
-   for (long i=0;i<n;i++)
+   for (unsigned long i=0;i<n;i++)
    {
     lpmd::Vector actual = sc[i].Position();
     double displace = (actual - oldposition[i]).Mod();

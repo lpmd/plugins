@@ -15,15 +15,13 @@ class TempScalingModifier: public lpmd::SystemModifier, public lpmd::Module
   TempScalingModifier(std::string args);
   ~TempScalingModifier();
   void ShowHelp() const;
-  std::string Keywords() const;
 
   //Metodos Propios
   void Apply(lpmd::SimulationCell & sc);
   void Apply(lpmd::MD & md);
 
  private:
-  double fromtemp;
-  double totemp;
+  double fromtemp, totemp;
 };
 
 #endif

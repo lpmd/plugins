@@ -16,7 +16,6 @@ class Leapfrog: public lpmd::OneStepIntegrator, public lpmd::IApplicable, public
   Leapfrog(std::string args);
   ~Leapfrog();
   void ShowHelp() const;
-  std::string Keywords() const;
 
   //Metodos propios modulo verlet
   void Initialize(lpmd::SimulationCell & sc, lpmd::Potential & p);
