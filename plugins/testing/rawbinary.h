@@ -7,6 +7,7 @@
 
 #include <lpmd/cellformat.h>
 #include <lpmd/plugin.h>
+#include <string.h>
 
 class RawBinFormat: public lpmd::CellFormat, public lpmd::Module
 {
