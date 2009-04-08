@@ -38,9 +38,9 @@ void SuttonChen::ShowHelp() const
  std::cout << " General Options   >>                                                          \n";
  std::cout << "      e             : Especifica el valor de epsilon para el potencial.        \n";
  std::cout << "      a             : Especifica el valor para la constante a del potencial.   \n";
- std::cout << "      n             : Especifica el valor para la constante a del potencial.   \n";
- std::cout << "      m             : Especifica el valor para la constante a del potencial.   \n";
- std::cout << "      c             : Especifica el valor para la constante a del potencial.   \n";
+ std::cout << "      n             : Especifica el valor para la constante n del potencial.   \n";
+ std::cout << "      m             : Especifica el valor para la constante m del potencial.   \n";
+ std::cout << "      c             : Especifica el valor para la constante c del potencial.   \n";
  std::cout << "      cutoff        : Radio de corte para el potencial.                        \n";
  std::cout << '\n';
  std::cout << " Example                                                                       \n";

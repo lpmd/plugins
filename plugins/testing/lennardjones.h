@@ -16,7 +16,7 @@ class LennardJones: public lpmd::PairPotential, public lpmd::Module
   ~LennardJones() { };
   void ShowHelp() const;
 
-  //Metodos Propios de modulo gdr
+  //Metodos Propios de modulo lennardjones
   double pairEnergy(const double & r) const;
   lpmd::Vector pairForce(const lpmd::Vector & r) const;
 
