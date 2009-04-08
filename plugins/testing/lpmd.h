@@ -29,7 +29,7 @@ class LPMDFormat: public lpmd::CellFormat, public lpmd::Module
    long int interval;
    long int level;
    bool rcell;
-   std::vector <std::string> hdr;
+   std::vector <const std::string> hdr;
 };
 
 #endif

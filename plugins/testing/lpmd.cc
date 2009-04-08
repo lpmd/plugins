@@ -59,7 +59,7 @@ void LPMDFormat::ReadHeader(std::istream & is) const
  if (tmp.substr(6, 3) =="1.0")
  {
   //assume 1.0 format
-  std::string info
+  std::string info;
   getline(is, info);
   getline(is, info);
   getline(is, info);
@@ -69,21 +69,21 @@ void LPMDFormat::ReadHeader(std::istream & is) const
   is.unget();is.unget();
   if (words.size()==4)
   {
-   hdr.append("SYM");
-   hdr.append("X");hdr.append("Y");hdr.append("Z");
+   hdr.push_back("SYM");
+   hdr.push_back(std::string("X"));hdr.push_back(std::string("Y"));hdr.push_back(std::string("Z"));
   }
   else if (words.size()==7)
   {
-   hdr.append("SYM");
-   hdr.append("X");hdr.append("Y");hdr.append("Z");
-   hdr.append("VX");hdr.append("VY");hdr.append("VZ");
+   hdr.push_back(std::string("SYM"));
+   hdr.push_back(std::string("X"));hdr.push_back(std::string("Y"));hdr.push_back(std::string("Z"));
+   hdr.push_back(std::string("VX"));hdr.push_back(std::string("VY"));hdr.push_back(std::string("VZ"));
   }
   else if (words.size()==10)
   {
-   hdr.append("SYM");
-   hdr.append("X");hdr.append("Y");hdr.append("Z");
-   hdr.append("VX");hdr.append("VY");hdr.append("VZ");
-   hdr.append("FX");hdr.append("FY");hdr.append("FZ");
+   hdr.push_back(std::string("SYM"));
+   hdr.push_back(std::string("X"));hdr.push_back(std::string("Y"));hdr.push_back(std::string("Z"));
+   hdr.push_back(std::string("VX"));hdr.push_back(std::string("VY"));hdr.push_back(std::string("VZ"));
+   hdr.push_back(std::string("FX"));hdr.push_back(std::string("FY"));hdr.push_back(std::string("FZ"));
   }
   else
   {
@@ -97,9 +97,9 @@ void LPMDFormat::ReadHeader(std::istream & is) const
   (*linecounter)++;
   if (tmp.substr(0, 4) != "HDR ") throw PluginError("lpmd", "File"+readfile+" doesn't seem to be in LPMD 2.0 fromat (wrong HDR)");
   std::vector <std::string> words = SplitTextLine(info);
-  for (int i=0;i<words.size() < ++i)
+  for (int i=0;i<words.size() ; ++i)
   {
-   hdr.append(words[i]);
+   hdr.push_back(words[i]);
   }
  }
  else 
