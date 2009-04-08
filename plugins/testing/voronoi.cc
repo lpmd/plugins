@@ -52,27 +52,29 @@ VoronoiGenerator::~VoronoiGenerator() { }
 void VoronoiGenerator::ShowHelp() const
 {
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
- std::cout << " Module Name        = voronoi                                                \n";
+ std::cout << " Module Name        = voronoi                                                	\n";
  std::cout << " Module Version     = 1.0                                                      \n";
  std::cout << " Support API lpmd   = 1.0.0                                                    \n";
  std::cout << " Problems Report to = gnm@gnm.cl                                               \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
- std::cout << "      El modulo es utilizado para generar una celda compuesta por celdas       \n";
- std::cout << " mas pequenas (nanoestructuras).                                               \n";
- std::cout << " General Options   >>                                                          \n";
- std::cout << "      symbol  : Especifica el simbolo atomico de la especie a generar.         \n";
- std::cout << "      type    : Especifica el tipo de celda base (sc, bcc, fcc)                \n";
- std::cout << "      a       : Especifica el tamano de la celda type                          \n";
- std::cout << "      cells   : Especifica la cantidad de celdas que se replicaran             \n";
+ std::cout << "      This module is used to generate a nanostructured crystal.                \n";
+ std::cout << " General Options   >>                                                         	\n";
+ std::cout << "      symbol  : Specifies the atomic symbol of the species to generate like    \n";
+ std::cout << "                Cu, Ar, Fe, etc.                                               \n";
+ std::cout << "      type    : Specifies the cell type (sc, bcc, fcc).                        \n";
+ std::cout << "      a       : Lattice constant.                                              \n";
+ std::cout << "      grains  : Number of grains to put in the simulation cell                 \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " Example                                                                       \n";
- std::cout << " Llamando al modulo :                                                          \n";
- std::cout << " input module=voronoi symbol=Ar a=2 cells=10 type=fcc                          \n";
- std::cout << "      De esta forma podemos generar una celda inicial, que contiene 10 celdas  \n";
- std::cout << " pequenas de argon, hechas a partir de la replicacion de una celda fcc,        \n";
- std::cout << " eliminando los atomos que se encuentren a una distancia menor que cierta      \n";
- std::cout << " distancia (que depende de type).                                              \n";
+ std::cout << " Module calling :                                                              \n";
+ std::cout << " input module=voronoi symbol=Ar type=fcc a=3.61 grains=10                      \n";
+ std::cout << " Explanation :                                                                 \n";
+ std::cout << "      This generates a simulation cell that contains 10 argon grains uniformly \n";
+ std::cout << "      distributed (using skewstart method), each one of them being a fcc       \n";
+ std::cout << "      cutted crystal. The number of resulting atoms depends on the number of		\n";
+ std::cout << "      grains you choose and the size of the simulation cell (the more grains   \n";
+ std::cout << "      you put, the smaller they become, and less atoms you have).               \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
 }
 
