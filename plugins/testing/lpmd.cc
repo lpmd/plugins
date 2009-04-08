@@ -11,7 +11,7 @@ using namespace lpmd;
 
 LPMDFormat::LPMDFormat(std::string args): Module("lpmd")
 {
- AssignParameter("version", "1.0"); 
+ AssignParameter("version", "2.0"); 
  AssignParameter("apirequired", "1.1"); 
  AssignParameter("bugreport", "gnm@gnm.cl"); 
  //
@@ -55,7 +55,57 @@ void LPMDFormat::ReadHeader(std::istream & is) const
  std::string tmp;
  getline(is, tmp);
  (*linecounter) = 1;
- if (tmp.substr(0, 5) != "LPMD ") throw PluginError("lpmd", "File "+readfile+" doesn't seem to be in LPMD format (wrong header)");
+ if (tmp.substr(0, 5) != "LPMD ") throw PluginError("lpmd", "File "+readfile+" doesn't seem to be in LPMD X.X format (wrong header)");
+ if (tmp.substr(6, 3) =="1.0")
+ {
+  //assume 1.0 format
+  std::string info
+  getline(is, info);
+  getline(is, info);
+  getline(is, info);
+  std::vector<std::string> words = SplitTextLine(info);
+  is.unget();is.unget();
+  is.unget();is.unget();
+  is.unget();is.unget();
+  if (words.size()==4)
+  {
+   hdr.append("SYM");
+   hdr.append("X");hdr.append("Y");hdr.append("Z");
+  }
+  else if (words.size()==7)
+  {
+   hdr.append("SYM");
+   hdr.append("X");hdr.append("Y");hdr.append("Z");
+   hdr.append("VX");hdr.append("VY");hdr.append("VZ");
+  }
+  else if (words.size()==10)
+  {
+   hdr.append("SYM");
+   hdr.append("X");hdr.append("Y");hdr.append("Z");
+   hdr.append("VX");hdr.append("VY");hdr.append("VZ");
+   hdr.append("FX");hdr.append("FY");hdr.append("FZ");
+  }
+  else
+  {
+   throw PluginError("lpmd", "File "+readfile+" not have a apropiate 1.0 version");
+  }
+ }
+ else if (tmp.substr(6, 3)=="2.0")
+ {
+  getline(is, tmp);
+  std::string info = tmp ;
+  (*linecounter)++;
+  if (tmp.substr(0, 4) != "HDR ") throw PluginError("lpmd", "File"+readfile+" doesn't seem to be in LPMD 2.0 fromat (wrong HDR)");
+  std::vector <std::string> words = SplitTextLine(info);
+  for (int i=0;i<words.size() < ++i)
+  {
+   hdr.append(words[i]);
+  }
+ }
+ else 
+ {
+  throw PluginError("lpmd", "The level of the file "+readfile+" are not supporten in this version of lpmd plugin.");
+ }
 }
 
 // 
@@ -94,37 +144,42 @@ bool LPMDFormat::ReadCell(std::istream & is, SimulationCell & sc) const
  {
   getline(is, tmp);
   (*linecounter)++;
-  words = SplitTextLine(tmp); 
+  words = SplitTextLine(tmp);
   if (words.size() == 0) { }
-  else if (words.size() == 4 && words[0] != "#")
+  else if (words.size()+1 != hdr.size())
   {
-   int N=ElemNum(words[0]);
-   Vector pos(atof(words[1].c_str()),atof(words[2].c_str()),atof(words[3].c_str()));
-   sc.Create(new Atom(N));
-   sc.SetFracPosition(atomcount++, pos);
-   //Falta Asignar aca la propiedad del atomo.
+   throw PluginError("lpmd", "Error ocurred, the header and atom information not match!");
   }
-  else if(words.size() == 7 && words[0] != "#")
+  else if (words.size()+1 == hdr.size())
   {
-   int N=ElemNum(words[0]);
-   Vector pos(atof(words[1].c_str()),atof(words[2].c_str()),atof(words[3].c_str()));
-   Vector vel(atof(words[4].c_str()),atof(words[5].c_str()),atof(words[6].c_str()));
-   sc.Create(new Atom(N));
-   sc.SetFracPosition(atomcount, pos);
-   sc.SetVelocity(atomcount++, vel);
-   //Falta asignar la propiedad del atomo.
-  }
-  else if(words.size() == 10 && words[0] != "#")
-  {
-   int N=ElemNum(words[0]);
-   Vector pos(atof(words[1].c_str()),atof(words[2].c_str()),atof(words[3].c_str()));
-   Vector vel(atof(words[4].c_str()),atof(words[5].c_str()),atof(words[6].c_str()));
-   Vector ace(atof(words[7].c_str()),atof(words[8].c_str()),atof(words[9].c_str()));
+   for (int j=1 ; j<hdr.size() ; ++j) // note start in one because 0 is HDR.
+   {
+    int N=0;
+    double X=0.0e0,Y=0.0e0,Z=0.0e0;
+    double VX=0.0e0,VY=0.0e0,VZ=0.0e0;
+    double AX=0.0e0,AY=0.0e0,AZ=0.0e0;
+    lpmd::Vector color(0,0,0);
+    if (hdr[j] == "SYM") {N=ElemNum(words[j]); color = GetSpcColor(N);}
+    if (hdr[j] == "X") X=atof(words[j].c_str());
+    if (hdr[j] == "Y") Y=atof(words[j].c_str());
+    if (hdr[j] == "Z") Z=atof(words[j].c_str());
+    if (hdr[j] == "VX") VX=atof(words[j].c_str());
+    if (hdr[j] == "VY") VY=atof(words[j].c_str());
+    if (hdr[j] == "VZ") VZ=atof(words[j].c_str());
+    if (hdr[j] == "AX") AX=atof(words[j].c_str());
+    if (hdr[j] == "AY") AY=atof(words[j].c_str());
+    if (hdr[j] == "AZ") AZ=atof(words[j].c_str());
+    if (hdr[j] == "RGB") color = ReadVector(words[j]);
+   }
+   Vector pos(X,Y,Z);
+   Vector vel(VX,VY,VZ);
+   Vector ace(AX,AY,AZ);
    sc.Create(new Atom(N));
    sc.SetFracPosition(atomcount, pos);
    sc.SetVelocity(atomcount, vel);
+   sc.SetColor(atomcount, color);
    sc.SetAcceleration(atomcount++, ace);
-   //Falta asignar la propiedad del atomo.
+   //NOTE : falta asignar la propiedad del atomo.
   }
   else throw PluginError("lpmd", "An unidentified line was found in the file \""+readfile+"\", line "+ToString<int>(*linecounter));
  }
@@ -133,13 +188,17 @@ bool LPMDFormat::ReadCell(std::istream & is, SimulationCell & sc) const
 
 void LPMDFormat::WriteHeader(std::ostream & os, std::vector<SimulationCell> * cells) const
 {
- os << "LPMD 1.0" << std::endl;
+ os << "LPMD 2.0" << std::endl;
 }
 
 void LPMDFormat::WriteCell(std::ostream & out, SimulationCell & sc) const
 {
  out << sc.size() << std::endl;
  out << sc.GetVector(0) << " " << sc.GetVector(1) << " " << sc.GetVector(2) << std::endl;
+ for (unsigned long int i=0;i<sc.size();i++)
+ {
+
+ }
  if(level == 0)
  {
   for (unsigned long int i=0;i<sc.size();i++) 
@@ -152,7 +211,7 @@ void LPMDFormat::WriteCell(std::ostream & out, SimulationCell & sc) const
  }
  else if(level == 2)
  {
-  for (unsigned long int i=0;i<sc.size();i++) 
+  for (unsigned long int i=0;i<sc.size();i++)
      out << sc[i].Symb() << " " << sc.FracPosition(i) << " " << sc[i].Velocity() << " " << sc[i].Acceleration() << std::endl;
  }
 }
