@@ -7,6 +7,7 @@
 
 #include <lpmd/cellformat.h>
 #include <lpmd/plugin.h>
+#include <lpmd/simulationcell.h>
 
 class LPMDFormat: public lpmd::CellFormat, public lpmd::Module
 {
@@ -28,8 +29,9 @@ class LPMDFormat: public lpmd::CellFormat, public lpmd::Module
    long int * linecounter;
    long int interval;
    long int level;
+   std::vector <std::string> extra;
    bool rcell;
-   std::vector <const std::string> hdr;
+   mutable std::vector <std::string> hdr;
 };
 
 #endif

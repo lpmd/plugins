@@ -6,6 +6,7 @@
 
 #include <lpmd/util.h>
 #include <lpmd/simulationcell.h>
+#include <lpmd/atom.h>
 
 using namespace lpmd;
 
@@ -19,6 +20,7 @@ LPMDFormat::LPMDFormat(std::string args): Module("lpmd")
  DefineKeyword("file");
  DefineKeyword("each", "1");
  DefineKeyword("level", "0");
+ DefineKeyword("extra");
  AssignParameter("replacecell", "false");
  // hasta aqui los valores por omision
  ProcessArguments(args);
@@ -26,6 +28,7 @@ LPMDFormat::LPMDFormat(std::string args): Module("lpmd")
  interval = GetInteger("each");
  level = GetInteger("level");
  rcell = GetBool("replacecell");
+ extra = SplitTextLine(GetString("extra"),',');
 }
 
 LPMDFormat::~LPMDFormat() { delete linecounter; }
@@ -41,6 +44,8 @@ void LPMDFormat::ShowHelp() const
  std::cout << "      file          : Especifica el archivo que posee el formato lpmd.         \n";
  std::cout << "      level         : Se especifica el nivel del formato de lpmd, estos son    \n";
  std::cout << "                      0/1/2 <-> pos/pos-vel/pos-vel-ace.                       \n";
+ std::cout << "      extra         : Informacion extra en el fichero, valores soportados son  \n";
+ std::cout << "                      colors,type.                                             \n";
  std::cout << '\n';
  std::cout << " Example                                                                       \n";
  std::cout << " Llamando al modulo :                                                          \n";
@@ -69,7 +74,7 @@ void LPMDFormat::ReadHeader(std::istream & is) const
   is.unget();is.unget();
   if (words.size()==4)
   {
-   hdr.push_back("SYM");
+   hdr.push_back(std::string("SYM"));
    hdr.push_back(std::string("X"));hdr.push_back(std::string("Y"));hdr.push_back(std::string("Z"));
   }
   else if (words.size()==7)
@@ -97,9 +102,9 @@ void LPMDFormat::ReadHeader(std::istream & is) const
   (*linecounter)++;
   if (tmp.substr(0, 4) != "HDR ") throw PluginError("lpmd", "File"+readfile+" doesn't seem to be in LPMD 2.0 fromat (wrong HDR)");
   std::vector <std::string> words = SplitTextLine(info);
-  for (int i=0;i<words.size() ; ++i)
+  for (unsigned long int i=0;i<words.size() ; ++i)
   {
-   hdr.push_back(words[i]);
+   hdr.push_back(std::string(words[i]));
   }
  }
  else 
@@ -152,13 +157,13 @@ bool LPMDFormat::ReadCell(std::istream & is, SimulationCell & sc) const
   }
   else if (words.size()+1 == hdr.size())
   {
-   for (int j=1 ; j<hdr.size() ; ++j) // note start in one because 0 is HDR.
+   int N=0;
+   double X=0.0e0,Y=0.0e0,Z=0.0e0;
+   double VX=0.0e0,VY=0.0e0,VZ=0.0e0;
+   double AX=0.0e0,AY=0.0e0,AZ=0.0e0;
+   lpmd::Vector color(0,0,0);
+   for (unsigned long int j=1 ; j<hdr.size() ; ++j) // note start in one because 0 is HDR.
    {
-    int N=0;
-    double X=0.0e0,Y=0.0e0,Z=0.0e0;
-    double VX=0.0e0,VY=0.0e0,VZ=0.0e0;
-    double AX=0.0e0,AY=0.0e0,AZ=0.0e0;
-    lpmd::Vector color(0,0,0);
     if (hdr[j] == "SYM") {N=ElemNum(words[j]); color = GetSpcColor(N);}
     if (hdr[j] == "X") X=atof(words[j].c_str());
     if (hdr[j] == "Y") Y=atof(words[j].c_str());
@@ -169,7 +174,7 @@ bool LPMDFormat::ReadCell(std::istream & is, SimulationCell & sc) const
     if (hdr[j] == "AX") AX=atof(words[j].c_str());
     if (hdr[j] == "AY") AY=atof(words[j].c_str());
     if (hdr[j] == "AZ") AZ=atof(words[j].c_str());
-    if (hdr[j] == "RGB") color = ReadVector(words[j]);
+    if (hdr[j] == "RGB") color = Vector(words[j]);
    }
    Vector pos(X,Y,Z);
    Vector vel(VX,VY,VZ);
@@ -189,6 +194,34 @@ bool LPMDFormat::ReadCell(std::istream & is, SimulationCell & sc) const
 void LPMDFormat::WriteHeader(std::ostream & os, std::vector<SimulationCell> * cells) const
 {
  os << "LPMD 2.0" << std::endl;
+ os << "HDR ";
+ if(hdr.size()<2)
+ {
+  //hdr not set, using the plugin information.
+  hdr.clear();
+  hdr.push_back("SYM");
+  hdr.push_back("X");hdr.push_back("Y");hdr.push_back("Z");
+  if (level>=1)
+  {
+   hdr.push_back("VX");hdr.push_back("VY");hdr.push_back("VZ");
+  }
+  if (level>=2)
+  {
+   hdr.push_back("AX");hdr.push_back("AY");hdr.push_back("AZ");
+  }
+  if (extra.size()>0)
+  {
+   for(unsigned int i=0;i<extra.size();++i)
+   {
+    hdr.push_back(extra[i].c_str());
+   }
+  }
+ }
+ for (unsigned int i=0 ; i < hdr.size() ; ++i)
+ {
+  os << hdr[i] << " ";
+ }
+ os << '\n';
 }
 
 void LPMDFormat::WriteCell(std::ostream & out, SimulationCell & sc) const
@@ -197,22 +230,27 @@ void LPMDFormat::WriteCell(std::ostream & out, SimulationCell & sc) const
  out << sc.GetVector(0) << " " << sc.GetVector(1) << " " << sc.GetVector(2) << std::endl;
  for (unsigned long int i=0;i<sc.size();i++)
  {
-
- }
- if(level == 0)
- {
-  for (unsigned long int i=0;i<sc.size();i++) 
-     out << sc[i].Symb() << " " << sc.FracPosition(i) << std::endl; //<< " " << (sc.GetAtom(i)).Type() << std::endl;
- }
- else if(level == 1)
- {
-  for (unsigned long int i=0;i<sc.size();i++) 
-     out << sc[i].Symb() << " " << sc.FracPosition(i) << " " << sc[i].Velocity() << std::endl; //<<" "<<(sc.GetAtom(i)).Type()<< std::endl;
- }
- else if(level == 2)
- {
-  for (unsigned long int i=0;i<sc.size();i++)
-     out << sc[i].Symb() << " " << sc.FracPosition(i) << " " << sc[i].Velocity() << " " << sc[i].Acceleration() << std::endl;
+  if (level>=0)
+  {
+   out << sc[i].Symb() << " " << sc.FracPosition(i) ;
+  }
+  if (level>=1)
+  {
+   out << " "<< sc[i].Velocity();
+  }
+  if (level>=2)
+  {
+   out << " "<< sc[i].Acceleration();
+  }
+  if (extra.size()>=1)
+  {
+   for (unsigned long j=0 ; j < extra.size() ; ++j)
+   {
+    if(extra[j] == "color") {lpmd::Vector tmp=sc[i].Color(); out << "          "<< tmp.Write(); }
+    if(extra[j] == "type") { out << "          " << "ATOMTYPE"; }
+   }
+  }
+  out << '\n';
  }
 }
 
