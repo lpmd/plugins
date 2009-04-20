@@ -45,7 +45,7 @@ void LPMDFormat::ShowHelp() const
  std::cout << "      level         : Se especifica el nivel del formato de lpmd, estos son    \n";
  std::cout << "                      0/1/2 <-> pos/pos-vel/pos-vel-ace.                       \n";
  std::cout << "      extra         : Informacion extra en el fichero, valores soportados son  \n";
- std::cout << "                      colors,type.                                             \n";
+ std::cout << "                      RGB,C,TYPE.                                              \n";
  std::cout << '\n';
  std::cout << " Example                                                                       \n";
  std::cout << " Llamando al modulo :                                                          \n";
@@ -162,6 +162,7 @@ bool LPMDFormat::ReadCell(std::istream & is, SimulationCell & sc) const
    double VX=0.0e0,VY=0.0e0,VZ=0.0e0;
    double AX=0.0e0,AY=0.0e0,AZ=0.0e0;
    lpmd::Vector color(0,0,0);
+   double colors=-1.0e0;
    for (unsigned long int j=1 ; j<hdr.size() ; ++j) // note start in one because 0 is HDR.
    {
     if (hdr[j] == "SYM") {N=ElemNum(words[j]); color = GetSpcColor(N);}
@@ -175,6 +176,7 @@ bool LPMDFormat::ReadCell(std::istream & is, SimulationCell & sc) const
     if (hdr[j] == "AY") AY=atof(words[j].c_str());
     if (hdr[j] == "AZ") AZ=atof(words[j].c_str());
     if (hdr[j] == "RGB") color = Vector(words[j]);
+    if (hdr[j] == "C") colors=atof(words[j].c_str());
    }
    Vector pos(X,Y,Z);
    Vector vel(VX,VY,VZ);
@@ -183,6 +185,7 @@ bool LPMDFormat::ReadCell(std::istream & is, SimulationCell & sc) const
    sc.SetFracPosition(atomcount, pos);
    sc.SetVelocity(atomcount, vel);
    sc.SetColor(atomcount, color);
+   if(colors>=0 && colors <=1) sc[i].SetColor(colors);
    sc.SetAcceleration(atomcount++, ace);
    //NOTE : falta asignar la propiedad del atomo.
   }
@@ -246,8 +249,9 @@ void LPMDFormat::WriteCell(std::ostream & out, SimulationCell & sc) const
   {
    for (unsigned long j=0 ; j < extra.size() ; ++j)
    {
-    if(extra[j] == "color") {lpmd::Vector tmp=sc[i].Color(); out << "          "<< tmp.Write(); }
-    if(extra[j] == "type") { out << "          " << "ATOMTYPE"; }
+    if(extra[j] == "RGB") {lpmd::Vector tmp=sc[i].Color(); out << "          "<< tmp.Write(); }
+    if(extra[j] == "C") {double color=sc[i].ColorS(); out << "          " << color;} 
+    if(extra[j] == "TYPE") { out << "          " << "ATOMTYPE"; }
    }
   }
   out << '\n';
