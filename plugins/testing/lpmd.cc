@@ -61,30 +61,32 @@ void LPMDFormat::ReadHeader(std::istream & is) const
  getline(is, tmp);
  (*linecounter) = 1;
  if (tmp.substr(0, 5) != "LPMD ") throw PluginError("lpmd", "File "+readfile+" doesn't seem to be in LPMD X.X format (wrong header)");
- if (tmp.substr(6, 3) =="1.0")
+ if (tmp.substr(5, 3) =="1.0")
  {
   //assume 1.0 format
+  int where = is.tellg();
   std::string info;
   getline(is, info);
   getline(is, info);
   getline(is, info);
   std::vector<std::string> words = SplitTextLine(info);
-  is.unget();is.unget();
-  is.unget();is.unget();
-  is.unget();is.unget();
+  is.seekg(where);
   if (words.size()==4)
   {
+   hdr.push_back(std::string("HDR"));
    hdr.push_back(std::string("SYM"));
    hdr.push_back(std::string("X"));hdr.push_back(std::string("Y"));hdr.push_back(std::string("Z"));
   }
   else if (words.size()==7)
   {
+   hdr.push_back(std::string("HDR"));
    hdr.push_back(std::string("SYM"));
    hdr.push_back(std::string("X"));hdr.push_back(std::string("Y"));hdr.push_back(std::string("Z"));
    hdr.push_back(std::string("VX"));hdr.push_back(std::string("VY"));hdr.push_back(std::string("VZ"));
   }
   else if (words.size()==10)
   {
+   hdr.push_back(std::string("HDR"));
    hdr.push_back(std::string("SYM"));
    hdr.push_back(std::string("X"));hdr.push_back(std::string("Y"));hdr.push_back(std::string("Z"));
    hdr.push_back(std::string("VX"));hdr.push_back(std::string("VY"));hdr.push_back(std::string("VZ"));
@@ -95,7 +97,7 @@ void LPMDFormat::ReadHeader(std::istream & is) const
    throw PluginError("lpmd", "File "+readfile+" not have a apropiate 1.0 version");
   }
  }
- else if (tmp.substr(6, 3)=="2.0")
+ else if (tmp.substr(5, 3)=="2.0")
  {
   getline(is, tmp);
   std::string info = tmp ;
@@ -150,12 +152,11 @@ bool LPMDFormat::ReadCell(std::istream & is, SimulationCell & sc) const
   getline(is, tmp);
   (*linecounter)++;
   words = SplitTextLine(tmp);
-  if (words.size() == 0) { }
-  else if (words.size()+1 != hdr.size())
+  if (words.size() == 0) 
   {
-   throw PluginError("lpmd", "Error ocurred, the header and atom information not match!");
+   throw PluginError("lpmd", "Error ocurred, the atom file not have elements!"); 
   }
-  else if (words.size()+1 == hdr.size())
+  else if (words.size() >=1)
   {
    int N=0;
    double X=0.0e0,Y=0.0e0,Z=0.0e0;
@@ -163,20 +164,20 @@ bool LPMDFormat::ReadCell(std::istream & is, SimulationCell & sc) const
    double AX=0.0e0,AY=0.0e0,AZ=0.0e0;
    lpmd::Vector color(0,0,0);
    double colors=-1.0e0;
-   for (unsigned long int j=1 ; j<hdr.size() ; ++j) // note start in one because 0 is HDR.
+   for (unsigned long int k=1 ; k < hdr.size() ; ++k)
    {
-    if (hdr[j] == "SYM") {N=ElemNum(words[j]); color = GetSpcColor(N);}
-    if (hdr[j] == "X") X=atof(words[j].c_str());
-    if (hdr[j] == "Y") Y=atof(words[j].c_str());
-    if (hdr[j] == "Z") Z=atof(words[j].c_str());
-    if (hdr[j] == "VX") VX=atof(words[j].c_str());
-    if (hdr[j] == "VY") VY=atof(words[j].c_str());
-    if (hdr[j] == "VZ") VZ=atof(words[j].c_str());
-    if (hdr[j] == "AX") AX=atof(words[j].c_str());
-    if (hdr[j] == "AY") AY=atof(words[j].c_str());
-    if (hdr[j] == "AZ") AZ=atof(words[j].c_str());
-    if (hdr[j] == "RGB") color = Vector(words[j]);
-    if (hdr[j] == "C") colors=atof(words[j].c_str());
+    if (hdr[k] == "SYM") {N=ElemNum(words[k-1]); color = GetSpcColor(N);}
+    if (hdr[k] == "X") X=atof(words[k-1].c_str());
+    if (hdr[k] == "Y") Y=atof(words[k-1].c_str());
+    if (hdr[k] == "Z") Z=atof(words[k-1].c_str());
+    if (hdr[k] == "VX") VX=atof(words[k-1].c_str());
+    if (hdr[k] == "VY") VY=atof(words[k-1].c_str());
+    if (hdr[k] == "VZ") VZ=atof(words[k-1].c_str());
+    if (hdr[k] == "AX") AX=atof(words[k-1].c_str());
+    if (hdr[k] == "AY") AY=atof(words[k-1].c_str());
+    if (hdr[k] == "AZ") AZ=atof(words[k-1].c_str());
+    if (hdr[k] == "RGB") color = Vector(words[k-1]);
+    if (hdr[k] == "C") colors=atof(words[k-1].c_str());
    }
    Vector pos(X,Y,Z);
    Vector vel(VX,VY,VZ);
@@ -229,6 +230,7 @@ void LPMDFormat::WriteHeader(std::ostream & os, std::vector<SimulationCell> * ce
 
 void LPMDFormat::WriteCell(std::ostream & out, SimulationCell & sc) const
 {
+ sc.MetaData().AssignParameter("level",ToString<int>(level));
  out << sc.size() << std::endl;
  out << sc.GetVector(0) << " " << sc.GetVector(1) << " " << sc.GetVector(2) << std::endl;
  for (unsigned long int i=0;i<sc.size();i++)
