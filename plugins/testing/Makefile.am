@@ -38,7 +38,7 @@ AM_LDFLAGS = -module -avoid-version plugincommon.lo
 # plugin_LTLIBRARIES contains the list of liblpmd plugins (as libtool libraries)
 #
 plugin_LTLIBRARIES =    angdist.la beeman.la berendsen.la buckingham.la cell.la \
-                        cellscaling.la cna.la constantforce.la cordnum.la cordnumfunc.la \
+                        cellscaling.la cna.la color.la constantforce.la cordnum.la cordnumfunc.la \
                         crystal2d.la crystalbcc.la crystalfcc.la crystalhcp.la crystalsc.la \
                         densityprofile.la displace.la dispvol.la dlpoly.la energy.la \
                         euler.la ewald.la extravel.la fastlj.la finnissinclair.la gdr.la \
@@ -68,6 +68,7 @@ buckingham_la_SOURCES = buckingham.h buckingham.cc
 cell_la_SOURCES = cell.h cell.cc
 cellscaling_la_SOURCES = cellscaling.h cellscaling.cc
 cna_la_SOURCES = cna.h cna.cc
+color_la_SOURCES = color.h color.cc
 constantforce_la_SOURCES = constantforce.h constantforce.cc
 cordnum_la_SOURCES = cordnum.h cordnum.cc
 cordnumfunc_la_SOURCES = cordnumfunc.h cordnumfunc.cc

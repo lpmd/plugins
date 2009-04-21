@@ -21,15 +21,13 @@ ColorModifier::ColorModifier(std::string args): Module("tempscaling")
  DefineKeyword("start");
  DefineKeyword("end");
  DefineKeyword("each");
- DefineKeyword("from", "300.0");
- DefineKeyword("to", "300.0");
+ DefineKeyword("type", "vel");
  // hasta aqui los valores por omision
  ProcessArguments(args);
- fromtemp = GetDouble("from");
- totemp = GetDouble("to");
  start_step = GetInteger("start");
  end_step = GetInteger("end");
  interval = GetInteger("each");
+ type = GetString("type");
 }
 
 ColorModifier::~ColorModifier() { }
@@ -37,34 +35,61 @@ ColorModifier::~ColorModifier() { }
 void ColorModifier::ShowHelp() const
 {
  std::cout << " General Info      >>                                                          \n";
- std::cout << "      El modulo es utilizado para escalar la temperatura del sistema utilizando\n";
- std::cout << " rescalamiento de velocidades.                                                 \n";
+ std::cout << "      El modulo es utilizado para modificar el color de los átomos utilizando  \n";
+ std::cout << " distintas características.                                                    \n";
  std::cout << " General Options   >>                                                          \n";
- std::cout << "      from          : Temperatura inicial para el escalamiento.                \n";
- std::cout << "      to            : Temperatura final para el sistema.                       \n";
+ std::cout << "      type          : vel,ace -> Tipos soportados.                             \n";
  std::cout << '\n';
  std::cout << " Example                                                                       \n";
  std::cout << " Cargando el Modulo :                                                          \n";
- std::cout << " use tempscaling                                                               \n";
- std::cout << "     from 84.0                                                                 \n";
- std::cout << "     to   10.0                                                                 \n";
+ std::cout << " use color                                                                     \n";
+ std::cout << "     vel                                                                       \n";
  std::cout << " enduse                                                                        \n";
  std::cout << " Llamando al modulo                                                            \n";
- std::cout << " apply tempscaling start=0 each=10 end=100                                     \n\n";
- std::cout << "      De esta forma aplicamos el termostato entre 0 y 100 cada 10 steps.       \n";
+ std::cout << " apply color start=0 each=10 end=100                                         \n\n";
+ std::cout << "     Modifica el color segun velocidad del atomo en los instantes indicados.   \n";
 }
-
-void ColorModifier::Apply(SimulationCell & sc) { sc.SetTemperature(fromtemp); }
 
 void ColorModifier::Apply(MD & md)
 {
  SimulationCell & sc = md.GetCell();
- double set_temp = LeverRule(md.CurrentStep(), start_step, end_step, fromtemp, totemp);
- long N = sc.Size();
- for (long i = 0 ; i<N ; ++i)
+ long N = sc.size();
+ double max=0.0;
+ double color = 0.0;
+ double *info;
+ if (N >= 1) info = new double[N];
+ else throw PluginError ("color", "Error in atom numbers less that 1.");
+ if (type=="vel")
  {
-  double vel = sc.GetVelocity(i);
+  for (long i = 0 ; i<N ; ++i)
+  {
+   info[i] = 0.0e0;
+   double vel = (sc[i].Velocity()).Mod();
+   if (vel >= max) max = vel;
+   info[i] = vel;
+  }
+  for (long i = 0 ; i < N ; ++i)
+  {
+   color = fabs(info[i]/max);
+   sc[i].SetColor(color);
+  }
  }
+ else if(type=="ace")
+ {
+  for (long i = 0 ; i<N ; ++i)
+  {
+   info[i] = 0.0e0;
+   double ace = (sc[i].Acceleration()).Mod();
+   if (ace >= max) max = ace;
+   info[i] = ace;
+  }
+  for (long i = 0 ; i < N ; ++i)
+  {
+   color = fabs(info[i]/max);
+   sc[i].SetColor(color);
+  }
+ }
+ else throw PluginError("color", "Error in plugin color type undefined");
 }
 
 // Esto se incluye para que el modulo pueda ser cargado dinamicamente

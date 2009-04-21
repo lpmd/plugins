@@ -21,7 +21,7 @@ class ColorModifier: public lpmd::SystemModifier, public lpmd::Module
   void Apply(lpmd::MD & md);
 
  private:
-  double fromtemp, totemp;
+  std::string type;
 };
 
 #endif
