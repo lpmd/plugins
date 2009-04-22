@@ -50,9 +50,8 @@ void ColorModifier::ShowHelp() const
  std::cout << "     Modifica el color segun velocidad del atomo en los instantes indicados.   \n";
 }
 
-void ColorModifier::Apply(MD & md)
+void ColorModifier::Apply(SimulationCell & sc)
 {
- SimulationCell & sc = md.GetCell();
  long N = sc.size();
  double max=0.0;
  double color = 0.0;
@@ -91,6 +90,8 @@ void ColorModifier::Apply(MD & md)
  }
  else throw PluginError("color", "Error in plugin color type undefined");
 }
+
+void ColorModifier::Apply(MD & md) { Apply(md.GetCell()); }
 
 // Esto se incluye para que el modulo pueda ser cargado dinamicamente
 Module * create(std::string args) { return new ColorModifier(args); }
