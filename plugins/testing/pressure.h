@@ -5,11 +5,11 @@
 #ifndef __PRESSURE_PROP_H__
 #define __PRESSURE_PROP_H__
 
-#include <lpmd/scalarvalue.h>
+#include <lpmd/value.h>
 #include <lpmd/instantproperty.h>
 #include <lpmd/plugin.h>
 
-class Pressure: public lpmd::ScalarValue, public lpmd::InstantProperty, public lpmd::Module
+class Pressure: public lpmd::Value<double>, public lpmd::InstantProperty, public lpmd::Module
 {
  public:
   //Metodos Generales
@@ -21,7 +21,7 @@ class Pressure: public lpmd::ScalarValue, public lpmd::InstantProperty, public l
   std::string Provides() const;
   double GetProperty(const std::string & name);
   void Evaluate(lpmd::SimulationCell & simcell, lpmd::Potential & pot); 
-  const double & Value() const;
+  const double & CurrentValue() const;
 
  private:
    double press, kpress, vpress;

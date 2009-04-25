@@ -5,11 +5,12 @@
 #ifndef __DISPVOL_H__
 #define __DISPVOL_H__
 
-#include <lpmd/scalartable.h>
+#include <lpmd/value.h>
+#include <lpmd/matrix.h>
 #include <lpmd/temporalproperty.h>
 #include <lpmd/plugin.h>
 
-class DispVol: public lpmd::ScalarTable, public lpmd::TemporalProperty, public lpmd::Module
+class DispVol: public lpmd::Value<lpmd::Matrix>, public lpmd::TemporalProperty, public lpmd::Module
 {
  public:
   DispVol(std::string args);
@@ -17,7 +18,7 @@ class DispVol: public lpmd::ScalarTable, public lpmd::TemporalProperty, public l
 
   std::string Keywords() const;
 
-  const lpmd::Matrix & Value() const { return *m; }
+  const lpmd::Matrix & CurrentValue() const { return *m; }
   void Evaluate(const std::vector<lpmd::SimulationCell> & simcell, lpmd::Potential & pot);
 
  private:

@@ -5,11 +5,12 @@
 #ifndef __PD_H__
 #define __PD_H__
 
-#include <lpmd/scalartable.h>
+#include <lpmd/value.h>
+#include <lpmd/matrix.h>
 #include <lpmd/instantproperty.h>
 #include <lpmd/plugin.h>
 
-class PairDistances: public lpmd::ScalarTable, public lpmd::InstantProperty, public lpmd::Module
+class PairDistances: public lpmd::Value<lpmd::Matrix>, public lpmd::InstantProperty, public lpmd::Module
 {
  public:
   //Metodos Generales
@@ -18,7 +19,7 @@ class PairDistances: public lpmd::ScalarTable, public lpmd::InstantProperty, pub
   void ShowHelp() const;
 
   //Metodos Propios de modulo pairdistances
-  const lpmd::Matrix & Value() const { return *m; }
+  const lpmd::Matrix & CurrentValue() const { return *m; }
   void Evaluate(lpmd::SimulationCell & simcell, lpmd::Potential & pot);
 
  private:

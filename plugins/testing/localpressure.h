@@ -5,11 +5,12 @@
 #ifndef __LOCPRESS_H__
 #define __LOCPRESS_H__
 
-#include <lpmd/scalartable.h>
+#include <lpmd/value.h>
+#include <lpmd/matrix.h>
 #include <lpmd/instantproperty.h>
 #include <lpmd/plugin.h>
 
-class LocalPressure: public lpmd::ScalarTable, public lpmd::InstantProperty, public lpmd::Module
+class LocalPressure: public lpmd::Value<lpmd::Matrix>, public lpmd::InstantProperty, public lpmd::Module
 {
  public:
   //Metodos Generales
@@ -19,7 +20,7 @@ class LocalPressure: public lpmd::ScalarTable, public lpmd::InstantProperty, pub
   std::string Keywords() const;
 
   //Metodos Propios de modulo localpressure
-  const lpmd::Matrix & Value() const { return *m; }
+  const lpmd::Matrix & CurrentValue() const { return *m; }
   void Evaluate(lpmd::SimulationCell & simcell, lpmd::Potential & pot);
 
  private:

@@ -67,7 +67,7 @@ void Energy::Evaluate(SimulationCell & sc, Potential & pot)
  pv = pv / double(sc.size());
 }
 
-const double & Energy::Value() const { return etot; }
+const double & Energy::CurrentValue() const { return etot; }
 
 // Esto se incluye para que el modulo pueda ser cargado dinamicamente
 Module * create(std::string args) { return new Energy(args); }

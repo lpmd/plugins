@@ -79,7 +79,7 @@ void Pressure::Evaluate(SimulationCell & sc, Potential & pot)
  }
 }
 
-const double & Pressure::Value() const { return press; }
+const double & Pressure::CurrentValue() const { return press; }
 
 // Esto se incluye para que el modulo pueda ser cargado dinamicamente
 Module * create(std::string args) { return new Pressure(args); }

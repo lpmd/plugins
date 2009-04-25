@@ -5,11 +5,12 @@
 #ifndef __CORDNUMFUNC_H__
 #define __CORDNUMFUNC_H__
 
-#include <lpmd/scalartable.h>
+#include <lpmd/value.h>
+#include <lpmd/matrix.h>
 #include <lpmd/instantproperty.h>
 #include <lpmd/plugin.h>
 
-class CordNumFunc: public lpmd::ScalarTable, public lpmd::InstantProperty, public lpmd::Module
+class CordNumFunc: public lpmd::Value<lpmd::Matrix>, public lpmd::InstantProperty, public lpmd::Module
 {
  public:
   //Metodos Generales
@@ -20,7 +21,7 @@ class CordNumFunc: public lpmd::ScalarTable, public lpmd::InstantProperty, publi
   void ShowHelp() const;
 
   //Metodos Propios de la clase cordnumfunc
-  const lpmd::Matrix & Value() const { return *m; }
+  const lpmd::Matrix & CurrentValue() const { return *m; }
   void Evaluate(lpmd::SimulationCell & simcell, lpmd::Potential & pot);
 
  private:

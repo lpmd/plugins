@@ -5,17 +5,18 @@
 #ifndef __MSD_H__
 #define __MSD_H__
 
-#include <lpmd/scalartable.h>
+#include <lpmd/value.h>
+#include <lpmd/matrix.h>
 #include <lpmd/temporalproperty.h>
 #include <lpmd/plugin.h>
 
-class MSD: public lpmd::ScalarTable, public lpmd::TemporalProperty, public lpmd::Module
+class MSD: public lpmd::Value<lpmd::Matrix>, public lpmd::TemporalProperty, public lpmd::Module
 {
  public:
   MSD(std::string args);
   ~MSD();
 
-  const lpmd::Matrix & Value() const { return *m; }
+  const lpmd::Matrix & CurrentValue() const { return *m; }
   void Evaluate(const std::vector<lpmd::SimulationCell> & simcell, lpmd::Potential & pot);
 
  private:

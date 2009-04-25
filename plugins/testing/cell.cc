@@ -60,7 +60,7 @@ void CellProp::Evaluate(SimulationCell & sc, Potential & pot)
  partdens = sc.ParticleDensity();
 }
 
-const double & CellProp::Value() const { return volume; }
+const double & CellProp::CurrentValue() const { return volume; }
 
 // Esto se incluye para que el modulo pueda ser cargado dinamicamente
 Module * create(std::string args) { return new CellProp(args); }
