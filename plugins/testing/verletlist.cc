@@ -39,7 +39,7 @@ void VerletListCellManager::UpdateCell(SimulationCell & sc)
  if (fabs(cutoff) < 1E-10) 
  {
   for (int q=0;q<3;++q)
-   if (0.5*sc.GetVector(q).Mod() > cutoff) cutoff = 0.5*sc.GetVector(q).Mod();
+   if (0.5*sc.GetVector(q).Module() > cutoff) cutoff = 0.5*sc.GetVector(q).Module();
  }
 }
 
@@ -75,7 +75,7 @@ void VerletListCellManager::BuildList(SimulationCell & sc, bool full, double rcu
       nn.i = &sc[i];
       nn.j = &sc[j];
       nn.rij = sc.VectorDistance(i, j);
-      nn.r = nn.rij.Mod();
+      nn.r = nn.rij.Module();
       if (cutoff < 1E-30) sc[i].AddNeighbor(nn);
       else if (nn.r < cutoff) sc[i].AddNeighbor(nn);
      }
@@ -90,7 +90,7 @@ void VerletListCellManager::BuildList(SimulationCell & sc, bool full, double rcu
      nn.i = &sc[i];
      nn.j = &sc[j];
      nn.rij = sc.VectorDistance(i, j);
-     nn.r = nn.rij.Mod();
+     nn.r = nn.rij.Module();
      if (cutoff < 1E-30) sc[i].AddNeighbor(nn);
      else if (nn.r < cutoff) sc[i].AddNeighbor(nn);
     }
@@ -103,7 +103,7 @@ void VerletListCellManager::BuildList(SimulationCell & sc, bool full, double rcu
    for (unsigned long i=0;i<n;i++)
    {
     lpmd::Vector actual = sc[i].Position();
-    double displace = (actual - oldposition[i]).Mod();
+    double displace = (actual - oldposition[i]).Module();
 //    std::cerr << "displace = " << displace << " tolerance = " << tolerance << " -- \n";
     if (displace > tolerance) evaluate=true;
     oldposition[i] = actual;

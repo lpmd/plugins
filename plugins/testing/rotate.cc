@@ -21,14 +21,14 @@ RotateModifier::RotateModifier(std::string args): Module("rotate")
  // 
  ProcessArguments(args);
  axis = Vector(GetDouble("x"), GetDouble("y"), GetDouble("z"));
- axis.Norm();
+ axis.Normalize();
  angle = M_PI*GetDouble("angle")/180.0;
  start_step = GetInteger("start");
  end_step = GetInteger("end");
  interval = GetInteger("each");
  //
  double c=cos(angle), s=sin(angle), t=1.0-c;
- double x=axis.Get(0), y=axis.Get(1), z=axis.Get(2);
+ double x=axis[0], y=axis[1], z=axis[2];
  rotmat[0][0] = t*x*x+c;
  rotmat[0][1] = t*x*y+s*z;
  rotmat[0][2] = t*x*z-s*y;
@@ -83,8 +83,8 @@ void RotateModifier::Apply(SimulationCell & sc)
   for (int j=0;j<3;++j)
   {
    rv[j] = 0.0;
-   for (int i=0;i<3;++i) rv[j] += rotmat[j][i]*pos.Get(i);
-   pos.Set(j, rv[j]);
+   for (int i=0;i<3;++i) rv[j] += rotmat[j][i]*pos[i];
+   pos[j] = rv[j];
   }
   // untranslate
   sc.SetPosition(i, pos+center);

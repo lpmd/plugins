@@ -8,6 +8,7 @@
 #include <lpmd/simulationcell.h>
 #include <algorithm>
 #include <cctype>
+#include <iomanip>
 
 using namespace lpmd;
 

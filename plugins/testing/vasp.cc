@@ -7,6 +7,7 @@
 #include <lpmd/util.h>
 #include <lpmd/simulationcell.h>
 #include <sstream>
+#include <iomanip>
 
 using namespace lpmd;
 
@@ -127,7 +128,7 @@ bool VaspFormat::ReadCell(std::istream & is, SimulationCell & sc) const
     }
     else if (tipo=="Direct")
     {
-     vtmp = (vtmp.GetX()*cv[0],vtmp.GetY()*cv[1],vtmp.GetZ()*cv[2]);
+     vtmp = (vtmp[0]*cv[0],vtmp[1]*cv[1],vtmp[2]*cv[2]);
      this_atom->SetPos(vtmp);
     }
     else
@@ -153,9 +154,9 @@ void VaspFormat::WriteCell(std::ostream & out, SimulationCell & sc) const
  {
   out.setf(std::ios::left);
   out.setf(std::ios::fixed);
-  out << " " << std::setw(8) << std::setprecision(8) << sc.GetVector(i).Get(0); 
-  out << " " << std::setw(8) << std::setprecision(8) << sc.GetVector(i).Get(1); 
-  out << " " << std::setw(8) << std::setprecision(8) << sc.GetVector(i).Get(2); 
+  out << " " << std::setw(8) << std::setprecision(8) << sc.GetVector(i)[0]; 
+  out << " " << std::setw(8) << std::setprecision(8) << sc.GetVector(i)[1]; 
+  out << " " << std::setw(8) << std::setprecision(8) << sc.GetVector(i)[2]; 
   out << '\n';
  }
  std::list<std::string> symesp=sc.SpeciesList();
@@ -180,10 +181,10 @@ void VaspFormat::WriteCell(std::ostream & out, SimulationCell & sc) const
     else if(tp=="Direct")
     {
      Vector tmp = at.Position();
-     double lx = (sc.GetVector(0)).Mod();
-     double ly = (sc.GetVector(1)).Mod();
-     double lz = (sc.GetVector(2)).Mod();
-     tmp = Vector(tmp.GetX()/lx,tmp.GetY()/ly,tmp.GetZ()/lz);
+     double lx = (sc.GetVector(0)).Module();
+     double ly = (sc.GetVector(1)).Module();
+     double lz = (sc.GetVector(2)).Module();
+     tmp = Vector(tmp[0]/lx,tmp[1]/ly,tmp[2]/lz);
      out << tmp << '\n';
     }
    }

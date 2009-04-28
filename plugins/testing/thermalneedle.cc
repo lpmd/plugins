@@ -78,7 +78,7 @@ void ThermalNeedleModifier::Apply(MD & md)
  for(unsigned long i=0;i<=sc.size();++i)
  {
   const Vector & pos = sc[i].Position();
-  double r = sc.Displacement(center, pos).Mod();
+  double r = sc.Displacement(center, pos).Module();
   if ( r < radius ) 
   {
    parts.Create(new Atom(sc[i]));   // FIXME 0.5 

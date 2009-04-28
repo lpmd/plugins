@@ -33,7 +33,7 @@ void SkewStart(int n, double x, double y, double z, Vector *centers)
  }
  for (long i=0;i<n;++i)
  {
-  centers[i]=x*cell[i].Position().GetX()*e1+y*cell[i].Position().GetY()*e2+z*cell[i].Position().GetZ()*e3;
+  centers[i]=x*cell[i].Position()[0]*e1+y*cell[i].Position()[1]*e2+z*cell[i].Position()[2]*e3;
  }
 }
 
@@ -118,10 +118,10 @@ void VoronoiGenerator::Generate(SimulationCell & sc) const
  }
 
  unsigned long nx,ny,nz;
- double V=Dot(Crux(sc.GetVector(0), sc.GetVector(1)), sc.GetVector(2)); // Volume of the sc
- double x=sc.GetVector(0).Mod();
- double y=sc.GetVector(1).Mod();
- double z=sc.GetVector(2).Mod();
+ double V=Dot(Cross(sc.GetVector(0), sc.GetVector(1)), sc.GetVector(2)); // Volume of the sc
+ double x=sc.GetVector(0).Module();
+ double y=sc.GetVector(1).Module();
+ double z=sc.GetVector(2).Module();
  nx=int(2.2*pow(V/(double)Ncell,1.0/3.0)/a); ny=nx; nz=nx;
  Vector *centers=new Vector [Ncell];
  Vector *CellColor=new Vector [Ncell];
@@ -141,9 +141,9 @@ void VoronoiGenerator::Generate(SimulationCell & sc) const
  {
   bool kill=false;
   Vector pos = sc[i].Position();
-  if 		 (pos.GetX()<0 || pos.GetX()>sc.GetVector(0).Mod()) {sc.Destroy(&sc[i]); kill=true;}
-  else if (pos.GetY()<0 || pos.GetY()>sc.GetVector(1).Mod()) {sc.Destroy(&sc[i]); kill=true;}
-  else if (pos.GetZ()<0 || pos.GetZ()>sc.GetVector(2).Mod()) {sc.Destroy(&sc[i]); kill=true;}
+  if 		 (pos[0]<0 || pos[0]>sc.GetVector(0).Module()) {sc.Destroy(&sc[i]); kill=true;}
+  else if (pos[1]<0 || pos[1]>sc.GetVector(1).Module()) {sc.Destroy(&sc[i]); kill=true;}
+  else if (pos[2]<0 || pos[2]>sc.GetVector(2).Module()) {sc.Destroy(&sc[i]); kill=true;}
   
   if (kill) i--;
  }
@@ -161,7 +161,8 @@ void VoronoiGenerator::Generate(SimulationCell & sc) const
      Vector sep=centers[m]-centers[n];
      Vector pos=sc[i].Position()-centers[n];
      Vector atmclr=sc[i].Color();
-     if ( Dot(pos,sep/sep.Mod())>0.5*sep.Mod() && atmclr==CellColor[n])
+     //FIXME : Sobrecarga de operador == en vector, ¿necesario?
+//     if ( Dot(pos,sep/sep.Module())>0.5*sep.Module() && atmclr==CellColor[n])
      {
       sc.Destroy(&sc[i]); eliminated=true; i--;
      }

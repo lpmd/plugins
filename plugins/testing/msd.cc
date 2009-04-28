@@ -67,7 +67,7 @@ void MSD::Evaluate(const std::vector<SimulationCell> & simcell, Potential & pot)
    {
     for (unsigned long int i=0;i<nat;i++)  // loop sobre todos los atomos
     {
-     if (simcell[t0][i].Species() == sp[e1]) msd[t][e1] += (noperiodic[t0+t][i]-noperiodic[t0][i]).Mod2();
+     if (simcell[t0][i].Species() == sp[e1]) msd[t][e1] += (noperiodic[t0+t][i]-noperiodic[t0][i]).SquareModule();
     }
    }
   }

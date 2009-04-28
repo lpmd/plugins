@@ -94,7 +94,7 @@ void LocalPressure::Evaluate(SimulationCell & simcell, Potential & pot)
   Vector fpos = simcell.FracPosition(i);
   for (int q=0;q<3;++q) 
   {
-   ind[q] = int(floor(fpos.Get(q)*n[q]));
+   ind[q] = int(floor(fpos[q]*n[q]));
    if (ind[q] == n[q]) ind[q]--;
   }
   for (std::vector<Neighbor>::const_iterator it=nlist.begin();it!=nlist.end();++it)
@@ -106,7 +106,7 @@ void LocalPressure::Evaluate(SimulationCell & simcell, Potential & pot)
     PairPotential & ppot = dynamic_cast<PairPotential &>(p_array.Get(s1, s2));
     Vector ff = ppot.pairForce(nn.rij);
     for (int p=0;p<3;++p)
-     for (int q=0;q<3;++q) stress[p][q] -= (nn.rij).Get(p)*ff.Get(q);
+     for (int q=0;q<3;++q) stress[p][q] -= (nn.rij)[p]*ff[q];
    }
    catch (std::exception &e) { throw PluginError("localpressure", "Cannot calculate local stress with a non-pair potential."); }
   }

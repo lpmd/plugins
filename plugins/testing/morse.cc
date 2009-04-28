@@ -54,11 +54,11 @@ double Morse::pairEnergy(const double & r) const
 
 Vector Morse::pairForce(const Vector & r) const
 {
- double rr = r.Mod();
+ double rr = r.Module();
  // FIXME: Checkear la expresion para la fuerza, signo correcto y esas cosas
  double ff = 2.0*a*(depth/rr)*(1.0-exp(-a*(rr-re)))*exp(-a*(rr-re));
- Vector fv = r;
- fv.Scale(ff);
+ Vector fv = r * ff;
+ //fv.Scale(ff);
  return fv;
 }
 

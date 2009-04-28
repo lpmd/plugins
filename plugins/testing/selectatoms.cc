@@ -31,15 +31,15 @@ SelectAtomsModifier::SelectAtomsModifier(std::string args): Module("selectatoms"
  mode = GetString("mode");
  p0 = GetInteger("from_index");
  p1 = GetInteger("to_index");
- vmin.Set(0, GetDouble("xmin"));
- vmax.Set(0, GetDouble("xmax"));
- vmin.Set(1, GetDouble("ymin"));
- vmax.Set(1, GetDouble("ymax"));
- vmin.Set(2, GetDouble("zmin"));
- vmax.Set(2, GetDouble("zmax"));
- vel.Set(0, GetDouble("vx"));
- vel.Set(1, GetDouble("vy"));
- vel.Set(2, GetDouble("vz"));
+ vmin[0] = GetDouble("xmin");
+ vmax[0] = GetDouble("xmax");
+ vmin[1] = GetDouble("ymin");
+ vmax[1] = GetDouble("ymax");
+ vmin[2] = GetDouble("zmin");
+ vmax[2] = GetDouble("zmax");
+ vel[0] = GetDouble("vx");
+ vel[1] = GetDouble("vy");
+ vel[2] = GetDouble("vz");
  outside = GetBool("outside");
 }
 
@@ -92,9 +92,9 @@ void SelectAtomsModifier::Show(std::ostream & os) const
    if (outside) os << "Setting velocity to atoms NOT inside range: " << '\n';
    else os << "Setting velocity to atoms inside range: " << '\n';
   }
-  os << "  x between " << vmin.Get(0) << " and " << vmax.Get(0) << '\n';
-  os << "  y between " << vmin.Get(1) << " and " << vmax.Get(1) << '\n';
-  os << "  z between " << vmin.Get(2) << " and " << vmax.Get(2) << '\n';
+  os << "  x between " << vmin[0] << " and " << vmax[0] << '\n';
+  os << "  y between " << vmin[1] << " and " << vmax[1] << '\n';
+  os << "  z between " << vmin[2] << " and " << vmax[2] << '\n';
   if (mode == "setvelocity") os << "Velocity set to " << vel << '\n';
  }
 }
@@ -135,11 +135,11 @@ void SelectAtomsModifier::Apply(SimulationCell & sc)
    {
     const Vector & pos = sc[i].Position();
     bool select_this = false;
-    if ((pos.Get(0) >= vmin.Get(0)) && (pos.Get(0) <= vmax.Get(0)))
+    if ((pos[0] >= vmin[0]) && (pos[0] <= vmax[0]))
     {
-     if ((pos.Get(1) >= vmin.Get(1)) && (pos.Get(1) <= vmax.Get(1)))
+     if ((pos[1] >= vmin[1]) && (pos[1] <= vmax[1]))
      {
-      if ((pos.Get(2) >= vmin.Get(2)) && (pos.Get(2) <= vmax.Get(2))) select_this = true;
+      if ((pos[2] >= vmin[2]) && (pos[2] <= vmax[2])) select_this = true;
      }
     }
     if (outside) select_this = (!select_this);
@@ -163,11 +163,11 @@ void SelectAtomsModifier::Apply(SimulationCell & sc)
    {
     const Vector & pos = sc[i].Position();
     bool select_this = false;
-    if ((pos.Get(0) >= vmin.Get(0)) && (pos.Get(0) <= vmax.Get(0)))
+    if ((pos[0] >= vmin[0]) && (pos[0] <= vmax[0]))
     {
-     if ((pos.Get(1) >= vmin.Get(1)) && (pos.Get(1) <= vmax.Get(1)))
+     if ((pos[1] >= vmin[1]) && (pos[1] <= vmax[1]))
      {
-      if ((pos.Get(2) >= vmin.Get(2)) && (pos.Get(2) <= vmax.Get(2))) select_this = true;
+      if ((pos[2] >= vmin[2]) && (pos[2] <= vmax[2])) select_this = true;
      }
     }
     if (outside) select_this = (!select_this);

@@ -131,17 +131,17 @@ void DensityProfile::Evaluate(SimulationCell & simcell, Potential & pot)
  if (bins == 0) throw PluginError("densityprofile", "Error in calculation: Wrong value for \"bins\".");
 
  //Vectores base, celda de simulacion.
- if(range[0][0]==0 && range[0][1]==0) {range[0][0]=0;range[0][1]=(simcell.GetVector(0)).Mod();}
- if(range[1][0]==0 && range[1][1]==0) {range[1][0]=0;range[1][1]=(simcell.GetVector(1)).Mod();}
- if(range[2][0]==0 && range[2][1]==0) {range[2][0]=0;range[2][1]=(simcell.GetVector(2)).Mod();}
+ if(range[0][0]==0 && range[0][1]==0) {range[0][0]=0;range[0][1]=(simcell.GetVector(0)).Module();}
+ if(range[1][0]==0 && range[1][1]==0) {range[1][0]=0;range[1][1]=(simcell.GetVector(1)).Module();}
+ if(range[2][0]==0 && range[2][1]==0) {range[2][0]=0;range[2][1]=(simcell.GetVector(2)).Module();}
 
  if(range[0][0]==range[0][1]) throw PluginError("densityprofile", "Error in cell range in axis X.");
  if(range[1][0]==range[1][1]) throw PluginError("densityprofile", "Error in cell range in axis Y.");
  if(range[2][0]==range[2][1]) throw PluginError("densityprofile", "Error in cell range in axis Z.");
 
- Vector na = simcell.GetVector(0); na.Norm();
- Vector nb = simcell.GetVector(1); nb.Norm();
- Vector nc = simcell.GetVector(2); nc.Norm();
+ Vector na = simcell.GetVector(0); na.Normalize();
+ Vector nb = simcell.GetVector(1); nb.Normalize();
+ Vector nc = simcell.GetVector(2); nc.Normalize();
 
  Vector la = na*range[0][1]-na*range[0][0];
  Vector lb = nb*range[1][1]-nb*range[1][0];
@@ -149,12 +149,12 @@ void DensityProfile::Evaluate(SimulationCell & simcell, Potential & pot)
 
  double dr=0.0e0,vol=0.0e0;
 
- if(axis==0) {dr=la.Mod()/double(bins);}
- else if(axis==1) {dr=lb.Mod()/double(bins);}
- else if(axis==2) {dr=lc.Mod()/double(bins);}
+ if(axis==0) {dr=la.Module()/double(bins);}
+ else if(axis==1) {dr=lb.Module()/double(bins);}
+ else if(axis==2) {dr=lc.Module()/double(bins);}
  else {throw PluginError("densityprofile", "Error in axis setting to set 'dr'!.");}
 
- vol = fabs(Dot(lc,Crux(la,lb)));
+ vol = fabs(Dot(lc,Cross(la,lb)));
 
  double dvol = vol/bins; //delta de volumen de cada rango.
 
@@ -190,9 +190,9 @@ void DensityProfile::Evaluate(SimulationCell & simcell, Potential & pot)
     //vemos la ubicacion atomica respecto a nuestra "rejilla".
     lpmd::Vector position = simcell[i].Position();
     double m = simcell[i].Mass();
-    double x = position.GetX();
-    double y = position.GetY();
-    double z = position.GetZ();
+    double x = position[0];
+    double y = position[1];
+    double z = position[2];
     if(x>=range[0][0] && x<=range[0][1])
     {
      if(y>=range[1][0] && y<=range[1][1])

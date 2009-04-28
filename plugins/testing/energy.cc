@@ -46,10 +46,10 @@ double Energy::GetProperty(const std::string & name)
  if (name == "potential-energy") return epot;
  if (name == "total-energy") return etot;
  if (name == "temperature") return temp;
- if (name == "momentum") return pv.Mod();
- if (name == "px") return pv.Get(0);
- if (name == "py") return pv.Get(1);
- if (name == "pz") return pv.Get(2);
+ if (name == "momentum") return pv.Module();
+ if (name == "px") return pv[0];
+ if (name == "py") return pv[1];
+ if (name == "pz") return pv[2];
  throw UnknownProperty(name);
 }
 
@@ -59,7 +59,9 @@ void Energy::Evaluate(SimulationCell & sc, Potential & pot)
  ekin = sc.KineticEnergy();
  etot = epot+ekin;
  temp = sc.Temperature();
- pv.Zero();
+ pv[0]=0.0e0;
+ pv[1]=0.0e0;
+ pv[2]=0.0e0;
  for (unsigned long int i=0;i<sc.size();++i)
  {
   pv = pv + sc[i].Velocity()*sc[i].Mass();

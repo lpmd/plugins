@@ -96,7 +96,7 @@ bool DlPolyFormat::ReadCell(std::istream & is, SimulationCell & sc) const
    getline(is, tmp);
    std::istringstream vst(tmp);
    vst >> x >> y >> z;
-   if (i == 0) this_atom->SetPos(Vector(x+0.5*cv[0].Mod(), y+0.5*cv[1].Mod(), z+0.5*cv[2].Mod()));
+   if (i == 0) this_atom->SetPos(Vector(x+0.5*cv[0].Module(), y+0.5*cv[1].Module(), z+0.5*cv[2].Module()));
    if (i == 1) this_atom->SetVel(Vector(x, y, z));
    if (i == 2) this_atom->SetAccel(Vector(x, y, z));
   }
@@ -118,7 +118,7 @@ void DlPolyFormat::WriteCell(std::ostream & out, SimulationCell & sc) const
  out << buf;
  for (int i=0;i<3;++i)
  {
-  sprintf(buf, "%20.10f%20.10f%20.10f\n", sc.GetVector(i).Get(0), sc.GetVector(i).Get(1), sc.GetVector(i).Get(2));
+  sprintf(buf, "%20.10f%20.10f%20.10f\n", sc.GetVector(i)[0], sc.GetVector(i)[1], sc.GetVector(i)[2]);
   out << buf; 
  }
  for (unsigned long int i=0;i<sc.size();++i)
@@ -130,20 +130,20 @@ void DlPolyFormat::WriteCell(std::ostream & out, SimulationCell & sc) const
   if (level >= 0)
   {
    v = at.Position();
-   for (int q=0;q<3;++q) v.Set(q, v.Get(q)-0.5*sc.GetVector(q).Mod()); 
-   sprintf(buf, "    %12.10g        %12.10g        %12.10g\n", v.Get(0), v.Get(1), v.Get(2));
+   for (int q=0;q<3;++q) v[q] = v[q]-0.5*sc.GetVector(q).Module(); 
+   sprintf(buf, "    %12.10g        %12.10g        %12.10g\n", v[0], v[1], v[2]);
    out << buf;
   }
   if (level >= 1)
   {
    v = at.Velocity();
-   sprintf(buf, "    %12.10g        %12.10g        %12.10g\n", v.Get(0), v.Get(1), v.Get(2));
+   sprintf(buf, "    %12.10g        %12.10g        %12.10g\n", v[0], v[1], v[2]);
    out << buf;
   }
   if (level >= 2)
   {
    v = at.Acceleration();
-   sprintf(buf, "    %12.10g        %12.10g        %12.10g\n", v.Get(0), v.Get(1), v.Get(2));
+   sprintf(buf, "    %12.10g        %12.10g        %12.10g\n", v[0], v[1], v[2]);
    out << buf;
   }
  } 

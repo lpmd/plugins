@@ -58,9 +58,9 @@ void Ewald::BuildKPointMesh(SimulationCell & sc)
  std::cerr << "DEBUG kcut = " << kcut << '\n';
  Vector R[3], K[3];  // real and reciprocal vectors
  for (int q=0;q<3;++q) R[q] = sc.GetVector(q);
- K[0] = (2*M_PI/(Dot(R[0],Crux(R[1],R[2]))))*Crux(R[1],R[2]);
- K[1] = (2*M_PI/(Dot(R[1],Crux(R[2],R[0]))))*Crux(R[2],R[0]);
- K[2] = (2*M_PI/(Dot(R[2],Crux(R[0],R[1]))))*Crux(R[0],R[1]);
+ K[0] = (2*M_PI/(Dot(R[0],Cross(R[1],R[2]))))*Cross(R[1],R[2]);
+ K[1] = (2*M_PI/(Dot(R[1],Cross(R[2],R[0]))))*Cross(R[2],R[0]);
+ K[2] = (2*M_PI/(Dot(R[2],Cross(R[0],R[1]))))*Cross(R[0],R[1]);
  kpoints = new std::vector<Vector>;
  int nrep = kmax;
  std::cerr << "DEBUG using nrep = " << nrep << '\n';
@@ -69,7 +69,7 @@ void Ewald::BuildKPointMesh(SimulationCell & sc)
    for (int rr=(pp == 0 && qq == 0 ? 1 : -nrep);rr<=nrep;++rr)
    {
     Vector k = pp*K[0]+qq*K[1]+rr*K[2];
-    if ((fabs(k.Mod()) > 1.0E-10) && (k.Mod() < kcut)) kpoints->push_back(k);
+    if ((fabs(k.Module()) > 1.0E-10) && (k.Module() < kcut)) kpoints->push_back(k);
    } 
  std::cerr << "DEBUG number of k-points: " << kpoints->size() << '\n';
 }
@@ -103,7 +103,7 @@ void Ewald::RealSpace(SimulationCell & sc, Vector * forces, double & e)
        {
         const double qj = sc[j].Charge();
         Vector rij = sc[j].Position()-sc[i].Position();
-        double rmod = (rij+n).Mod();
+        double rmod = (rij+n).Module();
         if (rmod < rcut)
         {
          ep += qi*qj*erfc(alpha*rmod)/rmod;
@@ -135,7 +135,7 @@ void Ewald::ReciprocalSpace(SimulationCell & sc, Vector * forces, double & e)
  for (unsigned int nk=0;nk<kpoints->size();++nk)
  {
   const Vector & k = (*kpoints)[nk];
-  double kfac = 4.0*M_PI*(1.0/k.Mod2())*(1.0/sc.Volume())*exp(-k.Mod2()/(4.0*alpha*alpha));
+  double kfac = 4.0*M_PI*(1.0/k.SquareModule())*(1.0/sc.Volume())*exp(-k.SquareModule()/(4.0*alpha*alpha));
   double sumqcos = 0.0, sumqsin = 0.0;
   for (unsigned long int i=0;i<sc.size();++i)
   {
@@ -148,7 +148,7 @@ void Ewald::ReciprocalSpace(SimulationCell & sc, Vector * forces, double & e)
   {
    const double qi = sc[i].Charge();
    const Vector ri = sc[i].Position();
-   forces[i] += k*2.0*qi*kfac*(sin(Dot(k, ri))*sumqcos-cos(Dot(k, ri))*sumqsin);
+   forces[i] = forces[i] + k*2.0*qi*kfac*(sin(Dot(k, ri))*sumqcos-cos(Dot(k, ri))*sumqsin);
   }
   ep += kfac*(pow(sumqcos, 2.0)+pow(sumqsin, 2.0));
  }
@@ -165,17 +165,19 @@ void Ewald::SurfaceDipole(SimulationCell & sc, Vector * forces, double & e)
  Vector v(0.0, 0.0, 0.0), sf(0.0, 0.0, 0.0);
  for (unsigned long int i=0;i<sc.size();++i)
  {
-  forces[i].Zero();
-  sf += sc[i].Charge()*sc[i].Position();
+  forces[i][0] = 0.0e0;
+  forces[i][1] = 0.0e0;
+  forces[i][2] = 0.0e0;
+  sf = sf + sc[i].Charge()*sc[i].Position();
  }
  for (unsigned long int i=0;i<sc.size();++i)
  {
-  v += sc[i].Charge()*sc[i].Position();
-  forces[i] -= 4.0*M_PI/(6.0*sc.Volume())*sc[i].Charge()*sf;
+  v = v + sc[i].Charge()*sc[i].Position();
+  forces[i] = forces[i] - 4.0*M_PI/(6.0*sc.Volume())*sc[i].Charge()*sf;
  }
  for (unsigned long int i=0;i<sc.size();++i)
   sc.SetAcceleration(i, sc[i].Acceleration()+forces[i]*Q2a2FORCE); 
- e = 4.0*M_PI*v.Mod2()/(6.0*sc.Volume())*Q2a2EV;
+ e = 4.0*M_PI*v.SquareModule()/(6.0*sc.Volume())*Q2a2EV;
 }
 
 double Ewald::EnergyConstantCorrection(SimulationCell & sc)

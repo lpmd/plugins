@@ -68,18 +68,18 @@ double Gupta::F(const double &rhoi) const { return -B*sqrt(rhoi); }
 Vector Gupta::PairForce(const Vector &rij) const
 {
  Vector norm = rij;
- double rmod = rij.Mod();
- norm.Norm();
+ double rmod = rij.Module();
+ norm.Normalize();
  return -(A*p/r0)*exp(-p*(rmod-r0)/r0)*(norm/rmod);
 }
 
 Vector Gupta::ManyBodies(const Vector &rij, const double &rhoi, const double &rhoj) const
 {
  double tmp;
- double rmod = rij.Mod();
+ double rmod = rij.Module();
  tmp=(B*qij/r0)*((1/rhoi)+(1/rhoj))*exp(-2*qij*(rmod-r0)/r0)*(1.0/rmod);
  Vector ff = rij;
- ff.Norm();
+ ff.Normalize();
  return tmp*ff;
 }
 

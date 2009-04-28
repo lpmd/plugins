@@ -79,7 +79,7 @@ double FinnisSinclair::F(const double &rhoi) const
 
 Vector FinnisSinclair::PairForce(const Vector &rij) const
 {
-	double r = rij.Mod();
+	double r = rij.Module();
 	double t1=2.0e0*(r-c)*(c0+c1*r+c2*r*r);
 	double t2=(r-c)*(r-c)*(c1+2.0e0*c2*r);
 	return (t1+t2)*(rij/r);
@@ -87,7 +87,7 @@ Vector FinnisSinclair::PairForce(const Vector &rij) const
 
 Vector FinnisSinclair::ManyBodies(const Vector &rij, const double &rhoi, const double &rhoj) const
 {
-	double r = rij.Mod();
+	double r = rij.Module();
 	double t1=(1.0/rhoi+1.0/rhoj)*A/2.0;
 	double t2=2.0*(r-d)+3.0*B*(r-d)*(r-d)/d;
 	return -t1*t2*rij/r;

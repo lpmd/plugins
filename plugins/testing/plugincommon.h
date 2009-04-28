@@ -8,6 +8,8 @@
 #include <lpmd/simulationcell.h>
 #include <lpmd/matrix.h>
 #include <lpmd/potential.h>
+#include <lpmd/basicvector.h>
+#include <lpmd/vector.h>
 
 #ifndef _AZAR_UTILS_H_
 #define _AZAR_UTILS_H_

@@ -8,6 +8,7 @@
 #include <lpmd/simulationcell.h>
 #include <algorithm>
 #include <cctype>
+#include <iomanip>
 
 using namespace lpmd;
 
@@ -68,9 +69,9 @@ void PDBFormat::WriteCell(std::ostream & out, SimulationCell & sc) const
   out << std::setw(4) << (i+1); //23-26
   out << std::setw(1) << " "; //27
   out << std::setw(3) << "  ";
-  out << std::setw(8) << std::fixed <<std::setprecision(3)<< pos.GetX(); //31-38
-  out << std::setw(8) << std::fixed <<std::setprecision(3)<< pos.GetY(); //39-46
-  out << std::setw(8) << std::fixed <<std::setprecision(3)<< pos.GetZ(); //47-54
+  out << std::setw(8) << std::fixed <<std::setprecision(3)<< pos[0]; //31-38
+  out << std::setw(8) << std::fixed <<std::setprecision(3)<< pos[1]; //39-46
+  out << std::setw(8) << std::fixed <<std::setprecision(3)<< pos[2]; //47-54
   out << std::right;
   out << std::setw(7) << "1.00"; //55-60
   out << std::setw(6) << "0.00"; //61-66

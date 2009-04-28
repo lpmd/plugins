@@ -65,9 +65,9 @@ void ShearModifier::Apply(SimulationCell & sc)
 {
  // primero cambia la forma de la celda...
  Vector deformation(0.0, 0.0, 0.0);
- deformation.Set(shear_axis, strain*sc.GetVector(perp_axis).Mod()); 
+ deformation[shear_axis] = strain*sc.GetVector(perp_axis).Module(); 
  Vector newaxis = sc.GetVector(perp_axis)+deformation;
- newaxis = newaxis*double(sc.GetVector(perp_axis).Mod())/double(newaxis.Mod());
+ newaxis = newaxis*double(sc.GetVector(perp_axis).Module())/double(newaxis.Module());
  sc.SetVector(perp_axis, newaxis);
  
  // luego desplaza los atomos
@@ -75,7 +75,7 @@ void ShearModifier::Apply(SimulationCell & sc)
  for (unsigned long int i=0;i<sc.size();++i)
  {
   Vector pos = sc[i].Position(); 
-  offset.Set(shear_axis, pos.Get(perp_axis)*strain); 
+  offset[shear_axis] = pos[perp_axis]*strain; 
   sc.SetPosition(i, pos+offset);
  }
 }

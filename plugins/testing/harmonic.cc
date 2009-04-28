@@ -50,10 +50,10 @@ double Harmonic::pairEnergy(const double & r) const
 
 Vector Harmonic::pairForce(const Vector & r) const
 {
- double rr = r.Mod();
+ double rr = r.Module();
  double ff = k*(rr-a)/rr;
- Vector fv = r;
- fv.Scale(ff);
+ Vector fv = r*ff;
+// fv.Scale(ff);
  return fv;
 }
 

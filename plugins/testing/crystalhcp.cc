@@ -54,7 +54,7 @@ void HCPGenerator::Generate(SimulationCell & sc) const
  double ax = 1.0/double(nx);
  double ay = 1.0/double(ny);
  double az = 1.0/double(nz);
- DebugStream() << "-> Generating HCP cell, c/a ratio is " << (nx*sc.GetVector(2).Mod())/(nz*sc.GetVector(0).Mod()) << '\n';
+ DebugStream() << "-> Generating HCP cell, c/a ratio is " << (nx*sc.GetVector(2).Module())/(nz*sc.GetVector(0).Module()) << '\n';
  for (long k=0;k<nz;++k)
  {
   for (long j=0;j<ny;++j)

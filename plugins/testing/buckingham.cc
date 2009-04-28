@@ -67,14 +67,14 @@ double Buckingham::pairEnergy(const double & r) const
 
 Vector Buckingham::pairForce(const Vector & r) const 
 {
- double rr2= r.Mod2();
+ double rr2= r.SquareModule();
  double rr = sqrt(rr2);
  double r8 = rr*rr*rr*rr*rr*rr*rr*rr;
  double f6 = 6*B2/r8;
  double pe = B1*exp(-rr/Ro)/(Ro*rr);
  double ff = f6 - pe;
- Vector fv = r;
- fv.Scale(ff);
+ Vector fv = r*ff;
+// fv.Scale(ff);
  return fv;
 }
 

@@ -132,17 +132,17 @@ void TempProfile::Evaluate(SimulationCell & simcell, Potential & pot)
  if (bins == 0) throw PluginError("tempprofile", "Error in calculation: Wrong value for \"bins\".");
 
  //Vectores base, celda de simulacion.
- if(range[0][0]==0 && range[0][1]==0) {range[0][0]=0;range[0][1]=(simcell.GetVector(0)).Mod();}
- if(range[1][0]==0 && range[1][1]==0) {range[1][0]=0;range[1][1]=(simcell.GetVector(1)).Mod();}
- if(range[2][0]==0 && range[2][1]==0) {range[2][0]=0;range[2][1]=(simcell.GetVector(2)).Mod();}
+ if(range[0][0]==0 && range[0][1]==0) {range[0][0]=0;range[0][1]=(simcell.GetVector(0)).Module();}
+ if(range[1][0]==0 && range[1][1]==0) {range[1][0]=0;range[1][1]=(simcell.GetVector(1)).Module();}
+ if(range[2][0]==0 && range[2][1]==0) {range[2][0]=0;range[2][1]=(simcell.GetVector(2)).Module();}
 
  if(range[0][0]==range[0][1]) throw PluginError("tempprofile", "Error in cell range in axis X.");
  if(range[1][0]==range[1][1]) throw PluginError("tempprofile", "Error in cell range in axis Y.");
  if(range[2][0]==range[2][1]) throw PluginError("tempprofile", "Error in cell range in axis Z.");
 
- Vector na = simcell.GetVector(0); na.Norm();
- Vector nb = simcell.GetVector(1); nb.Norm();
- Vector nc = simcell.GetVector(2); nc.Norm();
+ Vector na = simcell.GetVector(0); na.Normalize();
+ Vector nb = simcell.GetVector(1); nb.Normalize();
+ Vector nc = simcell.GetVector(2); nc.Normalize();
 
  Vector la = na*range[0][1]-na*range[0][0];
  Vector lb = nb*range[1][1]-nb*range[1][0];
@@ -150,9 +150,9 @@ void TempProfile::Evaluate(SimulationCell & simcell, Potential & pot)
 
  double dr=0.0e0;
 
- if(axis==0) {dr=la.Mod()/double(bins);}
- else if(axis==1) {dr=lb.Mod()/double(bins);}
- else if(axis==2) {dr=lc.Mod()/double(bins);}
+ if(axis==0) {dr=la.Module()/double(bins);}
+ else if(axis==1) {dr=lb.Module()/double(bins);}
+ else if(axis==2) {dr=lc.Module()/double(bins);}
  else {throw PluginError("tempprofile", "Error in axis setting to set 'dr'!.");}
 
  int nsp = simcell.SpeciesList().size();
@@ -192,9 +192,9 @@ void TempProfile::Evaluate(SimulationCell & simcell, Potential & pot)
     lpmd::Vector position = simcell[i].Position();
     lpmd::Vector velocity = simcell[i].Velocity();
     double m = simcell[i].Mass();
-    double x = position.GetX();
-    double y = position.GetY();
-    double z = position.GetZ();
+    double x = position[0];
+    double y = position[1];
+    double z = position[2];
     if(x>=range[0][0] && x<=range[0][1])
     {
      if(y>=range[1][0] && y<=range[1][1])
@@ -209,7 +209,7 @@ void TempProfile::Evaluate(SimulationCell & simcell, Potential & pot)
        else if(axis==2) pp = z;
        else ShowWarning("plugin tempprofile", "Bad calculation of tempprofile, check your 'axis' option.");
        int ir = (long) floor(pp/dr);
-       temp[ir][s] += (1/2)*m*velocity.Mod2()*kin2ev; //Solo son los aportes a la energia cinetica.
+       temp[ir][s] += (1/2)*m*velocity.SquareModule()*kin2ev; //Solo son los aportes a la energia cinetica.
        nab[ir]++;
       }
      }

@@ -67,18 +67,18 @@ double SuttonChen::F(const double &rhoi) const { return -c*e*sqrt(rhoi); }
 Vector SuttonChen::PairForce(const Vector &rij) const
 {
  Vector norm = rij;
- double rmod = rij.Mod();
- norm.Norm();
+ double rmod = rij.Module();
+ norm.Normalize();
  return -n*e*pow(a/rmod,n)*(norm/rmod);
 }
 
 Vector SuttonChen::ManyBodies(const Vector &rij, const double &rhoi, const double &rhoj) const
 {
  double tmp;
- double rmod = rij.Mod();
+ double rmod = rij.Module();
  tmp=(m/2)*c*e*((1/sqrt(rhoi))+(1/sqrt(rhoj)))*pow(a/rmod,m)*(1.0/rmod);
  Vector ff = rij;
- ff.Norm();
+ ff.Normalize();
  return tmp*ff;
 }
 

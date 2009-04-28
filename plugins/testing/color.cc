@@ -63,7 +63,7 @@ void ColorModifier::Apply(SimulationCell & sc)
   for (long i = 0 ; i<N ; ++i)
   {
    info[i] = 0.0e0;
-   double vel = (sc[i].Velocity()).Mod();
+   double vel = (sc[i].Velocity()).Module();
    if (vel >= max) max = vel;
    info[i] = vel;
   }
@@ -78,7 +78,7 @@ void ColorModifier::Apply(SimulationCell & sc)
   for (long i = 0 ; i<N ; ++i)
   {
    info[i] = 0.0e0;
-   double ace = (sc[i].Acceleration()).Mod();
+   double ace = (sc[i].Acceleration()).Module();
    if (ace >= max) max = ace;
    info[i] = ace;
   }

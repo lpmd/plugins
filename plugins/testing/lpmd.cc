@@ -176,7 +176,7 @@ bool LPMDFormat::ReadCell(std::istream & is, SimulationCell & sc) const
     if (hdr[k] == "AX") AX=atof(words[k-1].c_str());
     if (hdr[k] == "AY") AY=atof(words[k-1].c_str());
     if (hdr[k] == "AZ") AZ=atof(words[k-1].c_str());
-    if (hdr[k] == "RGB") color = Vector(words[k-1]);
+    if (hdr[k] == "RGB") color = Vector(words[k-1].c_str());
     if (hdr[k] == "C") colors=atof(words[k-1].c_str());
    }
    Vector pos(X,Y,Z);
@@ -251,7 +251,7 @@ void LPMDFormat::WriteCell(std::ostream & out, SimulationCell & sc) const
   {
    for (unsigned long j=0 ; j < extra.size() ; ++j)
    {
-    if(extra[j] == "RGB") {lpmd::Vector tmp=sc[i].Color(); out << "          "<< tmp.Write(); }
+    if(extra[j] == "RGB") {lpmd::Vector tmp=sc[i].Color(); FormattedWrite(out,tmp); }
     if(extra[j] == "C") {double color=sc[i].ColorS(); out << "          " << color;} 
     if(extra[j] == "TYPE") { out << "          " << "ATOMTYPE"; }
    }

@@ -52,7 +52,7 @@ void MoleculeCMModifier::Apply(SimulationCell & sc)
   double m = 0.0;
   if (used[i] == 0)
   {
-   cmpos += (sc[i].Mass()*sc[i].Position());
+   cmpos = cmpos + (sc[i].Mass()*sc[i].Position());
    m += sc[i].Mass();
    sc.BuildNeighborList(i, nlist, true, radius);
    Neighbor * closest = NULL;

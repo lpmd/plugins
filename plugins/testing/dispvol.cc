@@ -55,7 +55,7 @@ void DispVol::Evaluate(const std::vector<SimulationCell> & simcell, Potential & 
   for (int i=0;i<nat;i++)  // loop sobre todos los atomos
   {
    m->Set(0, t0*nat+i, i);
-   m->Set(1, t0*nat+i, (M_PI*4.0/3.0)*pow((noperiodic[t0+t][i]-noperiodic[t0][i]).Mod(), 3.0));
+   m->Set(1, t0*nat+i, (M_PI*4.0/3.0)*pow((noperiodic[t0+t][i]-noperiodic[t0][i]).Module(), 3.0));
   }
  }
  for (int i=0;i<N;++i) delete [] noperiodic[i];

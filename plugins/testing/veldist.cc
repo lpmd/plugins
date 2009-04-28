@@ -61,7 +61,7 @@ void VelDist::Evaluate(SimulationCell & sc, Potential & pot)
  Vector vmin, vmax;
  double vmodmin, vmodmax, vrmin, vrmax;
  vmin = vmax = sc[0].Velocity();
- vmodmin = vmodmax = sc[0].Velocity().Mod();
+ vmodmin = vmodmax = sc[0].Velocity().Module();
  vrmin = vmodmin;
  vrmax = vmodmax;
  for (unsigned long int i=0;i<n;++i)
@@ -69,13 +69,13 @@ void VelDist::Evaluate(SimulationCell & sc, Potential & pot)
   const Vector & v = sc[i].Velocity();
   for (int q=0;q<3;++q)
   {
-   if (v.Get(q) < vmin.Get(q)) vmin.Set(q, v.Get(q)); 
-   if (v.Get(q) > vmax.Get(q)) vmax.Set(q, v.Get(q)); 
-   if (vmin.Get(q) < vrmin) vrmin = vmin.Get(q);
-   if (vmax.Get(q) > vrmax) vrmax = vmax.Get(q);
+   if (v[q] < vmin[q]) vmin[q] = v[q]; 
+   if (v[q] > vmax[q]) vmax[q] = v[q]; 
+   if (vmin[q] < vrmin) vrmin = vmin[q];
+   if (vmax[q] > vrmax) vrmax = vmax[q];
   }
-  if (v.Mod() < vmodmin) vmodmin = v.Mod();
-  if (v.Mod() > vmodmax) vmodmax = v.Mod();
+  if (v.Module() < vmodmin) vmodmin = v.Module();
+  if (v.Module() > vmodmax) vmodmax = v.Module();
   if (vmodmin < vrmin) vrmin = vmodmin;
   if (vmodmax > vrmax) vrmax = vmodmax;
  }
@@ -101,10 +101,10 @@ void VelDist::Evaluate(SimulationCell & sc, Potential & pot)
   const Vector & v = sc[i].Velocity();
   for (int q=0;q<3;++q)
   {
-   int k = int(floor((bins-1)*((v.Get(q)-vrmin)/(vrmax-vrmin))));
+   int k = int(floor((bins-1)*((v[q]-vrmin)/(vrmax-vrmin))));
    m->Set(q+1, k, m->Get(q+1, k)+1);
   }
-  int k = int(floor((bins-1)*((v.Mod()-vrmin)/(vrmax-vrmin))));
+  int k = int(floor((bins-1)*((v.Module()-vrmin)/(vrmax-vrmin))));
   m->Set(4, k, m->Get(4, k)+1);
  }
 }

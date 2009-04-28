@@ -112,9 +112,9 @@ void RVCorr::Evaluate(SimulationCell & simcell, Potential & pot)
       if (nn.r <= rcut)
       {
        int ig=(long)floor(nn.r/dr);
-       if (fabs(nn.i->Velocity().Mod()*nn.j->Velocity().Mod()) >= FP_ZERO)
+       if (fabs(nn.i->Velocity().Module()*nn.j->Velocity().Module()) >= FP_ZERO)
        {
-        g[ig][s]=g[ig][s]+(Dot(nn.i->Velocity(), nn.j->Velocity()))/(nn.i->Velocity().Mod()*nn.j->Velocity().Mod());
+        g[ig][s]=g[ig][s]+(Dot(nn.i->Velocity(), nn.j->Velocity()))/(nn.i->Velocity().Module()*nn.j->Velocity().Module());
         nr[ig][s]=nr[ig][s]+1;
        }
       }

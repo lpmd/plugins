@@ -83,14 +83,14 @@ bool RawBinFormat::ReadCell(std::istream & is, SimulationCell & sc) const
   for (int q=0;q<3;++q)
   {
    is.read((char *)(&p), sizeof(double));
-   pos.Set(q, p);
+   pos[q] =  p;
   }
   if (lvl > 0)
   {
    for (int q=0;q<3;++q)
    {
     is.read((char *)(&p), sizeof(double));
-    vel.Set(q, p);
+    vel[q] = p;
    }
   }
   if (lvl > 1)
@@ -98,7 +98,7 @@ bool RawBinFormat::ReadCell(std::istream & is, SimulationCell & sc) const
    for (int q=0;q<3;++q)
    {
     is.read((char *)(&p), sizeof(double));
-    acc.Set(q, p);
+    acc[q] = p;
    }
   }
   sc.Create(new Atom(symbol, pos, vel, acc));
@@ -132,7 +132,7 @@ void RawBinFormat::WriteCell(std::ostream & out, SimulationCell & sc) const
   Vector pos = sc[i].Position();
   for (int q=0;q<3;++q)
   {
-   p = pos.Get(q);
+   p = pos[q];
    memcpy((void *)(&buffer[totsize]), (void *)(&p), sizeof(double));
    totsize += sizeof(double);
   }
@@ -141,7 +141,7 @@ void RawBinFormat::WriteCell(std::ostream & out, SimulationCell & sc) const
    Vector vel = sc[i].Velocity();
    for (int q=0;q<3;++q)
    {
-    p = vel.Get(q); 
+    p = vel[q]; 
     memcpy((void *)(&buffer[totsize]), (void *)(&p), sizeof(double));
     totsize += sizeof(double);
    }   
@@ -151,7 +151,7 @@ void RawBinFormat::WriteCell(std::ostream & out, SimulationCell & sc) const
    Vector acc = sc[i].Acceleration();
    for (int q=0;q<3;++q)
    {
-    p = acc.Get(q); 
+    p = acc[q]; 
     memcpy((void *)(&buffer[totsize]), (void *)(&p), sizeof(double));
     totsize += sizeof(double);
    }   

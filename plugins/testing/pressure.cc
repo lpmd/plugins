@@ -65,7 +65,7 @@ void Pressure::Evaluate(SimulationCell & sc, Potential & pot)
   const Atom & a = sc[i];
   double m = a.Mass();
   Vector vel = a.Velocity();
-  K += m*vel.Mod2();
+  K += m*vel.SquareModule();
  }
  K = 0.5*K;
  kpress = (pressfactor/v)*(2.0/3.0)*K*kin2ev;

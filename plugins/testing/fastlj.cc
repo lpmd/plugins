@@ -89,11 +89,12 @@ double FastLJ::pairEnergy(const double & r) const
 
 Vector FastLJ::pairForce(const Vector & r) const
 {
- double rr2 = r.Mod2();
+ double rr2 = r.SquareModule();
  double rr = sqrt(rr2);
  Vector fv = r;
  long k = long(floor(bins*rr/cutoff));
- fv.Scale(fftable[k]);
+ fv = fv*fftable[k];
+// fv.Scale(fftable[k]);
  return fv;
 }
 

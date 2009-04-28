@@ -223,9 +223,9 @@ void CommonNeighborAnalysis::Evaluate(SimulationCell & simcell, Potential & pot)
    m->Set(1, q, data[q].k);
    m->Set(2, q, data[q].l);
    m->Set(3, q, data[q].r);
-   m->Set(4, q, data[q].center.Get(0));
-   m->Set(5, q, data[q].center.Get(1));
-   m->Set(6, q, data[q].center.Get(2));
+   m->Set(4, q, data[q].center[0]);
+   m->Set(5, q, data[q].center[1]);
+   m->Set(6, q, data[q].center[2]);
   }
  } 
  else if (mode == 1)
@@ -300,7 +300,7 @@ void CommonNeighborAnalysis::Evaluate(SimulationCell & simcell, Potential & pot)
   for (unsigned long int q=0;q<simcell.size();++q)
   {
    const Vector & pos = simcell[q].Position();
-   for (int pp=0;pp<3;++pp) m->Set(pp, q, pos.Get(pp));
+   for (int pp=0;pp<3;++pp) m->Set(pp, q, pos[pp]);
    m->Set(3, q, regcnt[q]);
    m->Set(4, q, defcnt[q]);
    m->Set(5, q, 100.0*defcnt[q]/(regcnt[q]+defcnt[q]));

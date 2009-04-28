@@ -337,7 +337,7 @@ void Rotate(SimulationCell & sc, lpmd::Vector rotate)
  // euler rotation matrix
  double rotmat[3][3];
  // Eulerian Angles
- double phi=rotate.GetX(), psi=rotate.GetY(), theta=rotate.GetZ();
+ double phi=rotate[0], psi=rotate[1], theta=rotate[2];
 // double phi=M_PI/8.4, psi=M_PI/8.4, theta=0;
  // Eulerian Matrix
  rotmat[0][0] = (cos(phi)*cos(psi)-cos(theta)*sin(phi)*sin(psi));
@@ -353,9 +353,9 @@ void Rotate(SimulationCell & sc, lpmd::Vector rotate)
  // We rotate the simulation cell vectors
  for (int n=0; n<3; n++)
  {
-  double v1=sc.GetVector(n).Get(0), v2=sc.GetVector(n).Get(1), v3=sc.GetVector(n).Get(2);
+  double v1=sc.GetVector(n)[0], v2=sc.GetVector(n)[1], v3=sc.GetVector(n)[2];
   Vector newvec;
-  for (int i=0; i<3; i++) newvec.Set(i, v1*rotmat[i][0]+v2*rotmat[i][1]+v3*rotmat[i][2]);
+  for (int i=0; i<3; i++) newvec[i] = v1*rotmat[i][0]+v2*rotmat[i][1]+v3*rotmat[i][2];
   sc.SetVector(n,newvec);
  }
  // We rotate the atoms of the cell
@@ -369,9 +369,9 @@ void Rotate(SimulationCell & sc, lpmd::Vector rotate)
  {
 //  std::cerr <<"rotando los atomos de la celda replicada.\n";
   Vector pos0 = sc[n].Position();
-  double v1=pos0.Get(0), v2=pos0.Get(1), v3=pos0.Get(2);
+  double v1=pos0[0], v2=pos0[1], v3=pos0[2];
   Vector newvec;
-  for (int i=0; i<3; i++) newvec.Set(i, v1*rotmat[i][0]+v2*rotmat[i][1]+v3*rotmat[i][2]);
+  for (int i=0; i<3; i++) newvec[i] = v1*rotmat[i][0]+v2*rotmat[i][1]+v3*rotmat[i][2];
 //  std::cerr <<"antes de rotar, pos.atom "<<n<<" = "<<pos0<<" de componentes "<<v1<<v2<<v3<<"\n";
   sc.SetPosition(n, newvec);
 //  std::cerr <<"despues de rotar, newvec = pos.atom("<<n<<")= "<<newvec<<"\n";

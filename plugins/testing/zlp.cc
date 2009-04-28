@@ -156,7 +156,7 @@ bool ZLPFormat::ReadCell(std::istream & is, SimulationCell & sc) const
   for (int i=0;i<3;++i) 
   {
    ibufstr >> vq[i];
-   v.Set(i, vq[i]);
+   v[i] = vq[i];
   }
   if (GetString("replacecell") == "true") sc.SetVector(j, v);
  }
@@ -170,7 +170,7 @@ bool ZLPFormat::ReadCell(std::istream & is, SimulationCell & sc) const
   for (int q=0;q<3;++q) 
   {
    ibufstr >> vq[q];
-   fpos.Set(q, vq[q]);
+   fpos[q] = vq[q];
   }
   sc.Create(new Atom(ElemNum(sym)));
   sc.SetFracPosition(i, fpos);
@@ -179,7 +179,7 @@ bool ZLPFormat::ReadCell(std::istream & is, SimulationCell & sc) const
    for (int q=0;q<3;++q) 
    {
     ibufstr >> vq[q];
-    vel.Set(q, vq[q]);
+    vel[q] = vq[q];
    }
    sc.SetVelocity(i, vel);
   }
@@ -188,7 +188,7 @@ bool ZLPFormat::ReadCell(std::istream & is, SimulationCell & sc) const
    for (int q=0;q<3;++q) 
    {
     ibufstr >> vq[q];
-    acc.Set(q, vq[q]);
+    acc[q] = vq[q];
    }
    sc.SetAcceleration(i, acc);
   }
@@ -229,15 +229,15 @@ void ZLPFormat::WriteCell(std::ostream & out, SimulationCell & sc) const
  obufstr << level << '\n';
  obufstr << sc.size() << '\n';
  for (int j=0;j<3;++j) 
-   for (int i=0;i<3;++i) { obufstr.precision(15); obufstr << std::fixed << sc.GetVector(j).Get(i) << '\n'; }
+   for (int i=0;i<3;++i) { obufstr.precision(15); obufstr << std::fixed << sc.GetVector(j)[i] << '\n'; }
  for (unsigned long int i=0;i<sc.size();++i) 
  {
   obufstr << sc[i].Symb() << '\n';
-  for (int q=0;q<3;++q) { obufstr.precision(15); obufstr << std::fixed << sc.FracPosition(i).Get(q) << '\n'; }
+  for (int q=0;q<3;++q) { obufstr.precision(15); obufstr << std::fixed << sc.FracPosition(i)[q] << '\n'; }
   if (level > 0) 
-     for (int q=0;q<3;++q) { obufstr.precision(15); obufstr << std::fixed << sc[i].Velocity().Get(q) << '\n'; }
+     for (int q=0;q<3;++q) { obufstr.precision(15); obufstr << std::fixed << sc[i].Velocity()[q] << '\n'; }
   if (level > 1) 
-     for (int q=0;q<3;++q) { obufstr.precision(15); obufstr << std::fixed << sc[i].Acceleration().Get(q) << '\n'; }
+     for (int q=0;q<3;++q) { obufstr.precision(15); obufstr << std::fixed << sc[i].Acceleration()[q] << '\n'; }
  }
  std::istringstream * istr = new std::istringstream(obufstr.str());
  delete ostr;
