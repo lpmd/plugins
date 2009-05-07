@@ -20,7 +20,7 @@ Beeman::Beeman(std::string args): Module("beeman")
  // hasta aqui los valores por omision
  ProcessArguments(args);
  dt = GetDouble("dt");
- start_step = GetInteger("start");
+ start = GetInteger("start");
 }
 
 Beeman::~Beeman() { }

@@ -15,9 +15,9 @@ using namespace lpmd;
 QuenchedMDModifier::QuenchedMDModifier(std::string args): Module("quenchedmd")
 {
  ProcessArguments(args);
- start_step = GetInteger("start");
- end_step = GetInteger("end");
- interval = GetInteger("each");
+ start = GetInteger("start");
+ end = GetInteger("end");
+ each = GetInteger("each");
 }
 
 QuenchedMDModifier::~QuenchedMDModifier() { }

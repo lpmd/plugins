@@ -341,8 +341,8 @@ void POVRAY::Apply(const MD & md)
   //EXTRAS
   std::string phrase=mtexts[i];
   std::vector<std::string> EV,TV;
-  if(extras[i].size()>0) EV = SplitTextLine(extras[i],',');
-  if(mtexts[i].size()>0) TV = SplitTextLine(mtexts[i],'%');
+  if(extras[i].size()>0) EV = StringSplit< std::vector<std::string> >(extras[i],',');
+  if(mtexts[i].size()>0) TV = StringSplit< std::vector<std::string> >(mtexts[i],'%');
   ostr.str("");
 
   if (EV.size()==TV.size()-1 && EV.size()>0)

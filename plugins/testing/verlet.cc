@@ -21,7 +21,7 @@ Verlet::Verlet(std::string args): Module("verlet")
  // hasta aqui los valores por omision
  ProcessArguments(args);
  dt = GetDouble("dt");
- start_step = GetInteger("start");
+ start = GetInteger("start");
 }
 
 Verlet::~Verlet() { }

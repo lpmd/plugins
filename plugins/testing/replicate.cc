@@ -51,7 +51,7 @@ void ReplicateModifier::Apply(SimulationCell & sc)
   for (unsigned long int j=0;j<Ntmp;j++)
   {
    Atom * tmp = new Atom(atomos[j]);
-   tmp->SetPos(atomos[j].Position()+sc.GetVector(0)*i);
+   tmp->SetPos(atomos[j].Position()+sc.GetCell()[0]*i);
    sc.Create(tmp);
   }
  }
@@ -65,7 +65,7 @@ void ReplicateModifier::Apply(SimulationCell & sc)
   for(unsigned long int j=0;j<Ntmp;j++)
   {
    Atom * tmp = new Atom(atomos[j]);
-   tmp->SetPos(atomos[j].Position()+sc.GetVector(1)*i);
+   tmp->SetPos(atomos[j].Position()+sc.GetCell()[1]*i);
    sc.Create(tmp);
   }
  }
@@ -79,18 +79,18 @@ void ReplicateModifier::Apply(SimulationCell & sc)
   for (unsigned long int j=0;j<Ntmp;j++)
   {
    Atom * tmp = new Atom(atomos[j]);
-   tmp->SetPos(atomos[j].Position()+sc.GetVector(2)*i);
+   tmp->SetPos(atomos[j].Position()+sc.GetCell()[2]*i);
    sc.Create(tmp);
   }
  }
  delete[] atomos;
  //Resetea los vectores base de la celda.
- Vector a=sc.GetVector(0);
- sc.SetVector(0, a*nx);
- Vector b=sc.GetVector(1);
- sc.SetVector(1, b*ny);
- Vector c=sc.GetVector(2);
- sc.SetVector(2, c*nz);
+ Vector a=sc.GetCell()[0];
+ sc.GetCell()[0] = a*nx;
+ Vector b=sc.GetCell()[1];
+ sc.GetCell()[1] = b*ny;
+ Vector c=sc.GetCell()[2];
+ sc.GetCell()[2] = c*nz;
  //Asigna el index() a cada atomo de la celda.
  sc.AssignIndex();
  sc.ClearForces();

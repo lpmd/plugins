@@ -21,9 +21,9 @@ ThermalNeedleModifier::ThermalNeedleModifier(std::string args): Module("tempscal
  temperature = GetDouble("temp");
  center = GetVector("center");
  radius = GetDouble("radius");
- start_step = GetInteger("start");
- end_step = GetInteger("end");
- interval = GetInteger("each");
+ start = GetInteger("start");
+ end = GetInteger("end");
+ each = GetInteger("each");
 }
 
 ThermalNeedleModifier::~ThermalNeedleModifier() { }

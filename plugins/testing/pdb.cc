@@ -103,7 +103,7 @@ bool PDBFormat::ReadCell(std::istream & is, SimulationCell & sc) const
    if (tmp.compare(0,6,"HETATM")==0)
    {
     natoms++;
-    std::vector<std::string> linea = SplitTextLine(tmp,' ');
+    std::vector<std::string> linea = StringSplit< std::vector<std::string> >(tmp,' ');
     std::string symb = linea[2];
     if(symb.length()>1)
     {

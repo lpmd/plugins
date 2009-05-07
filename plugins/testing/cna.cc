@@ -50,13 +50,13 @@ CommonNeighborAnalysis::CommonNeighborAnalysis(std::string args): Module("cna")
  spc1 = spc2 = -1;
  if (species != "all")
  {
-  std::vector<std::string> tmp = SplitTextLine(species, '-');
+  std::vector<std::string> tmp = StringSplit< std::vector<std::string> >(species, '-');
   spc1 = ElemNum(tmp[0]); 
   spc2 = ElemNum(tmp[1]);
  }
- start_step = GetInteger("start");
- end_step = GetInteger("end");
- interval = GetInteger("each");
+ start = GetInteger("start");
+ end = GetInteger("end");
+ each = GetInteger("each");
  outputfile = GetString("output");
 }
 
@@ -261,7 +261,7 @@ void CommonNeighborAnalysis::Evaluate(SimulationCell & simcell, Potential & pot)
   {
    std::string s = (*qt).first;
    double ns = double(stat[s]);
-   std::vector<std::string> splt = SplitTextLine(s, '-');
+   std::vector<std::string> splt = StringSplit< std::vector<std::string> >(s, '-');
    m->Set(0, nk, atoi(splt[0].c_str()));
    m->Set(1, nk, atoi(splt[1].c_str()));
    m->Set(2, nk, atoi(splt[2].c_str()));

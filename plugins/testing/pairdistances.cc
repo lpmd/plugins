@@ -27,9 +27,9 @@ PairDistances::PairDistances(std::string args): Module("pairdistances")
  DefineKeyword("output");
  ProcessArguments(args);
  rcut = GetDouble("rcut");
- start_step = GetInteger("start");
- end_step = GetInteger("end");
- interval = GetInteger("each");
+ start = GetInteger("start");
+ end = GetInteger("end");
+ each = GetInteger("each");
  outputfile = GetString("output");
 }
 

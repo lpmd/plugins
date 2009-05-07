@@ -25,7 +25,7 @@ Euler::Euler(std::string args): Module("euler")
  // hasta aqui los valores por omision
  ProcessArguments(args);
  dt = GetDouble("dt");
- start_step = GetInteger("start");
+ start = GetInteger("start");
 }
 
 Euler::~Euler() { }

@@ -30,9 +30,9 @@ BerendsenModifier::BerendsenModifier(std::string args): Module("berendsen")
  fromtemp = GetDouble("from");
  totemp = GetDouble("to");
  tau = GetDouble("tau");
- start_step = GetInteger("start");
- end_step = GetInteger("end");
- interval = GetInteger("each");
+ start = GetInteger("start");
+ end = GetInteger("end");
+ each = GetInteger("each");
  // stop_thermostat no es un parametro sino un flag interno
  stop_thermostat = -1;
 }
@@ -72,13 +72,13 @@ void BerendsenModifier::Apply(MD & md)
 {
  SimulationCell & sc = md.GetCell();
  double timestep = md.GetIntegrator().Timestep();
- double set_temp = LeverRule(md.CurrentStep(), start_step, end_step, fromtemp, totemp);
+ double set_temp = ValueAtStep(md.CurrentStep(), fromtemp, totemp);
  if (stop_thermostat == -1)
  {
   stop_thermostat = long(double(md.CurrentStep()) + tau/timestep);
   DebugStream() << "-> Berendsen thermostat activated (stops in step " << stop_thermostat << "), rescaling temperature to T = " << set_temp << '\n';
-  old_step = interval;
-  interval = 1;
+  old_step = each;
+  each = 1;
  }
  else
  {
@@ -90,7 +90,7 @@ void BerendsenModifier::Apply(MD & md)
   {
    stop_thermostat = -1;
    DebugStream() << "-> Berendsen thermostat stopped." << '\n';
-   interval = old_step;
+   each = old_step;
   }
  }
 }

@@ -27,9 +27,9 @@ TempScalingModifier::TempScalingModifier(std::string args): Module("tempscaling"
  ProcessArguments(args);
  fromtemp = GetDouble("from");
  totemp = GetDouble("to");
- start_step = GetInteger("start");
- end_step = GetInteger("end");
- interval = GetInteger("each");
+ start = GetInteger("start");
+ end = GetInteger("end");
+ each = GetInteger("each");
 }
 
 TempScalingModifier::~TempScalingModifier() { }
@@ -59,7 +59,7 @@ void TempScalingModifier::Apply(SimulationCell & sc) { sc.SetTemperature(fromtem
 void TempScalingModifier::Apply(MD & md)
 {
  SimulationCell & sc = md.GetCell();
- double set_temp = LeverRule(md.CurrentStep(), start_step, end_step, fromtemp, totemp);
+ double set_temp = ValueAtStep(md.CurrentStep(), fromtemp, totemp);
  DebugStream() << "-> Rescaling temperature to T = " << set_temp << '\n';  
  sc.SetTemperature(set_temp);
 }

@@ -20,9 +20,9 @@ DisplaceModifier::DisplaceModifier(std::string args): Module("displace")
  // 
  ProcessArguments(args);
  offset = Vector(GetDouble("x"), GetDouble("y"), GetDouble("z"));
- start_step = GetInteger("start");
- end_step = GetInteger("end");
- interval = GetInteger("each");
+ start = GetInteger("start");
+ end = GetInteger("end");
+ each = GetInteger("each");
 }
 
 DisplaceModifier::~DisplaceModifier() { }

@@ -63,7 +63,7 @@ std::string Crystal2DGenerator::Keywords() const
 
 void Crystal2DGenerator::Generate(SimulationCell & sc) const
 {
- Vector tmp=sc.GetVector(2);
+ Vector tmp=sc.GetCell()[2];
  Vector p;
  long int cc = 0;
  double ax = 1.0/double(nx);

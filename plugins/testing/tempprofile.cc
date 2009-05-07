@@ -33,9 +33,9 @@ TempProfile::TempProfile(std::string args): Module("tempprofile", false)
  range[2][0]=0.0e0;range[2][1]=0.0e0;
  ProcessArguments(args);
  bins = GetInteger("bins");
- start_step = GetInteger("start");
- end_step = GetInteger("end");
- interval = GetInteger("each");
+ start = GetInteger("start");
+ end = GetInteger("end");
+ each = GetInteger("each");
  outputfile = GetString("output");
  do_average = GetBool("average");
 }
@@ -132,17 +132,17 @@ void TempProfile::Evaluate(SimulationCell & simcell, Potential & pot)
  if (bins == 0) throw PluginError("tempprofile", "Error in calculation: Wrong value for \"bins\".");
 
  //Vectores base, celda de simulacion.
- if(range[0][0]==0 && range[0][1]==0) {range[0][0]=0;range[0][1]=(simcell.GetVector(0)).Module();}
- if(range[1][0]==0 && range[1][1]==0) {range[1][0]=0;range[1][1]=(simcell.GetVector(1)).Module();}
- if(range[2][0]==0 && range[2][1]==0) {range[2][0]=0;range[2][1]=(simcell.GetVector(2)).Module();}
+ if(range[0][0]==0 && range[0][1]==0) {range[0][0]=0;range[0][1]=(simcell.GetCell()[0]).Module();}
+ if(range[1][0]==0 && range[1][1]==0) {range[1][0]=0;range[1][1]=(simcell.GetCell()[1]).Module();}
+ if(range[2][0]==0 && range[2][1]==0) {range[2][0]=0;range[2][1]=(simcell.GetCell()[2]).Module();}
 
  if(range[0][0]==range[0][1]) throw PluginError("tempprofile", "Error in cell range in axis X.");
  if(range[1][0]==range[1][1]) throw PluginError("tempprofile", "Error in cell range in axis Y.");
  if(range[2][0]==range[2][1]) throw PluginError("tempprofile", "Error in cell range in axis Z.");
 
- Vector na = simcell.GetVector(0); na.Normalize();
- Vector nb = simcell.GetVector(1); nb.Normalize();
- Vector nc = simcell.GetVector(2); nc.Normalize();
+ Vector na = simcell.GetCell()[0]; na.Normalize();
+ Vector nb = simcell.GetCell()[1]; nb.Normalize();
+ Vector nc = simcell.GetCell()[2]; nc.Normalize();
 
  Vector la = na*range[0][1]-na*range[0][0];
  Vector lb = nb*range[1][1]-nb*range[1][0];

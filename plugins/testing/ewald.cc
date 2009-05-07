@@ -57,7 +57,7 @@ void Ewald::BuildKPointMesh(SimulationCell & sc)
 {
  std::cerr << "DEBUG kcut = " << kcut << '\n';
  Vector R[3], K[3];  // real and reciprocal vectors
- for (int q=0;q<3;++q) R[q] = sc.GetVector(q);
+ for (int q=0;q<3;++q) R[q] = sc.GetCell()[q];
  K[0] = (2*M_PI/(Dot(R[0],Cross(R[1],R[2]))))*Cross(R[1],R[2]);
  K[1] = (2*M_PI/(Dot(R[1],Cross(R[2],R[0]))))*Cross(R[2],R[0]);
  K[2] = (2*M_PI/(Dot(R[2],Cross(R[0],R[1]))))*Cross(R[0],R[1]);
@@ -92,7 +92,7 @@ void Ewald::RealSpace(SimulationCell & sc, Vector * forces, double & e)
    for (int qq=-nrep;qq<nrep;++qq)
     for (int rr=-nrep;rr<nrep;++rr)
     {
-     Vector n = pp*sc.GetVector(0)+qq*sc.GetVector(1)+rr*sc.GetVector(2);
+     Vector n = pp*sc.GetCell()[0]+qq*sc.GetCell()[1]+rr*sc.GetCell()[2];
      for (unsigned long int i=0;i<sc.size()-1;++i)
      {
       const double qi = sc[i].Charge();

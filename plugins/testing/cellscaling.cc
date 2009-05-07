@@ -36,9 +36,9 @@ CellScalingModifier::CellScalingModifier(std::string args): Module("cellscaling"
  if ((ax == "x") || (ax == "X")) axis = 0;
  if ((ax == "y") || (ax == "Y")) axis = 1;
  if ((ax == "z") || (ax == "Z")) axis = 2;
- start_step = GetInteger("start");
- end_step = GetInteger("end");
- interval = GetInteger("each");
+ start = GetInteger("start");
+ end = GetInteger("end");
+ each = GetInteger("each");
 }
 
 CellScalingModifier::~CellScalingModifier() { }
@@ -98,7 +98,7 @@ void CellScalingModifier::Apply(SimulationCell & sc)
  {
   if (first == true)
   {
-   for(int i=0;i<3;++i) s[i] = sc.GetVector(i)*percent/100;
+   for(int i=0;i<3;++i) s[i] = sc.GetCell()[i]*percent/100;
    first=false;
   }
 

@@ -101,7 +101,7 @@ bool XYZFormat::ReadCell(std::istream & is, SimulationCell & sc) const
  { 
   getline(is, tmp);
   (*linecounter)++;
-  std::vector<std::string> words = SplitTextLine(tmp); 
+  std::vector<std::string> words = StringSplit< std::vector<std::string> >(tmp); 
   if (words.size() == 4)
   {
    int N=ElemNum(words[0]);
@@ -145,7 +145,7 @@ bool XYZFormat::ReadCell(std::istream & is, SimulationCell & sc) const
     Vector pos = sc[i].Position();
     sc.ConvertToInternal(pos);
     Vector opos = pos;
-    for (int q=0;q<3;++q) pos[q] = pos[q]/sc.GetVector(q).Module();
+    for (int q=0;q<3;++q) pos[q] = pos[q]/sc.GetCell()[q].Module();
     if (pos[0]<0 || pos[0]>1.0) throw PluginError("xyz", "The atom ["+ToString<int>(i)+"] was found outside the cell in the [a] Vector");
     if (pos[1]<0 || pos[1]>1.0) throw PluginError("xyz", "The atom ["+ToString<int>(i)+"] was found outside the cell in the [b] Vector");
     if (pos[2]<0 || pos[2]>1.0) throw PluginError("xyz", "The atom ["+ToString<int>(i)+"] was found outside the cell in the [c] Vector");

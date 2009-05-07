@@ -19,7 +19,7 @@ NullIntegrator::NullIntegrator(std::string args): Module("nullintegrator")
  DefineKeyword("start", "1");
  // hasta aqui los valores por omision
  ProcessArguments(args);
- start_step = GetInteger("start");
+ start = GetInteger("start");
 }
 
 NullIntegrator::~NullIntegrator() { }

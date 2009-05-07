@@ -158,7 +158,7 @@ bool ZLPFormat::ReadCell(std::istream & is, SimulationCell & sc) const
    ibufstr >> vq[i];
    v[i] = vq[i];
   }
-  if (GetString("replacecell") == "true") sc.SetVector(j, v);
+  if (GetString("replacecell") == "true") sc.GetCell()[j] = v;
  }
  for (long int i=0;i<natoms;++i) 
  {
@@ -229,7 +229,7 @@ void ZLPFormat::WriteCell(std::ostream & out, SimulationCell & sc) const
  obufstr << level << '\n';
  obufstr << sc.size() << '\n';
  for (int j=0;j<3;++j) 
-   for (int i=0;i<3;++i) { obufstr.precision(15); obufstr << std::fixed << sc.GetVector(j)[i] << '\n'; }
+   for (int i=0;i<3;++i) { obufstr.precision(15); obufstr << std::fixed << sc.GetCell()[j][i] << '\n'; }
  for (unsigned long int i=0;i<sc.size();++i) 
  {
   obufstr << sc[i].Symb() << '\n';

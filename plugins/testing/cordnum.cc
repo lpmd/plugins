@@ -29,9 +29,9 @@ CordNum::CordNum(std::string args): Module("cordnum")
  DefineKeyword("average", "false");
  ProcessArguments(args);
  nb = GetInteger("maxn");
- start_step = GetInteger("start");
- end_step = GetInteger("end");
- interval = GetInteger("each");
+ start = GetInteger("start");
+ end = GetInteger("end");
+ each = GetInteger("each");
  outputfile = GetString("output");
  do_average = GetBool("average");
 }
@@ -141,7 +141,7 @@ void CordNum::Evaluate(SimulationCell & simcell, Potential & pot)
  for(std::list<std::string>::const_iterator it = lst.begin() ; it!=lst.end() ; ++it)
  {
   //Hace funcional cada una de las especies de los pares.
-  std::vector<std::string> loa = SplitTextLine(*it,'-'); // lista de atomos
+  std::vector<std::string> loa = StringSplit< std::vector<std::string> >(*it,'-'); // lista de atomos
   int e1 = ElemNum(loa[0]);
   int e2 = ElemNum(loa[1]); 
   double rc12 = rcut[loa[0]+"-"+loa[1]];

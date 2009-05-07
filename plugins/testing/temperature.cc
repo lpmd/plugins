@@ -25,9 +25,9 @@ TemperatureModifier::TemperatureModifier(std::string args): Module("temperature"
  // hasta aqui los valores por omision
  ProcessArguments(args);
  temp = GetDouble("t");
- start_step = GetInteger("start");
- end_step = GetInteger("end");
- interval = GetInteger("each");
+ start = GetInteger("start");
+ end = GetInteger("end");
+ each = GetInteger("each");
 }
 
 TemperatureModifier::~TemperatureModifier() { }

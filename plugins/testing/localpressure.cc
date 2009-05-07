@@ -29,9 +29,9 @@ LocalPressure::LocalPressure(std::string args): Module("localpressure")
  n[1] = GetInteger("ny");
  n[2] = GetInteger("nz");
  rcut = GetDouble("rcut");
- start_step = GetInteger("start");
- end_step = GetInteger("end");
- interval = GetInteger("each");
+ start = GetInteger("start");
+ end = GetInteger("end");
+ each = GetInteger("each");
  outputfile = GetString("output");
  do_average = GetBool("average");
 }

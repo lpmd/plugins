@@ -24,9 +24,9 @@ ColorModifier::ColorModifier(std::string args): Module("color")
  DefineKeyword("type", "vel");
  // hasta aqui los valores por omision
  ProcessArguments(args);
- start_step = GetInteger("start");
- end_step = GetInteger("end");
- interval = GetInteger("each");
+ start = GetInteger("start");
+ end = GetInteger("end");
+ each = GetInteger("each");
  type = GetString("type");
 }
 

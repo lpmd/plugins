@@ -28,7 +28,7 @@ VaspFormat::VaspFormat(std::string args): Module("vasp")
  interval = GetInteger("each");
  level = GetInteger("level");
  speclist = GetString("species");
- satoms = SplitTextLine(speclist,',');
+ satoms = StringSplit< std::vector<std::string> >(speclist,',');
  tp = GetString("type");
  rcell = GetBool("replacecell");
 }
@@ -84,12 +84,12 @@ bool VaspFormat::ReadCell(std::istream & is, SimulationCell & sc) const
   std::istringstream vst(tmp);
   vst >> x >> y >> z;
   cv[i] = scale*Vector(x, y, z);
-  if (GetString("replacecell") == "true") sc.SetVector(i, cv[i]);
+  if (GetString("replacecell") == "true") sc.GetCell()[i] = cv[i];
  } 
  //lee y chequea especies atomicas.
  getline(is,tmp);
  RemoveUnnecessarySpaces(tmp);
- std::vector<std::string> numesp = SplitTextLine(tmp,' ');
+ std::vector<std::string> numesp = StringSplit< std::vector<std::string> >(tmp,' ');
 
  //lee si la red es directa o cartesiana, el caso de selective dynamics lo ignora.
  getline(is,tmp);
@@ -154,9 +154,9 @@ void VaspFormat::WriteCell(std::ostream & out, SimulationCell & sc) const
  {
   out.setf(std::ios::left);
   out.setf(std::ios::fixed);
-  out << " " << std::setw(8) << std::setprecision(8) << sc.GetVector(i)[0]; 
-  out << " " << std::setw(8) << std::setprecision(8) << sc.GetVector(i)[1]; 
-  out << " " << std::setw(8) << std::setprecision(8) << sc.GetVector(i)[2]; 
+  out << " " << std::setw(8) << std::setprecision(8) << sc.GetCell()[i][0]; 
+  out << " " << std::setw(8) << std::setprecision(8) << sc.GetCell()[i][1]; 
+  out << " " << std::setw(8) << std::setprecision(8) << sc.GetCell()[i][2]; 
   out << '\n';
  }
  std::list<std::string> symesp=sc.SpeciesList();
@@ -181,9 +181,9 @@ void VaspFormat::WriteCell(std::ostream & out, SimulationCell & sc) const
     else if(tp=="Direct")
     {
      Vector tmp = at.Position();
-     double lx = (sc.GetVector(0)).Module();
-     double ly = (sc.GetVector(1)).Module();
-     double lz = (sc.GetVector(2)).Module();
+     double lx = sc.GetCell()[0].Module();
+     double ly = sc.GetCell()[1].Module();
+     double lz = sc.GetCell()[2].Module();
      tmp = Vector(tmp[0]/lx,tmp[1]/ly,tmp[2]/lz);
      out << tmp << '\n';
     }

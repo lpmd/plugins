@@ -28,7 +28,7 @@ LPMDFormat::LPMDFormat(std::string args): Module("lpmd")
  interval = GetInteger("each");
  level = GetInteger("level");
  rcell = GetBool("replacecell");
- extra = SplitTextLine(GetString("extra"),',');
+ extra = StringSplit< std::vector<std::string> >(GetString("extra"),',');
 }
 
 LPMDFormat::~LPMDFormat() { delete linecounter; }
@@ -69,7 +69,7 @@ void LPMDFormat::ReadHeader(std::istream & is) const
   getline(is, info);
   getline(is, info);
   getline(is, info);
-  std::vector<std::string> words = SplitTextLine(info);
+  std::vector<std::string> words = StringSplit< std::vector<std::string> >(info);
   is.seekg(where);
   if (words.size()==4)
   {
@@ -103,7 +103,7 @@ void LPMDFormat::ReadHeader(std::istream & is) const
   std::string info = tmp ;
   (*linecounter)++;
   if (tmp.substr(0, 4) != "HDR ") throw PluginError("lpmd", "File"+readfile+" doesn't seem to be in LPMD 2.0 fromat (wrong HDR)");
-  std::vector <std::string> words = SplitTextLine(info);
+  std::vector <std::string> words = StringSplit< std::vector<std::string> >(info);
   for (unsigned long int i=0;i<words.size() ; ++i)
   {
    hdr.push_back(std::string(words[i]));
@@ -123,26 +123,27 @@ bool LPMDFormat::ReadCell(std::istream & is, SimulationCell & sc) const
  std::string tmp;
  getline(is, tmp);                                     // Numero de atomos
  (*linecounter)++;
- std::vector<std::string> words = SplitTextLine(tmp); 
+ std::vector<std::string> words = StringSplit< std::vector<std::string> >(tmp); 
  if (words.size() == 0) return false;
  long int natoms = atoi(words[0].c_str());
  getline(is, tmp);                                     // Vectores de la celda
  (*linecounter)++;
- words = SplitTextLine(tmp); 
+ words = StringSplit< std::vector<std::string> >(tmp); 
  if(words.size()==9)
  {
   if (GetString("replacecell") == "true")
   {
-   sc.SetVector(0, Vector(atof(words[0].c_str()), atof(words[1].c_str()), atof(words[2].c_str())));
-   sc.SetVector(1, Vector(atof(words[3].c_str()), atof(words[4].c_str()), atof(words[5].c_str())));
-   sc.SetVector(2, Vector(atof(words[6].c_str()), atof(words[7].c_str()), atof(words[8].c_str())));
+   sc.GetCell()[0] = Vector(atof(words[0].c_str()), atof(words[1].c_str()), atof(words[2].c_str()));
+   sc.GetCell()[1] = Vector(atof(words[3].c_str()), atof(words[4].c_str()), atof(words[5].c_str()));
+   sc.GetCell()[2] = Vector(atof(words[6].c_str()), atof(words[7].c_str()), atof(words[8].c_str()));
   }
  }
  else if(words.size()==6)
  {
   if (GetString("replacecell") == "true")
   {
-   sc.ReSet(atof(words[0].c_str()),atof(words[1].c_str()),atof(words[2].c_str()),atof(words[3].c_str())*M_PI/180,atof(words[4].c_str())*M_PI/180,atof(words[5].c_str())*M_PI/180);
+   Cell tmp(atof(words[0].c_str()),atof(words[1].c_str()),atof(words[2].c_str()),atof(words[3].c_str())*M_PI/180,atof(words[4].c_str())*M_PI/180,atof(words[5].c_str())*M_PI/180);
+   for (int q=0;q<3;++q) sc.GetCell()[q] = tmp[q];
   }
  }
  else throw PluginError("lpmd", "Error ocurred when reading the base vectors, file \""+readfile+"\", line "+ToString<int>(*linecounter));
@@ -151,7 +152,7 @@ bool LPMDFormat::ReadCell(std::istream & is, SimulationCell & sc) const
  {
   getline(is, tmp);
   (*linecounter)++;
-  words = SplitTextLine(tmp);
+  words = StringSplit< std::vector<std::string> >(tmp);
   if (words.size() == 0) 
   {
    throw PluginError("lpmd", "Error ocurred, the atom file not have elements!"); 
@@ -232,7 +233,7 @@ void LPMDFormat::WriteCell(std::ostream & out, SimulationCell & sc) const
 {
  sc.MetaData().AssignParameter("level",ToString<int>(level));
  out << sc.size() << std::endl;
- out << sc.GetVector(0) << " " << sc.GetVector(1) << " " << sc.GetVector(2) << std::endl;
+ out << sc.GetCell()[0] << " " << sc.GetCell()[1] << " " << sc.GetCell()[2] << std::endl;
  for (unsigned long int i=0;i<sc.size();i++)
  {
   if (level>=0)

@@ -23,7 +23,7 @@ NoseHoover::NoseHoover(std::string args): Module("nosehoover")
  // hasta aqui los valores por omision
  ProcessArguments(args);
  dt = GetDouble("dt");
- start_step = GetInteger("start");
+ start = GetInteger("start");
  q = GetDouble("fmass");
  temp = GetDouble("t");
 }

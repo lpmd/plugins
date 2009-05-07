@@ -53,9 +53,9 @@ void CellProp::Evaluate(SimulationCell & sc, Potential & pot)
 {
  nat = sc.size();
  volume = sc.Volume();
- a = sc.GetVector(0).Module();
- b = sc.GetVector(1).Module();
- c = sc.GetVector(2).Module();
+ a = sc.GetCell()[0].Module();
+ b = sc.GetCell()[1].Module();
+ c = sc.GetCell()[2].Module();
  dens = sc.Density();
  partdens = sc.ParticleDensity();
 }

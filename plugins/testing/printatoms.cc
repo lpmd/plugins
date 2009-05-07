@@ -25,9 +25,9 @@ PrintAtomsVisualizer::PrintAtomsVisualizer(std::string args): Module("printatoms
  ProcessArguments(args);
  from_at = GetInteger("from");
  to_at = GetInteger("to");
- start_step = GetInteger("start");
- end_step = GetInteger("end");
- interval = GetInteger("each");
+ start = GetInteger("start");
+ end = GetInteger("end");
+ each = GetInteger("each");
 }
 
 PrintAtomsVisualizer::~PrintAtomsVisualizer() { }

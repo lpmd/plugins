@@ -21,7 +21,7 @@ VelocityVerlet::VelocityVerlet(std::string args): Module("velocityverlet")
  // hasta aqui los valores por omision
  ProcessArguments(args);
  dt = GetDouble("dt");
- start_step = GetInteger("start");
+ start = GetInteger("start");
 }
 
 VelocityVerlet::~VelocityVerlet() { }

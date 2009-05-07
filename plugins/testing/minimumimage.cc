@@ -37,7 +37,7 @@ void MinimumImageCellManager::UpdateCell(SimulationCell & sc)
  if (fabs(rcut) < 1E-10) 
  {
   for (int q=0;q<3;++q)
-   if (0.5*sc.GetVector(q).Module() > rcut) rcut = 0.5*sc.GetVector(q).Module();
+   if (0.5*sc.GetCell()[q].Module() > rcut) rcut = 0.5*sc.GetCell()[q].Module();
  }
 }
 

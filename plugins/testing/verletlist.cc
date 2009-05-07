@@ -39,7 +39,7 @@ void VerletListCellManager::UpdateCell(SimulationCell & sc)
  if (fabs(cutoff) < 1E-10) 
  {
   for (int q=0;q<3;++q)
-   if (0.5*sc.GetVector(q).Module() > cutoff) cutoff = 0.5*sc.GetVector(q).Module();
+   if (0.5*sc.GetCell()[q].Module() > cutoff) cutoff = 0.5*sc.GetCell()[q].Module();
  }
 }
 

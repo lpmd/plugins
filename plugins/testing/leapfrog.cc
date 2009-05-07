@@ -22,7 +22,7 @@ Leapfrog::Leapfrog(std::string args): Module("leapfrog")
  // hasta aqui los valores por omision
  ProcessArguments(args);
  dt = GetDouble("dt");
- start_step = GetInteger("start");
+ start = GetInteger("start");
 }
 
 Leapfrog::~Leapfrog() { }

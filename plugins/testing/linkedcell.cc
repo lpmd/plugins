@@ -40,14 +40,16 @@ void SubCell::Allocate(long s)
 
 void SubCell::AddFirstHalfNeighbor(BasicSubCell & cell, const Vector & disp)
 {
- if (ifirst >= iwall) throw PluginError("linkedcell", "Internal initialization error.");
+ if (ifirst >= iwall) 
+    throw PluginError("linkedcell", "Internal initialization error, ifirst="+ToString<int>(ifirst)+", iwall="+ToString<int>(iwall));
  neighbors[ifirst] = NeighborSubCell(cell, disp);
  ifirst++;
 }
 
 void SubCell::AddSecondHalfNeighbor(BasicSubCell & cell, const Vector & disp)
 {
- if ((iwall+isecond) >= 2*iwall) throw PluginError("linkedcell", "Internal initialization error.");
+ if ((iwall+isecond) >= 2*iwall) 
+    throw PluginError("linkedcell", "Internal initialization error, iwall+isecond="+ToString<int>(iwall+isecond)+", 2*iwall="+ToString<int>(2*iwall));
  neighbors[iwall+isecond] = NeighborSubCell(cell, disp);
  isecond++;
 }
@@ -80,11 +82,11 @@ void LinkedCellManager::BuildSubCellList(double rc)
  subcells = new SubCell[nsubc];
  double ll =0.0;
  for (int j=0;j<3;++j)
-   if (realcell.GetVector(j).Module()/double(GridSize(j)) > ll) ll = realcell.GetVector(j).Module()/double(GridSize(j));
+   if (realcell.GetCell()[j].Module()/double(GridSize(j)) > ll) ll = realcell.GetCell()[j].Module()/double(GridSize(j));
  const double cell_cutoff = rcut + sqrt(3.0)*ll;
- long ncx = long(GridSize(0)*cell_cutoff/realcell.GetVector(0).Module());
- long ncy = long(GridSize(1)*cell_cutoff/realcell.GetVector(1).Module());
- long ncz = long(GridSize(2)*cell_cutoff/realcell.GetVector(2).Module());
+ long ncx = long(GridSize(0)*cell_cutoff/realcell.GetCell()[0].Module());
+ long ncy = long(GridSize(1)*cell_cutoff/realcell.GetCell()[1].Module());
+ long ncz = long(GridSize(2)*cell_cutoff/realcell.GetCell()[2].Module());
  long nestim = long((4.0*M_PI/3.0)*NumberOfSubCells()*(pow(cell_cutoff+ll, 3.0))/realcell.Volume());
  for (long i=0;i<nsubc;++i) subcells[i].Allocate(nestim+2);
 

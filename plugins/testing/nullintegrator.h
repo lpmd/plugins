@@ -6,10 +6,10 @@
 #define __NULLINTEGRATOR_H__
 
 #include <lpmd/integrator.h>
-#include <lpmd/applicable.h>
+#include <lpmd/stepper.h>
 #include <lpmd/plugin.h>
 
-class NullIntegrator: public lpmd::Integrator, public lpmd::IApplicable, public lpmd::Module
+class NullIntegrator: public lpmd::Integrator, public lpmd::Stepper, public lpmd::Module
 {
  public: 
   //Metodos Generales

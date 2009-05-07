@@ -26,9 +26,9 @@ VelDist::VelDist(std::string args): Module("veldist")
  DefineKeyword("bins", "300");
  ProcessArguments(args);
  bins = GetInteger("bins");
- start_step = GetInteger("start");
- end_step = GetInteger("end");
- interval = GetInteger("each");
+ start = GetInteger("start");
+ end = GetInteger("end");
+ each = GetInteger("each");
  outputfile = GetString("output");
 }
 

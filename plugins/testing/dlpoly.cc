@@ -79,7 +79,7 @@ bool DlPolyFormat::ReadCell(std::istream & is, SimulationCell & sc) const
   std::istringstream vst(tmp);
   vst >> x >> y >> z;
   cv[i] = Vector(x, y, z);
-  if (GetString("replacecell") == "true") sc.SetVector(i, cv[i]);
+  if (GetString("replacecell") == "true") sc.GetCell()[i] = cv[i];
  } 
  long cc = 0;
  while (1)
@@ -118,7 +118,7 @@ void DlPolyFormat::WriteCell(std::ostream & out, SimulationCell & sc) const
  out << buf;
  for (int i=0;i<3;++i)
  {
-  sprintf(buf, "%20.10f%20.10f%20.10f\n", sc.GetVector(i)[0], sc.GetVector(i)[1], sc.GetVector(i)[2]);
+  sprintf(buf, "%20.10f%20.10f%20.10f\n", sc.GetCell()[i][0], sc.GetCell()[i][1], sc.GetCell()[i][2]);
   out << buf; 
  }
  for (unsigned long int i=0;i<sc.size();++i)
@@ -130,7 +130,7 @@ void DlPolyFormat::WriteCell(std::ostream & out, SimulationCell & sc) const
   if (level >= 0)
   {
    v = at.Position();
-   for (int q=0;q<3;++q) v[q] = v[q]-0.5*sc.GetVector(q).Module(); 
+   for (int q=0;q<3;++q) v[q] = v[q]-0.5*sc.GetCell()[q].Module(); 
    sprintf(buf, "    %12.10g        %12.10g        %12.10g\n", v[0], v[1], v[2]);
    out << buf;
   }

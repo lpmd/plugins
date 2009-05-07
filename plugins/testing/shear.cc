@@ -29,9 +29,9 @@ ShearModifier::ShearModifier(std::string args): Module("shear")
  else throw PluginError("shear", "Invalid normal axis");
  if (shear_axis == perp_axis) throw PluginError("shear", "Shear axis must be orthogonal to normal axis");
  strain = GetDouble("strain");
- start_step = GetInteger("start");
- end_step = GetInteger("end");
- interval = GetInteger("each");
+ start = GetInteger("start");
+ end = GetInteger("end");
+ each = GetInteger("each");
 }
 
 ShearModifier::~ShearModifier() { }
@@ -65,10 +65,10 @@ void ShearModifier::Apply(SimulationCell & sc)
 {
  // primero cambia la forma de la celda...
  Vector deformation(0.0, 0.0, 0.0);
- deformation[shear_axis] = strain*sc.GetVector(perp_axis).Module(); 
- Vector newaxis = sc.GetVector(perp_axis)+deformation;
- newaxis = newaxis*double(sc.GetVector(perp_axis).Module())/double(newaxis.Module());
- sc.SetVector(perp_axis, newaxis);
+ deformation[shear_axis] = strain*sc.GetCell()[perp_axis].Module(); 
+ Vector newaxis = sc.GetCell()[perp_axis]+deformation;
+ newaxis = newaxis*double(sc.GetCell()[perp_axis].Module())/double(newaxis.Module());
+ sc.GetCell()[perp_axis] = newaxis;
  
  // luego desplaza los atomos
  Vector offset(0.0, 0.0, 0.0);

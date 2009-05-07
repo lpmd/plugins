@@ -75,7 +75,7 @@ lpmd::Matrix* gdr(SimulationCell & simcell,Potential & pot,long int nb,double rc
  for (std::list<std::string>::const_iterator it=lst.begin();it!=lst.end();++it)	   
  {
   //Hace funcional cada una de las especies de los pares.
-  std::vector<std::string> loa = SplitTextLine(*it,'-'); // lista de atomos
+  std::vector<std::string> loa = StringSplit< std::vector<std::string> >(*it,'-'); // lista de atomos
   int e1 = ElemNum(loa[0]);
   int e2 = ElemNum(loa[1]);
   //Cuenta los atomos de cada especie atomica.
@@ -113,7 +113,7 @@ lpmd::Matrix* gdr(SimulationCell & simcell,Potential & pot,long int nb,double rc
  for(std::list<std::string>::const_iterator it=lst.begin();it!=lst.end();++it)
  {
   //Hace funcional cada una de las especies de los pares.
-  std::vector<std::string> loa = SplitTextLine(*it,'-'); // lista de atomos
+  std::vector<std::string> loa = StringSplit< std::vector<std::string> >(*it,'-'); // lista de atomos
   int e1 = ElemNum(loa[0]);
   int e2 = ElemNum(loa[1]);
   //Cuenta la concentracion atomica de cada especie atomica.
@@ -285,7 +285,7 @@ void Replicate(SimulationCell & sc, unsigned long nx, unsigned long ny, unsigned
   for(int j=0;j<Ntmp;j++)
   {
    Atom tmp=atomos[j];
-   tmp.SetPos(atomos[j].Position()+sc.GetVector(0)*i);
+   tmp.SetPos(atomos[j].Position()+sc.GetCell()[0]*i);
    sc.Create(new Atom(tmp));
   }
  }
@@ -300,7 +300,7 @@ void Replicate(SimulationCell & sc, unsigned long nx, unsigned long ny, unsigned
   for(int j=0;j<Ntmp;j++)
   {
    Atom tmp=atomos[j];
-   tmp.SetPos(atomos[j].Position()+sc.GetVector(1)*i);
+   tmp.SetPos(atomos[j].Position()+sc.GetCell()[1]*i);
    sc.Create(new Atom(tmp));
   }
  }
@@ -315,18 +315,18 @@ void Replicate(SimulationCell & sc, unsigned long nx, unsigned long ny, unsigned
   for(int j=0;j<Ntmp;j++)
   {
    Atom tmp=atomos[j];
-   tmp.SetPos(atomos[j].Position()+sc.GetVector(2)*i);
+   tmp.SetPos(atomos[j].Position()+sc.GetCell()[2]*i);
    sc.Create(new Atom(tmp));
   }
  }
  delete[] atomos;
  //Resetea los vectores base de la celda.
- Vector a=sc.GetVector(0);
- sc.SetVector(0, a*nx);
- Vector b=sc.GetVector(1);
- sc.SetVector(1, b*ny);
- Vector c=sc.GetVector(2);
- sc.SetVector(2, c*nz);
+ Vector a=sc.GetCell()[0];
+ sc.GetCell()[0] = a*nx;
+ Vector b=sc.GetCell()[1];
+ sc.GetCell()[1] = b*ny;
+ Vector c=sc.GetCell()[2];
+ sc.GetCell()[2] = c*nz;
  //Asigna el index() a cada atomo de la celda.
  sc.AssignIndex();
  sc.ClearForces();
@@ -353,17 +353,17 @@ void Rotate(SimulationCell & sc, lpmd::Vector rotate)
  // We rotate the simulation cell vectors
  for (int n=0; n<3; n++)
  {
-  double v1=sc.GetVector(n)[0], v2=sc.GetVector(n)[1], v3=sc.GetVector(n)[2];
+  double v1=sc.GetCell()[n][0], v2=sc.GetCell()[n][1], v3=sc.GetCell()[n][2];
   Vector newvec;
   for (int i=0; i<3; i++) newvec[i] = v1*rotmat[i][0]+v2*rotmat[i][1]+v3*rotmat[i][2];
-  sc.SetVector(n,newvec);
+  sc.GetCell()[n] = newvec;
  }
  // We rotate the atoms of the cell
 // std::cerr <<"nuevos vectores base de la celda replicada:\n";
 // std::cerr << sc.GetVector(0) <<"\n";
 // std::cerr << sc.GetVector(1) <<"\n";
 // std::cerr << sc.GetVector(2) <<"\n";
- Vector center = (sc.GetVector(0)+sc.GetVector(1)+sc.GetVector(2))*0.5;
+ Vector center = (sc.GetCell()[0]+sc.GetCell()[1]+sc.GetCell()[2])*0.5;
 // std::cerr << "centro en "<<center <<"\n";
  for (unsigned long n=0;n<sc.size();n++)
  {
@@ -394,7 +394,7 @@ void ReplicateRotate(const SimulationCell basecell, lpmd::Vector &cellcenter, lp
  }
 */
  Rotate(tmpSC, rotate);
- Vector centro=0.5*(tmpSC.GetVector(0)+tmpSC.GetVector(1)+tmpSC.GetVector(2));
+ Vector centro=0.5*(tmpSC.GetCell()[0]+tmpSC.GetCell()[1]+tmpSC.GetCell()[2]);
  unsigned long N = tmpSC.size();
  Atom *atomos = new Atom[N];
  double r=dazar(0,1), g=dazar(0,1), b=dazar(0,1);

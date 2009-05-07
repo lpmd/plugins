@@ -6,10 +6,10 @@
 #define __VELOCITYVERLET_H__
 
 #include <lpmd/twostepintegrator.h>
-#include <lpmd/applicable.h>
+#include <lpmd/stepper.h>
 #include <lpmd/plugin.h>
 
-class VelocityVerlet: public lpmd::TwoStepIntegrator, public lpmd::IApplicable, public lpmd::Module
+class VelocityVerlet: public lpmd::TwoStepIntegrator, public lpmd::Stepper, public lpmd::Module
 {
  public:
   //Metodos Generales

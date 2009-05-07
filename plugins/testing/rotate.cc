@@ -23,9 +23,9 @@ RotateModifier::RotateModifier(std::string args): Module("rotate")
  axis = Vector(GetDouble("x"), GetDouble("y"), GetDouble("z"));
  axis.Normalize();
  angle = M_PI*GetDouble("angle")/180.0;
- start_step = GetInteger("start");
- end_step = GetInteger("end");
- interval = GetInteger("each");
+ start = GetInteger("start");
+ end = GetInteger("end");
+ each = GetInteger("each");
  //
  double c=cos(angle), s=sin(angle), t=1.0-c;
  double x=axis[0], y=axis[1], z=axis[2];
@@ -73,7 +73,7 @@ std::string RotateModifier::Keywords() const
 
 void RotateModifier::Apply(SimulationCell & sc)
 {
- Vector center = (sc.GetVector(0)+sc.GetVector(1)+sc.GetVector(2))*0.5;
+ Vector center = (sc.GetCell()[0]+sc.GetCell()[1]+sc.GetCell()[2])*0.5;
  for (unsigned long int i=0;i<sc.size();++i)
  {
   // translate so that the center of the cell is (0, 0, 0)

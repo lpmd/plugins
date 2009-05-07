@@ -92,7 +92,7 @@ bool Mol2Format::ReadCell(std::istream & is, SimulationCell & sc) const
    {
     getline(is,tmp);
     getline(is,tmp);
-    std::vector<std::string> linea = SplitTextLine(tmp,' ');
+    std::vector<std::string> linea = StringSplit< std::vector<std::string> >(tmp,' ');
     natoms = (long)atof(linea[0].c_str()); 
     std::cerr << " numero de atomos >> " << natoms << '\n';
    }
@@ -104,7 +104,7 @@ bool Mol2Format::ReadCell(std::istream & is, SimulationCell & sc) const
      for (int i=0;i<natoms;i++)
      {
       getline(is,tmp);
-      std::vector<std::string> linea = SplitTextLine(tmp,' ');
+      std::vector<std::string> linea = StringSplit< std::vector<std::string> >(tmp,' ');
       std::string symb = linea[1];
       lpmd::Vector pos(atof(linea[2].c_str()),atof(linea[3].c_str()),atof(linea[4].c_str()));
       if(symb.length()>1)

@@ -31,9 +31,9 @@ Gdr::Gdr(std::string args): Module("gdr")
  ProcessArguments(args);
  rcut = GetDouble("rcut");
  nb = GetInteger("bins");
- start_step = GetInteger("start");
- end_step = GetInteger("end");
- interval = GetInteger("each");
+ start = GetInteger("start");
+ end = GetInteger("end");
+ each = GetInteger("each");
  outputfile = GetString("output");
  do_average = GetBool("average");
 }
@@ -88,7 +88,7 @@ void Gdr::Evaluate(SimulationCell & simcell, Potential & pot)
  for (std::list<std::string>::const_iterator it=lst.begin();it!=lst.end();++it)	   
  {
   //Hace funcional cada una de las especies de los pares.
-  std::vector<std::string> loa = SplitTextLine(*it,'-'); // lista de atomos
+  std::vector<std::string> loa = StringSplit< std::vector<std::string> >(*it,'-'); // lista de atomos
   int e1 = ElemNum(loa[0]);
   int e2 = ElemNum(loa[1]);
   //Cuenta los atomos de cada especie atomica.
@@ -126,7 +126,7 @@ void Gdr::Evaluate(SimulationCell & simcell, Potential & pot)
  for(std::list<std::string>::const_iterator it=lst.begin();it!=lst.end();++it)
  {
   //Hace funcional cada una de las especies de los pares.
-  std::vector<std::string> loa = SplitTextLine(*it,'-'); // lista de atomos
+  std::vector<std::string> loa = StringSplit< std::vector<std::string> >(*it,'-'); // lista de atomos
   int e1 = ElemNum(loa[0]);
   int e2 = ElemNum(loa[1]);
   //Cuenta la concentracion atomica de cada especie atomica.

@@ -32,9 +32,9 @@ AngDist::AngDist(std::string args): Module("angdist")
  // 
  ProcessArguments(args);
  nb = GetInteger("bins");
- start_step = GetInteger("start");
- end_step = GetInteger("end");
- interval = GetInteger("each");
+ start = GetInteger("start");
+ end = GetInteger("end");
+ each = GetInteger("each");
  outputfile = GetString("output");
  do_average = GetBool("average");
 }
@@ -140,7 +140,7 @@ void AngDist::Evaluate(SimulationCell & simcell, Potential & pot)
  for(std::list<std::string>::const_iterator it=lst.begin();it!=lst.end();++it)
  {
   //Hace funcional el triplete de atomos y asigna los dos rcut
-  std::vector<std::string> loa = SplitTextLine(*it,'-');
+  std::vector<std::string> loa = StringSplit< std::vector<std::string> >(*it,'-');
   int e1 = ElemNum(loa[0]);
   int e2 = ElemNum(loa[1]);
   int e3 = ElemNum(loa[2]);

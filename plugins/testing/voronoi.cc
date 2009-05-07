@@ -17,7 +17,8 @@ double rmin;					// Minimum separation between atoms
 
 void SkewStart(int n, double x, double y, double z, Vector *centers)
 {
- SimulationCell cell(x,y,z,true,true,true);
+ // FIXME: int() corrige los warning, pero hay que chequear si es lo correcto o no
+ SimulationCell cell(int(x), int(y), int(z), true, true, true);
  int h, k, l;
  double dx, dy, dz;
  h = int(pow(double(n), 2.0/3.0));
@@ -89,7 +90,7 @@ void VoronoiGenerator::Generate(SimulationCell & sc) const
  Vector base[3];
  base[0]=a*e1; 	base[1]=a*e2; 	base[2]=a*e3;
  // WE SET THE VECTORS OF THE CELL
- for (int i=0; i<3; i++) basecell.SetVector(i, base[i]);     	
+ for (int i=0; i<3; i++) basecell.GetCell()[i] = base[i];
  // NOW WE FIX THE BASIC CELL
  //-- Simple cubic lattices --//
  if (type=="sc")
@@ -118,10 +119,11 @@ void VoronoiGenerator::Generate(SimulationCell & sc) const
  }
 
  unsigned long nx,ny,nz;
- double V=Dot(Cross(sc.GetVector(0), sc.GetVector(1)), sc.GetVector(2)); // Volume of the sc
- double x=sc.GetVector(0).Module();
- double y=sc.GetVector(1).Module();
- double z=sc.GetVector(2).Module();
+ const Cell & scell = sc.GetCell();
+ double V=scell.Volume();
+ double x=scell[0].Module();
+ double y=scell[1].Module();
+ double z=scell[2].Module();
  nx=int(2.2*pow(V/(double)Ncell,1.0/3.0)/a); ny=nx; nz=nx;
  Vector *centers=new Vector [Ncell];
  Vector *CellColor=new Vector [Ncell];
@@ -141,9 +143,9 @@ void VoronoiGenerator::Generate(SimulationCell & sc) const
  {
   bool kill=false;
   Vector pos = sc[i].Position();
-  if 		 (pos[0]<0 || pos[0]>sc.GetVector(0).Module()) {sc.Destroy(&sc[i]); kill=true;}
-  else if (pos[1]<0 || pos[1]>sc.GetVector(1).Module()) {sc.Destroy(&sc[i]); kill=true;}
-  else if (pos[2]<0 || pos[2]>sc.GetVector(2).Module()) {sc.Destroy(&sc[i]); kill=true;}
+  if (pos[0]<0 || pos[0]>sc.GetCell()[0].Module()) {sc.Destroy(&sc[i]); kill=true;}
+  else if (pos[1]<0 || pos[1]>sc.GetCell()[1].Module()) {sc.Destroy(&sc[i]); kill=true;}
+  else if (pos[2]<0 || pos[2]>sc.GetCell()[2].Module()) {sc.Destroy(&sc[i]); kill=true;}
   
   if (kill) i--;
  }
