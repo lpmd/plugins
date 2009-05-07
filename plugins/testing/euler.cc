@@ -52,9 +52,9 @@ void Euler::ShowHelp() const
 
 void Euler::Advance(SimulationCell & sc, long i)
 {
- const Atom & now = sc[i];
- sc.SetPosition(i, now.Position() + now.Velocity()*dt);
- sc.SetVelocity(i, now.Velocity() + now.Acceleration()*dt);
+ Atom now = sc[i];
+ sc[i].Position() = now.Position() + now.Velocity()*dt;
+ sc[i].Velocity() = now.Velocity() + now.Acceleration()*dt;
 }
 
 #ifdef __ICC

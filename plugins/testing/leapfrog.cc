@@ -55,19 +55,19 @@ void Leapfrog::Initialize(SimulationCell & sc, Potential & p)
  // Necesitamos las velocidades al tiempo -0.5*dt, no -dt
  for (unsigned long int i=0;i<oldsc.size();++i)
  {
-  const Atom & old = oldsc[i];
-  oldsc.SetVelocity(i, old.Velocity() + old.Acceleration()*0.5*dt);
+  Atom old = oldsc[i];
+  oldsc[i].Velocity() = old.Velocity() + old.Acceleration()*0.5*dt;
  } 
 }
 
 void Leapfrog::Advance(SimulationCell & sc, long i)
 {
  SimulationCell & oldsc = OldCell();
- const Atom & now = sc[i];
+ Atom now = sc[i];
  Vector vhalf = oldsc[i].Velocity() + now.Acceleration()*dt;
- sc.SetPosition(i, now.Position() + vhalf*dt);
- sc.SetVelocity(i, (vhalf+oldsc[i].Velocity())*(0.5));
- oldsc.SetVelocity(i, vhalf);
+ sc[i].Position() = now.Position() + vhalf*dt;
+ sc[i].Velocity() = (vhalf+oldsc[i].Velocity())*(0.5);
+ oldsc[i].Velocity() = vhalf;
 }
 
 // Esto se incluye para que el modulo pueda ser cargado dinamicamente
