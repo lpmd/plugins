@@ -60,7 +60,7 @@ void Beeman::AdvancePosition(SimulationCell & sc, long i)
  const Atom & old = oldsc[i];
  auxlist[i] = old.Acceleration();
  Vector newpos = now.Position() + now.Velocity()*dt + (2.0/3.0)*now.Acceleration()*dt*dt - (1.0/6.0)*old.Acceleration()*dt*dt;
- oldsc.SetAcceleration(i, now.Acceleration());
+ oldsc[i].Acceleration() = now.Acceleration();
  sc.SetPosition(i, newpos);
 }
 
@@ -69,7 +69,7 @@ void Beeman::AdvanceVelocity(SimulationCell & sc, long i)
  SimulationCell & oldsc = OldCell();
  const Atom & now = sc[i];
  const Atom & old = oldsc[i];
- sc.SetVelocity(i, now.Velocity() + (1.0/3.0)*now.Acceleration()*dt + (5.0/6.0)*old.Acceleration()*dt - (1.0/6.0)*auxlist[i]*dt);
+ sc[i].Velocity() = now.Velocity()+(1.0/3.0)*now.Acceleration()*dt+(5.0/6.0)*old.Acceleration()*dt-(1.0/6.0)*auxlist[i]*dt;
 }
 
 // Esto se incluye para que el modulo pueda ser cargado dinamicamente

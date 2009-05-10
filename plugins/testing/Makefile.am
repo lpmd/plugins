@@ -38,7 +38,7 @@ AM_LDFLAGS = -module -avoid-version
 #
 # plugin_LTLIBRARIES contains the list of liblpmd plugins (as libtool libraries)
 #
-plugin_LTLIBRARIES =     crystalfcc.la euler.la leapfrog.la lennardjones.la minimumimage.la
+plugin_LTLIBRARIES =     beeman.la crystalfcc.la euler.la leapfrog.la lennardjones.la minimumimage.la verlet.la velocityverlet.la
 
 #plugin_LTLIBRARIES =    angdist.la beeman.la berendsen.la buckingham.la cell.la \
 #                        cellscaling.la cna.la color.la constantforce.la cordnum.la cordnumfunc.la \
@@ -65,7 +65,7 @@ zlp_la_LDFLAGS = -module -avoid-version -lz
 #
 
 #angdist_la_SOURCES = angdist.h angdist.cc 
-#beeman_la_SOURCES = beeman.h beeman.cc
+beeman_la_SOURCES = beeman.h beeman.cc
 #berendsen_la_SOURCES = berendsen.h berendsen.cc
 #buckingham_la_SOURCES = buckingham.h buckingham.cc
 #cell_la_SOURCES = cell.h cell.cc
@@ -130,8 +130,8 @@ minimumimage_la_SOURCES = minimumimage.h minimumimage.cc
 #vacf_la_SOURCES = vacf.h vacf.cc
 #vasp_la_SOURCES = vasp.h vasp.cc
 #veldist_la_SOURCES = veldist.h veldist.cc
-#velocityverlet_la_SOURCES = velocityverlet.h velocityverlet.cc
-#verlet_la_SOURCES = verlet.h verlet.cc
+velocityverlet_la_SOURCES = velocityverlet.h velocityverlet.cc
+verlet_la_SOURCES = verlet.h verlet.cc
 #verletlist_la_SOURCES = verletlist.h verletlist.cc
 #voronoi_la_SOURCES = voronoi.h voronoi.cc
 #xyz_la_SOURCES = xyz.h xyz.cc

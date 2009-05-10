@@ -55,10 +55,10 @@ void Verlet::Advance(SimulationCell & sc, long i)
  Vector oldpos = oldsc[i].Position();
  Vector newpos = 2.0*now.Position() - oldpos + now.Acceleration()*dt*dt;
  oldsc.SetPosition(i, now.Position());
- oldsc.SetVelocity(i, now.Velocity());
+ oldsc[i].Velocity() = now.Velocity();
  sc.SetPosition(i, newpos);
- const Vector newvel = sc.Displacement(oldpos, sc[i].Position())/(2.0*dt);
- sc.SetVelocity(i, newvel);
+ const Vector newvel = sc.GetCell().Displacement(oldpos, sc[i].Position())/(2.0*dt);
+ sc[i].Velocity() = newvel;
 }
 
 // Esto se incluye para que el modulo pueda ser cargado dinamicamente

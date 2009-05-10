@@ -53,7 +53,7 @@ void VelocityVerlet::AdvancePosition(SimulationCell & sc, long i)
  SimulationCell & oldsc = OldCell();
  const Atom & now = sc[i];
  Vector newpos = now.Position() + now.Velocity()*dt + 0.5*now.Acceleration()*dt*dt;
- oldsc.SetAcceleration(i, now.Acceleration());
+ oldsc[i].Acceleration() = now.Acceleration();
  sc.SetPosition(i, newpos);
 }
 
@@ -62,7 +62,7 @@ void VelocityVerlet::AdvanceVelocity(SimulationCell & sc, long i)
  SimulationCell & oldsc = OldCell();
  const Atom & now = sc[i];
  const Atom & old = oldsc[i];
- sc.SetVelocity(i, now.Velocity() + 0.5*dt*(old.Acceleration() + now.Acceleration()));
+ sc[i].Velocity() = now.Velocity() + 0.5*dt*(old.Acceleration() + now.Acceleration());
 }
 
 // Esto se incluye para que el modulo pueda ser cargado dinamicamente
