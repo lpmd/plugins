@@ -59,8 +59,8 @@ void MinimumImageCellManager::BuildNeighborList(SimulationCell & sc, long i, std
     nn.j = &sc[j];
     nn.rij = sc.VectorDistance(i, j);
     nn.r = nn.rij.Module();
-    if (rcut < 1E-30) nlist.push_back(nn);
-    else if (nn.r < rcut) nlist.push_back(nn);
+    if (rcu < 1E-30) nlist.push_back(nn);
+    else if (nn.r < rcu) nlist.push_back(nn);
    }
   }
  }
@@ -74,8 +74,8 @@ void MinimumImageCellManager::BuildNeighborList(SimulationCell & sc, long i, std
    nn.j = &sc[j];
    nn.rij = sc.VectorDistance(i, j);
    nn.r = nn.rij.Module();
-   if (rcut < 1E-30) nlist.push_back(nn);
-   else if (nn.r < rcut) nlist.push_back(nn);
+   if (rcu < 1E-30) nlist.push_back(nn);
+   else if (nn.r < rcu) nlist.push_back(nn);
   }
  }
 }

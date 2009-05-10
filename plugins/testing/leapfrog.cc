@@ -55,18 +55,18 @@ void Leapfrog::Initialize(SimulationCell & sc, Potential & p)
  // Necesitamos las velocidades al tiempo -0.5*dt, no -dt
  for (unsigned long int i=0;i<oldsc.size();++i)
  {
-  Atom old = oldsc[i];
-  oldsc[i].Velocity() = old.Velocity() + old.Acceleration()*0.5*dt;
+  const Atom & old = oldsc[i];
+  oldsc[i].Velocity() += old.Acceleration()*0.5*dt;
  } 
 }
 
 void Leapfrog::Advance(SimulationCell & sc, long i)
 {
  SimulationCell & oldsc = OldCell();
- Atom now = sc[i];
+ const Atom & now = sc[i];                      // was Atom now = sc[i];
  Vector vhalf = oldsc[i].Velocity() + now.Acceleration()*dt;
- sc[i].Position() = now.Position() + vhalf*dt;
- sc[i].Velocity() = (vhalf+oldsc[i].Velocity())*(0.5);
+ sc[i].Position() += vhalf*dt;
+ sc[i].Velocity() = 0.5*(vhalf+oldsc[i].Velocity());
  oldsc[i].Velocity() = vhalf;
 }
 
