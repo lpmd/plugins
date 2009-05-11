@@ -38,7 +38,7 @@ AM_LDFLAGS = -module -avoid-version
 #
 # plugin_LTLIBRARIES contains the list of liblpmd plugins (as libtool libraries)
 #
-plugin_LTLIBRARIES =     beeman.la crystalfcc.la euler.la leapfrog.la lennardjones.la minimumimage.la verlet.la velocityverlet.la
+plugin_LTLIBRARIES =     test.la beeman.la crystalfcc.la euler.la leapfrog.la lennardjones.la minimumimage.la verlet.la velocityverlet.la
 
 #plugin_LTLIBRARIES =    angdist.la beeman.la berendsen.la buckingham.la cell.la \
 #                        cellscaling.la cna.la color.la constantforce.la cordnum.la cordnumfunc.la \
@@ -64,6 +64,7 @@ zlp_la_LDFLAGS = -module -avoid-version -lz
 #
 #
 
+test_la_SOURCES = test.h test.cc
 #angdist_la_SOURCES = angdist.h angdist.cc 
 beeman_la_SOURCES = beeman.h beeman.cc
 #berendsen_la_SOURCES = berendsen.h berendsen.cc
