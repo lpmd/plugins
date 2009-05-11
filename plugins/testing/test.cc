@@ -79,7 +79,7 @@ void Test::PerformTest(Simulation & s)
   for (long int i=0;i<100000;++i)
   {
    iarray[i].Position() = RandomVector(1.0);
-   ss += darray[i].Position().Module();
+   ss += iarray[i].Position().Module();
   }
  }
  t.Stop();
