@@ -5,7 +5,6 @@
 #include "crystalfcc.h"
 
 #include <lpmd/atom.h>
-#include <lpmd/simulationcell.h>
 
 using namespace lpmd;
 
@@ -47,7 +46,7 @@ void FCCGenerator::ShowHelp() const
  std::cout << "      De esta forma creamos una celda de entrada de tipo FCC en la simulacion. \n";
 }
 
-void FCCGenerator::Generate(SimulationCell & sc) const
+void FCCGenerator::Generate(BasicParticleSet & atoms, BasicCell & cell) const
 {
  Vector p;
  long int cc = 0;
@@ -55,26 +54,14 @@ void FCCGenerator::Generate(SimulationCell & sc) const
  double ay = 1.0/double(ny);
  double az = 1.0/double(nz);
  for (long k=0;k<nz;++k)
- {
   for (long j=0;j<ny;++j)
-  {
    for (long i=0;i<nx;++i)
    {
-    p = Vector((double(i)+0.51)*ax, (double(j)+0.5)*ay, (double(k)+0.5)*az);
-    sc.Create(new Atom(spc));
-    sc.SetFracPosition(cc++, p);
-    p = Vector((double(i)+0.51)*ax, double(j)*ay, (double(k)+1.0)*az);
-    sc.Create(new Atom(spc));
-    sc.SetFracPosition(cc++, p);
-    p = Vector((double(i)+1.01)*ax, double(j)*ay, (double(k)+0.5)*az);
-    sc.Create(new Atom(spc));
-    sc.SetFracPosition(cc++, p);
-    p = Vector((double(i)+1.01)*ax, (double(j)+0.5)*ay, (double(k)+1.0)*az);
-    sc.Create(new Atom(spc));
-    sc.SetFracPosition(cc++, p);
+    atoms[cc++].Position() = cell.ScaleByCell(Vector((double(i)+0.51)*ax, (double(j)+0.5)*ay, (double(k)+0.5)*az));
+    atoms[cc++].Position() = cell.ScaleByCell(Vector((double(i)+0.51)*ax, double(j)*ay, (double(k)+1.0)*az));
+    atoms[cc++].Position() = cell.ScaleByCell(Vector((double(i)+1.01)*ax, double(j)*ay, (double(k)+0.5)*az));
+    atoms[cc++].Position() = cell.ScaleByCell(Vector((double(i)+1.01)*ax, (double(j)+0.5)*ay, (double(k)+1.0)*az));
    }
-  }
- }
 }
 
 // Esto se incluye para que el modulo pueda ser cargado dinamicamente

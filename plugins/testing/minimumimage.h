@@ -18,8 +18,8 @@ class MinimumImageCellManager: public lpmd::CellManager, public lpmd::Module
    void Show(std::ostream & os) const;
 
    void Reset();
-   void UpdateCell(SimulationCell & sc);
-   void BuildNeighborList(SimulationCell & sc, long i, std::vector<Neighbor> & nlist, bool full, double);
+   void UpdateCell(BasicParticleSet & atoms, BasicCell & cell);
+   void BuildNeighborList(BasicParticleSet & atoms, BasicCell & cell, long i, Array<Neighbor> & nlist, bool full, double);
    double Cutoff() const;
 
  private:

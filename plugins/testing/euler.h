@@ -9,6 +9,8 @@
 #include <lpmd/stepper.h>
 #include <lpmd/plugin.h>
 
+using namespace lpmd;
+
 class Euler: public lpmd::OneStepIntegrator, public lpmd::Stepper, public lpmd::Module
 {
  public:
@@ -18,7 +20,7 @@ class Euler: public lpmd::OneStepIntegrator, public lpmd::Stepper, public lpmd::
   void ShowHelp() const;
 
   //Metodos Propios del modulo euler
-  void Advance(lpmd::SimulationCell & sc, long i);
+  void Advance(BasicParticleSet & atoms, BasicCell & cell, long i);
 };
 
 #endif

@@ -9,6 +9,8 @@
 #include <lpmd/stepper.h>
 #include <lpmd/plugin.h>
 
+using namespace lpmd;
+
 class NullIntegrator: public lpmd::Integrator, public lpmd::Stepper, public lpmd::Module
 {
  public: 
@@ -18,7 +20,7 @@ class NullIntegrator: public lpmd::Integrator, public lpmd::Stepper, public lpmd
   void ShowHelp() const;
 
   //Metodos propios de modulo nullintegrator
-  void Advance(lpmd::SimulationCell & sc, lpmd::Potential & p);
+  void Advance(BasicParticleSet & atoms, BasicCell & cell, Potential & p);
 
 };
 

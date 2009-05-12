@@ -8,6 +8,8 @@
 #include <lpmd/cellgenerator.h>
 #include <lpmd/plugin.h>
 
+using namespace lpmd;
+
 class FCCGenerator: public lpmd::CellGenerator, public lpmd::Module
 {
  public:
@@ -17,7 +19,7 @@ class FCCGenerator: public lpmd::CellGenerator, public lpmd::Module
    void ShowHelp() const;
 
    //Metodos Propios del modulo fccgenerator
-   void Generate(lpmd::SimulationCell & sc) const;
+   void Generate(BasicParticleSet & atoms, BasicCell & cell) const;
 
  private:
    int spc;

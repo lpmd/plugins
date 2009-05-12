@@ -38,7 +38,7 @@ AM_LDFLAGS = -module -avoid-version
 #
 # plugin_LTLIBRARIES contains the list of liblpmd plugins (as libtool libraries)
 #
-plugin_LTLIBRARIES =     test.la beeman.la crystalfcc.la euler.la leapfrog.la lennardjones.la minimumimage.la verlet.la velocityverlet.la
+plugin_LTLIBRARIES =     euler.la nullintegrator.la lennardjones.la minimumimage.la crystalfcc.la
 
 #plugin_LTLIBRARIES =    angdist.la beeman.la berendsen.la buckingham.la cell.la \
 #                        cellscaling.la cna.la color.la constantforce.la cordnum.la cordnumfunc.la \
@@ -105,7 +105,7 @@ minimumimage_la_SOURCES = minimumimage.h minimumimage.cc
 #morse_la_SOURCES = morse.h morse.cc
 #msd_la_SOURCES = msd.h msd.cc
 #nosehoover_la_SOURCES = nosehoover.h nosehoover.cc
-#nullintegrator_la_SOURCES = nullintegrator.h nullintegrator.cc
+nullintegrator_la_SOURCES = nullintegrator.h nullintegrator.cc
 #nullpairpotential_la_SOURCES = nullpairpotential.h nullpairpotential.cc
 #nullmetalpotential_la_SOURCES = nullmetalpotential.h nullmetalpotential.cc
 #nullmixer_la_SOURCES = nullmixer.h nullmixer.cc

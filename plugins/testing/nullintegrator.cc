@@ -39,7 +39,7 @@ void NullIntegrator::ShowHelp() const
  std::cout << "      De esta forma activa el integrador nulo a partir del step 150000.        \n";
 }
 
-void NullIntegrator::Advance(SimulationCell & sc, Potential & p) { p.UpdateForces(sc); }
+void NullIntegrator::Advance(BasicParticleSet & atoms, BasicCell & cell, Potential & p) { p.UpdateForces(atoms, cell); }
 
 // Esto se incluye para que el modulo pueda ser cargado dinamicamente
 Module * create(std::string args) { return new NullIntegrator(args); }

@@ -4,8 +4,6 @@
 
 #include "minimumimage.h"
 
-#include <lpmd/simulationcell.h>
-
 #include <cmath>
 
 using namespace lpmd;
@@ -32,37 +30,35 @@ void MinimumImageCellManager::Show(std::ostream & os) const
 
 void MinimumImageCellManager::Reset() { }
 
-void MinimumImageCellManager::UpdateCell(SimulationCell & sc) 
+void MinimumImageCellManager::UpdateCell(BasicParticleSet & atoms, BasicCell & cell) 
 { 
  if (fabs(rcut) < 1E-10) 
  {
   for (int q=0;q<3;++q)
-   if (0.5*sc.GetCell()[q].Module() > rcut) rcut = 0.5*sc.GetCell()[q].Module();
+   if (0.5*cell[q].Module() > rcut) rcut = 0.5*cell[q].Module();
  }
 }
 
 double MinimumImageCellManager::Cutoff() const { return rcut; }
 
-void MinimumImageCellManager::BuildNeighborList(SimulationCell & sc, long i, std::vector<Neighbor> & nlist, bool full, double rcu)
+void MinimumImageCellManager::BuildNeighborList(BasicParticleSet & atoms, BasicCell & cell, long i, Array<Neighbor> & nlist, bool full, double rcu)
 {
- const long int n = sc.size();
- nlist.clear();
+ const long int n = atoms.Size();
+ nlist.Clear();
  if (full)
  {
   //
   for (long int j=0;j<n;++j)
-  {
    if (i != j)
    {
     Neighbor nn;
-    nn.i = &sc[i];
-    nn.j = &sc[j];
-    nn.rij = sc.VectorDistance(i, j);
+    nn.i = &atoms[i];
+    nn.j = &atoms[j];
+    nn.rij = cell.Displacement(atoms[i].Position(), atoms[j].Position());
     nn.r = nn.rij.Module();
-    if (rcu < 1E-30) nlist.push_back(nn);
-    else if (nn.r < rcu) nlist.push_back(nn);
+    if (rcu < 1E-30) nlist.Append(nn);
+    else if (nn.r < rcu) nlist.Append(nn);
    }
-  }
  }
  else
  {
@@ -70,12 +66,12 @@ void MinimumImageCellManager::BuildNeighborList(SimulationCell & sc, long i, std
   for (long int j=i+1;j<n;++j)
   {
    Neighbor nn;
-   nn.i = &sc[i];
-   nn.j = &sc[j];
-   nn.rij = sc.VectorDistance(i, j);
+   nn.i = &atoms[i];
+   nn.j = &atoms[j];
+   nn.rij = cell.Displacement(atoms[i].Position(), atoms[j].Position());
    nn.r = nn.rij.Module();
-   if (rcu < 1E-30) nlist.push_back(nn);
-   else if (nn.r < rcu) nlist.push_back(nn);
+   if (rcu < 1E-30) nlist.Append(nn);
+   else if (nn.r < rcu) nlist.Append(nn);
   }
  }
 }
