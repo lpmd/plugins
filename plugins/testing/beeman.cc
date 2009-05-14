@@ -4,7 +4,7 @@
 
 #include "beeman.h"
 
-#include <lpmd/simulationcell.h>
+#include <lpmd/simulation.h>
 #include <lpmd/potential.h>
 
 using namespace lpmd;
@@ -45,31 +45,35 @@ void Beeman::ShowHelp() const
  std::cout << " simulacion.                                                                   \n";
 }
 
-void Beeman::Initialize(SimulationCell & sc, Potential & p)
+void Beeman::Initialize(Simulation & sim, Potential & p)
 {
- for (unsigned long int i=0;i<sc.size();++i) auxlist.push_back(Vector());
- UseOldCell(sc);
- SimulationCell & oldsc = OldCell();
- p.UpdateForces(oldsc);
+ BasicParticleSet & atoms = sim.Atoms();
+ BasicCell & cell = sim.Cell();
+ for (long int i=0;i<atoms.Size();++i) auxlist.push_back(Vector());
+ UseOldCell(atoms, cell);
+ p.UpdateForces(OldAtoms(), OldCell());
 }
 
-void Beeman::AdvancePosition(SimulationCell & sc, long i)
+void Beeman::AdvancePosition(Simulation & sim, long i)
 {
- SimulationCell & oldsc = OldCell();
- const Atom & now = sc[i];
- const Atom & old = oldsc[i];
+ BasicParticleSet & atoms = sim.Atoms();
+ BasicCell & cell = sim.Cell();
+ BasicParticleSet & oldatoms = OldAtoms();
+ const Atom & now = atoms[i];
+ const Atom & old = oldatoms[i];
  auxlist[i] = old.Acceleration();
  Vector newpos = now.Position() + now.Velocity()*dt + (2.0/3.0)*now.Acceleration()*dt*dt - (1.0/6.0)*old.Acceleration()*dt*dt;
- oldsc[i].Acceleration() = now.Acceleration();
- sc.SetPosition(i, newpos);
+ oldatoms[i].Acceleration() = now.Acceleration();
+ atoms[i].Position() = cell.FittedInside(newpos);
 }
 
-void Beeman::AdvanceVelocity(SimulationCell & sc, long i)
+void Beeman::AdvanceVelocity(Simulation & sim, long i)
 {
- SimulationCell & oldsc = OldCell();
- const Atom & now = sc[i];
- const Atom & old = oldsc[i];
- sc[i].Velocity() = now.Velocity()+(1.0/3.0)*now.Acceleration()*dt+(5.0/6.0)*old.Acceleration()*dt-(1.0/6.0)*auxlist[i]*dt;
+ BasicParticleSet & atoms = sim.Atoms();
+ BasicParticleSet & oldatoms = OldAtoms();
+ const Atom & now = atoms[i];
+ const Atom & old = oldatoms[i];
+ atoms[i].Velocity() = now.Velocity()+(1.0/3.0)*now.Acceleration()*dt+(5.0/6.0)*old.Acceleration()*dt-(1.0/6.0)*auxlist[i]*dt;
 }
 
 // Esto se incluye para que el modulo pueda ser cargado dinamicamente

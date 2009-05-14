@@ -4,7 +4,7 @@
 
 #include "leapfrog.h"
 
-#include <lpmd/simulationcell.h>
+#include <lpmd/simulation.h>
 #include <lpmd/potential.h>
 
 #include <iostream>
@@ -47,27 +47,31 @@ void Leapfrog::ShowHelp() const
  std::cout << " simulacion.                                                                   \n";
 }
 
-void Leapfrog::Initialize(SimulationCell & sc, Potential & p)
+void Leapfrog::Initialize(Simulation & sim, Potential & p)
 {
- UseOldCell(sc);
- SimulationCell & oldsc = OldCell();
- p.UpdateForces(oldsc);
+ BasicParticleSet & atoms = sim.Atoms();
+ BasicCell & cell = sim.Cell();
+ UseOldCell(atoms, cell);
+ BasicParticleSet & oldatoms = OldAtoms();
+ p.UpdateForces(oldatoms, OldCell());
  // Necesitamos las velocidades al tiempo -0.5*dt, no -dt
- for (unsigned long int i=0;i<oldsc.size();++i)
+ for (long int i=0;i<oldatoms.Size();++i)
  {
-  const Atom & old = oldsc[i];
-  oldsc[i].Velocity() += old.Acceleration()*0.5*dt;
+  const Atom & old = oldatoms[i];
+  oldatoms[i].Velocity() += old.Acceleration()*0.5*dt;
  } 
 }
 
-void Leapfrog::Advance(SimulationCell & sc, long i)
+void Leapfrog::Advance(Simulation & sim, long i)
 {
- SimulationCell & oldsc = OldCell();
- const Atom & now = sc[i];                      // was Atom now = sc[i];
- Vector vhalf = oldsc[i].Velocity() + now.Acceleration()*dt;
- sc[i].Position() += vhalf*dt;
- sc[i].Velocity() = 0.5*(vhalf+oldsc[i].Velocity());
- oldsc[i].Velocity() = vhalf;
+ BasicParticleSet & atoms = sim.Atoms();
+ BasicCell & cell = sim.Cell();
+ BasicParticleSet & oldatoms = OldAtoms();
+ const Atom & now = atoms[i];                      // was Atom now = sc[i];
+ Vector vhalf = oldatoms[i].Velocity() + now.Acceleration()*dt;
+ atoms[i].Position() = cell.FittedInside(atoms[i].Position() + vhalf*dt);
+ atoms[i].Velocity() = 0.5*(vhalf+oldatoms[i].Velocity());
+ oldatoms[i].Velocity() = vhalf;
 }
 
 // Esto se incluye para que el modulo pueda ser cargado dinamicamente

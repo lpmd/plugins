@@ -20,7 +20,7 @@ class Euler: public lpmd::OneStepIntegrator, public lpmd::Stepper, public lpmd::
   void ShowHelp() const;
 
   //Metodos Propios del modulo euler
-  void Advance(BasicParticleSet & atoms, BasicCell & cell, long i);
+  void Advance(Simulation & sim, long i);
 };
 
 #endif

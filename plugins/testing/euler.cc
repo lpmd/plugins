@@ -3,6 +3,7 @@
 //
 
 #include "euler.h"
+#include <lpmd/simulation.h>
 #include <lpmd/atom.h>
 
 #include <iostream>
@@ -49,8 +50,10 @@ void Euler::ShowHelp() const
  std::cout << " simulacion.                                                                   \n";
 }
 
-void Euler::Advance(BasicParticleSet & atoms, BasicCell & cell, long i)
+void Euler::Advance(Simulation & sim, long i)
 {
+ BasicParticleSet & atoms = sim.Atoms();
+ BasicCell & cell = sim.Cell();
  const Atom & now = atoms[i];
  atoms[i].Position() = cell.FittedInside(now.Position() + now.Velocity()*dt);
  atoms[i].Velocity() += now.Acceleration()*dt;

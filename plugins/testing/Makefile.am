@@ -29,7 +29,7 @@ CLEANFILES = version.h
 #
 plugindir = $(libdir)/lpmd
 
-AM_CPPFLAGS = -Wall -pedantic
+AM_CPPFLAGS = -Wall -pedantic 
 #AM_LDFLAGS = -module -avoid-version plugincommon.lo
 AM_LDFLAGS = -module -avoid-version 
 
@@ -38,7 +38,7 @@ AM_LDFLAGS = -module -avoid-version
 #
 # plugin_LTLIBRARIES contains the list of liblpmd plugins (as libtool libraries)
 #
-plugin_LTLIBRARIES =     euler.la nullintegrator.la lennardjones.la minimumimage.la crystalfcc.la
+plugin_LTLIBRARIES =     euler.la beeman.la leapfrog.la nullintegrator.la lennardjones.la minimumimage.la crystalfcc.la
 
 #plugin_LTLIBRARIES =    angdist.la beeman.la berendsen.la buckingham.la cell.la \
 #                        cellscaling.la cna.la color.la constantforce.la cordnum.la cordnumfunc.la \

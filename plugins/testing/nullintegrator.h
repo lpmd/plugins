@@ -20,7 +20,7 @@ class NullIntegrator: public lpmd::Integrator, public lpmd::Stepper, public lpmd
   void ShowHelp() const;
 
   //Metodos propios de modulo nullintegrator
-  void Advance(BasicParticleSet & atoms, BasicCell & cell, Potential & p);
+  void Advance(Simulation & sim, Potential & p);
 
 };
 

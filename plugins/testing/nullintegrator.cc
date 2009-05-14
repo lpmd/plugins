@@ -5,6 +5,7 @@
 #include "nullintegrator.h"
 
 #include <lpmd/potential.h>
+#include <lpmd/simulation.h>
 
 #include <iostream>
 
@@ -39,7 +40,7 @@ void NullIntegrator::ShowHelp() const
  std::cout << "      De esta forma activa el integrador nulo a partir del step 150000.        \n";
 }
 
-void NullIntegrator::Advance(BasicParticleSet & atoms, BasicCell & cell, Potential & p) { p.UpdateForces(atoms, cell); }
+void NullIntegrator::Advance(Simulation & sim, Potential & p) { p.UpdateForces(sim); }
 
 // Esto se incluye para que el modulo pueda ser cargado dinamicamente
 Module * create(std::string args) { return new NullIntegrator(args); }

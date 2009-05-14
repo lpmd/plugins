@@ -12,6 +12,8 @@
 
 #include <vector>
 
+using namespace lpmd;
+
 class Beeman: public lpmd::TwoStepIntegrator, public lpmd::Stepper, public lpmd::Module
 {
  public:
@@ -21,9 +23,9 @@ class Beeman: public lpmd::TwoStepIntegrator, public lpmd::Stepper, public lpmd:
    void ShowHelp() const;
 
    //Metodos Propios del Modulo Beeman
-   void Initialize(lpmd::SimulationCell & sc, lpmd::Potential & p);
-   void AdvancePosition(lpmd::SimulationCell & sc, long i);
-   void AdvanceVelocity(lpmd::SimulationCell & sc, long i);
+   void Initialize(Simulation & sim, Potential & p);
+   void AdvancePosition(Simulation & sim, long i);
+   void AdvanceVelocity(Simulation & sim, long i);
 
  private:
       std::vector<lpmd::Vector> auxlist;

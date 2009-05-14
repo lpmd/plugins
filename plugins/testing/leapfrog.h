@@ -9,7 +9,9 @@
 #include <lpmd/stepper.h>
 #include <lpmd/plugin.h>
 
-class Leapfrog: public lpmd::OneStepIntegrator, public lpmd::Stepper, public lpmd::Module
+using namespace lpmd;
+
+class Leapfrog: public OneStepIntegrator, public Stepper, public Module
 {
  public:
   //Metodos Generales
@@ -18,8 +20,8 @@ class Leapfrog: public lpmd::OneStepIntegrator, public lpmd::Stepper, public lpm
   void ShowHelp() const;
 
   //Metodos propios modulo verlet
-  void Initialize(lpmd::SimulationCell & sc, lpmd::Potential & p);
-  void Advance(lpmd::SimulationCell & sc, long i);
+  void Initialize(Simulation & sim, Potential & p);
+  void Advance(Simulation & sim, long i);
 };
 
 
