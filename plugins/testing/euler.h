@@ -11,7 +11,7 @@
 
 using namespace lpmd;
 
-class Euler: public lpmd::OneStepIntegrator, public lpmd::Stepper, public lpmd::Module
+class Euler: public lpmd::OneStepIntegrator, public lpmd::Module
 {
  public:
   //Metodos Generales
