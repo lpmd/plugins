@@ -5,6 +5,7 @@
 #include "crystalfcc.h"
 
 #include <lpmd/atom.h>
+#include <lpmd/configuration.h>
 
 using namespace lpmd;
 
@@ -46,10 +47,12 @@ void FCCGenerator::ShowHelp() const
  std::cout << "      De esta forma creamos una celda de entrada de tipo FCC en la simulacion. \n";
 }
 
-void FCCGenerator::Generate(BasicParticleSet & atoms, BasicCell & cell) const
+void FCCGenerator::Generate(Configuration & conf) const
 {
  Vector p;
  long int cc = 0;
+ BasicParticleSet & atoms = conf.Atoms();
+ BasicCell & cell = conf.Cell();
  double ax = 1.0/double(nx);
  double ay = 1.0/double(ny);
  double az = 1.0/double(nz);

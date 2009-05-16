@@ -19,7 +19,7 @@ class FCCGenerator: public lpmd::CellGenerator, public lpmd::Module
    void ShowHelp() const;
 
    //Metodos Propios del modulo fccgenerator
-   void Generate(BasicParticleSet & atoms, BasicCell & cell) const;
+   void Generate(Configuration & config) const;
 
  private:
    int spc;

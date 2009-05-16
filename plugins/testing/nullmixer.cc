@@ -29,10 +29,9 @@ void NullMixer::ShowHelp() const
  std::cout << " apply nullmixer                                                               \n";
 }
 
-SimulationCell NullMixer::Apply(SimulationCell & sc1, SimulationCell & sc2)
+Configuration & NullMixer::Apply(Configuration & config1, Configuration & config2)
 {
- SimulationCell mixed;
- return mixed;
+ return config1;
 }
 
 // Esto se incluye para que el modulo pueda ser cargado dinamicamente

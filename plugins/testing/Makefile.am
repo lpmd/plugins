@@ -38,7 +38,8 @@ AM_LDFLAGS = -module -avoid-version
 #
 # plugin_LTLIBRARIES contains the list of liblpmd plugins (as libtool libraries)
 #
-plugin_LTLIBRARIES =     euler.la beeman.la leapfrog.la nullintegrator.la lennardjones.la minimumimage.la crystalfcc.la
+plugin_LTLIBRARIES =     euler.la beeman.la leapfrog.la nullintegrator.la lennardjones.la minimumimage.la pairdistances.la \
+                         crystalfcc.la msd.la nullmixer.la
 
 #plugin_LTLIBRARIES =    angdist.la beeman.la berendsen.la buckingham.la cell.la \
 #                        cellscaling.la cna.la color.la constantforce.la cordnum.la cordnumfunc.la \
@@ -103,14 +104,14 @@ minimumimage_la_SOURCES = minimumimage.h minimumimage.cc
 #mol2_la_SOURCES = mol2.h mol2.cc
 #moleculecm_la_SOURCES = moleculecm.h moleculecm.cc
 #morse_la_SOURCES = morse.h morse.cc
-#msd_la_SOURCES = msd.h msd.cc
+msd_la_SOURCES = msd.h msd.cc
 #nosehoover_la_SOURCES = nosehoover.h nosehoover.cc
 nullintegrator_la_SOURCES = nullintegrator.h nullintegrator.cc
 #nullpairpotential_la_SOURCES = nullpairpotential.h nullpairpotential.cc
 #nullmetalpotential_la_SOURCES = nullmetalpotential.h nullmetalpotential.cc
-#nullmixer_la_SOURCES = nullmixer.h nullmixer.cc
+nullmixer_la_SOURCES = nullmixer.h nullmixer.cc
 #nullpotential_la_SOURCES = nullpotential.h nullpotential.cc
-#pairdistances_la_SOURCES = pairdistances.h pairdistances.cc
+pairdistances_la_SOURCES = pairdistances.h pairdistances.cc
 #pdb_la_SOURCES = pdb.h pdb.cc
 #povray_la_SOURCES = povray.h povray.cc
 #pressure_la_SOURCES = pressure.h pressure.cc

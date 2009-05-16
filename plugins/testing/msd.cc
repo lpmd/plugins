@@ -3,6 +3,8 @@
 //
 
 #include "msd.h"
+#include <lpmd/simulationhistory.h>
+#include <lpmd/storedconfiguration.h>
 
 using namespace lpmd;
 
@@ -18,14 +20,12 @@ MSD::MSD(std::string args): Module("msd")
 
 MSD::~MSD() { if (m != NULL) delete m; }
 
-void MSD::Evaluate(const std::vector<SimulationCell> & simcell, Potential & pot)
+void MSD::Evaluate(const SimulationHistory & hist, Potential & pot)
 {
- int N = simcell.size();
- std::list<std::string> species = simcell[0].SpeciesList();
- int nsp = species.size(), q = 0;
- int * sp = new int[nsp];
- for (std::list<std::string>::const_iterator it=species.begin();it!=species.end();++it) sp[q++] = ElemNum(*it);
- unsigned long int nat = simcell[0].size();
+ long int N = hist.Size(); // number of configurations, not number of atoms
+ const Array<int> & elements = hist[0].Atoms().Elements();
+ int nsp = elements.Size();
+ long int nat = hist[0].Atoms().Size(); // number of atoms
  double ** msd = new double*[(int)(N-1)/2];
  for (int i=0;i<(int)(N-1)/2;i++) 
  {
@@ -36,17 +36,22 @@ void MSD::Evaluate(const std::vector<SimulationCell> & simcell, Potential & pot)
  //
  // Undo periodicity 
  //
- SimulationCell scratch(simcell[0]);
+ StoredConfiguration scratch(hist[0]);
  Vector ** noperiodic = new Vector*[N];
  for (int t=0;t<N;++t) noperiodic[t] = new Vector[nat];
- for (unsigned long int i=0;i<nat;++i) noperiodic[0][i] = simcell[0][i].Position();
- 
+ BasicParticleSet & scratch_atoms = scratch.Atoms();
+ BasicCell & cell = scratch.Cell();
+ for (long int i=0;i<nat;++i) noperiodic[0][i] = scratch_atoms[i].Position();
  for (int t=1;t<N;++t)
-  for (unsigned long int i=0;i<nat;++i)
+  for (long int i=0;i<nat;++i)
   {
-   scratch.SetPosition(0, simcell[t-1][i].Position());
-   scratch.SetPosition(1, simcell[t][i].Position());
-   noperiodic[t][i] = noperiodic[t-1][i] + scratch.VectorDistance(0, 1);
+   scratch_atoms[0].Position() = hist[t-1].Atoms()[i].Position();
+   scratch_atoms[1].Position() = hist[t].Atoms()[i].Position();
+   // FIXME: inlining por mientras tenemos un metodo como sc.VectorDistance
+   const Vector & v0 = scratch_atoms[0].Position();
+   const Vector & v1 = scratch_atoms[1].Position();
+   noperiodic[t][i] = noperiodic[t-1][i] + cell.Displacement(v0, v1);
+   // noperiodic[t][i] = noperiodic[t-1][i] + scratch.VectorDistance(0, 1);
   }
 
  //
@@ -57,17 +62,17 @@ void MSD::Evaluate(const std::vector<SimulationCell> & simcell, Potential & pot)
  for(int e1=0;e1<nsp;e1++)
  {		 	
   int ne = 0;
-  for (unsigned long int i=0;i<nat;i++) 
+  for (long int i=0;i<nat;i++) 
   {
-   if (simcell[0][i].Species() == sp[e1]) ne++;
+   if (hist[0].Atoms()[i].Z() == elements[e1]) ne++;
   }
   for (int t0=0;t0<(int)(N-1)/2;t0++) // loop sobre todos los origenes
   {
    for (int t=0;t<(int)(N-1)/2;t++) // loop sobre la separacion en tiempo
    {
-    for (unsigned long int i=0;i<nat;i++)  // loop sobre todos los atomos
+    for (long int i=0;i<nat;i++)  // loop sobre todos los atomos
     {
-     if (simcell[t0][i].Species() == sp[e1]) msd[t][e1] += (noperiodic[t0+t][i]-noperiodic[t0][i]).SquareModule();
+     if (hist[t0].Atoms()[i].Z() == elements[e1]) msd[t][e1] += (noperiodic[t0+t][i]-noperiodic[t0][i]).SquareModule();
     }
    }
   }
@@ -87,7 +92,6 @@ void MSD::Evaluate(const std::vector<SimulationCell> & simcell, Potential & pot)
   m->Set(0, i, i);
   for(int j=0;j<nsp;++j) m->Set(j+1, i, msd[i][j]/double(nat*(N-1)/2));
  }
- delete [] sp;
 }
 
 // Esto se incluye para que el modulo pueda ser cargado dinamicamente

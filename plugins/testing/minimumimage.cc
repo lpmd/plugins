@@ -3,6 +3,7 @@
 //
 
 #include "minimumimage.h"
+#include <lpmd/configuration.h>
 
 #include <cmath>
 
@@ -30,8 +31,9 @@ void MinimumImageCellManager::Show(std::ostream & os) const
 
 void MinimumImageCellManager::Reset() { }
 
-void MinimumImageCellManager::UpdateCell(BasicParticleSet & atoms, BasicCell & cell) 
+void MinimumImageCellManager::UpdateCell(Configuration & conf) 
 { 
+ BasicCell & cell = conf.Cell();
  if (fabs(rcut) < 1E-10) 
  {
   for (int q=0;q<3;++q)
@@ -41,8 +43,10 @@ void MinimumImageCellManager::UpdateCell(BasicParticleSet & atoms, BasicCell & c
 
 double MinimumImageCellManager::Cutoff() const { return rcut; }
 
-void MinimumImageCellManager::BuildNeighborList(BasicParticleSet & atoms, BasicCell & cell, long i, Array<Neighbor> & nlist, bool full, double rcu)
+void MinimumImageCellManager::BuildNeighborList(Configuration & conf, long i, Array<Neighbor> & nlist, bool full, double rcu)
 {
+ BasicParticleSet & atoms = conf.Atoms();
+ BasicCell & cell = conf.Cell();
  const long int n = atoms.Size();
  nlist.Clear();
  if (full)

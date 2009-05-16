@@ -7,7 +7,7 @@
 #include <lpmd/matrix.h>
 #include <lpmd/util.h>
 #include <lpmd/neighbor.h>
-#include <lpmd/simulationcell.h>
+#include <lpmd/configuration.h>
 
 #include <sstream>
 
@@ -52,38 +52,32 @@ void PairDistances::ShowHelp() const
  std::cout << " property pairdistances start=1 each=10 end=100                                \n\n";
 }
 
-void PairDistances::Evaluate(SimulationCell & simcell, Potential & pot)
+void PairDistances::Evaluate(Configuration & conf, Potential & pot)
 {
- const unsigned long int n = simcell.size();
- std::list<Neighbor> total_list;
- for (unsigned long int i=0;i<n;++i)
+ BasicParticleSet & atoms = conf.Atoms();
+ const long int n = atoms.Size();
+ Array<Neighbor> total_list;
+ for (long int i=0;i<n;++i)
  {
-  std::vector<Neighbor> nlist;
-  simcell.BuildNeighborList(i, nlist, false, rcut);
-  for (unsigned long int k=0;k<nlist.size();++k)
-  {
-   const Neighbor & nn = nlist[k];
-   if (nn.r < rcut) total_list.push_back(nn); 
-  }
+  const Array<Neighbor> & nlist = conf.NeighborList(i, false, rcut);
+  for (long int k=0;k<nlist.Size();++k) total_list.Append(nlist[k]);
  } 
  //
  // Output 
  //
  if (m != NULL) delete m;
- m = new Matrix(3, total_list.size());
+ m = new Matrix(3, total_list.Size());
  // Asigna los labels al objeto Matrix para cada columna
  m->SetLabel(0, "r");
  m->SetLabel(1, "i");
  m->SetLabel(2, "j");
  // 
- long i = 0;
- for (std::list<Neighbor>::const_iterator it=total_list.begin();it!=total_list.end();++it)
+ for (long int i=0;i<total_list.Size();++i)
  {
-  const Neighbor & nn = *it;
+  const Neighbor & nn = total_list[i];
   m->Set(0, i, nn.r);
-  m->Set(1, i, nn.i->Index());
-  m->Set(2, i, nn.j->Index());
-  i++;
+  m->Set(1, i, nn.i_index);
+  m->Set(2, i, nn.j_index);
  }
 }
 

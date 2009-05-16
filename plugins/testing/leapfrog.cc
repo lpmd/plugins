@@ -49,11 +49,9 @@ void Leapfrog::ShowHelp() const
 
 void Leapfrog::Initialize(Simulation & sim, Potential & p)
 {
- BasicParticleSet & atoms = sim.Atoms();
- BasicCell & cell = sim.Cell();
- UseOldCell(atoms, cell);
- BasicParticleSet & oldatoms = OldAtoms();
- p.UpdateForces(oldatoms, OldCell());
+ UseOldConfig(sim);
+ BasicParticleSet & oldatoms = OldConfig().Atoms();
+ p.UpdateForces(OldConfig());
  // Necesitamos las velocidades al tiempo -0.5*dt, no -dt
  for (long int i=0;i<oldatoms.Size();++i)
  {
@@ -66,7 +64,7 @@ void Leapfrog::Advance(Simulation & sim, long i)
 {
  BasicParticleSet & atoms = sim.Atoms();
  BasicCell & cell = sim.Cell();
- BasicParticleSet & oldatoms = OldAtoms();
+ BasicParticleSet & oldatoms = OldConfig().Atoms();
  const Atom & now = atoms[i];                      // was Atom now = sc[i];
  Vector vhalf = oldatoms[i].Velocity() + now.Acceleration()*dt;
  atoms[i].Position() = cell.FittedInside(atoms[i].Position() + vhalf*dt);

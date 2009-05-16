@@ -6,10 +6,11 @@
 #define __NULLMIXER_H__
 
 #include <lpmd/systemmixer.h>
-#include <lpmd/simulationcell.h>
 #include <lpmd/plugin.h>
 
-class NullMixer: public lpmd::SystemMixer, public lpmd::Module
+using namespace lpmd;
+
+class NullMixer: public SystemMixer, public Module
 {
  public:
 
@@ -19,7 +20,7 @@ class NullMixer: public lpmd::SystemMixer, public lpmd::Module
   void ShowHelp() const;
 
   //Metodos Propios de modulo nullmixer
-  SimulationCell Apply(lpmd::SimulationCell & sc1, lpmd::SimulationCell & sc2);
+  Configuration & Apply(Configuration & config1, Configuration & config2);
 };
 
 #endif

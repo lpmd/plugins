@@ -48,17 +48,16 @@ void Beeman::ShowHelp() const
 void Beeman::Initialize(Simulation & sim, Potential & p)
 {
  BasicParticleSet & atoms = sim.Atoms();
- BasicCell & cell = sim.Cell();
  for (long int i=0;i<atoms.Size();++i) auxlist.push_back(Vector());
- UseOldCell(atoms, cell);
- p.UpdateForces(OldAtoms(), OldCell());
+ UseOldConfig(sim);
+ p.UpdateForces(OldConfig());
 }
 
 void Beeman::AdvancePosition(Simulation & sim, long i)
 {
  BasicParticleSet & atoms = sim.Atoms();
+ BasicParticleSet & oldatoms = OldConfig().Atoms();
  BasicCell & cell = sim.Cell();
- BasicParticleSet & oldatoms = OldAtoms();
  const Atom & now = atoms[i];
  const Atom & old = oldatoms[i];
  auxlist[i] = old.Acceleration();
@@ -70,7 +69,7 @@ void Beeman::AdvancePosition(Simulation & sim, long i)
 void Beeman::AdvanceVelocity(Simulation & sim, long i)
 {
  BasicParticleSet & atoms = sim.Atoms();
- BasicParticleSet & oldatoms = OldAtoms();
+ BasicParticleSet & oldatoms = OldConfig().Atoms();
  const Atom & now = atoms[i];
  const Atom & old = oldatoms[i];
  atoms[i].Velocity() = now.Velocity()+(1.0/3.0)*now.Acceleration()*dt+(5.0/6.0)*old.Acceleration()*dt-(1.0/6.0)*auxlist[i]*dt;

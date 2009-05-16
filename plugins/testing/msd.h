@@ -10,17 +10,19 @@
 #include <lpmd/temporalproperty.h>
 #include <lpmd/plugin.h>
 
-class MSD: public lpmd::Value<lpmd::Matrix>, public lpmd::TemporalProperty, public lpmd::Module
+using namespace lpmd;
+
+class MSD: public Value<Matrix>, public TemporalProperty, public Module
 {
  public:
   MSD(std::string args);
   ~MSD();
 
-  const lpmd::Matrix & CurrentValue() const { return *m; }
-  void Evaluate(const std::vector<lpmd::SimulationCell> & simcell, lpmd::Potential & pot);
+  const Matrix & CurrentValue() const { return *m; }
+  void Evaluate(const SimulationHistory & hist, Potential & pot);
 
  private:
-  lpmd::Matrix * m;
+  Matrix * m;
 };
 
 #endif
