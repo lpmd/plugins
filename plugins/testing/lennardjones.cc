@@ -62,13 +62,11 @@ Vector LennardJones::pairForce(const Vector & r) const
  double r6 = pow(sigma*sigma / rr2, 3.0e0);
  double r12 = r6*r6;
  double ff = -48.0e0*(epsilon/rr2)*(r12 - 0.50e0*r6);
- Vector fv = r * ff;
-// fv.Scale(ff);
+ Vector fv = r*ff;
  return fv;
 }
 
 // Esto se incluye para que el modulo pueda ser cargado dinamicamente
 Module * create(std::string args) { return new LennardJones(args); }
 void destroy(Module * m) { delete m; }
-
 

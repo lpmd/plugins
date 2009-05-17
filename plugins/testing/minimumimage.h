@@ -21,7 +21,7 @@ class MinimumImageCellManager: public CellManager, public Module
 
    void Reset();
    void UpdateCell(Configuration & conf);
-   void BuildNeighborList(Configuration & conf, long i, Array<Neighbor> & nlist, bool full, double);
+   void BuildNeighborList(Configuration & conf, long i, NeighborList & nlist, bool full, double);
    double Cutoff() const;
 
  private:

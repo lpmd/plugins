@@ -10,15 +10,12 @@ using namespace lpmd;
 
 MSD::MSD(std::string args): Module("msd")
 {
- m = NULL;
  AssignParameter("version", "1.0"); 
  AssignParameter("apirequired", "1.1"); 
  AssignParameter("bugreport", "gnm@gnm.cl"); 
  //
  ProcessArguments(args);
 }
-
-MSD::~MSD() { if (m != NULL) delete m; }
 
 void MSD::Evaluate(const SimulationHistory & hist, Potential & pot)
 {
@@ -84,13 +81,14 @@ void MSD::Evaluate(const SimulationHistory & hist, Potential & pot)
  //
  // Output MSD
  //
- m = new Matrix(nsp+1, (int)(N-1)/2);
- m->SetLabel(0, "time");
- for (int j=0;j<nsp;++j) m->SetLabel(j+1, "MSD");
+ Matrix & m = CurrentValue();
+ m = Matrix(nsp+1, (int)(N-1)/2);
+ m.SetLabel(0, "time");
+ for (int j=0;j<nsp;++j) m.SetLabel(j+1, "MSD");
  for(int i=0;i<(int)(N-1)/2;++i)
  {
-  m->Set(0, i, i);
-  for(int j=0;j<nsp;++j) m->Set(j+1, i, msd[i][j]/double(nat*(N-1)/2));
+  m.Set(0, i, i);
+  for(int j=0;j<nsp;++j) m.Set(j+1, i, msd[i][j]/double(nat*(N-1)/2));
  }
 }
 

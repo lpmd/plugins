@@ -15,7 +15,6 @@ using namespace lpmd;
 
 PairDistances::PairDistances(std::string args): Module("pairdistances")
 {
- m = NULL;
  AssignParameter("version", "1.0"); 
  AssignParameter("apirequired", "1.1"); 
  AssignParameter("bugreport", "gnm@gnm.cl"); 
@@ -30,10 +29,8 @@ PairDistances::PairDistances(std::string args): Module("pairdistances")
  start = GetInteger("start");
  end = GetInteger("end");
  each = GetInteger("each");
- outputfile = GetString("output");
+ OutputFile() = GetString("output");
 }
-
-PairDistances::~PairDistances() { if (m != NULL) delete m; }
 
 void PairDistances::ShowHelp() const
 {
@@ -56,28 +53,28 @@ void PairDistances::Evaluate(Configuration & conf, Potential & pot)
 {
  BasicParticleSet & atoms = conf.Atoms();
  const long int n = atoms.Size();
- Array<Neighbor> total_list;
+ NeighborList total_list;
  for (long int i=0;i<n;++i)
  {
-  const Array<Neighbor> & nlist = conf.NeighborList(i, false, rcut);
+  const NeighborList & nlist = conf.Neighbors(i, false, rcut);
   for (long int k=0;k<nlist.Size();++k) total_list.Append(nlist[k]);
  } 
  //
  // Output 
  //
- if (m != NULL) delete m;
- m = new Matrix(3, total_list.Size());
+ Matrix & m = CurrentValue();
+ m = Matrix(3, total_list.Size());
  // Asigna los labels al objeto Matrix para cada columna
- m->SetLabel(0, "r");
- m->SetLabel(1, "i");
- m->SetLabel(2, "j");
+ m.SetLabel(0, "r");
+ m.SetLabel(1, "i");
+ m.SetLabel(2, "j");
  // 
  for (long int i=0;i<total_list.Size();++i)
  {
-  const Neighbor & nn = total_list[i];
-  m->Set(0, i, nn.r);
-  m->Set(1, i, nn.i_index);
-  m->Set(2, i, nn.j_index);
+  const AtomPair & nn = total_list[i];
+  m.Set(0, i, nn.r);
+  m.Set(1, i, nn.i_index);
+  m.Set(2, i, nn.j_index);
  }
 }
 
