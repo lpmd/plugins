@@ -39,7 +39,7 @@ AM_LDFLAGS = -module -avoid-version
 # plugin_LTLIBRARIES contains the list of liblpmd plugins (as libtool libraries)
 #
 plugin_LTLIBRARIES =     euler.la beeman.la leapfrog.la nullintegrator.la lennardjones.la minimumimage.la pairdistances.la \
-                         crystalfcc.la msd.la nullmixer.la
+                         crystalfcc.la msd.la nullmixer.la linkedcell.la
 
 #plugin_LTLIBRARIES =    angdist.la beeman.la berendsen.la buckingham.la cell.la \
 #                        cellscaling.la cna.la color.la constantforce.la cordnum.la cordnumfunc.la \
@@ -97,7 +97,7 @@ euler_la_SOURCES = euler.h euler.cc
 #harmonic_la_SOURCES = harmonic.h harmonic.cc
 leapfrog_la_SOURCES = leapfrog.h leapfrog.cc
 lennardjones_la_SOURCES = lennardjones.h lennardjones.cc
-#linkedcell_la_SOURCES = linkedcell.h linkedcell.cc
+linkedcell_la_SOURCES = linkedcell.h linkedcell.cc
 #localpressure_la_SOURCES = localpressure.h localpressure.cc
 #lpmd_la_SOURCES = lpmd.h lpmd.cc
 minimumimage_la_SOURCES = minimumimage.h minimumimage.cc

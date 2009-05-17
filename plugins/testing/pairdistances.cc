@@ -6,7 +6,7 @@
 
 #include <lpmd/matrix.h>
 #include <lpmd/util.h>
-#include <lpmd/neighbor.h>
+#include <lpmd/atompair.h>
 #include <lpmd/configuration.h>
 
 #include <sstream>

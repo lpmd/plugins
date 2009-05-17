@@ -5,20 +5,15 @@
 #ifndef __LINKEDCELL_MODULE_H
 #define __LINKEDCELL_MODULE_H
 
-#include <lpmd/simulationcell.h>
 #include <lpmd/cellmanager.h>
 #include <lpmd/plugin.h>
-
-#include <exception>
-
-class SimulationCellTooSmall: public std::exception 
-{
- const char * what() const throw();
-};
+#include <lpmd/atompair.h>
 
 //
 //
 //
+
+using namespace lpmd;
 
 class AtomItem
 {
@@ -82,7 +77,7 @@ class SubCell: public BasicSubCell
 class LinkedCellManager
 {
  public:
-   LinkedCellManager(SimulationCell & cell, long nx, long ny, long nz, double rcut);
+   LinkedCellManager(Configuration & cell, long nx, long ny, long nz, double rcut);
    ~LinkedCellManager();
 
    void BuildSubCellList(double rcut);
@@ -103,10 +98,9 @@ class LinkedCellManager
   private:
    long grid[3];
    double rcut;
-   SimulationCell & realcell;
+   Configuration & realcell;
    SubCell * subcells;
 };
-
 
 class LinkedCellCellManager: public lpmd::CellManager, public lpmd::Module
 {
@@ -118,8 +112,8 @@ class LinkedCellCellManager: public lpmd::CellManager, public lpmd::Module
    void Show(std::ostream & os) const;
 
    void Reset();
-   void UpdateCell(SimulationCell & sc);
-   void BuildNeighborList(SimulationCell & sc, long i, std::vector<Neighbor> & nlist, bool full, double rcut);
+   void UpdateCell(Configuration & sc);
+   void BuildNeighborList(Configuration & sc, long i, NeighborList & nlist, bool full, double rcut);
    double Cutoff() const;
 
  private:

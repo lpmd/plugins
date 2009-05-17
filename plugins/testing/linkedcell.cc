@@ -3,13 +3,10 @@
 //
 
 #include "linkedcell.h"
+#include <lpmd/error.h>
+#include <lpmd/configuration.h>
 
 using namespace lpmd;
-
-const char * SimulationCellTooSmall::what() const throw()
-{
- return "The simulation cell is too small for the potential cutoff(s) considered.";
-}
 
 //
 //
@@ -66,7 +63,7 @@ void BasicSubCell::AddAtom(long index)
 
 BasicSubCell::~BasicSubCell() { ClearAtoms(); }
 
-LinkedCellManager::LinkedCellManager(SimulationCell & cell, long nx, long ny, long nz, double rcut): realcell(cell)
+LinkedCellManager::LinkedCellManager(Configuration & cell, long nx, long ny, long nz, double rcut): realcell(cell)
 {
  grid[0] = nx;
  grid[1] = ny;
@@ -78,16 +75,17 @@ void LinkedCellManager::BuildSubCellList(double rc)
 {
  rcut = rc;
  const long nsubc = NumberOfSubCells();
- if (nsubc == 0) throw SimulationCellTooSmall();
+ if (nsubc == 0) throw PluginError("linkedcell", "The simulation box is too small");
  subcells = new SubCell[nsubc];
+ BasicCell & cell = realcell.Cell();
  double ll =0.0;
  for (int j=0;j<3;++j)
-   if (realcell.GetCell()[j].Module()/double(GridSize(j)) > ll) ll = realcell.GetCell()[j].Module()/double(GridSize(j));
+   if (cell[j].Module()/double(GridSize(j)) > ll) ll = cell[j].Module()/double(GridSize(j));
  const double cell_cutoff = rcut + sqrt(3.0)*ll;
- long ncx = long(GridSize(0)*cell_cutoff/realcell.GetCell()[0].Module());
- long ncy = long(GridSize(1)*cell_cutoff/realcell.GetCell()[1].Module());
- long ncz = long(GridSize(2)*cell_cutoff/realcell.GetCell()[2].Module());
- long nestim = long((4.0*M_PI/3.0)*NumberOfSubCells()*(pow(cell_cutoff+ll, 3.0))/realcell.Volume());
+ long ncx = long(GridSize(0)*cell_cutoff/cell[0].Module());
+ long ncy = long(GridSize(1)*cell_cutoff/cell[1].Module());
+ long ncz = long(GridSize(2)*cell_cutoff/cell[2].Module());
+ long nestim = long((4.0*M_PI/3.0)*NumberOfSubCells()*(pow(cell_cutoff+ll, 3.0))/cell.Volume());
  for (long i=0;i<nsubc;++i) subcells[i].Allocate(nestim+2);
 
  for (long k=0;k<GridSize(2);++k)
@@ -98,10 +96,7 @@ void LinkedCellManager::BuildSubCellList(double rc)
       long ni = SubCellIndex(i, j, k, tmp);
       SubCell & this_cell = subcells[ni];
       this_cell.index = ni;
-      //FIXME : ScaleByCell comentado, resultados malos, metodo no implementado
-      //Vector cell_center = realcell.ScaleByCell(Vector((i+0.5)/double(GridSize(0)), (j+0.5)/double(GridSize(1)), (k+0.5)/double(GridSize(2))));
-      Vector cell_center;
-      realcell.ConvertToExternal(cell_center);
+      Vector cell_center = cell.Cartesian(Vector((i+0.5)/double(GridSize(0)), (j+0.5)/double(GridSize(1)), (k+0.5)/double(GridSize(2))));
       this_cell.center = cell_center;
       // 
       Vector trans;
@@ -113,14 +108,11 @@ void LinkedCellManager::BuildSubCellList(double rc)
 	    for (int pp=-ncz;pp<=ncz;++pp)
 	    {
 	     if (((pp == 0) && (qq == 0)) && (rr == 0)) continue;
-	     //FIXME : ScaleByCell comentado, resultados malos, metodo no implementado.
-             //const Vector realdisp = realcell.ScaleByCell(Vector(pp/double(GridSize(0)), qq/double(GridSize(1)), rr/double(GridSize(2))));
-	     Vector realdisp;
+         const Vector realdisp = cell.ScaleByCell(Vector(pp/double(GridSize(0)), qq/double(GridSize(1)), rr/double(GridSize(2))));
 	     if (realdisp.Module() <= cell_cutoff)
 	     {
               long nj = SubCellIndex(i+pp, j+qq, k+rr, trans);
-	      //FIXME : ScaleByCell comentado, resultados malos, metodo no implementado.
-	      //trans = realcell.ScaleByCell(trans);
+	      trans = cell.ScaleByCell(trans);
 	      nv++;
               if ((smart_counter % 2) == 0) 
               {
@@ -181,15 +173,17 @@ LinkedCellManager::~LinkedCellManager()
 void LinkedCellManager::FillCells() 
 {
  for (long i=0;i<NumberOfSubCells();++i) subcells[i].ClearAtoms();
- unsigned long int n = realcell.size();
- for (unsigned long int i=0;i<n;++i) GetSubCellByAtom(i).AddAtom(i);
+ long int n = realcell.Atoms().Size();
+ for (long int i=0;i<n;++i) GetSubCellByAtom(i).AddAtom(i);
 }
 
 SubCell * LinkedCellManager::GetSubCellList() const { return subcells; }
 
 SubCell & LinkedCellManager::GetSubCellByAtom(long i) const
 {
- Vector tmp, r = realcell.FracPosition(i);
+ BasicCell & cell = realcell.Cell();
+ BasicParticleSet & atoms = realcell.Atoms();
+ Vector tmp, r = cell.Fractional(atoms[i].Position());
  long k[3];
  for (int j=0;j<3;++j)
  {
@@ -245,7 +239,7 @@ void LinkedCellCellManager::Reset()
  //lcm = NULL;
 }
 
-void LinkedCellCellManager::UpdateCell(SimulationCell & sc) 
+void LinkedCellCellManager::UpdateCell(Configuration & sc) 
 { 
  if (lcm == NULL) lcm = new LinkedCellManager(sc, nx, ny, nz, rcut);
  lcm->FillCells(); 
@@ -253,23 +247,28 @@ void LinkedCellCellManager::UpdateCell(SimulationCell & sc)
 
 double LinkedCellCellManager::Cutoff() const { return lcm->GetCutoff(); }
 
-void LinkedCellCellManager::BuildNeighborList(SimulationCell & sc, long i, std::vector<Neighbor> & nlist, bool full, double rcut)
+void LinkedCellCellManager::BuildNeighborList(Configuration & sc, long i, NeighborList & nlist, bool full, double rcut)
 {
- nlist.clear();
+ BasicParticleSet & atoms = sc.Atoms();
+ nlist.Clear();
  //lcm->FillCells();
  //const double rcc = lcm->GetCutoff();
- const Atom & this_atom = sc[i];
+ BasicAtom & this_atom = atoms[i];
  SubCell & subcell = lcm->GetSubCellByAtom(i);
  for (AtomItem * ak = subcell.GetAtomList();ak!=NULL;ak=ak->next)
  {
-  if ( (full && (ak->i != this_atom.Index())) || ((! full) && (ak->i > i)) )
+  if ( (full && (ak->i != i)) || ((! full) && (ak->i > i)) )
   {
-   Neighbor nn;
+   AtomPair nn;
    nn.i = &this_atom;
-   nn.j = &sc[ak->i];
+   nn.j = &atoms[ak->i];
    nn.rij = nn.j->Position() - this_atom.Position();
    nn.r = nn.rij.Module();
-   if ((nn.r < rcut) && (nn.r > 0.001)) nlist.push_back(nn); // FIXME: hay un bug al usar integradores onestep
+   if ((nn.r < rcut) && (nn.r > 0.001)) 
+   {
+    std::cerr << "DEBUG intracell nn.r = " << nn.r << '\n';
+    nlist.Append(nn); // FIXME: hay un bug al usar integradores onestep
+   }
   }
  }
  // 
@@ -280,18 +279,23 @@ void LinkedCellCellManager::BuildNeighborList(SimulationCell & sc, long i, std::
   const Vector disp = nscell.disp;
   for (AtomItem * ak = scell.GetAtomList();ak!=NULL;ak=ak->next)
   {
-   Neighbor nn;
+   AtomPair nn;
    nn.i = &this_atom;
-   nn.j = &sc[ak->i];
+   nn.j = &atoms[ak->i];
    const Vector newpos = nn.j->Position()+disp;
    nn.rij = newpos-this_atom.Position();
    nn.r = nn.rij.Module();
-   if ((nn.r < rcut) && (nn.r > 0.001)) nlist.push_back(nn); // FIXME: hay un bug al usar integradores onestep
+   if ((nn.r < rcut) && (nn.r > 0.001))
+   {
+    std::cerr << "DEBUG intercell 1st half nn.r = " << nn.r << '\n';
+    nlist.Append(nn); // FIXME: hay un bug al usar integradores onestep
+   }
   }
  }
  // 
  if (full)
  {
+  std::cerr << "DEBUG Number of second half: " << subcell.GetNumberOfSecondHalf() << '\n';
   for (long p=0;p<subcell.GetNumberOfSecondHalf();++p)
   {
    NeighborSubCell & nscell = subcell.GetSecondHalfNeighbor(p);
@@ -299,14 +303,17 @@ void LinkedCellCellManager::BuildNeighborList(SimulationCell & sc, long i, std::
    const Vector disp = nscell.disp;
    for (AtomItem * ak = scell.GetAtomList();ak!=NULL;ak=ak->next)
    {
-    Neighbor nn;
+    AtomPair nn;
     nn.i = &this_atom;
-    nn.j = &sc[ak->i];
+    nn.j = &atoms[ak->i];
     const Vector newpos = nn.j->Position()+disp;
     nn.rij = newpos-this_atom.Position();
     nn.r = nn.rij.Module();
-    if ((nn.r < rcut) && (nn.r > 0.001)) nlist.push_back(nn); // FIXME: hay un bug al usar integradores onestep
-
+    if ((nn.r < rcut) && (nn.r > 0.001))
+    {
+     std::cerr << "DEBUG intercell 2nd half nn.r = " << nn.r << '\n';
+     nlist.Append(nn); // FIXME: hay un bug al usar integradores onestep
+    }
    }
   }
  }
