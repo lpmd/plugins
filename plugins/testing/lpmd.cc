@@ -184,7 +184,7 @@ bool LPMDFormat::ReadCell(std::istream & is, Configuration & con) const
     if (hdr[k] == "RGB") color = Vector(words[k-1].c_str());
     if (hdr[k] == "C") colors=atof(words[k-1].c_str());
    }
-   Vector pos(X,Y,Z);
+   Vector pos = cell.Cartesian(Vector(X,Y,Z));
    Vector vel(VX,VY,VZ);
    Vector ace(AX,AY,AZ);
    part.Append(Atom(sym,pos,vel,ace));
@@ -248,7 +248,7 @@ void LPMDFormat::WriteCell(std::ostream & out, Configuration & con) const
  {
   if (level>=0)
   {
-   out << part[i].Symbol() << " " << part[i].Position() ;
+   out << part[i].Symbol() << " " << cell.Fractional(part[i].Position()) ;
   }
   if (level>=1)
   {
