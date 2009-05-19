@@ -5,7 +5,6 @@
 #include "rotate.h"
 
 #include <lpmd/util.h>
-#include <lpmd/md.h>
 
 #include <iostream>
 
