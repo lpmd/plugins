@@ -17,10 +17,10 @@ class Mol2Format: public lpmd::CellFormat, public lpmd::Module
    void ShowHelp() const;
 
    //Metodos Propios de modulo mol2
-   void WriteHeader(std::ostream & os, std::vector<lpmd::SimulationCell> *) const;
+   void WriteHeader(std::ostream & os, lpmd::SimulationHistory * sh) const;
    void ReadHeader(std::istream & is) const;
-   void WriteCell(std::ostream & os, lpmd::SimulationCell & sc) const;
-   bool ReadCell(std::istream & is, lpmd::SimulationCell & sc) const;
+   void WriteCell(std::ostream & os, lpmd::Configuration & con) const;
+   bool ReadCell(std::istream & is, lpmd::Configuration & con) const;
    
    long int GetInterval() const {return interval;}
 

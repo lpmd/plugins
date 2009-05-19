@@ -80,6 +80,7 @@ bool XYZFormat::ReadCell(std::istream & is, Configuration & sc) const
  // Tomamos las cell y los atomos.
  BasicParticleSet & part = sc.Atoms();
  BasicCell & cell = sc.Cell();
+ assert(part.Size() == 0);
  //
  getline(is, tmp);              // This reads the "number of atoms" line
  (*linecounter)++;

@@ -122,6 +122,7 @@ bool LPMDFormat::ReadCell(std::istream & is, Configuration & con) const
 {
  BasicCell & cell = con.Cell();
  BasicParticleSet & part = con.Atoms();
+ assert(part.Size() == 0);
  std::string tmp;
  getline(is, tmp);                                     // Numero de atomos
  (*linecounter)++;
