@@ -40,7 +40,7 @@ AM_LDFLAGS = -module -avoid-version
 #
 plugin_LTLIBRARIES =     beeman.la buckingham.la crystal2d.la crystalbcc.la crystalfcc.la crystalhcp.la crystalsc.la\
 			 euler.la fastlj.la finnissinclair.la gupta.la harmonic.la\
-			 leapfrog.la lennardjones.la linkedcell.la minimumimage.la morse.la msd.la \
+			 leapfrog.la lennardjones.la linkedcell.la lpmd.la minimumimage.la morse.la msd.la \
 			 nullintegrator.la nullpairpotential.la nullmetalpotential.la nullmixer.la nullpotential.la\
 			 pairdistances.la rotate.la skewstart.la suttonchen.la xyz.la #voronoi.la
 
@@ -106,7 +106,7 @@ leapfrog_la_SOURCES = leapfrog.h leapfrog.cc
 lennardjones_la_SOURCES = lennardjones.h lennardjones.cc
 linkedcell_la_SOURCES = linkedcell.h linkedcell.cc
 #localpressure_la_SOURCES = localpressure.h localpressure.cc
-#lpmd_la_SOURCES = lpmd.h lpmd.cc
+lpmd_la_SOURCES = lpmd.h lpmd.cc
 minimumimage_la_SOURCES = minimumimage.h minimumimage.cc
 #mol2_la_SOURCES = mol2.h mol2.cc
 #moleculecm_la_SOURCES = moleculecm.h moleculecm.cc
