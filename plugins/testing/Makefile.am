@@ -42,7 +42,7 @@ plugin_LTLIBRARIES =     beeman.la buckingham.la crystal2d.la crystal3d.la \
 			 euler.la fastlj.la finnissinclair.la gupta.la harmonic.la\
 			 leapfrog.la lennardjones.la linkedcell.la lpmd.la minimumimage.la mol2.la morse.la msd.la \
 			 nullintegrator.la nullpairpotential.la nullmetalpotential.la nullmixer.la nullpotential.la\
-			 pairdistances.la pdb.la rotate.la skewstart.la suttonchen.la xyz.la zlp.la #voronoi.la
+			 pairdistances.la pdb.la rotate.la skewstart.la suttonchen.la xyz.la zlp.la
 
 #plugin_LTLIBRARIES =    angdist.la beeman.la berendsen.la buckingham.la cell.la \
 #                        cellscaling.la cna.la color.la constantforce.la cordnum.la cordnumfunc.la \
@@ -86,10 +86,6 @@ buckingham_la_SOURCES = buckingham.h buckingham.cc
 #cordnumfunc_la_SOURCES = cordnumfunc.h cordnumfunc.cc
 crystal2d_la_SOURCES = crystal2d.h crystal2d.cc
 crystal3d_la_SOURCES = crystal3d.h crystal3d.cc
-#crystalbcc_la_SOURCES = crystalbcc.h crystalbcc.cc
-#crystalfcc_la_SOURCES = crystalfcc.h crystalfcc.cc
-#crystalhcp_la_SOURCES = crystalhcp.h crystalhcp.cc
-#crystalsc_la_SOURCES = crystalsc.h crystalsc.cc
 #densityprofile_la_SOURCES = densityprofile.h densityprofile.cc
 #displace_la_SOURCES = displace.h displace.cc
 #dispvol_la_SOURCES = dispvol.h dispvol.cc
@@ -121,7 +117,6 @@ nullmixer_la_SOURCES = nullmixer.h nullmixer.cc
 nullpotential_la_SOURCES = nullpotential.h nullpotential.cc
 pairdistances_la_SOURCES = pairdistances.h pairdistances.cc
 pdb_la_SOURCES = pdb.h pdb.cc
-#povray_la_SOURCES = povray.h povray.cc
 #pressure_la_SOURCES = pressure.h pressure.cc
 #printatoms_la_SOURCES = printatoms.h printatoms.cc
 #quenchedmd_la_SOURCES = quenchedmd.h quenchedmd.cc
