@@ -5,7 +5,8 @@
 #include "xyz.h"
 
 #include <lpmd/util.h>
-#include <lpmd/simulationcell.h>
+#include <lpmd/simulation.h>
+#include <lpmd/manipulations.h>
 
 using namespace lpmd;
 
@@ -71,11 +72,14 @@ void XYZFormat::ReadHeader(std::istream & is) const
 // 
 // Lee una configuracion desde un archivo XYZ 
 //
-bool XYZFormat::ReadCell(std::istream & is, SimulationCell & sc) const
+bool XYZFormat::ReadCell(std::istream & is, Configuration & sc) const
 {
  if (GetString("replacecell") == "true") throw PluginError("xyz", "This format does not contain any cell vectors.");
  std::string tmp;
 
+ // Tomamos las cell y los atomos.
+ BasicParticleSet & part = sc.Atoms();
+ BasicCell & cell = sc.Cell();
  //
  getline(is, tmp);              // This reads the "number of atoms" line
  (*linecounter)++;
@@ -96,36 +100,32 @@ bool XYZFormat::ReadCell(std::istream & is, SimulationCell & sc) const
  getline(is, tmp);             // This reads the "title" line and ignores it
  (*linecounter)++;
 
- // 
  for (long i=0;i<natoms;++i)
  { 
   getline(is, tmp);
   (*linecounter)++;
-  std::vector<std::string> words = StringSplit< std::vector<std::string> >(tmp); 
-  if (words.size() == 4)
+  Array<std::string> words = StringSplit(tmp, ' '); 
+  if (words.Size() == 4)
   {
-   int N=ElemNum(words[0]);
    Vector pos(atof(words[1].c_str()),atof(words[2].c_str()),atof(words[3].c_str()));
-   sc.Create(new Atom(N, pos));
+   part.Append(Atom(words[0], pos));
   }
-  else if (words.size() == 7)
+  else if (words.Size() == 7)
   {
-   int N=ElemNum(words[0]);
    Vector pos(atof(words[1].c_str()),atof(words[2].c_str()),atof(words[3].c_str()));
    Vector vel(atof(words[4].c_str()),atof(words[5].c_str()),atof(words[6].c_str()));
-   sc.Create(new Atom(N, pos, vel));
+   part.Append(Atom(words[0], pos, vel));
   }
-  else if (words.size() == 10)
+  else if (words.Size() == 10)
   {
-   int N=ElemNum(words[0]);
    Vector pos(atof(words[1].c_str()),atof(words[2].c_str()),atof(words[3].c_str()));
    Vector vel(atof(words[4].c_str()),atof(words[5].c_str()),atof(words[6].c_str()));
    Vector ace(atof(words[7].c_str()),atof(words[8].c_str()),atof(words[9].c_str()));
-   sc.Create(new Atom(N, pos, vel, ace));
+   part.Append(Atom(words[0], pos, vel, ace));
   }
   else throw PluginError("xyz", "An unidentified line was found in the file \""+readfile+"\", line "+ToString<int>(*linecounter));
  }
- if (coords == "centered") sc.UnCenter();
+ if (coords == "centered") UnCenter(part,cell);
  if (external != "ignore")
  {
   if (inside == "true")
@@ -133,8 +133,7 @@ bool XYZFormat::ReadCell(std::istream & is, SimulationCell & sc) const
    //Reubica los atomos dentro de la celda.
    for(int i=0;i<natoms;i++)
    {
-    Vector atompos = sc[i].Position();
-    sc.SetPosition(i,atompos);
+    part[i].Position() = cell.FittedInside(part[i].Position());
    }
   }
   //Chequea que todos los atomos que se han leido esten dentro de la "celda".
@@ -142,44 +141,44 @@ bool XYZFormat::ReadCell(std::istream & is, SimulationCell & sc) const
   {
    for (int i=0;i<natoms;i++)
    {
-    Vector pos = sc[i].Position();
-    sc.ConvertToInternal(pos);
-    Vector opos = pos;
-    for (int q=0;q<3;++q) pos[q] = pos[q]/sc.GetCell()[q].Module();
-    if (pos[0]<0 || pos[0]>1.0) throw PluginError("xyz", "The atom ["+ToString<int>(i)+"] was found outside the cell in the [a] Vector");
-    if (pos[1]<0 || pos[1]>1.0) throw PluginError("xyz", "The atom ["+ToString<int>(i)+"] was found outside the cell in the [b] Vector");
-    if (pos[2]<0 || pos[2]>1.0) throw PluginError("xyz", "The atom ["+ToString<int>(i)+"] was found outside the cell in the [c] Vector");
+    if (cell.IsInside(part[i].Position()))
+    {
+     throw PluginError("xyz", "The atom["+ToString<int>(i)+"] was found outside the cell.");
+    }
    }
   }
  }
  return true;
 }
 
-void XYZFormat::WriteHeader(std::ostream & os, std::vector<SimulationCell> * cells) const
+void XYZFormat::WriteHeader(std::ostream & os, SimulationHistory * sh) const
 {
  // El formato XYZ no tiene ningun header especial
 }
 
-void XYZFormat::WriteCell(std::ostream & out, SimulationCell & sc) const
+void XYZFormat::WriteCell(std::ostream & out, Configuration & sc) const
 {
+ // Tomamos las cell y los atomos.
+ BasicParticleSet & part = sc.Atoms();
+ BasicCell & cell = sc.Cell();
  if (inside == "true")
  {
   //Reubica los atomos dentro de la celda.
-  for (unsigned long int i=0;i<sc.size();i++) sc.SetPosition(i, sc[i].Position());
+  for (long int i=0;i<part.Size();i++) part[i].Position() = cell.FittedInside(part[i].Position());
  }
- out << sc.size() << std::endl;
+ out << part.Size() << std::endl;
  out << '\n';
  if (level == 0)
  {
-  for(unsigned long int i=0;i<sc.size();i++) out << sc[i].Symb() << " " << sc[i].Position() << std::endl;
+  for(long int i=0;i<part.Size();i++) out << part[i].Symbol() << " " << part[i].Position() << std::endl;
  }
  else if (level == 1)
  {
-  for (unsigned long int i=0;i<sc.size();i++) out << sc[i].Symb() << " " << sc[i].Position() << " " << sc[i].Velocity() << std::endl;
+  for (long int i=0;i<part.Size();i++) out << part[i].Symbol() << " " << part[i].Position() << " " << part[i].Velocity() << std::endl;
  }
  else if (level == 2)
  {
-  for (unsigned long int i=0;i<sc.size();i++) out << sc[i].Symb() << " " << sc[i].Position() << " " << sc[i].Velocity() << " " << sc[i].Acceleration() << std::endl;
+  for (long int i=0;i<part.Size();i++) out << part[i].Symbol() << " " << part[i].Position() << " " << part[i].Velocity() << " " << part[i].Acceleration() << std::endl;
  }
 }
 

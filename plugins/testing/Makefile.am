@@ -42,7 +42,7 @@ plugin_LTLIBRARIES =     beeman.la buckingham.la crystal2d.la crystalbcc.la crys
 			 euler.la fastlj.la finnissinclair.la gupta.la harmonic.la\
 			 leapfrog.la lennardjones.la linkedcell.la minimumimage.la morse.la msd.la \
 			 nullintegrator.la nullpairpotential.la nullmetalpotential.la nullmixer.la nullpotential.la\
-			 pairdistances.la rotate.la skewstart.la suttonchen.la #voronoi.la
+			 pairdistances.la rotate.la skewstart.la suttonchen.la xyz.la #voronoi.la
 
 #plugin_LTLIBRARIES =    angdist.la beeman.la berendsen.la buckingham.la cell.la \
 #                        cellscaling.la cna.la color.la constantforce.la cordnum.la cordnumfunc.la \
@@ -143,6 +143,6 @@ suttonchen_la_SOURCES = suttonchen.h suttonchen.cc
 #verlet_la_SOURCES = verlet.h verlet.cc
 #verletlist_la_SOURCES = verletlist.h verletlist.cc
 #voronoi_la_SOURCES = voronoi.h voronoi.cc
-#xyz_la_SOURCES = xyz.h xyz.cc
+xyz_la_SOURCES = xyz.h xyz.cc
 #zlp_la_SOURCES = zlp.h zlp.cc
 

@@ -7,6 +7,7 @@
 
 #include <lpmd/cellformat.h>
 #include <lpmd/plugin.h>
+#include <lpmd/simulation.h>
 
 class XYZFormat: public lpmd::CellFormat, public lpmd::Module
 {
@@ -18,9 +19,9 @@ class XYZFormat: public lpmd::CellFormat, public lpmd::Module
 
   //Metodos propios de modulo xyz
   void ReadHeader(std::istream & is) const;
-  bool ReadCell(std::istream & is, lpmd::SimulationCell & sc) const;
-  void WriteHeader(std::ostream & os, std::vector<lpmd::SimulationCell> *) const;
-  void WriteCell(std::ostream & os, lpmd::SimulationCell & sc) const;
+  bool ReadCell(std::istream & is, lpmd::Configuration & c) const;
+  void WriteHeader(std::ostream & os, lpmd::SimulationHistory *sh) const;
+  void WriteCell(std::ostream & os, lpmd::Configuration & c) const;
   long int GetInterval() const { return interval; }
 
  private:
