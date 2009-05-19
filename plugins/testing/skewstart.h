@@ -2,11 +2,13 @@
 //
 //
 
-#ifndef __SKEWSTARTMODULE_H__
-#define __SKEWSTARTMODULE_H__
+#ifndef __SKEWSTART_H__
+#define __SKEWSTART_H__
 
 #include <lpmd/cellgenerator.h>
 #include <lpmd/plugin.h>
+
+using namespace lpmd;
 
 class SkewStartGenerator: public lpmd::CellGenerator, public lpmd::Module
 {
@@ -16,8 +18,8 @@ class SkewStartGenerator: public lpmd::CellGenerator, public lpmd::Module
   virtual ~SkewStartGenerator();
   void ShowHelp() const;
 
-  //Metodos propios del modulo skewstart
-  void Generate(lpmd::SimulationCell & sc) const;
+  //Metodos propios del modulo skewstartgenerator
+  void Generate(Configuration & config) const;
 
  private:
   long n;   // Number of atoms

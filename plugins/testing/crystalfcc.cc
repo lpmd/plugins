@@ -49,7 +49,6 @@ void FCCGenerator::ShowHelp() const
 
 void FCCGenerator::Generate(Configuration & conf) const
 {
- Vector p;
  long int cc = 0;
  BasicParticleSet & atoms = conf.Atoms();
  BasicCell & cell = conf.Cell();

@@ -8,6 +8,9 @@
 #include <lpmd/systemmodifier.h>
 #include <lpmd/vector.h>
 #include <lpmd/plugin.h>
+#include <lpmd/configuration.h>
+
+using namespace lpmd;
 
 class RotateModifier: public lpmd::SystemModifier, public lpmd::Module
 {
@@ -20,8 +23,10 @@ class RotateModifier: public lpmd::SystemModifier, public lpmd::Module
   std::string Keywords() const;
 
   //Metodos Propios
-  void Apply(lpmd::SimulationCell & sc);
-  void Apply(lpmd::MD & md);
+//  void Apply(lpmd::SimulationCell & sc);
+//  void Apply(lpmd::MD & md);
+  void Apply(Configuration & conf);
+  void Apply(Simulation & md);
  
  private:
   lpmd::Vector axis;

@@ -7,6 +7,9 @@
 
 #include <lpmd/potential.h>
 #include <lpmd/plugin.h>
+#include <lpmd/configuration.h>
+
+using namespace lpmd;
 
 class NullPotential: public lpmd::Potential, public lpmd::Module
 {
@@ -17,8 +20,8 @@ class NullPotential: public lpmd::Potential, public lpmd::Module
   void ShowHelp() const;
 
   //Metodos Proopios de modulo nullpotential
-  double energy(lpmd::SimulationCell & sc);
-  void UpdateForces(lpmd::SimulationCell & sc);
+  double energy(Configuration & conf);
+  void UpdateForces(Configuration & conf);
 };
 
 

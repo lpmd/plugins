@@ -5,8 +5,7 @@
 #include "skewstart.h"
 
 #include <lpmd/atom.h>
-#include <lpmd/simulationcell.h>
-
+#include <lpmd/configuration.h>
 #include <cmath>
 
 using namespace lpmd;
@@ -46,8 +45,10 @@ void SkewStartGenerator::ShowHelp() const
 // Skew Start method, like Moldy
 // Only works with atoms (we have no molecules yet!)
 //
-void SkewStartGenerator::Generate(SimulationCell & sc) const
+void SkewStartGenerator::Generate(Configuration & config) const
 {
+ BasicParticleSet & atoms = config.Atoms();
+ BasicCell & cell = config.Cell();  
  int h, k, l;
  double dx, dy, dz;
  h = int(pow(double(n), 2.0/3.0));
@@ -58,8 +59,9 @@ void SkewStartGenerator::Generate(SimulationCell & sc) const
  dz = l / double(n);
  for (long i=0;i<n;++i)
  {
-  sc.Create(new Atom(spc));
-  sc.SetFracPosition(i, Vector(dx*double(i), dy*double(i), dz*double(i)));
+//  sc.Create(new Atom(spc));
+//  sc.SetFracPosition(i, Vector(dx*double(i), dy*double(i), dz*double(i)));
+  atoms[i].Position() = cell.ScaleByCell(Vector(dx*double(i), dy*double(i), dz*double(i)));
  }
 }
 

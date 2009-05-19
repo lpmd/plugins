@@ -4,7 +4,6 @@
 
 #include "rotate.h"
 
-#include <lpmd/simulationcell.h>
 #include <lpmd/util.h>
 #include <lpmd/md.h>
 
@@ -71,13 +70,16 @@ std::string RotateModifier::Keywords() const
  return "x y z angle start end each";
 }
 
-void RotateModifier::Apply(SimulationCell & sc)
+void RotateModifier::Apply(Configuration & conf)
 {
- Vector center = (sc.GetCell()[0]+sc.GetCell()[1]+sc.GetCell()[2])*0.5;
- for (unsigned long int i=0;i<sc.size();++i)
+ BasicParticleSet & atoms = conf.Atoms();
+ BasicCell & cell = conf.Cell();
+ // Vector center = (sc.GetCell()[0]+sc.GetCell()[1]+sc.GetCell()[2])*0.5;
+ Vector center = (cell[0]+cell[1]+cell[2])*0.5;
+ for (long i=0;i<atoms.Size();++i)
  {
   // translate so that the center of the cell is (0, 0, 0)
-  Vector pos = sc[i].Position() - center; 
+  Vector pos = atoms[i].Position() - center; 
   // rotate
   double rv[3];
   for (int j=0;j<3;++j)
@@ -87,13 +89,14 @@ void RotateModifier::Apply(SimulationCell & sc)
    pos[j] = rv[j];
   }
   // untranslate
-  sc.SetPosition(i, pos+center);
+//  sc.SetPosition(i, pos+center); 
+   atoms[i].Position() = cell.ScaleByCell(pos+center);
  }
 }
 
-void RotateModifier::Apply(MD & md)
+void RotateModifier::Apply(Simulation & md)
 {
- SimulationCell & sc = md.GetCell();
+ Configuration & sc = md;
  Apply(sc);
 }
 

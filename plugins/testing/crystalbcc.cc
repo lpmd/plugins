@@ -5,7 +5,7 @@
 #include "crystalbcc.h"
 
 #include <lpmd/atom.h>
-#include <lpmd/simulationcell.h>
+#include <lpmd/configuration.h>
 
 using namespace lpmd;
 
@@ -47,28 +47,27 @@ void BCCGenerator::ShowHelp() const
  std::cout << "      De esta forma creamos una celda de entrada de tipo BCC en la simulacion. \n";
 }
 
-void BCCGenerator::Generate(SimulationCell & sc) const
+void BCCGenerator::Generate(Configuration & conf) const
 {
- Vector p;
  long int cc = 0;
+ BasicParticleSet & atoms = conf.Atoms();
+ BasicCell & cell = conf.Cell();
  double ax = 1.0/double(nx);
  double ay = 1.0/double(ny);
  double az = 1.0/double(nz);
  for (long k=0;k<nz;++k)
- {
   for (long j=0;j<ny;++j)
-  {
    for (long i=0;i<nx;++i)
    {
-    p = Vector(double(i)*ax, double(j)*ay, double(k)*az);
-    sc.Create(new Atom(spc));
-    sc.SetFracPosition(cc++, p);
-    p = Vector((double(i)+0.5)*ax, (double(j)+0.5)*ay, (double(k)+0.5)*az);
-    sc.Create(new Atom(spc));
-    sc.SetFracPosition(cc++, p);
+//    p = Vector(double(i)*ax, double(j)*ay, double(k)*az);
+//    sc.Create(new Atom(spc));
+//    sc.SetFracPosition(cc++, p);
+//    p = Vector((double(i)+0.5)*ax, (double(j)+0.5)*ay, (double(k)+0.5)*az);
+//    sc.Create(new Atom(spc));
+//    sc.SetFracPosition(cc++, p);
+    atoms[cc++].Position() = cell.ScaleByCell(Vector(double(i)*ax, double(j)*ay, double(k)*az));
+    atoms[cc++].Position() = cell.ScaleByCell(Vector((double(i)+0.5)*ax, (double(j)+0.5)*ay, (double(k)+0.5)*az));
    }
-  }
- }
 }
 
 // Esto se incluye para que el modulo pueda ser cargado dinamicamente

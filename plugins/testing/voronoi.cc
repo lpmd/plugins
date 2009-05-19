@@ -129,6 +129,8 @@ void VoronoiGenerator::Generate(SimulationCell & sc) const
  Vector *CellColor=new Vector [Ncell];
 
  randomize();
+ std::cout<<"\nRUNNING VORONOI PLUGIN:"<<std::endl;
+
  // CHOOSE CENTERS AND REPLICATE CELLS
  SkewStart(Ncell, x, y, z, centers);
  for (int i=0; i<Ncell; i++)
@@ -139,19 +141,33 @@ void VoronoiGenerator::Generate(SimulationCell & sc) const
  }
 
  // OUTSIDE ELIMINATION: ELIMINATE OUTSIDE ATOMS
- for (unsigned long i=0;i<sc.size();i++)
+ std::cout << "Elimination of atoms out of the cell..."<<std::endl;
+ for (long i=0;i<sc.size();i++)
  {
   bool kill=false;
   Vector pos = sc[i].Position();
+<<<<<<< .mine
+<<<<<<< .mine
+  if      (pos.GetX()<0 || pos.GetX()>sc.GetVector(0).Mod()) {sc.Remove(sc[i]); kill=true;}
+  else if (pos.GetY()<0 || pos.GetY()>sc.GetVector(1).Mod()) {sc.Remove(sc[i]); kill=true;}
+  else if (pos.GetZ()<0 || pos.GetZ()>sc.GetVector(2).Mod()) {sc.Remove(sc[i]); kill=true;}
+=======
+  if 		 (pos[0]<0 || pos[0]>sc.GetVector(0).Module()) {sc.Destroy(&sc[i]); kill=true;}
+  else if (pos[1]<0 || pos[1]>sc.GetVector(1).Module()) {sc.Destroy(&sc[i]); kill=true;}
+  else if (pos[2]<0 || pos[2]>sc.GetVector(2).Module()) {sc.Destroy(&sc[i]); kill=true;}
+=======
   if (pos[0]<0 || pos[0]>sc.GetCell()[0].Module()) {sc.Destroy(&sc[i]); kill=true;}
   else if (pos[1]<0 || pos[1]>sc.GetCell()[1].Module()) {sc.Destroy(&sc[i]); kill=true;}
   else if (pos[2]<0 || pos[2]>sc.GetCell()[2].Module()) {sc.Destroy(&sc[i]); kill=true;}
+>>>>>>> .r774
+>>>>>>> .r701
   
   if (kill) i--;
  }
 
 
  // ELIMINATION BY CUTTING PLANE
+ std::cout<< "Separating grains..."<<std::endl;
  for (unsigned long int i=0; i<sc.size(); i++)
  {
   bool eliminated=false;
@@ -177,6 +193,7 @@ void VoronoiGenerator::Generate(SimulationCell & sc) const
 
 
  // PAIRS ELIMINATION: NOW THAT THE CELL IS FULL OF CELLS FILLED WITH ATOMS, WE ELIMINATE THE CLOSEST ATOMS
+ std::cout << "Eliminating closest atoms..."<<std::endl;
  for (unsigned long i=0; i<sc.size(); i++)
  {
   for (unsigned long j=i+1; j<sc.size(); j++)
@@ -194,6 +211,7 @@ void VoronoiGenerator::Generate(SimulationCell & sc) const
 
  delete [] CellColor;
  delete [] centers;
+ std::cout<<"Ready."<<std::endl;
 }
 
 // Esto se incluye para que el modulo pueda ser cargado dinamicamente

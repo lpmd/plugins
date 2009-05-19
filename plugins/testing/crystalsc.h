@@ -8,17 +8,18 @@
 #include <lpmd/cellgenerator.h>
 #include <lpmd/plugin.h>
 
+using namespace lpmd;
+
 class SCGenerator: public lpmd::CellGenerator, public lpmd::Module
 {
  public:
-   
   //Metodos Generales
   SCGenerator(std::string args);
   virtual ~SCGenerator();
   void ShowHelp() const;
 
   //Metodos Propios del module scgnerator
-  void Generate(lpmd::SimulationCell & sc) const;
+  void Generate(Configuration & conf) const;
 
  private:
    int spc;

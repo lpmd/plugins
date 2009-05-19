@@ -61,7 +61,7 @@ void Gdr::ShowHelp() const
  std::cout << " enduse                                                                        \n";
  std::cout << " Llamando al Modulo :                                                          \n";  
  std::cout << " property gdr start=1 each=10 end=100                                        \n\n";
- std::cout << "      De esta forma clculamos la funcion de distribucion radial de pares en    \n";
+ std::cout << "      De esta forma calculamos la funcion de distribucion radial de pares en    \n";
  std::cout << " la simulacion entre 1 y 100 cada 10 pasos.                                    \n";
 }
 

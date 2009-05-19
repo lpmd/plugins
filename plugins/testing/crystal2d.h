@@ -8,6 +8,8 @@
 #include <lpmd/cellgenerator.h>
 #include <lpmd/plugin.h>
 
+using namespace lpmd;
+
 class Crystal2DGenerator: public lpmd::CellGenerator, public lpmd::Module
 {
  public:
@@ -19,7 +21,7 @@ class Crystal2DGenerator: public lpmd::CellGenerator, public lpmd::Module
   std::string Keywords() const;
 
   //Metodos Propios del module scgnerator
-  void Generate(lpmd::SimulationCell & sc) const;
+  void Generate(Configuration & conf) const;
 
  private:
    int spc;

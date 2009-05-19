@@ -5,7 +5,7 @@
 #include "crystal2d.h"
 
 #include <lpmd/atom.h>
-#include <lpmd/simulationcell.h>
+#include <lpmd/configuration.h>
 
 using namespace lpmd;
 
@@ -61,11 +61,12 @@ std::string Crystal2DGenerator::Keywords() const
  return "a b gamma symbol nx ny";
 }
 
-void Crystal2DGenerator::Generate(SimulationCell & sc) const
+void Crystal2DGenerator::Generate(Configuration & conf) const
 {
- Vector tmp=sc.GetCell()[2];
- Vector p;
+// Vector tmp=sc.GetCell()[2];
  long int cc = 0;
+ BasicParticleSet & atoms = conf.Atoms();
+ BasicCell & cell = conf.Cell();
  double ax = 1.0/double(nx);
  double ay = 1.0/double(ny);
  std::cerr << "gamma = " << gamma << " a = " << a << " b = " << b << '\n';
@@ -76,14 +77,13 @@ void Crystal2DGenerator::Generate(SimulationCell & sc) const
  std::cerr << "Vector A = " << baseA << '\n';
  std::cerr << "Vector B = " << baseB << '\n';
  for (long j=0;j<ny;++j)
- {
   for (long i=0;i<nx;++i)
   {
-   p = j*baseA + i*baseB;
-   sc.Create(new Atom(spc));
-   sc.SetFracPosition(cc++, p);
+//   p = j*baseA + i*baseB;
+//   sc.Create(new Atom(spc));
+//   sc.SetFracPosition(cc++, p);
+   atoms[cc++].Position() = cell.ScaleByCell(j*baseA + i*baseB);
   }
- }
 }
 
 // Esto se incluye para que el modulo pueda ser cargado dinamicamente
