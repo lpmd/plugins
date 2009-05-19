@@ -51,22 +51,17 @@ void HCPGenerator::Generate(Configuration & conf) const
 {
  long int cc = 0;
  BasicParticleSet & atoms = conf.Atoms();
+ assert(atoms.Size() == 0);
  BasicCell & cell = conf.Cell();
  double ax = 1.0/double(nx);
  double ay = 1.0/double(ny);
  double az = 1.0/double(nz);
-// DebugStream() << "-> Generating HCP cell, c/a ratio is " << (nx*sc.GetCell()[2].Module())/(nz*sc.GetCell()[0].Module()) << '\n';
+ DebugStream() << "-> Generating HCP cell, c/a ratio is " << (nx*cell[2].Module())/(nz*cell[0].Module()) << '\n';
+ for (long i=0;i<nx*ny*nz*2;++i) atoms.Append(Atom(spc));
  for (long k=0;k<nz;++k)
   for (long j=0;j<ny;++j)
    for (long i=0;i<nx;++i)
    {
-/*    p = Vector((double(i)+(2.0/3.0))*ax, (double(j)+(1.0/3.0))*ay, (double(k)+(3.0/4.0))*az);
-    sc.Create(new Atom(spc));
-    sc.SetFracPosition(cc++, p);
-    p = Vector((double(i)+(1.0/3.0))*ax, (double(j)+(2.0/3.0))*ay, (double(k)+(1.0/4.0))*az);
-    sc.Create(new Atom(spc));
-    sc.SetFracPosition(cc++, p);
-*/    
     atoms[cc++].Position() = cell.ScaleByCell(Vector((double(i)+(2.0/3.0))*ax, (double(j)+(1.0/3.0))*ay, (double(k)+(3.0/4.0))*az));
     atoms[cc++].Position() = cell.ScaleByCell(Vector((double(i)+(1.0/3.0))*ax, (double(j)+(2.0/3.0))*ay, (double(k)+(1.0/4.0))*az));
    }

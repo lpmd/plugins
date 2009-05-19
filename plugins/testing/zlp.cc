@@ -8,7 +8,8 @@
 #include <zlib.h>
 
 #include <lpmd/util.h>
-#include <lpmd/simulationcell.h>
+#include <lpmd/configuration.h>
+#include <lpmd/atom.h>
 
 #include <sstream>
 
@@ -102,8 +103,11 @@ void ZLPFormat::ReadHeader(std::istream & is) const
 // 
 // Reads a configuration from a ZLP file 
 //
-bool ZLPFormat::ReadCell(std::istream & is, SimulationCell & sc) const
+bool ZLPFormat::ReadCell(std::istream & is, Configuration & conf) const
 {
+ BasicParticleSet & atoms = conf.Atoms();
+ assert(atoms.Size() == 0);
+ BasicCell & cell = conf.Cell();
  *lastop = ZLP_READ;
  z_stream & stream = *((z_stream *)(zstr));
  std::istringstream bufstr(std::istringstream::in);
@@ -158,11 +162,10 @@ bool ZLPFormat::ReadCell(std::istream & is, SimulationCell & sc) const
    ibufstr >> vq[i];
    v[i] = vq[i];
   }
-  if (GetString("replacecell") == "true") sc.GetCell()[j] = v;
+  if (GetString("replacecell") == "true") cell[j] = v;
  }
  for (long int i=0;i<natoms;++i) 
  {
-  Atom at;
   std::string sym;
   ibufstr >> sym;
   Vector fpos, vel, acc;
@@ -172,8 +175,8 @@ bool ZLPFormat::ReadCell(std::istream & is, SimulationCell & sc) const
    ibufstr >> vq[q];
    fpos[q] = vq[q];
   }
-  sc.Create(new Atom(ElemNum(sym)));
-  sc.SetFracPosition(i, fpos);
+  atoms.Append(Atom(ElemNum(sym)));
+  atoms[i].Position() = cell.Cartesian(fpos);
   if (lvl > 0)
   {
    for (int q=0;q<3;++q) 
@@ -181,7 +184,7 @@ bool ZLPFormat::ReadCell(std::istream & is, SimulationCell & sc) const
     ibufstr >> vq[q];
     vel[q] = vq[q];
    }
-   sc.SetVelocity(i, vel);
+   atoms[i].Velocity() = vel;
   }
   if (lvl > 1) 
   {
@@ -190,14 +193,14 @@ bool ZLPFormat::ReadCell(std::istream & is, SimulationCell & sc) const
     ibufstr >> vq[q];
     acc[q] = vq[q];
    }
-   sc.SetAcceleration(i, acc);
+   atoms[i].Acceleration() = acc;
   }
  }
  delete istr;
  return true;
 }
 
-void ZLPFormat::WriteHeader(std::ostream & os, std::vector<SimulationCell> * cells) const
+void ZLPFormat::WriteHeader(std::ostream & os, SimulationHistory * cells) const
 {
  char hdr[10] = {'Z', '4', 'L', '2', 'P', 1, 0, 0, 0, 0};
  // Z4L2P es la firma que marca el archivo como formato ZLP
@@ -218,8 +221,10 @@ void ZLPFormat::WriteHeader(std::ostream & os, std::vector<SimulationCell> * cel
 //
 // Writes a configuration to a ZLP file
 //
-void ZLPFormat::WriteCell(std::ostream & out, SimulationCell & sc) const
+void ZLPFormat::WriteCell(std::ostream & out, Configuration & conf) const
 {
+ BasicParticleSet & atoms = conf.Atoms();
+ BasicCell & cell = conf.Cell();
  *lastop = ZLP_WRITE;
  z_stream & stream = *((z_stream *)(zstr));
  std::ostringstream * ostr = new std::ostringstream();
@@ -227,17 +232,17 @@ void ZLPFormat::WriteCell(std::ostream & out, SimulationCell & sc) const
  // Escribe la configuracion completa en bufstr 
  // Esto gasta memoria enormemente pero por ahora deberia bastar
  obufstr << level << '\n';
- obufstr << sc.size() << '\n';
+ obufstr << atoms.Size() << '\n';
  for (int j=0;j<3;++j) 
-   for (int i=0;i<3;++i) { obufstr.precision(15); obufstr << std::fixed << sc.GetCell()[j][i] << '\n'; }
- for (unsigned long int i=0;i<sc.size();++i) 
+   for (int i=0;i<3;++i) { obufstr.precision(15); obufstr << std::fixed << cell[j][i] << '\n'; }
+ for (long int i=0;i<atoms.Size();++i) 
  {
-  obufstr << sc[i].Symb() << '\n';
-  for (int q=0;q<3;++q) { obufstr.precision(15); obufstr << std::fixed << sc.FracPosition(i)[q] << '\n'; }
+  obufstr << atoms[i].Symbol() << '\n';
+  for (int q=0;q<3;++q) { obufstr.precision(15); obufstr << std::fixed << cell.Fractional(atoms[i].Position())[q] << '\n'; }
   if (level > 0) 
-     for (int q=0;q<3;++q) { obufstr.precision(15); obufstr << std::fixed << sc[i].Velocity()[q] << '\n'; }
+     for (int q=0;q<3;++q) { obufstr.precision(15); obufstr << std::fixed << atoms[i].Velocity()[q] << '\n'; }
   if (level > 1) 
-     for (int q=0;q<3;++q) { obufstr.precision(15); obufstr << std::fixed << sc[i].Acceleration()[q] << '\n'; }
+     for (int q=0;q<3;++q) { obufstr.precision(15); obufstr << std::fixed << atoms[i].Acceleration()[q] << '\n'; }
  }
  std::istringstream * istr = new std::istringstream(obufstr.str());
  delete ostr;

@@ -104,30 +104,22 @@ void LinkedCellManager::BuildSubCellList(double rc)
       int nv = 0;
 
       for (int rr=-ncx;rr<=ncx;++rr)
-         for (int qq=-ncy;qq<=ncy;++qq)
+       for (int qq=-ncy;qq<=ncy;++qq)
 	    for (int pp=-ncz;pp<=ncz;++pp)
 	    {
 	     if (((pp == 0) && (qq == 0)) && (rr == 0)) continue;
          const Vector realdisp = cell.ScaleByCell(Vector(pp/double(GridSize(0)), qq/double(GridSize(1)), rr/double(GridSize(2))));
 	     if (realdisp.Module() <= cell_cutoff)
 	     {
-              long nj = SubCellIndex(i+pp, j+qq, k+rr, trans);
+          long nj = SubCellIndex(i+pp, j+qq, k+rr, trans);
 	      trans = cell.ScaleByCell(trans);
 	      nv++;
-              if ((smart_counter % 2) == 0) 
-              {
-               this_cell.AddFirstHalfNeighbor(subcells[nj], trans);
-              }
-	      else
-              {
-               this_cell.AddSecondHalfNeighbor(subcells[nj], trans);
-              }
+          if ((smart_counter % 2) == 0) this_cell.AddFirstHalfNeighbor(subcells[nj], trans);
+	      else this_cell.AddSecondHalfNeighbor(subcells[nj], trans);
 	     }
-             smart_counter++;
+         smart_counter++;
 	    }
-      //
-      //
-     }
+       }
 }
 
 long LinkedCellManager::SubCellIndex(long * n, Vector & trans) const
@@ -175,6 +167,17 @@ void LinkedCellManager::FillCells()
  for (long i=0;i<NumberOfSubCells();++i) subcells[i].ClearAtoms();
  long int n = realcell.Atoms().Size();
  for (long int i=0;i<n;++i) GetSubCellByAtom(i).AddAtom(i);
+ long int totalcnt = 0;
+ std::cerr << "DEBUG Total subcells: " << NumberOfSubCells() << '\n';
+ for (long int i=0;i<NumberOfSubCells();++i)
+ {
+  SubCell & subc = (*this)[i];
+  int cnt = 0;
+  for (AtomItem * ak = subc.GetAtomList();ak!=NULL;ak=ak->next) cnt++;
+  // std::cerr << "DEBUG subcell " << i << " has " << cnt << " atoms \n";
+  totalcnt += cnt;
+ }
+ assert(totalcnt == n);
 }
 
 SubCell * LinkedCellManager::GetSubCellList() const { return subcells; }
@@ -266,11 +269,12 @@ void LinkedCellCellManager::BuildNeighborList(Configuration & sc, long i, Neighb
    nn.r = nn.rij.Module();
    if ((nn.r < rcut) && (nn.r > 0.001)) 
    {
-    std::cerr << "DEBUG intracell nn.r = " << nn.r << '\n';
     nlist.Append(nn); // FIXME: hay un bug al usar integradores onestep
    }
   }
  }
+ //std::cerr << "DEBUG First half: " << subcell.GetNumberOfFirstHalf() << '\n';
+ //std::cerr << "DEBUG Second half: " << subcell.GetNumberOfSecondHalf() << '\n';
  // 
  for (long p=0;p<subcell.GetNumberOfFirstHalf();++p)
  {
@@ -285,17 +289,12 @@ void LinkedCellCellManager::BuildNeighborList(Configuration & sc, long i, Neighb
    const Vector newpos = nn.j->Position()+disp;
    nn.rij = newpos-this_atom.Position();
    nn.r = nn.rij.Module();
-   if ((nn.r < rcut) && (nn.r > 0.001))
-   {
-    std::cerr << "DEBUG intercell 1st half nn.r = " << nn.r << '\n';
-    nlist.Append(nn); // FIXME: hay un bug al usar integradores onestep
-   }
+   if ((nn.r < rcut) && (nn.r > 0.001)) nlist.Append(nn); // FIXME: hay un bug al usar integradores onestep
   }
  }
  // 
  if (full)
  {
-  std::cerr << "DEBUG Number of second half: " << subcell.GetNumberOfSecondHalf() << '\n';
   for (long p=0;p<subcell.GetNumberOfSecondHalf();++p)
   {
    NeighborSubCell & nscell = subcell.GetSecondHalfNeighbor(p);
@@ -309,11 +308,7 @@ void LinkedCellCellManager::BuildNeighborList(Configuration & sc, long i, Neighb
     const Vector newpos = nn.j->Position()+disp;
     nn.rij = newpos-this_atom.Position();
     nn.r = nn.rij.Module();
-    if ((nn.r < rcut) && (nn.r > 0.001))
-    {
-     std::cerr << "DEBUG intercell 2nd half nn.r = " << nn.r << '\n';
-     nlist.Append(nn); // FIXME: hay un bug al usar integradores onestep
-    }
+    if ((nn.r < rcut) && (nn.r > 0.001)) nlist.Append(nn); // FIXME: hay un bug al usar integradores onestep
    }
   }
  }
@@ -322,5 +317,4 @@ void LinkedCellCellManager::BuildNeighborList(Configuration & sc, long i, Neighb
 // Esto se incluye para que el modulo pueda ser cargado dinamicamente
 Module * create(std::string args) { return new LinkedCellCellManager(args); }
 void destroy(Module * m) { delete m; }
-
 
