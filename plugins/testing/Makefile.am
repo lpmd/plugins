@@ -42,7 +42,7 @@ plugin_LTLIBRARIES =     beeman.la buckingham.la crystal2d.la crystal3d.la \
 			 euler.la fastlj.la finnissinclair.la gupta.la harmonic.la\
 			 leapfrog.la lennardjones.la linkedcell.la lpmd.la minimumimage.la mol2.la morse.la msd.la \
 			 nullintegrator.la nullpairpotential.la nullmetalpotential.la nullmixer.la nullpotential.la\
-			 pairdistances.la rotate.la skewstart.la suttonchen.la xyz.la zlp.la #voronoi.la
+			 pairdistances.la pdb.la rotate.la skewstart.la suttonchen.la xyz.la zlp.la #voronoi.la
 
 #plugin_LTLIBRARIES =    angdist.la beeman.la berendsen.la buckingham.la cell.la \
 #                        cellscaling.la cna.la color.la constantforce.la cordnum.la cordnumfunc.la \
@@ -120,7 +120,7 @@ nullmetalpotential_la_SOURCES = nullmetalpotential.h nullmetalpotential.cc
 nullmixer_la_SOURCES = nullmixer.h nullmixer.cc
 nullpotential_la_SOURCES = nullpotential.h nullpotential.cc
 pairdistances_la_SOURCES = pairdistances.h pairdistances.cc
-#pdb_la_SOURCES = pdb.h pdb.cc
+pdb_la_SOURCES = pdb.h pdb.cc
 #povray_la_SOURCES = povray.h povray.cc
 #pressure_la_SOURCES = pressure.h pressure.cc
 #printatoms_la_SOURCES = printatoms.h printatoms.cc

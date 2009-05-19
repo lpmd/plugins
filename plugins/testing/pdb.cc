@@ -5,7 +5,7 @@
 #include "pdb.h"
 
 #include <lpmd/util.h>
-#include <lpmd/simulationcell.h>
+#include <lpmd/simulation.h>
 #include <algorithm>
 #include <cctype>
 #include <iomanip>
@@ -43,21 +43,24 @@ void PDBFormat::ShowHelp() const
  std::cout << "      De esta forma podemos escribir archivos en formato pdb.                  \n";
 }
 
-void PDBFormat::WriteHeader(std::ostream & os, std::vector<SimulationCell> * cells) const
+void PDBFormat::WriteHeader(std::ostream & os, SimulationHistory * sh) const
 {
  // PDB no tiene ningun header especial
 }
 
-void PDBFormat::WriteCell(std::ostream & out, SimulationCell & sc) const
+void PDBFormat::WriteCell(std::ostream & out, Configuration & con) const
 {
+ BasicParticleSet & part = con.Atoms();
+ //BasicCell & cell = con.Cell();
+
  out << "COMPND   From lpmd\n";
  out << "AUTHOR   pdb plugin for lpmd\n";
- for (unsigned long int i=0;i<sc.size();++i)
+ for (long int i=0;i<part.Size();++i)
  {
-  const Vector & pos = sc[i].Position();
+  const Vector & pos = part[i].Position();
   out << std::setw(6) << "HETATM"; //1-6
   out << std::setw(5) << (i+1); //7-11
-  std::string sy = sc[i].Symb();
+  std::string sy = part[i].Symbol();
   std::transform(sy.begin(), sy.end(), sy.begin(), (int(*) (int)) std::toupper);
   out << std::setw(1) << " ";
   out << std::setw(4) <<std::left<< sy ; //13-16
@@ -89,8 +92,12 @@ void PDBFormat::ReadHeader(std::istream & is) const
  // PDB no tiene header especial para leer
 }
 
-bool PDBFormat::ReadCell(std::istream & is, SimulationCell & sc) const
+bool PDBFormat::ReadCell(std::istream & is, Configuration & con) const
 {
+ BasicParticleSet & part = con.Atoms();
+ //BasicCell & cell = con.Cell();
+ assert (part.Size() == 0);
+
  long natoms=0;
  std::vector<lpmd::Atom> atomlist;
  if(is.eof()) return false;
@@ -103,15 +110,14 @@ bool PDBFormat::ReadCell(std::istream & is, SimulationCell & sc) const
    if (tmp.compare(0,6,"HETATM")==0)
    {
     natoms++;
-    std::vector<std::string> linea = StringSplit< std::vector<std::string> >(tmp,' ');
+    Array<std::string> linea = StringSplit(tmp,' ');
     std::string symb = linea[2];
     if(symb.length()>1)
     {
      for(unsigned int j=1;j<symb.length();j++) symb[j]=tolower(symb[j]);
     }
     lpmd::Vector pos(atof(linea[5].c_str()),atof(linea[6].c_str()),atof(linea[7].c_str()));
-    int elem=ElemNum(symb);
-    sc.Create(new Atom(elem,pos));
+    part.Append(Atom(symb,pos));
    }
    if (tmp.compare(0,3,"END")==0)
    {
