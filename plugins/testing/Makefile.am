@@ -38,7 +38,7 @@ AM_LDFLAGS = -module -avoid-version
 #
 # plugin_LTLIBRARIES contains the list of liblpmd plugins (as libtool libraries)
 #
-plugin_LTLIBRARIES =     beeman.la buckingham.la crystal2d.la crystalbcc.la crystalfcc.la crystalhcp.la crystalsc.la\
+plugin_LTLIBRARIES =     beeman.la buckingham.la crystal2d.la crystal3d.la \
 			 euler.la fastlj.la finnissinclair.la gupta.la harmonic.la\
 			 leapfrog.la lennardjones.la linkedcell.la lpmd.la minimumimage.la mol2.la morse.la msd.la \
 			 nullintegrator.la nullpairpotential.la nullmetalpotential.la nullmixer.la nullpotential.la\
@@ -85,10 +85,11 @@ buckingham_la_SOURCES = buckingham.h buckingham.cc
 #cordnum_la_SOURCES = cordnum.h cordnum.cc
 #cordnumfunc_la_SOURCES = cordnumfunc.h cordnumfunc.cc
 crystal2d_la_SOURCES = crystal2d.h crystal2d.cc
-crystalbcc_la_SOURCES = crystalbcc.h crystalbcc.cc
-crystalfcc_la_SOURCES = crystalfcc.h crystalfcc.cc
-crystalhcp_la_SOURCES = crystalhcp.h crystalhcp.cc
-crystalsc_la_SOURCES = crystalsc.h crystalsc.cc
+crystal3d_la_SOURCES = crystal3d.h crystal3d.cc
+#crystalbcc_la_SOURCES = crystalbcc.h crystalbcc.cc
+#crystalfcc_la_SOURCES = crystalfcc.h crystalfcc.cc
+#crystalhcp_la_SOURCES = crystalhcp.h crystalhcp.cc
+#crystalsc_la_SOURCES = crystalsc.h crystalsc.cc
 #densityprofile_la_SOURCES = densityprofile.h densityprofile.cc
 #displace_la_SOURCES = displace.h displace.cc
 #dispvol_la_SOURCES = dispvol.h dispvol.cc
