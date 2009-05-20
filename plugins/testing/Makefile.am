@@ -42,7 +42,7 @@ plugin_LTLIBRARIES =     beeman.la buckingham.la crystal2d.la crystal3d.la \
 			 euler.la fastlj.la finnissinclair.la gupta.la harmonic.la\
 			 leapfrog.la lennardjones.la linkedcell.la lpmd.la minimumimage.la mol2.la morse.la msd.la \
 			 nullintegrator.la nullpairpotential.la nullmetalpotential.la nullmixer.la nullpotential.la\
-			 pairdistances.la pdb.la rotate.la skewstart.la suttonchen.la xyz.la zlp.la
+			 pairdistances.la pdb.la rotate.la skewstart.la suttonchen.la vasp.la xyz.la zlp.la
 
 #plugin_LTLIBRARIES =    angdist.la beeman.la berendsen.la buckingham.la cell.la \
 #                        cellscaling.la cna.la color.la constantforce.la cordnum.la cordnumfunc.la \
@@ -133,7 +133,7 @@ suttonchen_la_SOURCES = suttonchen.h suttonchen.cc
 #tempprofile_la_SOURCES = tempprofile.h tempprofile.cc
 #tempscaling_la_SOURCES = tempscaling.h tempscaling.cc
 #vacf_la_SOURCES = vacf.h vacf.cc
-#vasp_la_SOURCES = vasp.h vasp.cc
+vasp_la_SOURCES = vasp.h vasp.cc
 #veldist_la_SOURCES = veldist.h veldist.cc
 #velocityverlet_la_SOURCES = velocityverlet.h velocityverlet.cc
 #verlet_la_SOURCES = verlet.h verlet.cc

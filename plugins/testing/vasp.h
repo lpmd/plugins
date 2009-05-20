@@ -18,9 +18,9 @@ class VaspFormat: public lpmd::CellFormat, public lpmd::Module
 
   //Metodos propios de modulo dlpoly
   void ReadHeader(std::istream & is) const;
-  bool ReadCell(std::istream & is, lpmd::SimulationCell & sc) const;
-  void WriteHeader(std::ostream & os, std::vector<lpmd::SimulationCell> *) const;
-  void WriteCell(std::ostream & os, lpmd::SimulationCell & sc) const;
+  bool ReadCell(std::istream & is, lpmd::Configuration & con) const;
+  void WriteHeader(std::ostream & os, lpmd::SimulationHistory * sh) const;
+  void WriteCell(std::ostream & os, lpmd::Configuration & con) const;
   long int GetInterval() const { return interval; }
 
  public:
@@ -28,7 +28,7 @@ class VaspFormat: public lpmd::CellFormat, public lpmd::Module
   int level;
   bool rcell;
   std::string speclist;
-  std::vector<std::string> satoms; //simbolos atomicos
+  lpmd::Array<std::string> satoms; //simbolos atomicos
   std::string tp; // tipo de celda Direct/Cartesian
 };
 
