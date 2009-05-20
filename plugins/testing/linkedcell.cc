@@ -37,16 +37,14 @@ void SubCell::Allocate(long s)
 
 void SubCell::AddFirstHalfNeighbor(BasicSubCell & cell, const Vector & disp)
 {
- if (ifirst >= iwall) 
-    throw PluginError("linkedcell", "Internal initialization error, ifirst="+ToString<int>(ifirst)+", iwall="+ToString<int>(iwall));
+ //assert(ifirst < iwall);
  neighbors[ifirst] = NeighborSubCell(cell, disp);
  ifirst++;
 }
 
 void SubCell::AddSecondHalfNeighbor(BasicSubCell & cell, const Vector & disp)
 {
- if ((iwall+isecond) >= 2*iwall) 
-    throw PluginError("linkedcell", "Internal initialization error, iwall+isecond="+ToString<int>(iwall+isecond)+", 2*iwall="+ToString<int>(2*iwall));
+ //assert((iwall+isecond) < 2*iwall); 
  neighbors[iwall+isecond] = NeighborSubCell(cell, disp);
  isecond++;
 }
@@ -167,8 +165,9 @@ void LinkedCellManager::FillCells()
  for (long i=0;i<NumberOfSubCells();++i) subcells[i].ClearAtoms();
  long int n = realcell.Atoms().Size();
  for (long int i=0;i<n;++i) GetSubCellByAtom(i).AddAtom(i);
- long int totalcnt = 0;
- std::cerr << "DEBUG Total subcells: " << NumberOfSubCells() << '\n';
+ //long int totalcnt = 0;
+ //std::cerr << "DEBUG Total subcells: " << NumberOfSubCells() << '\n';
+ /*
  for (long int i=0;i<NumberOfSubCells();++i)
  {
   SubCell & subc = (*this)[i];
@@ -177,7 +176,8 @@ void LinkedCellManager::FillCells()
   // std::cerr << "DEBUG subcell " << i << " has " << cnt << " atoms \n";
   totalcnt += cnt;
  }
- assert(totalcnt == n);
+ */
+ //assert(totalcnt == n);
 }
 
 SubCell * LinkedCellManager::GetSubCellList() const { return subcells; }
@@ -273,9 +273,9 @@ void LinkedCellCellManager::BuildNeighborList(Configuration & sc, long i, Neighb
    }
   }
  }
+ // 
  //std::cerr << "DEBUG First half: " << subcell.GetNumberOfFirstHalf() << '\n';
  //std::cerr << "DEBUG Second half: " << subcell.GetNumberOfSecondHalf() << '\n';
- // 
  for (long p=0;p<subcell.GetNumberOfFirstHalf();++p)
  {
   NeighborSubCell & nscell = subcell.GetFirstHalfNeighbor(p);

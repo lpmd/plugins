@@ -30,6 +30,7 @@ CLEANFILES = version.h
 plugindir = $(libdir)/lpmd
 
 AM_CPPFLAGS = -Wall -pedantic 
+AM_CFLAGS = -Wall -pedantic -std=c99
 #AM_LDFLAGS = -module -avoid-version plugincommon.lo
 AM_LDFLAGS = -module -avoid-version 
 
@@ -40,7 +41,7 @@ AM_LDFLAGS = -module -avoid-version
 #
 plugin_LTLIBRARIES =     beeman.la buckingham.la crystal2d.la crystal3d.la \
 			 euler.la fastlj.la finnissinclair.la gupta.la harmonic.la\
-			 leapfrog.la lennardjones.la linkedcell.la lpmd.la minimumimage.la mol2.la morse.la msd.la \
+			 leapfrog.la lennardjones.la linkedcell.la lc2.la lpmd.la minimumimage.la mol2.la morse.la msd.la \
 			 nullintegrator.la nullpairpotential.la nullmetalpotential.la nullmixer.la nullpotential.la\
 			 pairdistances.la pdb.la rotate.la skewstart.la suttonchen.la vasp.la xyz.la zlp.la
 
@@ -102,6 +103,7 @@ harmonic_la_SOURCES = harmonic.h harmonic.cc
 leapfrog_la_SOURCES = leapfrog.h leapfrog.cc
 lennardjones_la_SOURCES = lennardjones.h lennardjones.cc
 linkedcell_la_SOURCES = linkedcell.h linkedcell.cc
+lc2_la_SOURCES = lclib.c lc2.h lc2.cc
 #localpressure_la_SOURCES = localpressure.h localpressure.cc
 lpmd_la_SOURCES = lpmd.h lpmd.cc
 minimumimage_la_SOURCES = minimumimage.h minimumimage.cc
