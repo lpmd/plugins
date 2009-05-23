@@ -16,6 +16,7 @@ using namespace lpmd;
 
 Euler::Euler(std::string args): Module("euler")
 {
+ ParamList & params = (*this);
  AssignParameter("version", "1.0"); 
  AssignParameter("apirequired", "1.1"); 
  AssignParameter("bugreport", "gnm@gnm.cl"); 
@@ -24,8 +25,8 @@ Euler::Euler(std::string args): Module("euler")
  DefineKeyword("start", "1");
  // hasta aqui los valores por omision
  ProcessArguments(args);
- dt = GetDouble("dt");
- start = GetInteger("start");
+ dt = params["dt"];
+ start = int(params["start"]);
 }
 
 Euler::~Euler() { }

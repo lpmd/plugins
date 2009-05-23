@@ -10,6 +10,7 @@ using namespace lpmd;
 
 Morse::Morse(std::string args): Module("morse") 
 { 
+ ParamList & params = (*this);
  AssignParameter("version", "1.0"); 
  AssignParameter("apirequired", "1.1"); 
  AssignParameter("bugreport", "gnm@gnm.cl"); 
@@ -18,9 +19,9 @@ Morse::Morse(std::string args): Module("morse")
  DefineKeyword("a");
  DefineKeyword("re");
  ProcessArguments(args);
- depth = GetDouble("depth");
- a = GetDouble("a");
- re = GetDouble("re");
+ depth = params["depth"];
+ a = params["a"];
+ re = params["re"];
 }
 
 void Morse::ShowHelp() const

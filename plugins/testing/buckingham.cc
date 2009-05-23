@@ -10,6 +10,7 @@ using namespace lpmd;
 
 Buckingham::Buckingham(std::string args): Module("buckingham")
 {
+ ParamList & params = (*this);
  AssignParameter("version", "1.0"); 
  AssignParameter("apirequired", "1.1"); 
  AssignParameter("bugreport", "gnm@gnm.cl"); 
@@ -19,10 +20,10 @@ Buckingham::Buckingham(std::string args): Module("buckingham")
  DefineKeyword("Ro");
  DefineKeyword("cutoff");
  ProcessArguments(args);
- B1 = GetDouble("B1");
- B2 = GetDouble("B2");
- Ro = GetDouble("Ro");
- cutoff = GetDouble("cutoff");
+ B1 = params["B1"];
+ B2 = params["B2"];
+ Ro = params["Ro"];
+ cutoff = params["cutoff"];
  SetCutoff(cutoff);
 }
 

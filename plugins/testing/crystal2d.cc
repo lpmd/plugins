@@ -11,6 +11,7 @@ using namespace lpmd;
 
 Crystal2DGenerator::Crystal2DGenerator(std::string args): Module("crystal2d")
 {
+ ParamList & params = (*this);
  AssignParameter("a", "1");
  AssignParameter("b", "1");
  AssignParameter("gamma", "90");
@@ -19,13 +20,13 @@ Crystal2DGenerator::Crystal2DGenerator(std::string args): Module("crystal2d")
  AssignParameter("symbol", "H");
  // hasta aqui los valores por omision
  ProcessArguments(args);
- a = GetDouble("a");
- b = GetDouble("b");
- gamma = M_PI*GetDouble("gamma")/180.0e0;
- spc = ElemNum(GetString("symbol"));
- nx = GetInteger("nx");
- ny = GetInteger("ny");
- nz = GetInteger("nz");
+ a = params["a"];
+ b = params["b"];
+ gamma = M_PI*double(params["gamma"])/180.0e0;
+ spc = ElemNum(params["symbol"]);
+ nx = int(params["nx"]);
+ ny = int(params["ny"]);
+ nz = int(params["nz"]);
 }
 
 Crystal2DGenerator::~Crystal2DGenerator() { }

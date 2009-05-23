@@ -26,13 +26,14 @@ double LinkedCellCellManager2::DistanceFunction(double dx, double dy, double dz)
 
 LinkedCellCellManager2::LinkedCellCellManager2(std::string args): Module("lc2")
 { 
+ ParamList & params = (*this);
  AssignParameter("cutoff", "7.0");
  // 
  ProcessArguments(args);
- cutoff = GetDouble("cutoff");
- nx = GetInteger("nx");
- ny = GetInteger("ny");
- nz = GetInteger("nz");
+ cutoff = params["cutoff"];
+ nx = int(params["nx"]);
+ ny = int(params["ny"]);
+ nz = int(params["nz"]);
 
  LC_Init(&lc, nx, ny, nz); 
  pos = NULL;

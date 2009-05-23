@@ -15,6 +15,7 @@ using namespace lpmd;
 
 PairDistances::PairDistances(std::string args): Module("pairdistances")
 {
+ ParamList & params = (*this);
  AssignParameter("version", "1.0"); 
  AssignParameter("apirequired", "1.1"); 
  AssignParameter("bugreport", "gnm@gnm.cl"); 
@@ -25,11 +26,11 @@ PairDistances::PairDistances(std::string args): Module("pairdistances")
  DefineKeyword("each");
  DefineKeyword("output");
  ProcessArguments(args);
- rcut = GetDouble("rcut");
- start = GetInteger("start");
- end = GetInteger("end");
- each = GetInteger("each");
- OutputFile() = GetString("output");
+ rcut = params["rcut"];
+ start = int(params["start"]);
+ end = int(params["end"]);
+ each = int(params["each"]);
+ OutputFile() = params["output"];
 }
 
 void PairDistances::ShowHelp() const

@@ -10,6 +10,7 @@ using namespace lpmd;
 
 FastLJ::FastLJ(std::string args): Module("fastlj") 
 { 
+ ParamList & params = (*this);
  AssignParameter("version", "1.0"); 
  AssignParameter("apirequired", "1.1"); 
  AssignParameter("bugreport", "gnm@gnm.cl"); 
@@ -20,11 +21,11 @@ FastLJ::FastLJ(std::string args): Module("fastlj")
  DefineKeyword("bins", "500");
  // hasta aqui los valores por omision
  ProcessArguments(args);
- sigma = GetDouble("sigma");
- epsilon = GetDouble("epsilon");
- cutoff = GetDouble("cutoff");
+ sigma = params["sigma"];
+ epsilon = params["epsilon"];
+ cutoff = params["cutoff"];
  SetCutoff(cutoff);
- bins = GetInteger("bins");
+ bins = int(params["bins"]);
  Tabulate();
 }
 

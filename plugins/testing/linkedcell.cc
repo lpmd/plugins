@@ -205,6 +205,7 @@ SubCell & LinkedCellManager::GetSubCellByAtom(long i) const
 
 LinkedCellCellManager::LinkedCellCellManager(std::string args): Module("linkedcell"), lcm(NULL) 
 { 
+ ParamList & params = (*this);
  AssignParameter("version", "1.0"); 
  AssignParameter("apirequired", "1.1"); 
  AssignParameter("bugreport", "gnm@gnm.cl"); 
@@ -215,10 +216,10 @@ LinkedCellCellManager::LinkedCellCellManager(std::string args): Module("linkedce
  DefineKeyword("nz", "7");
  // hasta aqui los parametros por omision
  ProcessArguments(args); 
- rcut = GetDouble("cutoff");
- nx = GetInteger("nx");
- ny = GetInteger("ny");
- nz = GetInteger("nz");
+ rcut = params["cutoff"];
+ nx = int(params["nx"]);
+ ny = int(params["ny"]);
+ nz = int(params["nz"]);
 }
 
 LinkedCellCellManager::~LinkedCellCellManager() 

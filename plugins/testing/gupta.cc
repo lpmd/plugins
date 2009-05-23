@@ -10,6 +10,7 @@ using namespace lpmd;
 
 Gupta::Gupta(std::string args): Module("gupta")
 {
+ ParamList & params = (*this);
  AssignParameter("version", "1.0"); 
  AssignParameter("apirequired", "1.1"); 
  AssignParameter("bugreport", "gnm@gnm.cl"); 
@@ -21,12 +22,12 @@ Gupta::Gupta(std::string args): Module("gupta")
  DefineKeyword("qij");
  DefineKeyword("cutoff");
  ProcessArguments(args); 
- A = GetDouble("A");
- r0 = GetDouble("r0");
- p = GetDouble("p");
- B = GetDouble("B");
- qij = GetDouble("qij");
- rcut = GetDouble("cutoff");
+ A = params["A"];
+ r0 = params["r0"];
+ p = params["p"];
+ B = params["B"];
+ qij = params["qij"];
+ rcut = params["cutoff"];
 }
 
 void Gupta::ShowHelp() const

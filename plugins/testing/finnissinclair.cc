@@ -10,14 +10,15 @@ using namespace lpmd;
 
 FinnisSinclair::FinnisSinclair(std::string args): Module("finnissinclair")
 {
+ ParamList & params = (*this);
  ProcessArguments(args); 
- c0 = GetDouble("c0");
- c1 = GetDouble("c1");
- c2 = GetDouble("c2");
- A = GetDouble("A");
- B = GetDouble("B");
- c = GetDouble("c");
- d = GetDouble("d");
+ c0 = params["c0"];
+ c1 = params["c1"];
+ c2 = params["c2"];
+ A = params["A"];
+ B = params["B"];
+ c = params["c"];
+ d = params["d"];
 }
 
 void FinnisSinclair::ShowHelp() const

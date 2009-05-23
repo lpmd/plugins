@@ -12,18 +12,19 @@ using namespace lpmd;
 
 RotateModifier::RotateModifier(std::string args): Module("rotate")
 {
+ ParamList & params = (*this);
  AssignParameter("x", "1.0");
  AssignParameter("y", "0.0");
  AssignParameter("z", "0.0");
  AssignParameter("angle", "0.0");
  // 
  ProcessArguments(args);
- axis = Vector(GetDouble("x"), GetDouble("y"), GetDouble("z"));
+ axis = Vector(double(params["x"]), double(params["y"]), double(params["z"]));
  axis.Normalize();
- angle = M_PI*GetDouble("angle")/180.0;
- start = GetInteger("start");
- end = GetInteger("end");
- each = GetInteger("each");
+ angle = M_PI*double(params["angle"])/180.0;
+ start = int(params["start"]);
+ end = int(params["end"]);
+ each = int(params["each"]);
  //
  double c=cos(angle), s=sin(angle), t=1.0-c;
  double x=axis[0], y=axis[1], z=axis[2];

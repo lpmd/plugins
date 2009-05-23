@@ -14,6 +14,7 @@ using namespace lpmd;
 
 PDBFormat::PDBFormat(std::string args): Module("pdb")
 {
+ ParamList & params = (*this);
  AssignParameter("version", "1.0"); 
  AssignParameter("apirequired", "1.1"); 
  AssignParameter("bugreport", "gnm@gnm.cl"); 
@@ -22,8 +23,8 @@ PDBFormat::PDBFormat(std::string args): Module("pdb")
  DefineKeyword("each", "1");
  // hasta aqui los valores por omision
  ProcessArguments(args);
- writefile = GetString("file");
- interval = GetInteger("each");
+ writefile = params["file"];
+ interval = int(params["each"]);
 }
 
 PDBFormat::~PDBFormat() { }

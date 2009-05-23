@@ -14,6 +14,7 @@ using namespace lpmd;
 
 Mol2Format::Mol2Format(std::string args): Module("mol2")
 {
+ ParamList & params = (*this);
  AssignParameter("version", "1.0"); 
  AssignParameter("apirequired", "1.1"); 
  AssignParameter("bugreport", "gnm@gnm.cl"); 
@@ -23,9 +24,9 @@ Mol2Format::Mol2Format(std::string args): Module("mol2")
  AssignParameter("replacecell", "false");
  // hasta aqui los valores por omision
  ProcessArguments(args);
- writefile = GetString("file");
- interval = GetInteger("each");
- rcell = GetBool("replacecell");
+ writefile = params["file"];
+ interval = int(params["each"]);
+ rcell = params["replacecell"];
 }
 
 Mol2Format::~Mol2Format() { }
@@ -82,7 +83,7 @@ bool Mol2Format::ReadCell(std::istream & is, Configuration & con) const
 {
  BasicParticleSet & part = con.Atoms();
  assert(part.Size() == 0);
- if (GetString("replacecell") == "true") throw PluginError("mol2", "This format does not contain any cell vectors.");
+ if ((*this)["replacecell"] == "true") throw PluginError("mol2", "This format does not contain any cell vectors.");
  long natoms=0;
  if(is.eof()) return false;
  while(!is.eof())

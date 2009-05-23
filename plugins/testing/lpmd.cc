@@ -12,6 +12,7 @@ using namespace lpmd;
 
 LPMDFormat::LPMDFormat(std::string args): Module("lpmd")
 {
+ ParamList & params = (*this);
  AssignParameter("version", "2.0"); 
  AssignParameter("apirequired", "1.1"); 
  AssignParameter("bugreport", "gnm@gnm.cl"); 
@@ -24,11 +25,11 @@ LPMDFormat::LPMDFormat(std::string args): Module("lpmd")
  AssignParameter("replacecell", "false");
  // hasta aqui los valores por omision
  ProcessArguments(args);
- readfile = writefile = GetString("file");
- interval = GetInteger("each");
- level = GetInteger("level");
- rcell = GetBool("replacecell");
- extra = StringSplit(GetString("extra"),',');
+ readfile = writefile = (*this)["file"];
+ interval = int(params["each"]);
+ level = int(params["level"]);
+ rcell = params["replacecell"];
+ extra = StringSplit((*this)["extra"],',');
 }
 
 LPMDFormat::~LPMDFormat() { delete linecounter; }
@@ -134,7 +135,7 @@ bool LPMDFormat::ReadCell(std::istream & is, Configuration & con) const
  words = StringSplit(tmp, ' '); 
  if(words.Size()==9)
  {
-  if (GetString("replacecell") == "true")
+  if ((*this)["replacecell"] == "true")
   {
    cell[0] = Vector(atof(words[0].c_str()), atof(words[1].c_str()), atof(words[2].c_str()));
    cell[1] = Vector(atof(words[3].c_str()), atof(words[4].c_str()), atof(words[5].c_str()));
@@ -143,7 +144,7 @@ bool LPMDFormat::ReadCell(std::istream & is, Configuration & con) const
  }
  else if(words.Size()==6)
  {
-  if (GetString("replacecell") == "true")
+  if ((*this)["replacecell"] == "true")
   {
    Cell tmp(atof(words[0].c_str()),atof(words[1].c_str()),atof(words[2].c_str()),atof(words[3].c_str())*M_PI/180,atof(words[4].c_str())*M_PI/180,atof(words[5].c_str())*M_PI/180);
    for (int q=0;q<3;++q) cell[q] = tmp[q];

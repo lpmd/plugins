@@ -10,6 +10,7 @@ using namespace lpmd;
 
 Harmonic::Harmonic(std::string args): Module("harmonic") 
 { 
+ ParamList & params = (*this);
  AssignParameter("version", "1.0"); 
  AssignParameter("apirequired", "1.1"); 
  AssignParameter("bugreport", "gnm@gnm.cl"); 
@@ -17,8 +18,8 @@ Harmonic::Harmonic(std::string args): Module("harmonic")
  DefineKeyword("k");
  DefineKeyword("a");
  ProcessArguments(args);
- k = GetDouble("k");
- a = GetDouble("a");
+ k = params["k"];
+ a = params["a"];
 }
 
 void Harmonic::ShowHelp() const

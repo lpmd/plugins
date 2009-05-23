@@ -11,6 +11,7 @@ using namespace lpmd;
 
 Beeman::Beeman(std::string args): Module("beeman")
 {
+ ParamList & params = (*this);
  AssignParameter("version", "1.0"); 
  AssignParameter("apirequired", "1.1"); 
  AssignParameter("bugreport", "gnm@gnm.cl"); 
@@ -19,8 +20,8 @@ Beeman::Beeman(std::string args): Module("beeman")
  DefineKeyword("start", "1");
  // hasta aqui los valores por omision
  ProcessArguments(args);
- dt = GetDouble("dt");
- start = GetInteger("start");
+ dt = params["dt"];
+ start = int(params["start"]);
 }
 
 Beeman::~Beeman() { }

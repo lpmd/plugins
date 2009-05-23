@@ -12,6 +12,7 @@ using namespace lpmd;
 
 SkewStartGenerator::SkewStartGenerator(std::string args): Module("skewstart") 
 { 
+ ParamList & params = (*this);
  AssignParameter("version", "1.0"); 
  AssignParameter("apirequired", "1.1"); 
  AssignParameter("bugreport", "gnm@gnm.cl"); 
@@ -19,8 +20,8 @@ SkewStartGenerator::SkewStartGenerator(std::string args): Module("skewstart")
  DefineKeyword("atoms");
  DefineKeyword("symbol", "H");
  ProcessArguments(args); 
- spc = ElemNum(GetString("symbol"));
- n = GetInteger("atoms");
+ spc = ElemNum(params["symbol"]);
+ n = int(params["atoms"]);
 }
 
 SkewStartGenerator::~SkewStartGenerator() { }

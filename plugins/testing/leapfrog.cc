@@ -13,6 +13,7 @@ using namespace lpmd;
 
 Leapfrog::Leapfrog(std::string args): Module("leapfrog")
 {
+ ParamList & params = (*this);
  AssignParameter("version", "1.0"); 
  AssignParameter("apirequired", "1.1"); 
  AssignParameter("bugreport", "gnm@gnm.cl"); 
@@ -21,8 +22,8 @@ Leapfrog::Leapfrog(std::string args): Module("leapfrog")
  DefineKeyword("start", "1");
  // hasta aqui los valores por omision
  ProcessArguments(args);
- dt = GetDouble("dt");
- start = GetInteger("start");
+ dt = params["dt"];
+ start = int(params["start"]);
 }
 
 Leapfrog::~Leapfrog() { }

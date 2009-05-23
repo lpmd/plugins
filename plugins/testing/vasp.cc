@@ -13,6 +13,7 @@ using namespace lpmd;
 
 VaspFormat::VaspFormat(std::string args): Module("vasp")
 {
+ ParamList & params = (*this);
  AssignParameter("version", "1.0"); 
  AssignParameter("apirequired", "1.1"); 
  AssignParameter("bugreport", "gnm@gnm.cl"); 
@@ -24,13 +25,13 @@ VaspFormat::VaspFormat(std::string args): Module("vasp")
  DefineKeyword("type", "Direct");
  AssignParameter("replacecell", "false");
  ProcessArguments(args);
- readfile = writefile = GetString("file");
- interval = GetInteger("each");
- level = GetInteger("level");
- speclist = GetString("species");
+ readfile = writefile = params["file"];
+ interval = int(params["each"]);
+ level = int(params["level"]);
+ speclist = params["species"];
  satoms = StringSplit(speclist,',');
- tp = GetString("type");
- rcell = GetBool("replacecell");
+ tp = params["type"];
+ rcell = params["replacecell"];
 }
 
 VaspFormat::~VaspFormat() { }
@@ -88,7 +89,7 @@ bool VaspFormat::ReadCell(std::istream & is, Configuration & con) const
   std::istringstream vst(tmp);
   vst >> x >> y >> z;
   cv[i] = scale*Vector(x, y, z);
-  if (GetString("replacecell") == "true") cell[i] = cv[i];
+  if ((*this)["replacecell"] == "true") cell[i] = cv[i];
  } 
  //lee y chequea especies atomicas.
  getline(is,tmp);

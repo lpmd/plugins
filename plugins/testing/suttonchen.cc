@@ -10,6 +10,7 @@ using namespace lpmd;
 
 SuttonChen::SuttonChen(std::string args): Module("suttonchen")
 {
+ ParamList & params = (*this);
  AssignParameter("version", "1.0"); 
  AssignParameter("apirequired", "1.1"); 
  AssignParameter("bugreport", "gnm@gnm.cl"); 
@@ -21,12 +22,12 @@ SuttonChen::SuttonChen(std::string args): Module("suttonchen")
  DefineKeyword("c");
  DefineKeyword("cutoff");
  ProcessArguments(args); 
- e = GetDouble("e");
- a = GetDouble("a");
- n = GetDouble("n");
- m = GetDouble("m");
- c = GetDouble("c");
- rcut = GetDouble("cutoff");
+ e = params["e"];
+ a = params["a"];
+ n = params["n"];
+ m = params["m"];
+ c = params["c"];
+ rcut = params["cutoff"];
 }
 
 void SuttonChen::ShowHelp() const

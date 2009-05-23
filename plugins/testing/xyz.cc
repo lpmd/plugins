@@ -12,6 +12,7 @@ using namespace lpmd;
 
 XYZFormat::XYZFormat(std::string args): Module("xyz")
 {
+ ParamList & params = (*this);
  linecounter = new long int;
  AssignParameter("version", "1.0"); 
  AssignParameter("apirequired", "1.1"); 
@@ -27,13 +28,13 @@ XYZFormat::XYZFormat(std::string args): Module("xyz")
  AssignParameter("replacecell", "false");
  // hasta aqui los valores por omision
  ProcessArguments(args);
- readfile = writefile = GetString("file");
- interval = GetInteger("each");
- level = GetInteger("level");
- coords = GetString("coords");
- inside = GetString("inside");
- external = GetString("external");
- rcell = GetBool("replacecell");
+ readfile = writefile = params["file"];
+ interval = int(params["each"]);
+ level = int(params["level"]);
+ coords = params["coords"];
+ inside = params["inside"];
+ external = params["external"];
+ rcell = params["replacecell"];
 }
 
 XYZFormat::~XYZFormat() { delete linecounter; }
@@ -74,7 +75,7 @@ void XYZFormat::ReadHeader(std::istream & is) const
 //
 bool XYZFormat::ReadCell(std::istream & is, Configuration & sc) const
 {
- if (GetString("replacecell") == "true") throw PluginError("xyz", "This format does not contain any cell vectors.");
+ if ((*this)["replacecell"] == "true") throw PluginError("xyz", "This format does not contain any cell vectors.");
  std::string tmp;
 
  // Tomamos las cell y los atomos.

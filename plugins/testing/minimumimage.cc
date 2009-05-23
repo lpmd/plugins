@@ -11,6 +11,7 @@ using namespace lpmd;
 
 MinimumImageCellManager::MinimumImageCellManager(std::string args): Module("minimumimage")
 { 
+ ParamList & params = (*this);
  AssignParameter("version", "1.0"); 
  AssignParameter("apirequired", "1.1"); 
  AssignParameter("bugreport", "gnm@gnm.cl"); 
@@ -18,7 +19,7 @@ MinimumImageCellManager::MinimumImageCellManager(std::string args): Module("mini
  DefineKeyword("cutoff", "0.0");
  // hasta aqui los valores por omision
  ProcessArguments(args);
- rcut = GetDouble("cutoff");
+ rcut = params["cutoff"];
 }
 
 MinimumImageCellManager::~MinimumImageCellManager() { }

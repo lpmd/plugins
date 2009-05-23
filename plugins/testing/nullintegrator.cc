@@ -13,6 +13,7 @@ using namespace lpmd;
 
 NullIntegrator::NullIntegrator(std::string args): Module("nullintegrator")
 {
+ ParamList & params = (*this);
  AssignParameter("version", "1.0"); 
  AssignParameter("apirequired", "1.1"); 
  AssignParameter("bugreport", "gnm@gnm.cl"); 
@@ -20,7 +21,7 @@ NullIntegrator::NullIntegrator(std::string args): Module("nullintegrator")
  DefineKeyword("start", "1");
  // hasta aqui los valores por omision
  ProcessArguments(args);
- start = GetInteger("start");
+ start = int(params["start"]);
 }
 
 NullIntegrator::~NullIntegrator() { }

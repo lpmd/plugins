@@ -11,6 +11,7 @@ using namespace lpmd;
 
 CrystalGenerator::CrystalGenerator(std::string args): Module("crystal3d")
 {
+ ParamList & params = (*this);
  AssignParameter("version", "1.0"); 
  AssignParameter("apirequired", "1.1"); 
  AssignParameter("bugreport", "gnm@gnm.cl"); 
@@ -22,11 +23,11 @@ CrystalGenerator::CrystalGenerator(std::string args): Module("crystal3d")
  DefineKeyword("type", "fcc");
  // hasta aqui los valores por omision
  ProcessArguments(args);
- spc = ElemNum(GetString("symbol"));
- type = GetString("type");
- nx = GetInteger("nx");
- ny = GetInteger("ny");
- nz = GetInteger("nz");
+ spc = ElemNum((*this)["symbol"]);
+ type = (*this)["type"];
+ nx = int(params["nx"]);
+ ny = int(params["ny"]);
+ nz = int(params["nz"]);
 }
 
 CrystalGenerator::~CrystalGenerator() { }

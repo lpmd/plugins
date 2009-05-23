@@ -10,6 +10,7 @@ using namespace lpmd;
 
 LennardJones::LennardJones(std::string args): Module("lennardjones") 
 { 
+ ParamList & params = (*this);
  AssignParameter("version", "1.0"); 
  AssignParameter("apirequired", "1.1"); 
  AssignParameter("bugreport", "gnm@gnm.cl"); 
@@ -18,9 +19,9 @@ LennardJones::LennardJones(std::string args): Module("lennardjones")
  DefineKeyword("epsilon");
  DefineKeyword("cutoff");
  ProcessArguments(args);
- sigma = GetDouble("sigma");
- epsilon = GetDouble("epsilon");
- cutoff = GetDouble("cutoff");
+ sigma = params["sigma"];
+ epsilon = params["epsilon"];
+ cutoff = params["cutoff"];
  SetCutoff(cutoff);
 }
 

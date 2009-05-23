@@ -25,6 +25,7 @@ using namespace lpmd;
 
 ZLPFormat::ZLPFormat(std::string args): Module("zlp")
 {
+ ParamList & params = (*this);
  AssignParameter("version", "1.0"); 
  AssignParameter("apirequired", "1.1"); 
  AssignParameter("bugreport", "gnm@gnm.cl"); 
@@ -35,12 +36,12 @@ ZLPFormat::ZLPFormat(std::string args): Module("zlp")
  DefineKeyword("blocksize", "1024");
  DefineKeyword("compression", "6");
  ProcessArguments(args);
- readfile = writefile = GetString("file");
- interval = GetInteger("each");
- level = GetInteger("level");
- blocksize = GetInteger("blocksize");
- complev = GetInteger("compression");
- rcell = GetBool("replacecell");
+ readfile = writefile = (*this)["file"];
+ interval = int(params["each"]);
+ level = int(params["level"]);
+ blocksize = int(params["blocksize"]);
+ complev = int(params["compression"]);
+ rcell = params["replacecell"];
  // inicializa la estructura z_stream
  zstr = (void *)(new z_stream);
  lastop = new int(ZLP_NONE);
@@ -162,7 +163,7 @@ bool ZLPFormat::ReadCell(std::istream & is, Configuration & conf) const
    ibufstr >> vq[i];
    v[i] = vq[i];
   }
-  if (GetString("replacecell") == "true") cell[j] = v;
+  if ((*this)["replacecell"] == "true") cell[j] = v;
  }
  for (long int i=0;i<natoms;++i) 
  {
