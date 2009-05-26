@@ -220,10 +220,13 @@ LinkedCellCellManager::LinkedCellCellManager(std::string args): Module("linkedce
  nx = int(params["nx"]);
  ny = int(params["ny"]);
  nz = int(params["nz"]);
+ successperc = 0.0;
+ nsuccess = 0;
 }
 
 LinkedCellCellManager::~LinkedCellCellManager() 
 { 
+ std::cerr << " *** LinkedCell Efficiency percentage: " << 100.0*successperc/double(nsuccess) << " % " <<'\n';
  if (lcm != NULL) delete lcm;
 }
 
@@ -259,6 +262,9 @@ void LinkedCellCellManager::BuildNeighborList(Configuration & sc, long i, Neighb
  //const double rcc = lcm->GetCutoff();
  BasicAtom & this_atom = atoms[i];
  SubCell & subcell = lcm->GetSubCellByAtom(i);
+
+ long int nwin = 0, nfail = 0;
+
  for (AtomItem * ak = subcell.GetAtomList();ak!=NULL;ak=ak->next)
  {
   if ( (full && (ak->i != i)) || ((! full) && (ak->i > i)) )
@@ -271,7 +277,9 @@ void LinkedCellCellManager::BuildNeighborList(Configuration & sc, long i, Neighb
    if ((nn.r < rcut) && (nn.r > 0.001)) 
    {
     nlist.Append(nn); // FIXME: hay un bug al usar integradores onestep
+    nwin++;
    }
+   else if (nn.r > rcut) nfail++;
   }
  }
  // 
@@ -290,7 +298,12 @@ void LinkedCellCellManager::BuildNeighborList(Configuration & sc, long i, Neighb
    const Vector newpos = nn.j->Position()+disp;
    nn.rij = newpos-this_atom.Position();
    nn.r = nn.rij.Module();
-   if ((nn.r < rcut) && (nn.r > 0.001)) nlist.Append(nn); // FIXME: hay un bug al usar integradores onestep
+   if ((nn.r < rcut) && (nn.r > 0.001))
+   {
+    nlist.Append(nn); // FIXME: hay un bug al usar integradores onestep
+    nwin++;
+   }
+   else if (nn.r > rcut) nfail++;
   }
  }
  // 
@@ -309,10 +322,17 @@ void LinkedCellCellManager::BuildNeighborList(Configuration & sc, long i, Neighb
     const Vector newpos = nn.j->Position()+disp;
     nn.rij = newpos-this_atom.Position();
     nn.r = nn.rij.Module();
-    if ((nn.r < rcut) && (nn.r > 0.001)) nlist.Append(nn); // FIXME: hay un bug al usar integradores onestep
+    if ((nn.r < rcut) && (nn.r > 0.001)) 
+    {
+     nlist.Append(nn); // FIXME: hay un bug al usar integradores onestep
+     nwin++;
+    }
+    else if (nn.r > rcut) nfail++;
    }
   }
  }
+ successperc += (double(nwin)/double(nwin+nfail));
+ nsuccess++;
 }
 
 // Esto se incluye para que el modulo pueda ser cargado dinamicamente

@@ -120,6 +120,8 @@ class LinkedCellCellManager: public lpmd::CellManager, public lpmd::Module
    double rcut;
    long nx, ny, nz;
    LinkedCellManager * lcm;
+   long int nsuccess;
+   double successperc;
 };
 
 
