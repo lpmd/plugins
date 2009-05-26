@@ -331,8 +331,11 @@ void LinkedCellCellManager::BuildNeighborList(Configuration & sc, long i, Neighb
    }
   }
  }
- successperc += (double(nwin)/double(nwin+nfail));
- nsuccess++;
+ if ((nwin+nfail) > 0)
+ {
+  successperc += (double(nwin)/double(nwin+nfail));
+  nsuccess++;
+ }
 }
 
 // Esto se incluye para que el modulo pueda ser cargado dinamicamente
