@@ -7,7 +7,8 @@
 #include <lpmd/matrix.h>
 #include <lpmd/util.h>
 #include <lpmd/neighbor.h>
-#include <lpmd/simulationcell.h>
+#include <lpmd/simulation.h>
+#include <lpmd/properties.h>
 
 #include <sstream>
 
@@ -15,6 +16,7 @@ using namespace lpmd;
 
 Gdr::Gdr(std::string args): Module("gdr")
 {
+ ParamList & params=(*this);
  m = NULL;
  AssignParameter("version", "1.0"); 
  AssignParameter("apirequired", "1.1"); 
@@ -29,13 +31,13 @@ Gdr::Gdr(std::string args): Module("gdr")
  DefineKeyword("bins", "200");
  // hasta aqui los valores por omision
  ProcessArguments(args);
- rcut = GetDouble("rcut");
- nb = GetInteger("bins");
- start = GetInteger("start");
- end = GetInteger("end");
- each = GetInteger("each");
- outputfile = GetString("output");
- do_average = GetBool("average");
+ rcut = params["rcut"];
+ nb = int(params["bins"]);
+ start = int(params["start"]);
+ end = int(params["end"]);
+ each = int(params["each"]);
+ //outputfile = GetString("output");
+ do_average = bool(params["average"]);
 }
 
 Gdr::~Gdr() { if (m != NULL) delete m; }
@@ -65,115 +67,12 @@ void Gdr::ShowHelp() const
  std::cout << " la simulacion entre 1 y 100 cada 10 pasos.                                    \n";
 }
 
-void Gdr::Evaluate(SimulationCell & simcell, Potential & pot)
+void Gdr::Evaluate(Configuration & con, Potential & pot)
 {
  // fabs(rcut) < 1e-05 used to avoid comparing doubles
  if (nb == 0 || fabs(rcut) < 1e-05) throw PluginError("gdr", "Error in calculation: Cutoff or bins have wrong value.");
- double dr = rcut/ double(nb);
-
- int nsp = simcell.SpeciesList().size();
- unsigned long int N = simcell.size();
- double **g, *gt;
- g = new double*[nb];
- for(int i=0;i<nb;i++) { g[i]=new double[(int)(nsp*(nsp+1)/2)]; }
- gt = new double[nb]; //total gdr
- for (int i=0;i<nb;i++) 
- { 
-  gt[i]=0.0e0;
-  for (int j=0;j<(int)(nsp*(nsp+1)/2);j++) g[i][j]=0.0e0;
- }
- int s=0;
- const std::list<std::string> lst = simcell.SpeciesPairs();
-
- for (std::list<std::string>::const_iterator it=lst.begin();it!=lst.end();++it)	   
- {
-  //Hace funcional cada una de las especies de los pares.
-  std::vector<std::string> loa = StringSplit< std::vector<std::string> >(*it,'-'); // lista de atomos
-  int e1 = ElemNum(loa[0]);
-  int e2 = ElemNum(loa[1]);
-  //Cuenta los atomos de cada especie atomica.
-  int ne1=0,ne2=0;
-  for(unsigned long int m=0;m<N;m++)
-  {
-   if(simcell[m].Species()==e1) ne1++;
-   if(simcell[m].Species()==e2) ne2++;
-  }
-  //Comienza la iteracion principal para el calculo de g(r).
-  for(unsigned long int i=0;i<N;++i)
-  {
-   if(simcell[i].Species()==e1)
-   {
-    std::vector<Neighbor> nlist;
-    simcell.BuildNeighborList (i,nlist,true, rcut);
-    for(unsigned long int k=0;k<nlist.size();++k)
-    {
-     const Neighbor &nn = nlist[k];
-     if(nn.j->Species()==e2)
-     {
-      if(nn.r*nn.r<=rcut*rcut)
-      {
-       int ig=(long)floor(nn.r/dr);
-       g[ig][s]=g[ig][s]+(simcell.Volume())/(4.0e0*M_PI*nn.r*nn.r*dr*ne1*ne2);
-      }
-     }
-    }
-   }
-  }
-  s++;
- }
- //Calcula el valor de g(r) total.
- int j=0;
- for(std::list<std::string>::const_iterator it=lst.begin();it!=lst.end();++it)
- {
-  //Hace funcional cada una de las especies de los pares.
-  std::vector<std::string> loa = StringSplit< std::vector<std::string> >(*it,'-'); // lista de atomos
-  int e1 = ElemNum(loa[0]);
-  int e2 = ElemNum(loa[1]);
-  //Cuenta la concentracion atomica de cada especie atomica.
-  int ne1=0,ne2=0;
-  for(unsigned long int m=0;m<N;m++)
-  {
-   if(simcell[m].Species()==e1) ne1++;
-   if(simcell[m].Species()==e2) ne2++;
-  }
-  double ce1 = (double)ne1/(double)N;
-  double ce2 = (double)ne2/(double)N;
-  //Comienza la asignacion principal para g(r) total.
-  for(int i=0;i<nb;i++)
-  {
-   if(e1==e2) gt[i] = gt[i]+ce1*ce2*g[i][j];
-   else {gt[i]=gt[i]+2*ce1*ce2*g[i][j];}
-  }
-  j++;
- }
- //
- // Output of g(r)
- //
  if (m != NULL) delete m;
- m = new Matrix(2 + nsp*(nsp+1)/2, nb);
-
- // Asigna los labels al objeto Matrix para cada columna
- m->SetLabel(0, "r");
- m->SetLabel(nsp*(nsp+1)/2+1, "total g(r)");
- j=1;
- for (std::list<std::string>::const_iterator it=lst.begin();it!=lst.end();++it)
- {
-  m->SetLabel(j, (*it)+" g(r)");
-  j++;
- }
- // 
- for(int i=0;i<nb;i++)
- {
-  m->Set(0, i, dr*i);
-  for(int j=0;j<(int)(nsp*(nsp+1)/2);j++)
-  {
-   m->Set(j+1, i, g[i][j]);
-  }
-  m->Set(nsp*(nsp+1)/2+1, i, gt[i]);
- }
- delete [] gt;
- for (int i=0;i<nb;i++) delete [] g[i];
- delete [] g;
+ m=gdr(con,pot,nb,rcut);
 }
 
 // Esto se incluye para que el modulo pueda ser cargado dinamicamente

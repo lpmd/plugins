@@ -5,12 +5,12 @@
 #ifndef __GDR_H__
 #define __GDR_H__
 
-#include <lpmd/value.h>
+#include <lpmd/storedvalue.h>
 #include <lpmd/matrix.h>
-#include <lpmd/instantproperty.h>
+#include <lpmd/property.h>
 #include <lpmd/plugin.h>
 
-class Gdr: public lpmd::Value<lpmd::Matrix>, public lpmd::InstantProperty, public lpmd::Module
+class Gdr: public lpmd::StoredValue<lpmd::Matrix>, public lpmd::InstantProperty, public lpmd::Module
 {
  public:
   //Metodos Generales
@@ -20,7 +20,7 @@ class Gdr: public lpmd::Value<lpmd::Matrix>, public lpmd::InstantProperty, publi
 
   //Metodos Propios de modulo gdr
   const lpmd::Matrix & CurrentValue() const { return *m; }
-  void Evaluate(lpmd::SimulationCell & simcell, lpmd::Potential & pot);
+  void Evaluate(lpmd::Configuration & conf, lpmd::Potential & pot);
 
  private:
     lpmd::Matrix * m;
