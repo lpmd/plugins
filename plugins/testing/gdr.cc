@@ -4,9 +4,6 @@
 
 #include "gdr.h"
 
-#include <lpmd/matrix.h>
-#include <lpmd/util.h>
-#include <lpmd/neighbor.h>
 #include <lpmd/simulation.h>
 #include <lpmd/properties.h>
 

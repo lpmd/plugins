@@ -1,0 +1,294 @@
+#
+#
+#
+
+name = lpmd-plugins
+fullname = 'LPMD plugins'
+version = 0.6.0
+author = 'GNM <gnm@gnm.cl>'
+prefix = /usr/local
+
+language c++
+   flags = -g -O3 -ffast-math -funroll-all-loops -Wall -pedantic 
+end
+
+language c
+   flags = -g -O3 -ffast-math -funroll-all-loops -Wall -pedantic -std=c99
+end
+
+directory .
+
+    staticlibrary lclib.a
+       language = c
+       sources = lclib.c lclib.h
+    end
+
+    module beeman.so
+       language = c++
+       sources = beeman.cc beeman.h
+       installpath = lib/lpmd
+       pkgconfig += liblpmd-2.0
+    end
+
+    module buckingham.so
+       language = c++
+       sources = buckingham.cc buckingham.h
+       installpath = lib/lpmd
+       pkgconfig += liblpmd-2.0
+    end
+
+    module crystal2d.so
+       language = c++
+       sources = crystal2d.cc crystal2d.h
+       installpath = lib/lpmd
+       pkgconfig += liblpmd-2.0
+    end
+
+    module crystal3d.so
+       language = c++
+       sources = crystal3d.cc crystal3d.h
+       installpath = lib/lpmd
+       pkgconfig += liblpmd-2.0
+    end
+
+    module euler.so
+       language = c++
+       sources = euler.cc euler.h
+       installpath = lib/lpmd
+       pkgconfig += liblpmd-2.0
+    end
+
+    module fastlj.so
+       language = c++
+       sources = fastlj.cc fastlj.h
+       installpath = lib/lpmd
+       pkgconfig += liblpmd-2.0
+    end
+
+    module finnissinclair.so
+       language = c++
+       sources = finnissinclair.cc finnissinclair.h
+       installpath = lib/lpmd
+       pkgconfig += liblpmd-2.0
+    end
+
+    module gdr.so
+       language = c++
+       sources = gdr.cc gdr.h
+       installpath = lib/lpmd
+       pkgconfig += liblpmd-2.0
+    end
+
+    module gupta.so
+       language = c++
+       sources = gupta.cc gupta.h
+       installpath = lib/lpmd
+       pkgconfig += liblpmd-2.0
+    end
+
+    module harmonic.so
+       language = c++
+       sources = harmonic.cc harmonic.h
+       installpath = lib/lpmd
+       pkgconfig += liblpmd-2.0
+    end
+
+    module leapfrog.so
+       language = c++
+       sources = leapfrog.cc leapfrog.h
+       installpath = lib/lpmd
+       pkgconfig += liblpmd-2.0
+    end
+
+    module lennardjones.so
+       language = c++
+       sources = lennardjones.cc lennardjones.h
+       installpath = lib/lpmd
+       pkgconfig += liblpmd-2.0
+    end
+
+    module linkedcell.so
+       language = c++
+       sources = linkedcell.cc linkedcell.h
+       installpath = lib/lpmd
+       pkgconfig += liblpmd-2.0
+    end
+
+    module lc2.so
+       language = c++
+       sources = lc2.cc lc2.h
+       installpath = lib/lpmd
+       pkgconfig += liblpmd-2.0
+       libraries += lclib.a
+    end
+
+    module lpmd.so
+       language = c++
+       sources = lpmd.cc lpmd.h
+       installpath = lib/lpmd
+       pkgconfig += liblpmd-2.0
+    end
+
+    module minimumimage.so
+       language = c++
+       sources = minimumimage.cc minimumimage.h
+       installpath = lib/lpmd
+       pkgconfig += liblpmd-2.0
+    end
+
+    module mol2.so
+       language = c++
+       sources = mol2.cc mol2.h
+       installpath = lib/lpmd
+       pkgconfig += liblpmd-2.0
+    end
+
+    module morse.so
+       language = c++
+       sources = morse.cc morse.h
+       installpath = lib/lpmd
+       pkgconfig += liblpmd-2.0
+    end
+
+    module msd.so
+       language = c++
+       sources = msd.cc msd.h
+       installpath = lib/lpmd
+       pkgconfig += liblpmd-2.0
+    end
+
+    module nullintegrator.so
+       language = c++
+       sources = nullintegrator.cc nullintegrator.h
+       installpath = lib/lpmd
+       pkgconfig += liblpmd-2.0
+    end
+
+    module nullmetalpotential.so
+       language = c++
+       sources = nullmetalpotential.cc nullmetalpotential.h
+       installpath = lib/lpmd
+       pkgconfig += liblpmd-2.0
+    end
+
+    module nullmixer.so
+       language = c++
+       sources = nullmixer.cc nullmixer.h
+       installpath = lib/lpmd
+       pkgconfig += liblpmd-2.0
+    end
+
+    module nullpairpotential.so
+       language = c++
+       sources = nullpairpotential.cc nullpairpotential.h
+       installpath = lib/lpmd
+       pkgconfig += liblpmd-2.0
+    end
+
+    module nullpotential.so
+       language = c++
+       sources = nullpotential.cc nullpotential.h
+       installpath = lib/lpmd
+       pkgconfig += liblpmd-2.0
+    end
+
+    module pairdistances.so
+       language = c++
+       sources = pairdistances.cc pairdistances.h
+       installpath = lib/lpmd
+       pkgconfig += liblpmd-2.0
+    end
+
+    module pdb.so
+       language = c++
+       sources = pdb.cc pdb.h
+       installpath = lib/lpmd
+       pkgconfig += liblpmd-2.0
+    end
+
+    module rotate.so
+       language = c++
+       sources = rotate.cc rotate.h
+       installpath = lib/lpmd
+       pkgconfig += liblpmd-2.0
+    end
+
+    module skewstart.so
+       language = c++
+       sources = skewstart.cc skewstart.h
+       installpath = lib/lpmd
+       pkgconfig += liblpmd-2.0
+    end
+
+    module suttonchen.so
+       language = c++
+       sources = suttonchen.cc suttonchen.h
+       installpath = lib/lpmd
+       pkgconfig += liblpmd-2.0
+    end
+
+    module vasp.so
+       language = c++
+       sources = vasp.cc vasp.h
+       installpath = lib/lpmd
+       pkgconfig += liblpmd-2.0
+    end
+
+    module xyz.so
+       language = c++
+       sources = xyz.cc xyz.h
+       installpath = lib/lpmd
+       pkgconfig += liblpmd-2.0
+    end
+
+    module zlp.so
+       language = c++
+       sources = zlp.cc zlp.h
+       installpath = lib/lpmd
+       pkgconfig += liblpmd-2.0
+       libraries += -lz
+    end
+
+#
+# Aca los plugins que faltan por agregar a la compilacion
+#
+#angdist_la_SOURCES = angdist.h angdist.cc 
+#berendsen_la_SOURCES = berendsen.h berendsen.cc
+#cell_la_SOURCES = cell.h cell.cc
+#cellscaling_la_SOURCES = cellscaling.h cellscaling.cc
+#cna_la_SOURCES = cna.h cna.cc
+#color_la_SOURCES = color.h color.cc
+#constantforce_la_SOURCES = constantforce.h constantforce.cc
+#cordnum_la_SOURCES = cordnum.h cordnum.cc
+#cordnumfunc_la_SOURCES = cordnumfunc.h cordnumfunc.cc
+#densityprofile_la_SOURCES = densityprofile.h densityprofile.cc
+#displace_la_SOURCES = displace.h displace.cc
+#dispvol_la_SOURCES = dispvol.h dispvol.cc
+#dlpoly_la_SOURCES = dlpoly.h dlpoly.cc
+#energy_la_SOURCES = energy.h energy.cc
+#ewald_la_SOURCES = ewald.h ewald.cc
+#extravel_la_SOURCES = extravel.h extravel.cc
+#localpressure_la_SOURCES = localpressure.h localpressure.cc
+#moleculecm_la_SOURCES = moleculecm.h moleculecm.cc
+#nosehoover_la_SOURCES = nosehoover.h nosehoover.cc
+#pressure_la_SOURCES = pressure.h pressure.cc
+#printatoms_la_SOURCES = printatoms.h printatoms.cc
+#quenchedmd_la_SOURCES = quenchedmd.h quenchedmd.cc
+#rawbinary_la_SOURCES = rawbinary.h rawbinary.cc
+#replicate_la_SOURCES = replicate.h replicate.cc
+#rvcorr_la_SOURCES = rvcorr.h rvcorr.cc
+#selectatoms_la_SOURCES = selectatoms.h selectatoms.cc
+#shear_la_SOURCES = shear.h shear.cc
+#thermalneedle_la_SOURCES = thermalneedle.h thermalneedle.cc
+#temperature_la_SOURCES = temperature.h temperature.cc
+#tempprofile_la_SOURCES = tempprofile.h tempprofile.cc
+#tempscaling_la_SOURCES = tempscaling.h tempscaling.cc
+#vacf_la_SOURCES = vacf.h vacf.cc
+#veldist_la_SOURCES = veldist.h veldist.cc
+#velocityverlet_la_SOURCES = velocityverlet.h velocityverlet.cc
+#verlet_la_SOURCES = verlet.h verlet.cc
+#verletlist_la_SOURCES = verletlist.h verletlist.cc
+#voronoi_la_SOURCES = voronoi.h voronoi.cc
+
+end
+
