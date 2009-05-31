@@ -21,6 +21,7 @@ directory .
     staticlibrary lclib.a
        language = c
        sources = lclib.c lclib.h
+       flags += -fPIC
     end
 
     module beeman.so
@@ -223,6 +224,13 @@ directory .
     module suttonchen.so
        language = c++
        sources = suttonchen.cc suttonchen.h
+       installpath = lib/lpmd
+       pkgconfig += liblpmd-2.0
+    end
+    
+    module temperature.so
+       language = c++
+       sources = temperature.cc temperature.h
        installpath = lib/lpmd
        pkgconfig += liblpmd-2.0
     end

@@ -4,9 +4,8 @@
 
 #include "temperature.h"
 
-#include <lpmd/simulationcell.h>
+#include <lpmd/simulation.h>
 #include <lpmd/util.h>
-#include <lpmd/md.h>
 
 #include <iostream>
 
@@ -14,6 +13,7 @@ using namespace lpmd;
 
 TemperatureModifier::TemperatureModifier(std::string args): Module("temperature")
 {
+ ParamList & params = (*this);
  AssignParameter("version", "1.0"); 
  AssignParameter("apirequired", "1.1"); 
  AssignParameter("bugreport", "gnm@gnm.cl"); 
@@ -24,10 +24,10 @@ TemperatureModifier::TemperatureModifier(std::string args): Module("temperature"
  DefineKeyword("t", "300.0");
  // hasta aqui los valores por omision
  ProcessArguments(args);
- temp = GetDouble("t");
- start = GetInteger("start");
- end = GetInteger("end");
- each = GetInteger("each");
+ temp = double(params["t"]);
+ start = int(params["start"]);
+ end = int(params["end"]);
+ each = int(params["each"]);
 }
 
 TemperatureModifier::~TemperatureModifier() { }
@@ -47,18 +47,10 @@ void TemperatureModifier::ShowHelp() const
  std::cout << "      De esta forma fijamos la temperatura inicial.                            \n";
 }
 
-void TemperatureModifier::Apply(SimulationCell & sc)
+void TemperatureModifier::Apply(Simulation & sim)
 {
- sc.InitVelocities();
- sc.SetTemperature(temp);
-}
-
-void TemperatureModifier::Apply(MD & md)
-{
- SimulationCell & sc = md.GetCell();
  DebugStream() << "-> Rescaling temperature to T = " << temp << '\n';  
- sc.InitVelocities();
- sc.SetTemperature(temp);
+ sim.SetTemperature(temp);
 }
 
 // Esto se incluye para que el modulo pueda ser cargado dinamicamente
