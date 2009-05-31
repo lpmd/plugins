@@ -2,8 +2,8 @@
 //
 //
 
-#ifndef __PRINTATOMS_H__
-#define __PRINTATOMS_CM_H__
+#ifndef __PRINTATOMS_SM_H__
+#define __PRINTATOMS_SM_H__
 
 #include <lpmd/visualizer.h>
 #include <lpmd/plugin.h>
@@ -18,10 +18,10 @@ class PrintAtomsVisualizer: public lpmd::Visualizer, public lpmd::Module
   void ShowHelp() const;
 
   //Metodos Propios de modulo printatoms
-  void Apply(const lpmd::MD & md);
+  void Apply(const lpmd::Simulation & sim);
 
  private:
-   unsigned long int from_at, to_at;
+  long int from_at, to_at;
 };
 
 #endif

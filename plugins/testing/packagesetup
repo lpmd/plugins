@@ -20,104 +20,104 @@ directory .
 
     staticlibrary lclib.a
        language = c
-       sources = lclib.c lclib.h
+       sources = lclib.c
        flags += -fPIC
     end
 
     module beeman.so
        language = c++
-       sources = beeman.cc beeman.h
+       sources = beeman.cc
        installpath = lib/lpmd
        pkgconfig += liblpmd-2.0
     end
 
     module buckingham.so
        language = c++
-       sources = buckingham.cc buckingham.h
+       sources = buckingham.cc
        installpath = lib/lpmd
        pkgconfig += liblpmd-2.0
     end
 
     module crystal2d.so
        language = c++
-       sources = crystal2d.cc crystal2d.h
+       sources = crystal2d.cc
        installpath = lib/lpmd
        pkgconfig += liblpmd-2.0
     end
 
     module crystal3d.so
        language = c++
-       sources = crystal3d.cc crystal3d.h
+       sources = crystal3d.cc
        installpath = lib/lpmd
        pkgconfig += liblpmd-2.0
     end
 
     module euler.so
        language = c++
-       sources = euler.cc euler.h
+       sources = euler.cc
        installpath = lib/lpmd
        pkgconfig += liblpmd-2.0
     end
 
     module fastlj.so
        language = c++
-       sources = fastlj.cc fastlj.h
+       sources = fastlj.cc
        installpath = lib/lpmd
        pkgconfig += liblpmd-2.0
     end
 
     module finnissinclair.so
        language = c++
-       sources = finnissinclair.cc finnissinclair.h
+       sources = finnissinclair.cc
        installpath = lib/lpmd
        pkgconfig += liblpmd-2.0
     end
 
     module gdr.so
        language = c++
-       sources = gdr.cc gdr.h
+       sources = gdr.cc
        installpath = lib/lpmd
        pkgconfig += liblpmd-2.0
     end
 
     module gupta.so
        language = c++
-       sources = gupta.cc gupta.h
+       sources = gupta.cc
        installpath = lib/lpmd
        pkgconfig += liblpmd-2.0
     end
 
     module harmonic.so
        language = c++
-       sources = harmonic.cc harmonic.h
+       sources = harmonic.cc
        installpath = lib/lpmd
        pkgconfig += liblpmd-2.0
     end
 
     module leapfrog.so
        language = c++
-       sources = leapfrog.cc leapfrog.h
+       sources = leapfrog.cc
        installpath = lib/lpmd
        pkgconfig += liblpmd-2.0
     end
 
     module lennardjones.so
        language = c++
-       sources = lennardjones.cc lennardjones.h
+       sources = lennardjones.cc
        installpath = lib/lpmd
        pkgconfig += liblpmd-2.0
     end
 
     module linkedcell.so
        language = c++
-       sources = linkedcell.cc linkedcell.h
+       sources = linkedcell.cc
        installpath = lib/lpmd
        pkgconfig += liblpmd-2.0
     end
 
     module lc2.so
        language = c++
-       sources = lc2.cc lc2.h
+       sources = lc2.cc
        installpath = lib/lpmd
        pkgconfig += liblpmd-2.0
        libraries += lclib.a
@@ -125,133 +125,140 @@ directory .
 
     module lpmd.so
        language = c++
-       sources = lpmd.cc lpmd.h
+       sources = lpmd.cc
        installpath = lib/lpmd
        pkgconfig += liblpmd-2.0
     end
 
     module minimumimage.so
        language = c++
-       sources = minimumimage.cc minimumimage.h
+       sources = minimumimage.cc
        installpath = lib/lpmd
        pkgconfig += liblpmd-2.0
     end
 
     module mol2.so
        language = c++
-       sources = mol2.cc mol2.h
+       sources = mol2.cc
        installpath = lib/lpmd
        pkgconfig += liblpmd-2.0
     end
 
     module morse.so
        language = c++
-       sources = morse.cc morse.h
+       sources = morse.cc
        installpath = lib/lpmd
        pkgconfig += liblpmd-2.0
     end
 
     module msd.so
        language = c++
-       sources = msd.cc msd.h
+       sources = msd.cc
        installpath = lib/lpmd
        pkgconfig += liblpmd-2.0
     end
 
     module nullintegrator.so
        language = c++
-       sources = nullintegrator.cc nullintegrator.h
+       sources = nullintegrator.cc
        installpath = lib/lpmd
        pkgconfig += liblpmd-2.0
     end
 
     module nullmetalpotential.so
        language = c++
-       sources = nullmetalpotential.cc nullmetalpotential.h
+       sources = nullmetalpotential.cc
        installpath = lib/lpmd
        pkgconfig += liblpmd-2.0
     end
 
     module nullmixer.so
        language = c++
-       sources = nullmixer.cc nullmixer.h
+       sources = nullmixer.cc
        installpath = lib/lpmd
        pkgconfig += liblpmd-2.0
     end
 
     module nullpairpotential.so
        language = c++
-       sources = nullpairpotential.cc nullpairpotential.h
+       sources = nullpairpotential.cc
        installpath = lib/lpmd
        pkgconfig += liblpmd-2.0
     end
 
     module nullpotential.so
        language = c++
-       sources = nullpotential.cc nullpotential.h
+       sources = nullpotential.cc
        installpath = lib/lpmd
        pkgconfig += liblpmd-2.0
     end
 
     module pairdistances.so
        language = c++
-       sources = pairdistances.cc pairdistances.h
+       sources = pairdistances.cc
        installpath = lib/lpmd
        pkgconfig += liblpmd-2.0
     end
 
     module pdb.so
        language = c++
-       sources = pdb.cc pdb.h
+       sources = pdb.cc
+       installpath = lib/lpmd
+       pkgconfig += liblpmd-2.0
+    end
+
+    module printatoms.so
+       language = c++
+       sources = printatoms.cc
        installpath = lib/lpmd
        pkgconfig += liblpmd-2.0
     end
 
     module rotate.so
        language = c++
-       sources = rotate.cc rotate.h
+       sources = rotate.cc
        installpath = lib/lpmd
        pkgconfig += liblpmd-2.0
     end
 
     module skewstart.so
        language = c++
-       sources = skewstart.cc skewstart.h
+       sources = skewstart.cc
        installpath = lib/lpmd
        pkgconfig += liblpmd-2.0
     end
 
     module suttonchen.so
        language = c++
-       sources = suttonchen.cc suttonchen.h
+       sources = suttonchen.cc
        installpath = lib/lpmd
        pkgconfig += liblpmd-2.0
     end
     
     module temperature.so
        language = c++
-       sources = temperature.cc temperature.h
+       sources = temperature.cc
        installpath = lib/lpmd
        pkgconfig += liblpmd-2.0
     end
 
     module vasp.so
        language = c++
-       sources = vasp.cc vasp.h
+       sources = vasp.cc
        installpath = lib/lpmd
        pkgconfig += liblpmd-2.0
     end
 
     module xyz.so
        language = c++
-       sources = xyz.cc xyz.h
+       sources = xyz.cc
        installpath = lib/lpmd
        pkgconfig += liblpmd-2.0
     end
 
     module zlp.so
        language = c++
-       sources = zlp.cc zlp.h
+       sources = zlp.cc
        installpath = lib/lpmd
        pkgconfig += liblpmd-2.0
        libraries += -lz
@@ -280,7 +287,6 @@ directory .
 #moleculecm_la_SOURCES = moleculecm.h moleculecm.cc
 #nosehoover_la_SOURCES = nosehoover.h nosehoover.cc
 #pressure_la_SOURCES = pressure.h pressure.cc
-#printatoms_la_SOURCES = printatoms.h printatoms.cc
 #quenchedmd_la_SOURCES = quenchedmd.h quenchedmd.cc
 #rawbinary_la_SOURCES = rawbinary.h rawbinary.cc
 #replicate_la_SOURCES = replicate.h replicate.cc
@@ -288,7 +294,6 @@ directory .
 #selectatoms_la_SOURCES = selectatoms.h selectatoms.cc
 #shear_la_SOURCES = shear.h shear.cc
 #thermalneedle_la_SOURCES = thermalneedle.h thermalneedle.cc
-#temperature_la_SOURCES = temperature.h temperature.cc
 #tempprofile_la_SOURCES = tempprofile.h tempprofile.cc
 #tempscaling_la_SOURCES = tempscaling.h tempscaling.cc
 #vacf_la_SOURCES = vacf.h vacf.cc

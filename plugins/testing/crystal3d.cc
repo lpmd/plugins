@@ -63,13 +63,17 @@ void CrystalGenerator::Generate(Configuration & conf) const
  double ax = 1.0/double(nx);
  double ay = 1.0/double(ny);
  double az = 1.0/double(nz);
+ bool create_atoms = (atoms.Size() == 0);
+ 
  if (type=="bcc")
  {
   for (long k=0;k<nz;++k)
    for (long j=0;j<ny;++j)
     for (long i=0;i<nx;++i)
     {
+     if (create_atoms) atoms.Append(Atom(spc));
      atoms[cc++].Position() = cell.ScaleByCell(Vector(double(i)*ax, double(j)*ay, double(k)*az));
+     if (create_atoms) atoms.Append(Atom(spc));
      atoms[cc++].Position() = cell.ScaleByCell(Vector((double(i)+0.5)*ax, (double(j)+0.5)*ay, (double(k)+0.5)*az));
     }
  }
@@ -79,9 +83,13 @@ void CrystalGenerator::Generate(Configuration & conf) const
    for (long j=0;j<ny;++j)
     for (long i=0;i<nx;++i)
     {
+     if (create_atoms) atoms.Append(Atom(spc));
      atoms[cc++].Position() = cell.ScaleByCell(Vector((double(i)+0.51)*ax, (double(j)+0.5)*ay, (double(k)+0.5)*az));
+     if (create_atoms) atoms.Append(Atom(spc));
      atoms[cc++].Position() = cell.ScaleByCell(Vector((double(i)+0.51)*ax, double(j)*ay, (double(k)+1.0)*az));
+     if (create_atoms) atoms.Append(Atom(spc));
      atoms[cc++].Position() = cell.ScaleByCell(Vector((double(i)+1.01)*ax, double(j)*ay, (double(k)+0.5)*az));
+     if (create_atoms) atoms.Append(Atom(spc));
      atoms[cc++].Position() = cell.ScaleByCell(Vector((double(i)+1.01)*ax, (double(j)+0.5)*ay, (double(k)+1.0)*az));
     }
  }
@@ -91,8 +99,10 @@ void CrystalGenerator::Generate(Configuration & conf) const
    for (long j=0;j<ny;++j)
     for (long i=0;i<nx;++i)
     {
+     if (create_atoms) atoms.Append(Atom(spc));
      atoms[cc++].Position() = cell.ScaleByCell(Vector((double(i)+(2.0/3.0))*ax, (double(j)+(1.0/3.0))*ay, (double(k)+(3.0/4.0))*az));
-    atoms[cc++].Position() = cell.ScaleByCell(Vector((double(i)+(1.0/3.0))*ax, (double(j)+(2.0/3.0))*ay, (double(k)+(1.0/4.0))*az));
+     if (create_atoms) atoms.Append(Atom(spc));
+     atoms[cc++].Position() = cell.ScaleByCell(Vector((double(i)+(1.0/3.0))*ax, (double(j)+(2.0/3.0))*ay, (double(k)+(1.0/4.0))*az));
     }
  }
  else if (type=="sc")
@@ -101,6 +111,7 @@ void CrystalGenerator::Generate(Configuration & conf) const
    for (long j=0;j<ny;++j)
     for (long i=0;i<nx;++i)
     {
+     if (create_atoms) atoms.Append(Atom(spc));
      atoms[cc++].Position() = cell.ScaleByCell(Vector(double(i)*ax, double(j)*ay, double(k)*az));
     }
  }

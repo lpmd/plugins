@@ -4,8 +4,7 @@
 
 #include "printatoms.h"
 
-#include <lpmd/md.h>
-#include <lpmd/simulationcell.h>
+#include <lpmd/simulation.h>
 
 #include <iostream>
 
@@ -13,6 +12,7 @@ using namespace lpmd;
 
 PrintAtomsVisualizer::PrintAtomsVisualizer(std::string args): Module("printatoms")
 {
+ ParamList & params = (*this);
  AssignParameter("version", "1.0"); 
  AssignParameter("apirequired", "1.1"); 
  AssignParameter("bugreport", "gnm@gnm.cl"); 
@@ -23,11 +23,11 @@ PrintAtomsVisualizer::PrintAtomsVisualizer(std::string args): Module("printatoms
  DefineKeyword("from", "-1");
  DefineKeyword("to", "-1");
  ProcessArguments(args);
- from_at = GetInteger("from");
- to_at = GetInteger("to");
- start = GetInteger("start");
- end = GetInteger("end");
- each = GetInteger("each");
+ from_at = int(params["from"]);
+ to_at = int(params["to"]);
+ start = int(params["start"]);
+ end = int(params["end"]);
+ each = int(params["each"]);
 }
 
 PrintAtomsVisualizer::~PrintAtomsVisualizer() { }
@@ -47,17 +47,17 @@ void PrintAtomsVisualizer::ShowHelp() const
  std::cout << " visualize printatoms start=1 end=1000 each=50                               \n\n";
 }
 
-void PrintAtomsVisualizer::Apply(const MD & md) 
+void PrintAtomsVisualizer::Apply(const Simulation & sim) 
 { 
- SimulationCell & sc = md.GetCell();
- for (unsigned long int i=0;i<sc.size();++i) 
+ const BasicParticleSet & atoms = sim.Atoms();
+ for (long int i=0;i<atoms.Size();++i) 
  {  
   if ((i >= from_at) && (i <= to_at)) 
   {
-   std::cout << "-> Atom " << i << " : " << sc[i].Symb() << '\n'; 
-   std::cout << "   Position     : " << sc[i].Position() << '\n';
-   std::cout << "   Velocity     : " << sc[i].Velocity() << '\n';
-   std::cout << "   Acceleration : " << sc[i].Acceleration() << '\n';
+   std::cout << "-> Atom " << i << " : " << atoms[i].Symbol() << '\n'; 
+   std::cout << "   Position     : " << atoms[i].Position() << '\n';
+   std::cout << "   Velocity     : " << atoms[i].Velocity() << '\n';
+   std::cout << "   Acceleration : " << atoms[i].Acceleration() << '\n';
   }
  }
  std::cout << '\n';

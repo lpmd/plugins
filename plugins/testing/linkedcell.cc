@@ -226,7 +226,7 @@ LinkedCellCellManager::LinkedCellCellManager(std::string args): Module("linkedce
 
 LinkedCellCellManager::~LinkedCellCellManager() 
 { 
- std::cerr << " *** LinkedCell Efficiency percentage: " << 100.0*successperc/double(nsuccess) << " % " <<'\n';
+ DebugStream() << " *** LinkedCell Efficiency percentage: " << 100.0*successperc/double(nsuccess) << " % " <<'\n';
  if (lcm != NULL) delete lcm;
 }
 
