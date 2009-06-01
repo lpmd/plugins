@@ -19,9 +19,9 @@ languageCompilation = { 'c++': '%(compiler)s %(compilerflags)s -c %(source)s -o 
                         'c': '%(compiler)s %(compilerflags)s -c %(source)s -o %(object)s',
                         'lpunit': '%(compiler)s %(source)s - | g++ %(compilerflags)s -x c++ -c -o %(object)s -' }
 
-languageLinking = { 'c++': '%(linker)s -o %(target)s %(object)s %(linkflags)s',
-                    'c': '%(linker)s -o %(target)s %(object)s %(linkflags)s',
-                    'lpunit': '%(linker)s -o %(target)s %(object)s %(linkflags)s' }
+languageLinking = { 'c++': '%(linker)s -o %(target)s %(object)s -Wl,-rpath,%(prefix)s/lib %(linkflags)s',
+                    'c': '%(linker)s -o %(target)s %(object)s -Wl,-rpath,%(prefix)s/lib %(linkflags)s',
+                    'lpunit': '%(linker)s -o %(target)s %(object)s -Wl,-rpath,%(prefix)s/lib %(linkflags)s' }
 
 languageStaticLibraryPacking  = { 'c++': 'ar rcs %(target)s %(object)s',
                                   'c': 'ar rcs %(target)s %(object)s',
@@ -151,12 +151,13 @@ class Language(Item):
         compilableSources = [x for x in sources if self.IsFileCompilable(x)]
         return pattern % {'target': target.name, 'compiler': target.compiler, 'linkflags': target.libraries, 
                           'compilerflags': target.flags, 'linker': target.linker, 
-                          'source': ' '.join(compilableSources), 'object': ' '.join(objects)}
+                          'source': ' '.join(compilableSources), 'prefix': target.setup.prefix, 'object': ' '.join(objects)}
 
 class Target(Item):
 
     def __init__(self, setup, directory, targettype, name, **kwargs):
         Item.__init__(self, name, targetFields, kwargs)
+        self.setup = setup
         self.targettype = targettype
         if self.targettype in ('binary', 'script'):
            if not hasattr(self, 'test'): self.test = False
