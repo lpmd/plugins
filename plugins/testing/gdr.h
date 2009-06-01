@@ -19,11 +19,9 @@ class Gdr: public lpmd::StoredValue<lpmd::Matrix>, public lpmd::InstantProperty,
   void ShowHelp() const;
 
   //Metodos Propios de modulo gdr
-  const lpmd::Matrix & CurrentValue() const { return *m; }
   void Evaluate(lpmd::Configuration & conf, lpmd::Potential & pot);
 
  private:
-    lpmd::Matrix * m;
     double rcut;
     int nb;
     bool do_average;

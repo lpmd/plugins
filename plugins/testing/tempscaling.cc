@@ -4,9 +4,8 @@
 
 #include "tempscaling.h"
 
-#include <lpmd/simulationcell.h>
+#include <lpmd/simulation.h>
 #include <lpmd/util.h>
-#include <lpmd/md.h>
 
 #include <iostream>
 
@@ -14,6 +13,7 @@ using namespace lpmd;
 
 TempScalingModifier::TempScalingModifier(std::string args): Module("tempscaling")
 {
+ ParamList & params = (*this);
  AssignParameter("version", "1.0"); 
  AssignParameter("apirequired", "1.1"); 
  AssignParameter("bugreport", "gnm@gnm.cl"); 
@@ -25,11 +25,11 @@ TempScalingModifier::TempScalingModifier(std::string args): Module("tempscaling"
  DefineKeyword("to", "300.0");
  // hasta aqui los valores por omision
  ProcessArguments(args);
- fromtemp = GetDouble("from");
- totemp = GetDouble("to");
- start = GetInteger("start");
- end = GetInteger("end");
- each = GetInteger("each");
+ fromtemp = double(params["from"]);
+ totemp = double(params["to"]);
+ start = int(params["start"]);
+ end = int(params["end"]);
+ each = int(params["each"]);
 }
 
 TempScalingModifier::~TempScalingModifier() { }
@@ -54,18 +54,14 @@ void TempScalingModifier::ShowHelp() const
  std::cout << "      De esta forma aplicamos el termostato entre 0 y 100 cada 10 steps.       \n";
 }
 
-void TempScalingModifier::Apply(SimulationCell & sc) { sc.SetTemperature(fromtemp); }
-
-void TempScalingModifier::Apply(MD & md)
+void TempScalingModifier::Apply(Simulation & sim)
 {
- SimulationCell & sc = md.GetCell();
- double set_temp = ValueAtStep(md.CurrentStep(), fromtemp, totemp);
+ double set_temp = ValueAtStep(sim.CurrentStep(), fromtemp, totemp);
  DebugStream() << "-> Rescaling temperature to T = " << set_temp << '\n';  
- sc.SetTemperature(set_temp);
+ sim.SetTemperature(set_temp);
 }
 
 // Esto se incluye para que el modulo pueda ser cargado dinamicamente
 Module * create(std::string args) { return new TempScalingModifier(args); }
 void destroy(Module * m) { delete m; }
-
 

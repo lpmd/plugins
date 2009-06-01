@@ -10,9 +10,7 @@
 #include <lpmd/property.h>
 #include <lpmd/plugin.h>
 
-using namespace lpmd;
-
-class PairDistances: public StoredValue<Matrix>, public InstantProperty, public Module
+class PairDistances: public lpmd::StoredValue<lpmd::Matrix>, public lpmd::InstantProperty, public lpmd::Module
 {
  public:
   //Metodos Generales
@@ -20,7 +18,7 @@ class PairDistances: public StoredValue<Matrix>, public InstantProperty, public 
   void ShowHelp() const;
 
   //Metodos Propios de modulo pairdistances
-  void Evaluate(Configuration & conf, Potential & pot);
+  void Evaluate(lpmd::Configuration & conf, lpmd::Potential & pot);
 
  private:
     double rcut;

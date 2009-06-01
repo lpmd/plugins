@@ -243,6 +243,13 @@ directory .
        pkgconfig += liblpmd-2.0
     end
 
+    module tempscaling.so
+       language = c++
+       sources = tempscaling.cc
+       installpath = lib/lpmd
+       pkgconfig += liblpmd-2.0
+    end
+
     module vasp.so
        language = c++
        sources = vasp.cc
@@ -296,7 +303,6 @@ directory .
 #shear_la_SOURCES = shear.h shear.cc
 #thermalneedle_la_SOURCES = thermalneedle.h thermalneedle.cc
 #tempprofile_la_SOURCES = tempprofile.h tempprofile.cc
-#tempscaling_la_SOURCES = tempscaling.h tempscaling.cc
 #vacf_la_SOURCES = vacf.h vacf.cc
 #veldist_la_SOURCES = veldist.h veldist.cc
 #velocityverlet_la_SOURCES = velocityverlet.h velocityverlet.cc

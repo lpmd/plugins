@@ -17,7 +17,7 @@ class MSD: public StoredValue<Matrix>, public TemporalProperty, public Module
  public:
   MSD(std::string args);
 
-  void Evaluate(const SimulationHistory & hist, Potential & pot);
+  void Evaluate(SimulationHistory & hist, Potential & pot);
 };
 
 #endif

@@ -14,7 +14,6 @@ using namespace lpmd;
 Gdr::Gdr(std::string args): Module("gdr")
 {
  ParamList & params=(*this);
- m = NULL;
  AssignParameter("version", "1.0"); 
  AssignParameter("apirequired", "1.1"); 
  AssignParameter("bugreport", "gnm@gnm.cl"); 
@@ -33,11 +32,11 @@ Gdr::Gdr(std::string args): Module("gdr")
  start = int(params["start"]);
  end = int(params["end"]);
  each = int(params["each"]);
- //outputfile = GetString("output");
+ OutputFile() = params["output"];
  do_average = bool(params["average"]);
 }
 
-Gdr::~Gdr() { if (m != NULL) delete m; }
+Gdr::~Gdr() { }
 
 void Gdr::ShowHelp() const
 {
@@ -68,12 +67,11 @@ void Gdr::Evaluate(Configuration & con, Potential & pot)
 {
  // fabs(rcut) < 1e-05 used to avoid comparing doubles
  if (nb == 0 || fabs(rcut) < 1e-05) throw PluginError("gdr", "Error in calculation: Cutoff or bins have wrong value.");
- if (m != NULL) delete m;
- m=gdr(con,pot,nb,rcut);
+ CurrentValue() = *(gdr(con,pot,nb,rcut));
+ #warning "GDR: memory leak?"
 }
 
 // Esto se incluye para que el modulo pueda ser cargado dinamicamente
 Module * create(std::string args) { return new Gdr(args); }
 void destroy(Module * m) { delete m; }
-
 

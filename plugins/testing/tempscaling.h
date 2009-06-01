@@ -2,8 +2,8 @@
 //
 //
 
-#ifndef __TEMPSCALING_H__
-#define __TEMPSCALING_H__
+#ifndef __TEMPSCALING_SM_H__
+#define __TEMPSCALING_SM_H__
 
 #include <lpmd/systemmodifier.h>
 #include <lpmd/plugin.h>
@@ -17,8 +17,7 @@ class TempScalingModifier: public lpmd::SystemModifier, public lpmd::Module
   void ShowHelp() const;
 
   //Metodos Propios
-  void Apply(lpmd::SimulationCell & sc);
-  void Apply(lpmd::MD & md);
+  void Apply(lpmd::Simulation & sim);
 
  private:
   double fromtemp, totemp;
