@@ -22,6 +22,7 @@ directory .
        language = c
        sources = lclib.c
        flags += -fPIC
+       flags += -fPIC
     end
 
     module beeman.so
