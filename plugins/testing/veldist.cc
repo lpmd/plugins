@@ -6,7 +6,7 @@
 
 #include <lpmd/matrix.h>
 #include <lpmd/util.h>
-#include <lpmd/simulationcell.h>
+#include <lpmd/configuration.h>
 
 #include <sstream>
 
@@ -14,7 +14,7 @@ using namespace lpmd;
 
 VelDist::VelDist(std::string args): Module("veldist")
 {
- m = NULL;
+ ParamList & params = (*this);
  AssignParameter("version", "1.0"); 
  AssignParameter("apirequired", "1.1"); 
  AssignParameter("bugreport", "gnm@gnm.cl"); 
@@ -25,14 +25,14 @@ VelDist::VelDist(std::string args): Module("veldist")
  DefineKeyword("output");
  DefineKeyword("bins", "300");
  ProcessArguments(args);
- bins = GetInteger("bins");
- start = GetInteger("start");
- end = GetInteger("end");
- each = GetInteger("each");
- outputfile = GetString("output");
+ bins = int(params["bins"]);
+ start = int(params["start"]);
+ end = int(params["end"]);
+ each = int(params["each"]);
+ OutputFile() = params["output"];
 }
 
-VelDist::~VelDist() { if (m != NULL) delete m; }
+VelDist::~VelDist() { }
 
 void VelDist::ShowHelp() const
 {
@@ -52,21 +52,22 @@ void VelDist::ShowHelp() const
  std::cout << " property veldist start=1 each=10 end=100                                      \n\n";
 }
 
-void VelDist::Evaluate(SimulationCell & sc, Potential & pot)
+void VelDist::Evaluate(Configuration & conf, Potential & pot)
 {
  //
  // Primero determina los valores extremos
  // 
- unsigned long int n = sc.size();
+ BasicParticleSet & atoms = conf.Atoms();
+ long int n = atoms.Size();
  Vector vmin, vmax;
  double vmodmin, vmodmax, vrmin, vrmax;
- vmin = vmax = sc[0].Velocity();
- vmodmin = vmodmax = sc[0].Velocity().Module();
+ vmin = vmax = atoms[0].Velocity();
+ vmodmin = vmodmax = atoms[0].Velocity().Module();
  vrmin = vmodmin;
  vrmax = vmodmax;
- for (unsigned long int i=0;i<n;++i)
+ for (long int i=0;i<n;++i)
  {
-  const Vector & v = sc[i].Velocity();
+  const Vector & v = atoms[i].Velocity();
   for (int q=0;q<3;++q)
   {
    if (v[q] < vmin[q]) vmin[q] = v[q]; 
@@ -82,30 +83,30 @@ void VelDist::Evaluate(SimulationCell & sc, Potential & pot)
  // 
  // Ahora llena el histograma 
  //
- if (m != NULL) delete m;
- m = new Matrix(5, bins);
+ Matrix & m = CurrentValue() = Matrix(5, bins);
+ 
  // Asigna los labels al objeto Matrix para cada columna
- m->SetLabel(0, "v");
- m->SetLabel(1, "vx dist");
- m->SetLabel(2, "vy dist");
- m->SetLabel(3, "vz dist");
- m->SetLabel(4, "|v| dist");
+ m.SetLabel(0, "v");
+ m.SetLabel(1, "vx dist");
+ m.SetLabel(2, "vy dist");
+ m.SetLabel(3, "vz dist");
+ m.SetLabel(4, "|v| dist");
  for (int z=0;z<bins;++z)
  {
-  m->Set(0, z, vrmin+z*(vrmax-vrmin)/double(bins-1));
-  for (int q=0;q<3;++q) m->Set(q+1, z, 0.0);
-  m->Set(4, z, 0.0);  
+  m.Set(0, z, vrmin+z*(vrmax-vrmin)/double(bins-1));
+  for (int q=0;q<3;++q) m.Set(q+1, z, 0.0);
+  m.Set(4, z, 0.0);  
  }
- for (unsigned long int i=0;i<n;++i)
+ for (long int i=0;i<n;++i)
  {
-  const Vector & v = sc[i].Velocity();
+  const Vector & v = atoms[i].Velocity();
   for (int q=0;q<3;++q)
   {
    int k = int(floor((bins-1)*((v[q]-vrmin)/(vrmax-vrmin))));
-   m->Set(q+1, k, m->Get(q+1, k)+1);
+   m.Set(q+1, k, m.Get(q+1, k)+1);
   }
   int k = int(floor((bins-1)*((v.Module()-vrmin)/(vrmax-vrmin))));
-  m->Set(4, k, m->Get(4, k)+1);
+  m.Set(4, k, m.Get(4, k)+1);
  }
 }
 

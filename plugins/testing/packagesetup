@@ -264,6 +264,13 @@ directory .
        pkgconfig += liblpmd-2.0
     end
 
+    module veldist.so
+       language = c++
+       sources = veldist.cc
+       installpath = lib/lpmd
+       pkgconfig += liblpmd-2.0
+    end
+
     module xyz.so
        language = c++
        sources = xyz.cc
@@ -286,7 +293,6 @@ directory .
 #berendsen_la_SOURCES = berendsen.h berendsen.cc
 #cell_la_SOURCES = cell.h cell.cc
 #cellscaling_la_SOURCES = cellscaling.h cellscaling.cc
-#cna_la_SOURCES = cna.h cna.cc
 #color_la_SOURCES = color.h color.cc
 #constantforce_la_SOURCES = constantforce.h constantforce.cc
 #cordnum_la_SOURCES = cordnum.h cordnum.cc
@@ -311,7 +317,6 @@ directory .
 #thermalneedle_la_SOURCES = thermalneedle.h thermalneedle.cc
 #tempprofile_la_SOURCES = tempprofile.h tempprofile.cc
 #vacf_la_SOURCES = vacf.h vacf.cc
-#veldist_la_SOURCES = veldist.h veldist.cc
 #velocityverlet_la_SOURCES = velocityverlet.h velocityverlet.cc
 #verlet_la_SOURCES = verlet.h verlet.cc
 #verletlist_la_SOURCES = verletlist.h verletlist.cc

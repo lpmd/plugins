@@ -282,6 +282,18 @@ void CommonNeighborAnalysis::Evaluate(Configuration & conf, Potential & pot)
    m->Set(5, nk, sqrt(stat_r2av[s]/ns-pow(stat_rav[s]/ns, 2.0)));
    nk++;
   }
+  if ((stat.size() == 1) && ((*(stat.begin())).first == "4-2-1")) 
+     DebugStream() << "-> All pairs 4-2-1, this is definitely FCC!\n";
+  else if (stat.size() == 2)
+  {
+   Array<std::string> lista;
+   std::map<std::string, unsigned long int>::iterator it = stat.begin();
+   lista.Append((*it).first);
+   lista.Append((*(++it)).first);
+   if ((lista.Find("4-2-1") >= 0) && (lista.Find("4-2-2") >= 0)) DebugStream() << "-> Found 4-2-1 and 4-2-2 pairs, looks like HCP\n";
+   if ((lista.Find("6-6-6") >= 0) && (lista.Find("4-4-4") >= 0)) DebugStream() << "-> Found 6-6-6 and 4-4-4 pairs, looks like BCC\n";
+  }
+  else DebugStream() << "-> Found " << stat.size() << " kinds of pairs, cannot tell the structure\n";
  }
  else if (mode == 2)
  {
