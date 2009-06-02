@@ -3,12 +3,13 @@
 //
 
 #include "vacf.h"
-#include "plugincommon.h"
+#include <lpmd/properties.h>
 
 using namespace lpmd;
 
 Vacf::Vacf(std::string args): Module("vacf")
 {
+ ParamList & param = (*this);
  m = NULL;
  AssignParameter("version", "1.0"); 
  AssignParameter("apirequired", "1.1"); 
@@ -16,15 +17,15 @@ Vacf::Vacf(std::string args): Module("vacf")
  AssignParameter("dt","0");
  //
  ProcessArguments(args);
- dt = GetDouble("dt");
+ dt = param["dt"];
 }
 
 Vacf::~Vacf() { if (m != NULL) delete m; }
 
-void Vacf::Evaluate(const std::vector<SimulationCell> & simcell, Potential & pot)
+void Vacf::Evaluate(lpmd::SimulationHistory & hist, Potential & pot)
 {
  if(m!=NULL) delete []m;
- m=vacf(simcell,pot,dt);
+ m=vacf(hist,pot,dt);
 }
 
 // Esto se incluye para que el modulo pueda ser cargado dinamicamente
