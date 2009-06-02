@@ -5,9 +5,10 @@
 #ifndef __CNA_H__
 #define __CNA_H__
 
-#include <lpmd/value.h>
 #include <lpmd/matrix.h>
-#include <lpmd/instantproperty.h>
+#include <lpmd/storedvalue.h>
+#include <lpmd/property.h>
+#include <lpmd/configuration.h>
 #include <lpmd/plugin.h>
 
 #include <map>
@@ -30,7 +31,7 @@ inline bool operator<(const IndexTrio & t1, const IndexTrio & t2)
  return false;
 }
 
-class CommonNeighborAnalysis: public lpmd::Value<lpmd::Matrix>, public lpmd::InstantProperty, public lpmd::Module
+class CommonNeighborAnalysis: public lpmd::StoredValue<lpmd::Matrix>, public lpmd::InstantProperty, public lpmd::Module
 {
  public:
   //Metodos Generales
@@ -39,11 +40,9 @@ class CommonNeighborAnalysis: public lpmd::Value<lpmd::Matrix>, public lpmd::Ins
   void ShowHelp() const;
   std::string Keywords() const;
 
-  const lpmd::Matrix & CurrentValue() const { return *m; }
-  void Evaluate(lpmd::SimulationCell & simcell, lpmd::Potential & pot);
+  void Evaluate(lpmd::Configuration & config, lpmd::Potential & pot);
 
  private:
-    lpmd::Matrix * m;
     int mode, spc1, spc2;
     double rcut;
     std::map<IndexTrio, int> refmap;

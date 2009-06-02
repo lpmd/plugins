@@ -39,6 +39,13 @@ directory .
        pkgconfig += liblpmd-2.0
     end
 
+    module cna.so
+       language = c++
+       sources = cna.cc
+       installpath = lib/lpmd
+       pkgconfig += liblpmd-2.0
+    end
+
     module crystal2d.so
        language = c++
        sources = crystal2d.cc

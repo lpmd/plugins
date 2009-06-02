@@ -6,8 +6,8 @@
 
 #include <lpmd/matrix.h>
 #include <lpmd/util.h>
-#include <lpmd/neighbor.h>
-#include <lpmd/simulationcell.h>
+#include <lpmd/atompair.h>
+#include <lpmd/configuration.h>
 
 #include <sstream>
 #include <map>
@@ -25,16 +25,16 @@ class BondedPair: public IndexTrio
 
 CommonNeighborAnalysis::CommonNeighborAnalysis(std::string args): Module("cna")
 {
- m = NULL;
+ ParamList & params = (*this);
  AssignParameter("mode", "statistics");
  AssignParameter("species", "all");
  ProcessArguments(args);
- std::string m = GetString("mode");
+ std::string m = params["mode"];
  if (m == "full") mode = 0;
  else if (m == "statistics") mode = 1;
  else if (m == "defects") mode = 2;
- rcut = GetDouble("rcut");
- std::string rfs = GetString("reference");
+ rcut = double(params["rcut"]);
+ std::string rfs = params["reference"];
  if (rfs == "fcc") refmap[IndexTrio(4, 2, 1)] = 1;
  else if (rfs == "bcc")
  {
@@ -46,21 +46,21 @@ CommonNeighborAnalysis::CommonNeighborAnalysis(std::string args): Module("cna")
   refmap[IndexTrio(4, 2, 1)] = 1;
   refmap[IndexTrio(4, 2, 2)] = 1;
  }
- std::string species = GetString("species");
+ std::string species = params["species"];
  spc1 = spc2 = -1;
  if (species != "all")
  {
-  std::vector<std::string> tmp = StringSplit< std::vector<std::string> >(species, '-');
+  Array<std::string> tmp = StringSplit(species, '-');
   spc1 = ElemNum(tmp[0]); 
   spc2 = ElemNum(tmp[1]);
  }
- start = GetInteger("start");
- end = GetInteger("end");
- each = GetInteger("each");
- outputfile = GetString("output");
+ start = int(params["start"]);
+ end = int(params["end"]);
+ each = int(params["each"]);
+ OutputFile() = params["output"];
 }
 
-CommonNeighborAnalysis::~CommonNeighborAnalysis() { if (m != NULL) delete m; }
+CommonNeighborAnalysis::~CommonNeighborAnalysis() { }
 
 void CommonNeighborAnalysis::ShowHelp() const
 {
@@ -131,41 +131,52 @@ std::vector<long int> AddSegmentToChain(std::vector<long int> & cnm, std::map<lo
  return emp;
 }
 
-void CommonNeighborAnalysis::Evaluate(SimulationCell & simcell, Potential & pot)
+void CommonNeighborAnalysis::Evaluate(Configuration & conf, Potential & pot)
 {
- const long n = simcell.size();
+ BasicParticleSet & atoms = conf.Atoms();
+ BasicCell & cell = conf.Cell();
+ const long n = atoms.Size();
  std::vector<BondedPair> data;
- std::vector<Neighbor> * neighbormatrix = new std::vector<Neighbor>[n];
- std::cerr << "-> Building neighbor lists\n";
- for (long i=0;i<n;++i) simcell.BuildNeighborList(i, neighbormatrix[i], true, rcut);
- std::cerr << "-> Searching for pairs, species = " << GetString("species") << '\n'; 
+ NeighborList * neighbormatrix = new NeighborList[n];
+ DebugStream() << "-> Building neighbor lists\n";
  for (long i=0;i<n;++i)
  {
-  std::vector<Neighbor> & nlist = neighbormatrix[i];
-  for(std::vector<Neighbor>::const_iterator it=nlist.begin();it!=nlist.end();++it)
+  neighbormatrix[i] = conf.Neighbors(i, true, rcut);
+ }
+ // Construct an "index table" so we don't have to depend on Atom::Index()
+ std::map<BasicAtom *, long int> indices;
+ for (long int i=0;i<atoms.Size();++i) indices[&atoms[i]] = i;
+ // 
+
+ DebugStream() << "-> Searching for pairs, species = " << (*this)["species"] << '\n'; 
+ for (long i=0;i<n;++i)
+ {
+  NeighborList & nlist = neighbormatrix[i];
+  for (long int it=0;it<nlist.Size();++it)
   {
-   const Neighbor & nn = *it;
+   const AtomPair & nn = nlist[it];
    if (spc1 != -1)
    {
-    bool rightpair = (simcell[i].Species() == spc1) && (nn.j->Species() == spc2);
-    rightpair = (rightpair || ((simcell[i].Species() == spc2) && (nn.j->Species() == spc1)));
+    bool rightpair = (atoms[i].Z() == spc1) && (nn.j->Z() == spc2);
+    rightpair = (rightpair || ((atoms[i].Z() == spc2) && (nn.j->Z() == spc1)));
     if (!rightpair) continue;
    }
    if (nn.r >= rcut) continue;  
    unsigned int cna_indices[3];
-   long int j = nn.j->Index();
-   std::vector<Neighbor> & jlist = neighbormatrix[j];
+   long int j = indices[nn.j];
+   NeighborList & jlist = neighbormatrix[j];
    std::list<long int> cn;
    std::vector<long int> cnm;
-   for (std::vector<Neighbor>::const_iterator jt=jlist.begin();jt!=jlist.end();++jt)
+   for (long int jt=0;jt<jlist.Size();++jt)
    {
-    if ((*jt).r >= rcut) continue;
-    if (((*jt).j->Index() != i) && ((*jt).j->Index() != j)) cn.push_back((*jt).j->Index());
+    const AtomPair & jnn = jlist[jt];
+    if (jnn.r >= rcut) continue;
+    if ((indices[jnn.j] != i) && (indices[jnn.j] != j)) cn.push_back(indices[jnn.j]);
    }
    for (std::list<long int>::const_iterator qt=cn.begin();qt!=cn.end();++qt)
    {
-    for (std::vector<Neighbor>::const_iterator kt=nlist.begin();kt!=nlist.end();++kt)
-     if (((*kt).j->Index() == (*qt)) || ((*kt).i->Index() == (*qt)))
+    for (long int kt=0;kt<nlist.Size();++kt)
+     if ((indices[nlist[kt].j] == (*qt)) || (indices[nlist[kt].i] == (*qt)))
      {
       cnm.push_back(*qt);
       break;
@@ -181,7 +192,7 @@ void CommonNeighborAnalysis::Evaluate(SimulationCell & simcell, Potential & pot)
     for (unsigned int p=0;p<cna_indices[0]-1;++p)
      for (unsigned int q=p+1;q<cna_indices[0];++q)
      {
-      if (simcell.Distance(cnm[p], cnm[q]) < rcut)
+      if (cell.Displacement(atoms[cnm[p]].Position(), atoms[cnm[q]].Position()).Module() < rcut)
       {
        bonds[cnm[p]].push_back(cnm[q]);
        bonds[cnm[q]].push_back(cnm[p]);
@@ -199,16 +210,17 @@ void CommonNeighborAnalysis::Evaluate(SimulationCell & simcell, Potential & pot)
     }
     cna_indices[2] = longest.size()-1;
    }
-   data.push_back(BondedPair(cna_indices[0], cna_indices[1], cna_indices[2], i, nn.j->Index(), nn.r, simcell[i].Position()+nn.rij*0.5));
+   data.push_back(BondedPair(cna_indices[0], cna_indices[1], cna_indices[2], i, indices[nn.j], nn.r, atoms[i].Position()+nn.rij*0.5));
   }
  }
  delete [] neighbormatrix;
  unsigned long int npairs = data.size();
- if (m != NULL) delete m;
+
+ Matrix * m = &(CurrentValue());
  if (mode == 0)
  {
   // Full mode
-  m = new Matrix(7, npairs);
+  *m = Matrix(7, npairs);
   // Asigna los labels al objeto Matrix para cada columna
   m->SetLabel(0, "j");
   m->SetLabel(1, "k");
@@ -249,7 +261,7 @@ void CommonNeighborAnalysis::Evaluate(SimulationCell & simcell, Potential & pot)
   }
   int nkeys = 0;
   for (std::map<std::string, unsigned long int>::const_iterator qt=stat.begin();qt!=stat.end();++qt) nkeys++;
-  m = new Matrix(6, nkeys);
+  *m = Matrix(6, nkeys);
   m->SetLabel(0, "j");
   m->SetLabel(1, "k");
   m->SetLabel(2, "l");
@@ -261,7 +273,7 @@ void CommonNeighborAnalysis::Evaluate(SimulationCell & simcell, Potential & pot)
   {
    std::string s = (*qt).first;
    double ns = double(stat[s]);
-   std::vector<std::string> splt = StringSplit< std::vector<std::string> >(s, '-');
+   Array<std::string> splt = StringSplit(s, '-');
    m->Set(0, nk, atoi(splt[0].c_str()));
    m->Set(1, nk, atoi(splt[1].c_str()));
    m->Set(2, nk, atoi(splt[2].c_str()));
@@ -274,9 +286,9 @@ void CommonNeighborAnalysis::Evaluate(SimulationCell & simcell, Potential & pot)
  else if (mode == 2)
  {
   // Defects mode
-  unsigned long int * regcnt = new unsigned long int[simcell.size()];
-  unsigned long int * defcnt = new unsigned long int[simcell.size()];
-  for (unsigned long int q=0;q<simcell.size();++q) regcnt[q] = defcnt[q] = 0;
+  unsigned long int * regcnt = new unsigned long int[atoms.Size()];
+  unsigned long int * defcnt = new unsigned long int[atoms.Size()];
+  for (long int q=0;q<atoms.Size();++q) regcnt[q] = defcnt[q] = 0;
   for (unsigned long int q=0;q<npairs;++q)
   {
    if (refmap.count(IndexTrio(data[q].j, data[q].k, data[q].l)) > 0) 
@@ -290,16 +302,16 @@ void CommonNeighborAnalysis::Evaluate(SimulationCell & simcell, Potential & pot)
     defcnt[data[q].atj]++;
    }
   }
-  m = new Matrix(6, simcell.size());
+  *m = Matrix(6, atoms.Size());
   m->SetLabel(0, "x");
   m->SetLabel(1, "y");
   m->SetLabel(2, "z");
   m->SetLabel(3, "reference");
   m->SetLabel(4, "defects");
   m->SetLabel(5, "%defect");
-  for (unsigned long int q=0;q<simcell.size();++q)
+  for (long int q=0;q<atoms.Size();++q)
   {
-   const Vector & pos = simcell[q].Position();
+   const Vector & pos = atoms[q].Position();
    for (int pp=0;pp<3;++pp) m->Set(pp, q, pos[pp]);
    m->Set(3, q, regcnt[q]);
    m->Set(4, q, defcnt[q]);
