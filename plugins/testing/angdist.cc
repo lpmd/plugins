@@ -7,8 +7,8 @@
 
 #include <lpmd/matrix.h>
 #include <lpmd/util.h>
-#include <lpmd/neighbor.h>
-#include <lpmd/simulationcell.h>
+#include <lpmd/atompair.h>
+#include <lpmd/configuration.h>
 
 #include <sstream>
 
@@ -16,6 +16,7 @@ using namespace lpmd;
 
 AngDist::AngDist(std::string args): Module("angdist")
 {
+ ParamList & param = (*this);
  m = NULL;
  //
  AssignParameter("version", "1.0");
@@ -31,12 +32,12 @@ AngDist::AngDist(std::string args): Module("angdist")
  DefineKeyword("average", "false");
  // 
  ProcessArguments(args);
- nb = GetInteger("bins");
- start = GetInteger("start");
- end = GetInteger("end");
- each = GetInteger("each");
- outputfile = GetString("output");
- do_average = GetBool("average");
+ nb = int(param["bins"]);
+ start = int(param["start"]);
+ end = int(param["end"]);
+ each = int(param["each"]);
+ OutputFile() = param["output"];
+ do_average = bool(param["average"]);
 }
 
 AngDist::~AngDist()
@@ -49,7 +50,7 @@ void AngDist::SetParameter(std::string name)
  if (name == "atoms")
  {
   AssignParameter("atoms", GetNextWord());
-  na = GetInteger("atoms");
+  na = (*this)["atoms"];
   for(int i=0;i<na;i++) { satoms.push_back(GetNextWord()); }
  }
  else if (name == "rcut") 
@@ -122,11 +123,13 @@ void AngDist::ShowHelp() const
  std::cout << " paso entre los pasos 0 y 100 de la simulacion de lpmd.                        \n";
 }
 
-void AngDist::Evaluate(SimulationCell & simcell, Potential & pot)
+void AngDist::Evaluate(lpmd::Configuration & con, lpmd::Potential & pot)
 {
+ lpmd::BasicParticleSet & part = con.Atoms();
+ lpmd::BasicCell & cell = con.Cell();
  if (nb <= 0 ||  na <=0) throw PluginError("angdist", "Error with angular distribution calculation.");
  int nsp = na;
- unsigned long int N = simcell.size();
+ unsigned long int N = part.Size();
  double **ang;
  ang = new double*[nb];
  for(int i=0;i<nb;i++) { ang[i]=new double[(int)(nsp*nsp*nsp)]; }
@@ -134,13 +137,27 @@ void AngDist::Evaluate(SimulationCell & simcell, Potential & pot)
  { 
   for (int j=0;j<(int)(nsp*nsp*nsp);j++) ang[i][j]=0.0e0;
  }
- const std::list<std::string> lst = simcell.SpeciesTriplets();
+#warning Armado propio de triples, ¿debería ser método de la api?
+ lpmd::Array <int> elements = part.Elements();
+ Array<std::string> lst;
+ for (int i=0;i<elements.Size();++i)
+ {
+  for (int j=0;j<elements.Size();++i)
+  {
+   for (int k=0;k<elements.Size();++i)
+   {
+    std::ostringstream ostr ;
+    ostr << ElemSym[elements[i]] << "-" << ElemSym[elements[j]] << "-" <<ElemSym[elements[k]];
+    lst.Append(ostr.str());
+   }
+  }
+ }
 
  int s=0;
- for(std::list<std::string>::const_iterator it=lst.begin();it!=lst.end();++it)
+ for(int i=0;i<lst.Size();++i)
  {
   //Hace funcional el triplete de atomos y asigna los dos rcut
-  std::vector<std::string> loa = StringSplit< std::vector<std::string> >(*it,'-');
+  Array<std::string> loa = StringSplit(lst[i],'-');
   int e1 = ElemNum(loa[0]);
   int e2 = ElemNum(loa[1]);
   int e3 = ElemNum(loa[2]);
@@ -148,29 +165,32 @@ void AngDist::Evaluate(SimulationCell & simcell, Potential & pot)
   double rc23 = rcut[loa[1]+"-"+loa[2]];
   for(unsigned long int i=0;i<N;++i)
   {
-   if (simcell[i].Species()==e2)
+   if (part[i].Z()==e2)
    {
-    std::vector<Neighbor> nlist;
-    simcell.BuildNeighborList(i,nlist,true, simcell.CMCutoff());
-    for (unsigned long int k=0;k<nlist.size();++k)
+#warning Que pasará com CMCutoff() ??? ahora esta rempplazado por rc12+rc23
+    lpmd::NeighborList & nlist = con.Neighbors(i,true,rc12+rc23);
+    for (long int k=0;k<nlist.Size();++k)
     {
-     const Neighbor & nn = nlist[k];
-     if(nn.j->Species()==e1 && nn.r*nn.r <= rc12*rc12)
+     const lpmd::AtomPair & nn = nlist[k];
+     if(nn.j->Z()==e1 && nn.r*nn.r <= rc12*rc12)
      {
-      for (unsigned long int l=0;l<nlist.size();++l)
+      for (long int l=0;l<nlist.Size();++l)
       {
-       const Neighbor & mm = nlist[l];
+       const lpmd::AtomPair & mm = nlist[l];
        if(&mm!=&nn)
        {
-	if(mm.j->Species()==e3 && mm.r*mm.r <= rc23*rc23)
+	if(mm.j->Z()==e3 && mm.r*mm.r <= rc23*rc23)
 	{
-	 double angle=simcell.Angle(nn.j->Index(),i,mm.j->Index());
+#warning Angle debe pasarse a la API!
+	 Vector a = cell.Displacement(part[i].Position(), nn.j->Position());
+	 Vector b = cell.Displacement(part[i].Position(), mm.j->Position());
+	 double angle= acos(Dot(a,b)/ (a.Module()*b.Module()));
 	 int ig=(long)floor(nb*(angle/M_PI));
-	 if(nn.j->Species()==mm.j->Species())
+	 if(nn.j->Z()==mm.j->Z())
 	 {
 	  ang[ig][s]=ang[ig][s]+0.5;
 	 }
-	 else if(nn.j->Species()!=mm.j->Species())
+	 else if(nn.j->Z()!=mm.j->Z())
 	 {
 	  ang[ig][s]=ang[ig][s]+1.0;
 	 }
@@ -187,24 +207,24 @@ void AngDist::Evaluate(SimulationCell & simcell, Potential & pot)
  //
  // Output of ang
  //
- if (m != NULL) delete m;
- m = new Matrix(1 + nsp*nsp*nsp, nb);
+ lpmd::Matrix & m = CurrentValue();
+ m = lpmd::Matrix(1 + nsp*nsp*nsp, nb);
 
  // Asigna los labels al objeto Matrix para cada columna
- m->SetLabel(0, "angle");
+ m.SetLabel(0, "angle");
  int j=1;
- for (std::list<std::string>::const_iterator it=lst.begin();it!=lst.end();++it)
+ for (int i=0;i < lst.Size() ; ++i)
  {
-  m->SetLabel(j, *it);
+  m.SetLabel(j, lst[i]);
   j++;
  }
  //
  for(int i=0;i<nb;i++)
  {
-  m->Set(0, i, (double)180*i/nb);
+  m.Set(0, i, (double)180*i/nb);
   for(int j=0;j<(int)(nsp*nsp*nsp);j++)
   {
-   m->Set(j+1, i, ang[i][j]);
+   m.Set(j+1, i, ang[i][j]);
   }
  }
  for (int i=0;i<nb;i++) delete [] ang[i];

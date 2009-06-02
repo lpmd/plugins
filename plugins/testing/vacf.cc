@@ -24,8 +24,7 @@ Vacf::~Vacf() { if (m != NULL) delete m; }
 
 void Vacf::Evaluate(lpmd::SimulationHistory & hist, Potential & pot)
 {
- if(m!=NULL) delete []m;
- m=vacf(hist,pot,dt);
+ vacf(hist,pot,dt,CurrentValue());
 }
 
 // Esto se incluye para que el modulo pueda ser cargado dinamicamente

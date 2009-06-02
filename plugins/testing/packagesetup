@@ -25,6 +25,13 @@ directory .
        flags += -fPIC
     end
 
+    module angdist.so
+       language = c++
+       sources = angdist.cc
+       installpath = lib/lpmd
+       pkgconfig += liblpmd-2.0
+    end
+
     module beeman.so
        language = c++
        sources = beeman.cc
@@ -296,7 +303,6 @@ directory .
 #
 # Aca los plugins que faltan por agregar a la compilacion
 #
-#angdist_la_SOURCES = angdist.h angdist.cc 
 #berendsen_la_SOURCES = berendsen.h berendsen.cc
 #cell_la_SOURCES = cell.h cell.cc
 #cellscaling_la_SOURCES = cellscaling.h cellscaling.cc
