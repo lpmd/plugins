@@ -159,6 +159,13 @@ directory .
        pkgconfig += liblpmd-2.0
     end
 
+    module monitor.so
+       language = c++
+       sources = monitor.cc
+       installpath = lib/lpmd
+       pkgconfig += liblpmd-2.0
+    end
+
     module morse.so
        language = c++
        sources = morse.cc
