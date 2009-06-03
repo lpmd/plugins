@@ -39,6 +39,13 @@ directory .
        pkgconfig += liblpmd-2.0
     end
 
+    module berendsen.so
+       language = c++
+       sources = berendsen.cc
+       installpath = lib/lpmd
+       pkgconfig += liblpmd-2.0
+    end
+
     module buckingham.so
        language = c++
        sources = buckingham.cc

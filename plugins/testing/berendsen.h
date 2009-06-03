@@ -2,8 +2,8 @@
 //
 //
 
-#ifndef __BERENDSEN_H__
-#define __BERENDSEN_H__
+#ifndef __BERENDSEN_SM_H__
+#define __BERENDSEN_SM_H__
 
 #include <lpmd/systemmodifier.h>
 #include <lpmd/plugin.h>
@@ -17,8 +17,7 @@ class BerendsenModifier: public lpmd::SystemModifier, public lpmd::Module
    void ShowHelp() const;
 
    //Metodos Propios del Modulo Berendsen
-   void Apply(lpmd::SimulationCell & sc);
-   void Apply(lpmd::MD & md);
+   void Apply(lpmd::Simulation & sim);
 
   private:
     long stop_thermostat, old_step;

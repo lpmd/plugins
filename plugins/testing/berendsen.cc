@@ -4,10 +4,10 @@
 
 #include "berendsen.h"
 
-#include <lpmd/simulationcell.h>
-#include <lpmd/integrator.h>
-#include <lpmd/md.h>
+#include <lpmd/simulation.h>
 #include <lpmd/util.h>
+#include <lpmd/integrator.h>
+#include <lpmd/properties.h>
 
 #include <iostream>
 
@@ -15,6 +15,7 @@ using namespace lpmd;
 
 BerendsenModifier::BerendsenModifier(std::string args): Module("berendsen")
 {
+ ParamList & params = (*this);
  AssignParameter("version", "1.0"); 
  AssignParameter("apirequired", "1.1"); 
  AssignParameter("bugreport", "gnm@gnm.cl"); 
@@ -27,12 +28,12 @@ BerendsenModifier::BerendsenModifier(std::string args): Module("berendsen")
  DefineKeyword("tau", "400.0");
  // hasta aqui los valores por omision
  ProcessArguments(args);
- fromtemp = GetDouble("from");
- totemp = GetDouble("to");
- tau = GetDouble("tau");
- start = GetInteger("start");
- end = GetInteger("end");
- each = GetInteger("each");
+ fromtemp = double(params["from"]);
+ totemp = double(params["to"]);
+ tau = double(params["tau"]);
+ start = int(params["start"]);
+ end = int(params["end"]);
+ each = int(params["each"]);
  // stop_thermostat no es un parametro sino un flag interno
  stop_thermostat = -1;
 }
@@ -63,28 +64,32 @@ void BerendsenModifier::ShowHelp() const
  std::cout << "      De esta forma aplicamos el termostato entre 0 y 100 cada 10 steps.       \n";
 }
 
-void BerendsenModifier::Apply(SimulationCell & sc)
+void BerendsenModifier::Apply(lpmd::Simulation & sim)
 {
- ShowWarning("plugin berendsen", "Applying the berendsen modifier to a single configuration does not make much sense.");
-}
-
-void BerendsenModifier::Apply(MD & md)
-{
- SimulationCell & sc = md.GetCell();
- double timestep = md.GetIntegrator().Timestep();
- double set_temp = ValueAtStep(md.CurrentStep(), fromtemp, totemp);
+ lpmd::BasicParticleSet & atoms = sim.Atoms();
+ lpmd::Integrator & integrator = sim.Integrator();
+ double timestep = integrator.Timestep();
+ double set_temp = ValueAtStep(sim.CurrentStep(), fromtemp, totemp);
  if (stop_thermostat == -1)
  {
-  stop_thermostat = long(double(md.CurrentStep()) + tau/timestep);
+  stop_thermostat = long(double(sim.CurrentStep()) + tau/timestep);
   DebugStream() << "-> Berendsen thermostat activated (stops in step " << stop_thermostat << "), rescaling temperature to T = " << set_temp << '\n';
   old_step = each;
   each = 1;
  }
  else
  {
-  if (md.CurrentStep() <= stop_thermostat) 
+  if (sim.CurrentStep() <= stop_thermostat) 
   {
-   sc.SetTemperature(set_temp, timestep, tau);
+   Vector vel(0,0,0);
+   double xi, ti=lpmd::Temperature(atoms);
+   for (int i=0;i<atoms.Size();++i)
+   {
+    vel = atoms[i].Velocity();
+    xi = sqrt(1.0 + (double(timestep)/tau)*(set_temp/ti - 1.0));
+    vel = vel*xi;
+    atoms[i].Velocity() = vel;
+   }
   }
   else
   {
