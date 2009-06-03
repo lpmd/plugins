@@ -4,8 +4,7 @@
 
 #include "cellscaling.h"
 
-#include <lpmd/md.h>
-#include <lpmd/simulationcell.h>
+#include <lpmd/simulation.h>
 
 #include <iostream>
 #include <iomanip>
@@ -14,6 +13,7 @@ using namespace lpmd;
 
 CellScalingModifier::CellScalingModifier(std::string args): Module("cellscaling")
 {
+ lpmd::ParamList & params = (*this);
  AssignParameter("version", "1.0"); 
  AssignParameter("apirequired", "1.1"); 
  AssignParameter("bugreport", "gnm@gnm.cl"); 
@@ -28,17 +28,17 @@ CellScalingModifier::CellScalingModifier(std::string args): Module("cellscaling"
  AssignParameter("first", "true");
  // hasta aqui los valores por omision
  ProcessArguments(args);
- percent = GetDouble("percent");
- constant = GetBool("constant");
- first = GetBool("first");
- std::string ax = GetString("axis");
+ percent = double(params["percent"]);
+ constant = bool(params["constant"]);
+ first = bool(params["first"]);
+ std::string ax = params["axis"];
  if ((ax == "all") || (ax == "ALL")) axis = -1;
  if ((ax == "x") || (ax == "X")) axis = 0;
  if ((ax == "y") || (ax == "Y")) axis = 1;
  if ((ax == "z") || (ax == "Z")) axis = 2;
- start = GetInteger("start");
- end = GetInteger("end");
- each = GetInteger("each");
+ start = int(params["start"]);
+ end = int(params["end"]);
+ each = int(params["each"]);
 }
 
 CellScalingModifier::~CellScalingModifier() { }
@@ -79,43 +79,45 @@ void CellScalingModifier::ShowHelp() const
  std::cout << " en el eje X, terminando el escalado enel paso 1000.                           \n";
 }
 
-void CellScalingModifier::Apply(SimulationCell & sc)
+void CellScalingModifier::Apply(Simulation & sim)
 {
+ lpmd::BasicCell & cell = sim.Cell();
  if (constant == false)
  {
   if (axis == -1)
   {
    DebugStream() << "-> Rescaling cell by " << percent << "%\n";
-   sc.RescalePercent(percent); 
+   //sc.RescalePercent(percent);
+   for (int i=0;i<3;++i) cell[i] = cell[i] + cell[i] * percent/100.0e0;
   }
   else
   {
    DebugStream() << "-> Rescaling axis " << axis << " in a " << percent << "%\n";
-   sc.RescalePercent(percent, axis);
+   //sc.RescalePercent(percent, axis);
+   cell[axis] = cell[axis] + cell[axis]*percent/100.0e0;
   }
  }
  else if (constant == true)
  {
   if (first == true)
   {
-   for(int i=0;i<3;++i) s[i] = sc.GetCell()[i]*percent/100;
+   for(int i=0;i<3;++i) s[i] = cell[i]*percent/100;
    first=false;
   }
-
   if (axis == -1)
   {
    DebugStream() << "-> Rescaling constant by " << percent << "%\n";
-   sc.RescaleVector(s[0],s[1],s[2]);
+   //sc.RescaleVector(s[0],s[1],s[2]);
+   for (int i=0;i<3;++i) cell[i] = cell[i] + s[i];
   }
   else
   {
    DebugStream() << "-> Rescaling axis " << axis <<" constant by " << percent << "%\n";
-   sc.RescaleVector(s[axis],axis);
+   //sc.RescaleVector(s[axis],axis);
+   cell[axis] = cell[axis] + s[axis];
   }
  }
 }
-
-void CellScalingModifier::Apply(MD & md) { Apply(md.GetCell()); }
 
 // Esto se incluye para que el modulo pueda ser cargado dinamicamente
 Module * create(std::string args) { return new CellScalingModifier(args); }

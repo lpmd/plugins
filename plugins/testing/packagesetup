@@ -53,6 +53,13 @@ directory .
        pkgconfig += liblpmd-2.0
     end
 
+    module cellscaling.so
+       language = c++
+       sources = cellscaling.cc
+       installpath = lib/lpmd
+       pkgconfig += liblpmd-2.0
+    end
+
     module cna.so
        language = c++
        sources = cna.cc
@@ -317,8 +324,7 @@ directory .
 #
 # Aca los plugins que faltan por agregar a la compilacion
 #
-#berendsen_la_SOURCES = berendsen.h berendsen.cc
-#cell_la_SOURCES = cell.h cell.cc
+#cell_la_SOURCES = cell.h cell.cc #PROBABLEMENTE YA NO VA MAS!!
 #cellscaling_la_SOURCES = cellscaling.h cellscaling.cc
 #color_la_SOURCES = color.h color.cc
 #constantforce_la_SOURCES = constantforce.h constantforce.cc

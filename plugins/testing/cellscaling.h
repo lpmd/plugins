@@ -20,8 +20,7 @@ class CellScalingModifier: public lpmd::SystemModifier, public lpmd::Module
   void ShowHelp() const;
 
   //Metodos Propios de modulo cellscaling
-  void Apply(lpmd::SimulationCell & sc);
-  void Apply(lpmd::MD & md);
+  void Apply(lpmd::Simulation & sim);
 
  private:
   int axis;
