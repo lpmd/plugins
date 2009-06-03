@@ -6,7 +6,7 @@
 
 #include <lpmd/matrix.h>
 #include <lpmd/util.h>
-#include <lpmd/simulationcell.h>
+#include <lpmd/simulation.h>
 
 #include <sstream>
 
@@ -14,7 +14,7 @@ using namespace lpmd;
 
 CordNum::CordNum(std::string args): Module("cordnum")
 {
- m = NULL;
+ ParamList & params = (*this);
  AssignParameter("version", "1.0"); 
  AssignParameter("apirequired", "1.1"); 
  AssignParameter("bugreport", "gnm@gnm.cl"); 
@@ -28,17 +28,16 @@ CordNum::CordNum(std::string args): Module("cordnum")
  DefineKeyword("output");
  DefineKeyword("average", "false");
  ProcessArguments(args);
- nb = GetInteger("maxn");
- start = GetInteger("start");
- end = GetInteger("end");
- each = GetInteger("each");
- outputfile = GetString("output");
- do_average = GetBool("average");
+ nb = int(params["maxn"]);
+ start = int(params["start"]);
+ end = int(params["end"]);
+ each = int(params["each"]);
+ OutputFile() = params["output"];
+ do_average = bool(params["average"]);
 }
 
 CordNum::~CordNum()
 {
- if (m != NULL) delete m;
 }
 
 void CordNum::SetParameter(std::string name)
@@ -46,7 +45,7 @@ void CordNum::SetParameter(std::string name)
  if (name == "atoms")
  {
   AssignParameter("atoms", GetNextWord());
-  na = GetInteger("atoms");
+  na = int((*this)["atoms"]);
   for(int i=0;i<na;i++) { satoms.push_back(GetNextWord()); }
  }
  else if (name == "rcut") 
@@ -118,11 +117,13 @@ void CordNum::ShowHelp() const
  std::cout << " paso entre los pasos 0 y 100 de la simulacion de lpmd.                        \n";
 }
 
-void CordNum::Evaluate(SimulationCell & simcell, Potential & pot)
+void CordNum::Evaluate(Configuration & con, Potential & pot)
 {
+ lpmd::BasicParticleSet & atoms = con.Atoms();
+ lpmd::Array <int> esp = atoms.Elements();
  if (nb <= 0 || na <=0) throw PluginError("cordnum", "Error in coordination number calculation.");
  int nsp = na;
- unsigned long int N = simcell.size();
+ unsigned long int N = atoms.Size();
  int **histo;
  double **cnfun;
  histo = new int*[nsp*nsp];
@@ -135,30 +136,40 @@ void CordNum::Evaluate(SimulationCell & simcell, Potential & pot)
   for (int j=0;j<nb;j++) cnfun[i][j]=0.0e0;
  }
 
- const std::list<std::string> lst = simcell.RepeatedSpeciesPairs(); 
+ //const std::list<std::string> lst = simcell.RepeatedSpeciesPairs(); 
+ lpmd::Array<std::string> pairs;
+ for(int i=0; i<esp.Size() ; ++i)
+ {
+  for(int j=0; j<esp.Size() ; ++j)
+  {
+   std::ostringstream ostr;
+   ostr << ElemSym[esp[i]]<< "-" << ElemSym[esp[j]];
+   pairs.Append(ostr.str());
+  }
+ }
  int s=0;
 
- for(std::list<std::string>::const_iterator it = lst.begin() ; it!=lst.end() ; ++it)
+ for(int i=0;i<pairs.Size();++i)
  {
   //Hace funcional cada una de las especies de los pares.
-  std::vector<std::string> loa = StringSplit< std::vector<std::string> >(*it,'-'); // lista de atomos
+  lpmd::Array<std::string> loa = StringSplit(pairs[i],'-'); // lista de atomos
   int e1 = ElemNum(loa[0]);
   int e2 = ElemNum(loa[1]); 
   double rc12 = rcut[loa[0]+"-"+loa[1]];
   //Cuenta los atomos de la especie 1.
   int ne1=0;
-  for (unsigned long int i=0;i<N;i++) {if(simcell[i].Species()==e1) ne1++;}
+  for (unsigned long int i=0;i<N;i++) {if(atoms[i].Z()==e1) ne1++;}
   //Comienzan las iteraciones.
   for (unsigned long int i=0;i<N;++i)
   {
-   if(simcell[i].Species()==e1)
+   if(atoms[i].Z()==e1)
    {
-    std::vector<Neighbor> nlist;
-    simcell.BuildNeighborList(i,nlist,true,simcell.CMCutoff());
-    for(unsigned long int k=0;k<nlist.size();++k)
+#warning nuevamente CMCutoff .. reemplazado por rc12 por2
+    lpmd::NeighborList & nlist = con.Neighbors(i,true,rc12*2);
+    for(long int k=0;k<nlist.Size();++k)
     {
-     const Neighbor &nn = nlist[k];
-     if(nn.j->Species()==e2)
+     const lpmd::AtomPair & nn = nlist[k];
+     if(nn.j->Z()==e2)
      {
       if(nn.r<=rc12*rc12)
       {
@@ -170,7 +181,7 @@ void CordNum::Evaluate(SimulationCell & simcell, Potential & pot)
   }
   for (unsigned long int i=0;i<N;i++)
   {
-   if(simcell[i].Species()==e1 && histo[s][i]<nb)
+   if(atoms[i].Z()==e1 && histo[s][i]<nb)
    {
     cnfun[s][histo[s][i]]++;
    }
@@ -187,22 +198,23 @@ void CordNum::Evaluate(SimulationCell & simcell, Potential & pot)
  //
  // Output of cordnum - histogram format
  //
- m = new Matrix(1 + nsp*nsp, nb);
+ Matrix & m = CurrentValue();
+ m = lpmd::Matrix(1 + nsp*nsp, nb);
  // Asigna los labels al objeto Matrix para cada columna
- m->SetLabel(0, "numb of neigh");
+ m.SetLabel(0, "numb of neigh");
  int j=1;
- for (std::list<std::string>::const_iterator it=lst.begin();it!=lst.end();++it)
+ for (int i=0;i<pairs.Size();++i)
  {
-  m->SetLabel(j, (*it)+" cn");
+  m.SetLabel(j, pairs[i]+" cn");
   j++;
  }
  //
  for(int i=0;i<nb;i++)
  {
-  m->Set(0, i, i);
+  m.Set(0, i, i);
   for(int j=0;j<(int)(nsp*nsp);j++)
   {
-   m->Set(j+1, i, cnfun[j][i]);
+   m.Set(j+1, i, cnfun[j][i]);
   }
  }
  //Borra arreglos dinamicos.

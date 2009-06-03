@@ -6,7 +6,7 @@
 
 #include <lpmd/matrix.h>
 #include <lpmd/util.h>
-#include <lpmd/simulationcell.h>
+#include <lpmd/simulation.h>
 
 #include <sstream>
 
@@ -14,7 +14,7 @@ using namespace lpmd;
 
 CordNumFunc::CordNumFunc(std::string args): Module("cordnumfunc")
 {
- m = NULL;
+ ParamList & params = (*this);
  AssignParameter("version", "1.0"); 
  AssignParameter("apirequired", "1.1"); 
  AssignParameter("bugreport", "gnm@gnm.cl"); 
@@ -28,18 +28,17 @@ CordNumFunc::CordNumFunc(std::string args): Module("cordnumfunc")
  DefineKeyword("bins", "200");
  DefineKeyword("average", "false");
  ProcessArguments(args);
- cut = GetDouble("rcut");
- nb = GetInteger("bins");
- start = GetInteger("start");
- end = GetInteger("end");
- each = GetInteger("each");
- outputfile = GetString("output");
- do_average = GetBool("average");
+ cut = double(params["rcut"]);
+ nb = int(params["bins"]);
+ start = int(params["start"]);
+ end = int(params["end"]);
+ each = int(params["each"]);
+ OutputFile() = params["output"];
+ do_average = bool(params["average"]);
 }
 
 CordNumFunc::~CordNumFunc()
 {
- if (m != NULL) delete m;
 }
 
 void CordNumFunc::SetParameter(std::string name)
@@ -47,7 +46,7 @@ void CordNumFunc::SetParameter(std::string name)
  if (name == "atoms")
  {
   AssignParameter("atoms", GetNextWord());
-  na = GetInteger("atoms");
+  na = int((*this)["atoms"]);
   for(int i=0;i<na;i++) { satoms.push_back(GetNextWord()); }
  }
  else Module::SetParameter(name);
@@ -94,11 +93,13 @@ void CordNumFunc::ShowHelp() const
  std::cout << " un paso entre los pasos 0 y 100 de la simulacion de lpmd.                     \n";
 }
 
-void CordNumFunc::Evaluate(SimulationCell & simcell, Potential & pot)
+void CordNumFunc::Evaluate(lpmd::Configuration & con, Potential & pot)
 {
+ lpmd::BasicParticleSet & atoms = con.Atoms();
+ lpmd::Array <int> esp = atoms.Elements();
  if (nb <= 0 || na <=0) throw PluginError("cordnumfunc", "Error in calculation.");
  int nsp = na;
- unsigned long int N = simcell.size();
+ unsigned long int N = atoms.Size();
  double **histo;
  double **cnfun;
  histo = new double*[nsp*nsp];
@@ -113,28 +114,37 @@ void CordNumFunc::Evaluate(SimulationCell & simcell, Potential & pot)
  double rcut=cut;
  double dr=rcut/nb;
 
- const std::list<std::string> lst = simcell.RepeatedSpeciesPairs();
+ 
+ lpmd::Array<std::string> pairs;
+ for(int i=0; i<esp.Size() ; ++i)
+ {
+  for(int j=0; j<esp.Size() ; ++j)
+  {
+   std::ostringstream ostr;
+   ostr << ElemSym[esp[i]]<< "-" << ElemSym[esp[j]];
+   pairs.Append(ostr.str());
+  }
+ }
  int s=0;
- for(std::list<std::string>::const_iterator it = lst.begin();it!=lst.end();++it)	   
+ for(int i=0;i<pairs.Size();++i)	   
  {
   //Hace funcional cada una de las especies de los pares.
-  std::vector<std::string> loa = StringSplit< std::vector<std::string> >(*it,'-'); // lista de atomos
+  lpmd::Array<std::string> loa = StringSplit(pairs[i],'-'); // lista de atomos
   int e1 = ElemNum(loa[0]);
   int e2 = ElemNum(loa[1]); 
   //Cuenta los atomos de la especie 1.
   int ne1=0;
-  for (unsigned long int i=0;i<N;i++) {if (simcell[i].Species()==e1) ne1++;}
+  for (unsigned long int i=0;i<N;i++) {if (atoms[i].Z()==e1) ne1++;}
   //Comienzan las iteraciones.
   for (unsigned long int i=0;i<N;i++)
   {
-   if(simcell[i].Species()==e1)
+   if(atoms[i].Z()==e1)
    {
-    std::vector<Neighbor> nlist;
-    simcell.BuildNeighborList(i,nlist,true, rcut);
-    for(unsigned long int k=0;k<nlist.size();++k)
+    lpmd::NeighborList & nlist = con.Neighbors(i,true,rcut);
+    for(long int k=0;k<nlist.Size();++k)
     {
-     const Neighbor &nn = nlist[k];
-     if(nn.j->Species()==e2)
+     const lpmd::AtomPair & nn = nlist[k];
+     if(nn.j->Z()==e2)
      {
       if(nn.r*nn.r<rcut*rcut)
       {
@@ -158,23 +168,24 @@ void CordNumFunc::Evaluate(SimulationCell & simcell, Potential & pot)
  //
  // Output of cordnum - histogram format
  //
- m = new Matrix(1 + nsp*nsp, nb);
+ Matrix & m = CurrentValue(); 
+ m = lpmd::Matrix(1 + nsp*nsp, nb);
  // Asigna los labels al objeto Matrix para cada columna
- m->SetLabel(0, "r");
+ m.SetLabel(0, "r");
  int j=1;
- for (std::list<std::string>::const_iterator it=lst.begin();it!=lst.end();++it)
+ for (int i=0;i<pairs.Size();++i)
  {
-  m->SetLabel(j, (*it)+" cn");
+  m.SetLabel(j, pairs[i]+" cn");
   j++;
  }
  //
  double k=0.0e0;
  for(int i=0;i<nb;i++)
  {
-  m->Set(0, i, k);
+  m.Set(0, i, k);
   for(int j=0;j<(int)(nsp*nsp);j++)
   {
-   m->Set(j+1, i, cnfun[j][i]);
+   m.Set(j+1, i, cnfun[j][i]);
   }
   k+=dr;
  }

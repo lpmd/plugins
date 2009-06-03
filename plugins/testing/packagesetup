@@ -67,6 +67,20 @@ directory .
        pkgconfig += liblpmd-2.0
     end
 
+    module cordnum.so
+       language = c++
+       sources = cordnum.cc
+       installpath = lib/lpmd
+       pkgconfig += liblpmd-2.0
+    end
+
+    module cordnumfunc.so
+       language = c++
+       sources = cordnumfunc.cc
+       installpath = lib/lpmd
+       pkgconfig +=liblpmd-2.0
+    end
+
     module crystal2d.so
        language = c++
        sources = crystal2d.cc

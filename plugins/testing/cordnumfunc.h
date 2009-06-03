@@ -5,12 +5,12 @@
 #ifndef __CORDNUMFUNC_H__
 #define __CORDNUMFUNC_H__
 
-#include <lpmd/value.h>
+#include <lpmd/storedvalue.h>
 #include <lpmd/matrix.h>
-#include <lpmd/instantproperty.h>
+#include <lpmd/property.h>
 #include <lpmd/plugin.h>
 
-class CordNumFunc: public lpmd::Value<lpmd::Matrix>, public lpmd::InstantProperty, public lpmd::Module
+class CordNumFunc: public lpmd::StoredValue<lpmd::Matrix>, public lpmd::InstantProperty, public lpmd::Module
 {
  public:
   //Metodos Generales
@@ -21,11 +21,9 @@ class CordNumFunc: public lpmd::Value<lpmd::Matrix>, public lpmd::InstantPropert
   void ShowHelp() const;
 
   //Metodos Propios de la clase cordnumfunc
-  const lpmd::Matrix & CurrentValue() const { return *m; }
-  void Evaluate(lpmd::SimulationCell & simcell, lpmd::Potential & pot);
+  void Evaluate(lpmd::Configuration & con, lpmd::Potential & pot);
 
  private:
-  lpmd::Matrix * m;
   int nb;
   double cut;
   int na;
