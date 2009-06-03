@@ -95,6 +95,13 @@ directory .
        pkgconfig += liblpmd-2.0
     end
 
+    module densityprofile.so
+       language = c++
+       sources = densityprofile.cc
+       installpath = lib/lpmd
+       pkgconfig += liblpmd-2.0
+    end
+
     module euler.so
        language = c++
        sources = euler.cc
@@ -342,8 +349,6 @@ directory .
 #cellscaling_la_SOURCES = cellscaling.h cellscaling.cc
 #color_la_SOURCES = color.h color.cc
 #constantforce_la_SOURCES = constantforce.h constantforce.cc
-#cordnum_la_SOURCES = cordnum.h cordnum.cc
-#cordnumfunc_la_SOURCES = cordnumfunc.h cordnumfunc.cc
 #densityprofile_la_SOURCES = densityprofile.h densityprofile.cc
 #displace_la_SOURCES = displace.h displace.cc
 #dispvol_la_SOURCES = dispvol.h dispvol.cc

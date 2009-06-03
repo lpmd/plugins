@@ -198,7 +198,7 @@ void CordNum::Evaluate(Configuration & con, Potential & pot)
  //
  // Output of cordnum - histogram format
  //
- Matrix & m = CurrentValue();
+ lpmd::Matrix & m = CurrentValue();
  m = lpmd::Matrix(1 + nsp*nsp, nb);
  // Asigna los labels al objeto Matrix para cada columna
  m.SetLabel(0, "numb of neigh");
