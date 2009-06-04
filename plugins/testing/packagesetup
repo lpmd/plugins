@@ -285,6 +285,13 @@ directory .
        pkgconfig += liblpmd-2.0
     end
 
+    module sphere.so
+       language = c++
+       sources = sphere.cc
+       installpath = lib/lpmd
+       pkgconfig += liblpmd-2.0
+    end
+
     module suttonchen.so
        language = c++
        sources = suttonchen.cc
