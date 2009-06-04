@@ -22,7 +22,7 @@ Vacf::Vacf(std::string args): Module("vacf")
 
 Vacf::~Vacf() { if (m != NULL) delete m; }
 
-void Vacf::Evaluate(lpmd::SimulationHistory & hist, Potential & pot)
+void Vacf::Evaluate(lpmd::ConfigurationSet & hist, Potential & pot)
 {
  vacf(hist,pot,dt,CurrentValue());
 }

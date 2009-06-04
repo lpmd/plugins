@@ -17,7 +17,7 @@ MSD::MSD(std::string args): Module("msd")
  ProcessArguments(args);
 }
 
-void MSD::Evaluate(SimulationHistory & hist, Potential & pot)
+void MSD::Evaluate(ConfigurationSet & hist, Potential & pot)
 {
  long int N = hist.Size(); // number of configurations, not number of atoms
  const Array<int> & elements = hist[0].Atoms().Elements();

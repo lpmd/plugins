@@ -18,7 +18,7 @@ class Vacf: public lpmd::StoredValue<lpmd::Matrix>, public lpmd::TemporalPropert
   ~Vacf();
 
   //Metodos propios de modulo vacf
-  void Evaluate(lpmd::SimulationHistory & hist, lpmd::Potential & pot);
+  void Evaluate(lpmd::ConfigurationSet & hist, lpmd::Potential & pot);
 
  private:
   lpmd::Matrix * m;
