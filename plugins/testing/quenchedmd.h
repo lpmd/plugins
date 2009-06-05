@@ -18,8 +18,7 @@ class QuenchedMDModifier: public lpmd::SystemModifier, public lpmd::Module
   std::string Keywords() const;
 
   //Metodos Propios
-  void Apply(lpmd::SimulationCell & sc);
-  void Apply(lpmd::MD & md);
+  void Apply(lpmd::Simulation & sim);
 };
 
 #endif

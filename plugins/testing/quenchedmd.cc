@@ -4,9 +4,8 @@
 
 #include "quenchedmd.h"
 
-#include <lpmd/simulationcell.h>
+#include <lpmd/simulation.h>
 #include <lpmd/util.h>
-#include <lpmd/md.h>
 
 #include <iostream>
 
@@ -15,9 +14,9 @@ using namespace lpmd;
 QuenchedMDModifier::QuenchedMDModifier(std::string args): Module("quenchedmd")
 {
  ProcessArguments(args);
- start = GetInteger("start");
- end = GetInteger("end");
- each = GetInteger("each");
+ start = int((*this)["start"]);
+ end = int((*this)["end"]);
+ each = int((*this)["each"]);
 }
 
 QuenchedMDModifier::~QuenchedMDModifier() { }
@@ -45,19 +44,14 @@ std::string QuenchedMDModifier::Keywords() const
  return "start end each";
 }
 
-void QuenchedMDModifier::Apply(SimulationCell & sc)
+void QuenchedMDModifier::Apply(Simulation & sim)
 {
+ lpmd::BasicParticleSet & atoms = sim.Atoms();
  //
- for (unsigned long int i=0;i<sc.size();++i)
+ for (unsigned long int i=0;i<atoms.Size();++i)
  {
-  if (Dot(sc[i].Acceleration(), sc[i].Velocity()) < 0.0) sc.SetVelocity(i, Vector(0.0, 0.0, 0.0));
+  if (Dot(atoms[i].Acceleration(), atoms[i].Velocity()) < 0.0) atoms[i].Velocity() = Vector(0.0, 0.0, 0.0);
  }
-}
-
-void QuenchedMDModifier::Apply(MD & md)
-{
- SimulationCell & sc = md.GetCell();
- Apply(sc);
 }
 
 // Esto se incluye para que el modulo pueda ser cargado dinamicamente
