@@ -123,6 +123,13 @@ directory .
        pkgconfig += liblpmd-2.0
     end
 
+    module dlpoly.so
+       language = c++
+       sources = dlpoly.cc
+       installpath = lib/lpmd
+       pkgconfig += liblpmd-2.0
+    end
+
     module euler.so
        language = c++
        sources = euler.cc
@@ -375,7 +382,6 @@ directory .
 #
 #cell_la_SOURCES = cell.h cell.cc #PROBABLEMENTE YA NO VA MAS!!
 #color_la_SOURCES = color.h color.cc
-#dlpoly_la_SOURCES = dlpoly.h dlpoly.cc
 #energy_la_SOURCES = energy.h energy.cc
 #ewald_la_SOURCES = ewald.h ewald.cc
 #extravel_la_SOURCES = extravel.h extravel.cc
