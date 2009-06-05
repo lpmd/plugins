@@ -4,8 +4,7 @@
 
 #include "replicate.h"
 
-#include <lpmd/md.h>
-#include <lpmd/simulationcell.h>
+#include <lpmd/simulation.h>
 
 #include <iostream>
 
@@ -13,6 +12,7 @@ using namespace lpmd;
 
 ReplicateModifier::ReplicateModifier(std::string args): Module("replicate")
 {
+ ParamList & param = (*this);
  AssignParameter("version", "1.0"); 
  AssignParameter("apirequired", "1.1"); 
  AssignParameter("bugreport", "gnm@gnm.cl"); 
@@ -22,9 +22,9 @@ ReplicateModifier::ReplicateModifier(std::string args): Module("replicate")
  DefineKeyword("nz", "1");
  // hasta aqui los valores por omision
  ProcessArguments(args);
- nx = GetInteger("nx");
- ny = GetInteger("ny");
- nz = GetInteger("nz");
+ nx = int(param["nx"]);
+ ny = int(param["ny"]);
+ nz = int(param["nz"]);
 }
 
 ReplicateModifier::~ReplicateModifier() { }
@@ -39,64 +39,63 @@ void ReplicateModifier::ShowHelp() const
  std::cout << " prepare replicate nx=3 ny=3 nz=3                                              \n";
 }
 
-void ReplicateModifier::Apply(SimulationCell & sc)
+void ReplicateModifier::Apply(Simulation & con)
 {
- unsigned long int Ntmp = sc.size();
- Atom * atomos;
- atomos = new Atom[Ntmp];
- for (unsigned long int i=0;i<Ntmp;i++) atomos[i]=sc[i];
- for (unsigned long int i=0;i<Ntmp;i++) { sc.Create(new Atom(atomos[i]));}
+ lpmd::BasicParticleSet & atoms = con.Atoms();
+ lpmd::BasicCell & cell = con.Cell();
+ unsigned long int Ntmp = atoms.Size();
+ //Atom * atomos;
+ //atomos = new Atom[Ntmp];
+ //for (unsigned long int i=0;i<Ntmp;i++) atomos[i]=sc[i];
+ //for (unsigned long int i=0;i<Ntmp;i++) { sc.Create(new Atom(atomos[i]));}
  for (unsigned long i=1;i<nx;i++)
  {
   for (unsigned long int j=0;j<Ntmp;j++)
   {
-   Atom * tmp = new Atom(atomos[j]);
-   tmp->SetPos(atomos[j].Position()+sc.GetCell()[0]*i);
-   sc.Create(tmp);
+   std::string symb = atoms[j].Symbol();
+   lpmd::Vector pos = atoms[j].Position() + cell[0]*i;
+   lpmd::Vector vel = atoms[j].Velocity();
+   lpmd::Vector acc = atoms[j].Acceleration();
+   lpmd::Atom atm = Atom(symb,pos,vel,acc);
+   atoms.Append(atm);
   }
  }
- delete[] atomos;
- Ntmp = sc.size();
- atomos = new Atom[Ntmp];
- for (unsigned long int i=0;i<Ntmp;i++) atomos[i]=sc[i];
- for (unsigned long int i=0;i<Ntmp;i++) { sc.Create(new Atom(atomos[i]));}
+ Ntmp = atoms.Size();
  for (unsigned long i=1;i<ny;i++)
  {
   for(unsigned long int j=0;j<Ntmp;j++)
   {
-   Atom * tmp = new Atom(atomos[j]);
-   tmp->SetPos(atomos[j].Position()+sc.GetCell()[1]*i);
-   sc.Create(tmp);
+   std::string symb = atoms[j].Symbol();
+   lpmd::Vector pos = atoms[j].Position() + cell[0]*i;
+   lpmd::Vector vel = atoms[j].Velocity();
+   lpmd::Vector acc = atoms[j].Acceleration();
+   lpmd::Atom atm = Atom(symb,pos,vel,acc);
+   atoms.Append(atm);
   }
  }
- delete[] atomos;
- Ntmp = sc.size();
- atomos = new Atom[Ntmp];
- for (unsigned long int i=0;i<Ntmp;i++) atomos[i]=sc[i];
- for (unsigned long int i=0;i<Ntmp;i++) { sc.Create(new Atom(atomos[i]));}
+ Ntmp = atoms.Size();
  for (unsigned long i=1;i<nz;i++)
  {
   for (unsigned long int j=0;j<Ntmp;j++)
   {
-   Atom * tmp = new Atom(atomos[j]);
-   tmp->SetPos(atomos[j].Position()+sc.GetCell()[2]*i);
-   sc.Create(tmp);
+   std::string symb = atoms[j].Symbol();
+   lpmd::Vector pos = atoms[j].Position() + cell[0]*i;
+   lpmd::Vector vel = atoms[j].Velocity();
+   lpmd::Vector acc = atoms[j].Acceleration();
+   lpmd::Atom atm = Atom(symb,pos,vel,acc);
+   atoms.Append(atm);
   }
  }
- delete[] atomos;
  //Resetea los vectores base de la celda.
- Vector a=sc.GetCell()[0];
- sc.GetCell()[0] = a*nx;
- Vector b=sc.GetCell()[1];
- sc.GetCell()[1] = b*ny;
- Vector c=sc.GetCell()[2];
- sc.GetCell()[2] = c*nz;
+ cell[0] = cell[0]*nx;
+ cell[1] = cell[1]*ny;
+ cell[2] = cell[2]*nz;
  //Asigna el index() a cada atomo de la celda.
- sc.AssignIndex();
- sc.ClearForces();
+#warning no hay clearforces ni assignindex
+ //sc.AssignIndex();
+ //sc.ClearForces();
 }
 
-void ReplicateModifier::Apply(MD & md) { Apply(md.GetCell()); }
 
 // Esto se incluye para que el modulo pueda ser cargado dinamicamente
 Module * create(std::string args) { return new ReplicateModifier(args); }
