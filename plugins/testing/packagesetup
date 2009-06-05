@@ -109,6 +109,13 @@ directory .
        pkgconfig += liblpmd-2.0
     end
 
+    module displace.so
+       language = c++
+       sources = displace.cc
+       installpath = lib/lpmd
+       pkgconfig += liblpmd-2.0
+    end
+
     module euler.so
        language = c++
        sources = euler.cc
@@ -361,7 +368,6 @@ directory .
 #
 #cell_la_SOURCES = cell.h cell.cc #PROBABLEMENTE YA NO VA MAS!!
 #color_la_SOURCES = color.h color.cc
-#densityprofile_la_SOURCES = densityprofile.h densityprofile.cc
 #displace_la_SOURCES = displace.h displace.cc
 #dispvol_la_SOURCES = dispvol.h dispvol.cc
 #dlpoly_la_SOURCES = dlpoly.h dlpoly.cc

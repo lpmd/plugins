@@ -4,9 +4,8 @@
 
 #include "displace.h"
 
-#include <lpmd/simulationcell.h>
+#include <lpmd/simulation.h>
 #include <lpmd/util.h>
-#include <lpmd/md.h>
 
 #include <iostream>
 
@@ -14,15 +13,16 @@ using namespace lpmd;
 
 DisplaceModifier::DisplaceModifier(std::string args): Module("displace")
 {
+ ParamList & params = (*this);
  AssignParameter("x", "1.0");
  AssignParameter("y", "0.0");
  AssignParameter("z", "0.0");
  // 
  ProcessArguments(args);
- offset = Vector(GetDouble("x"), GetDouble("y"), GetDouble("z"));
- start = GetInteger("start");
- end = GetInteger("end");
- each = GetInteger("each");
+ offset = Vector(double(params["x"]), double(params["y"]), double(params["z"]));
+ start = int(params["start"]);
+ end = int(params["end"]);
+ each = int(params["each"]);
 }
 
 DisplaceModifier::~DisplaceModifier() { }
@@ -52,19 +52,14 @@ std::string DisplaceModifier::Keywords() const
  return "x y z start end each";
 }
 
-void DisplaceModifier::Apply(SimulationCell & sc)
+void DisplaceModifier::Apply(lpmd::Simulation & sim)
 {
- for (unsigned long int i=0;i<sc.size();++i)
- {
-  Vector pos = sc[i].Position() + offset; 
-  sc.SetPosition(i, pos);
- }
-}
+ lpmd::BasicParticleSet & atoms = sim.Atoms();
 
-void DisplaceModifier::Apply(MD & md)
-{
- SimulationCell & sc = md.GetCell();
- Apply(sc);
+ for (long int i=0;i<atoms.Size();++i)
+ {
+  atoms[i].Position() = atoms[i].Position() + offset;
+ }
 }
 
 // Esto se incluye para que el modulo pueda ser cargado dinamicamente
