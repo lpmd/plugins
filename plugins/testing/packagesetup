@@ -137,6 +137,13 @@ directory .
        pkgconfig += liblpmd-2.0
     end
 
+    module extravel.so
+       language = c++
+       sources = extravel.cc
+       installpath = lib/lpmd
+       pkgconfig += liblpmd-2.0
+    end
+
     module fastlj.so
        language = c++
        sources = fastlj.cc
@@ -384,7 +391,6 @@ directory .
 #color_la_SOURCES = color.h color.cc
 #energy_la_SOURCES = energy.h energy.cc
 #ewald_la_SOURCES = ewald.h ewald.cc
-#extravel_la_SOURCES = extravel.h extravel.cc
 #localpressure_la_SOURCES = localpressure.h localpressure.cc
 #moleculecm_la_SOURCES = moleculecm.h moleculecm.cc
 #nosehoover_la_SOURCES = nosehoover.h nosehoover.cc

@@ -4,9 +4,8 @@
 
 #include "extravel.h"
 
-#include <lpmd/simulationcell.h>
+#include <lpmd/simulation.h>
 #include <lpmd/util.h>
-#include <lpmd/md.h>
 
 #include <iostream>
 
@@ -22,9 +21,9 @@ ExtraVelModifier::ExtraVelModifier(std::string args): Module("extravel")
  DefineKeyword("end");
  DefineKeyword("each");
  ProcessArguments(args); 
- start = GetInteger("start");
- end = GetInteger("end");
- each = GetInteger("each");
+ start = int((*this)["start"]);
+ end = int((*this)["end"]);
+ each = int((*this)["each"]);
 }
 
 ExtraVelModifier::~ExtraVelModifier() { }
@@ -43,25 +42,21 @@ void ExtraVelModifier::ShowHelp() const
  std::cout << "      De esta forma aplicamos extravel entre 0 y 100 cada 10 steps.            \n";
 }
 
-void ExtraVelModifier::Apply(SimulationCell & sc)
+void ExtraVelModifier::Apply(Simulation & sim)
 {
+ lpmd::BasicParticleSet & atoms = sim.Atoms();
  DebugStream() << "-> Applying extravel modifier!" << '\n';
- for (unsigned long int i=0;i<sc.size();++i)
+ for (int i=0;i<atoms.Size();++i)
  {
-  const Atom & at = sc[i];
-  if (at.IsTypeSet() && at.Type().GetBool("extravel"))
+  Atom at = atoms[i];
+#warning plugin completamente dependiente de atomtype
+//  if (at.IsTypeSet() && at.Type().GetBool("extravel"))
   {
-   AtomType & atype = at.Type();
-   const Vector & vapply = Vector(atype.GetDouble("vx"), atype.GetDouble("vy"), atype.GetDouble("vz"));
-   sc.SetVelocity(i, at.Velocity()+vapply);
+//   AtomType & atype = at.Type();
+//   const Vector & vapply = Vector(atype.GetDouble("vx"), atype.GetDouble("vy"), atype.GetDouble("vz"));
+//   sc.SetVelocity(i, at.Velocity()+vapply);
   }
  }
-}
-
-void ExtraVelModifier::Apply(MD & md)
-{
- SimulationCell & sc = md.GetCell();
- Apply(sc);
 }
 
 // Esto se incluye para que el modulo pueda ser cargado dinamicamente

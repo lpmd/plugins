@@ -17,8 +17,7 @@ class ExtraVelModifier: public lpmd::SystemModifier, public lpmd::Module
   void ShowHelp() const;
 
   //Metodos Propios
-  void Apply(lpmd::SimulationCell & sc);
-  void Apply(lpmd::MD & md);
+  void Apply(lpmd::Simulation & sim);
 };
 
 #endif
