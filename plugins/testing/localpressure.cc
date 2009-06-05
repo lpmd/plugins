@@ -6,11 +6,10 @@
 
 #include <lpmd/matrix.h>
 #include <lpmd/util.h>
-#include <lpmd/neighbor.h>
-#include <lpmd/simulationcell.h>
+#include <lpmd/simulation.h>
 #include <lpmd/pairpotential.h>
-#include <lpmd/potentialarray.h>
 #include <lpmd/session.h>
+#include <lpmd/basiccell.h>
 
 #include <sstream>
 
@@ -18,25 +17,25 @@ using namespace lpmd;
 
 LocalPressure::LocalPressure(std::string args): Module("localpressure")
 {
- m = NULL;
+ ParamList & param = (*this);
  // hasta aqui los valores por omision
  AssignParameter("nx", "10");
  AssignParameter("ny", "10");
  AssignParameter("nz", "10");
  AssignParameter("average", "false");
  ProcessArguments(args);
- n[0] = GetInteger("nx");
- n[1] = GetInteger("ny");
- n[2] = GetInteger("nz");
- rcut = GetDouble("rcut");
- start = GetInteger("start");
- end = GetInteger("end");
- each = GetInteger("each");
- outputfile = GetString("output");
- do_average = GetBool("average");
+ n[0] = int(param["nx"]);
+ n[1] = int(param["ny"]);
+ n[2] = int(param["nz"]);
+ rcut = double(param["rcut"]);
+ start = int(param["start"]);
+ end = int(param["end"]);
+ each = int(param["each"]);
+ OutputFile() = param["output"];
+ do_average = bool(param["average"]);
 }
 
-LocalPressure::~LocalPressure() { if (m != NULL) delete m; }
+LocalPressure::~LocalPressure() { }
 
 void LocalPressure::ShowHelp() const
 {
@@ -58,64 +57,70 @@ void LocalPressure::ShowHelp() const
 
 std::string LocalPressure::Keywords() const { return "nx ny nz rcut start end each output average"; }
 
-void LocalPressure::Evaluate(SimulationCell & simcell, Potential & pot)
+void LocalPressure::Evaluate(Configuration & sim, Potential & pot)
 { 
- PotentialArray & p_array = dynamic_cast<PotentialArray &>(pot);
+#warning como tomar los potenciales si evaluate no recive simulaitons ... solo configurations.
+ //PotentialArray & p_array = dynamic_cast<PotentialArray &>(pot);
+ //lpmd::CombinedPotential & p_array = pot.Potentials();
+ lpmd::BasicParticleSet & atoms = sim.Atoms();
+ lpmd::BasicCell & cell = sim.Cell();
 
- double cv = simcell.Volume()/(n[0]*n[1]*n[2]);
- if (m != NULL) delete m;
- m = new Matrix(12, n[0]*n[1]*n[2]);
- m->SetLabel(0, "i");
- m->SetLabel(1, "j");
- m->SetLabel(2, "k");
+ double cv = cell.Volume()/(n[0]*n[1]*n[2]);
+ lpmd::Matrix & m = CurrentValue();
+ m = lpmd::Matrix(12, n[0]*n[1]*n[2]);
+ m.SetLabel(0, "i");
+ m.SetLabel(1, "j");
+ m.SetLabel(2, "k");
  for (int p=0;p<3;++p)
-   for (int q=0;q<3;++q) m->SetLabel(3+(3*p+q), "S"+ToString<int>(p+1)+ToString<int>(q+1));
+   for (int q=0;q<3;++q) m.SetLabel(3+(3*p+q), "S"+ToString<int>(p+1)+ToString<int>(q+1));
 
  int l=0; 
  for (int k=0;k<n[2];++k)
    for (int j=0;j<n[1];++j)
     for (int i=0;i<n[0];++i)
     {
-     m->Set(0, l, i);
-     m->Set(1, l, j);
-     m->Set(2, l, k);
+     m.Set(0, l, i);
+     m.Set(1, l, j);
+     m.Set(2, l, k);
      ++l;
     }
 
- for (unsigned long int i=0;i<simcell.size();++i)
+ for (long int i=0;i<atoms.Size();++i)
  {
   int s1, ind[3];
   double stress[3][3];
   for (int p=0;p<3;++p)
     for (int q=0;q<3;++q) stress[p][q]=0.0e0;
-  s1 = simcell[i].Species();
-  std::vector<Neighbor> nlist;
-  simcell.BuildNeighborList(i, nlist, false, rcut);
-  Vector fpos = simcell.FracPosition(i);
+  s1 = atoms[i].Z();
+
+  lpmd::NeighborList & nlist = sim.Neighbors(i,false,rcut);
+  //simcell.BuildNeighborList(i, nlist, false, rcut);
+  Vector fpos = cell.Fractional(atoms[i].Position());
   for (int q=0;q<3;++q) 
   {
    ind[q] = int(floor(fpos[q]*n[q]));
    if (ind[q] == n[q]) ind[q]--;
   }
-  for (std::vector<Neighbor>::const_iterator it=nlist.begin();it!=nlist.end();++it)
+  for (int i=0;i<nlist.Size();++i)
   {
    try
    {
-    const Neighbor &nn = *it;
-    int s2 = (nn.j)->Species();
-    PairPotential & ppot = dynamic_cast<PairPotential &>(p_array.Get(s1, s2));
-    Vector ff = ppot.pairForce(nn.rij);
-    for (int p=0;p<3;++p)
-     for (int q=0;q<3;++q) stress[p][q] -= (nn.rij)[p]*ff[q];
+    const lpmd::AtomPair & nn = nlist[i];
+//    int s2 = (nn.j)->Z();
+#warning como usar CombinedPotential para retornar el potencial entre dos especies.
+//    PairPotential & ppot = dynamic_cast<PairPotential &>(p_array.Get(s1, s2));
+//    Vector ff = ppot.pairForce(nn.rij);
+//    for (int p=0;p<3;++p)
+//     for (int q=0;q<3;++q) stress[p][q] -= (nn.rij)[p]*ff[q];
    }
    catch (std::exception &e) { throw PluginError("localpressure", "Cannot calculate local stress with a non-pair potential."); }
   }
   int k = ind[0]+n[0]*ind[1]+n[0]*n[1]*ind[2];
-  const double pressfactor = GlobalSession.GetDouble("pressfactor");
+  const double pressfactor = double(Parameter(sim.GetTag(sim, "pressfactor")));
   for (int p=0;p<3;++p)
    for (int q=0;q<3;++q)
    {
-    m->Set(3+(3*p+q), k, m->Get(3+(3*p+q), k)+(pressfactor/cv)*stress[p][q]);
+    m.Set(3+(3*p+q), k, m.Get(3+(3*p+q), k)+(pressfactor/cv)*stress[p][q]);
    }
  } 
 }

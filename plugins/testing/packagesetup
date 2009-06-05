@@ -208,6 +208,14 @@ directory .
        libraries += lclib.a
     end
 
+    module localpressure.so
+       language = c++
+       sources = localpressure.cc
+       installpath = lib/lpmd
+       pkgconfig += liblpmd-2.0
+       libraries += lclib.a
+    end
+
     module lpmd.so
        language = c++
        sources = lpmd.cc
@@ -391,7 +399,6 @@ directory .
 #color_la_SOURCES = color.h color.cc
 #energy_la_SOURCES = energy.h energy.cc
 #ewald_la_SOURCES = ewald.h ewald.cc
-#localpressure_la_SOURCES = localpressure.h localpressure.cc
 #moleculecm_la_SOURCES = moleculecm.h moleculecm.cc
 #nosehoover_la_SOURCES = nosehoover.h nosehoover.cc
 #pressure_la_SOURCES = pressure.h pressure.cc
