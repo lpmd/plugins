@@ -116,6 +116,13 @@ directory .
        pkgconfig += liblpmd-2.0
     end
 
+    module dispvol.so
+       language = c++
+       sources = dispvol.cc
+       installpath = lib/lpmd
+       pkgconfig += liblpmd-2.0
+    end
+
     module euler.so
        language = c++
        sources = euler.cc
@@ -368,8 +375,6 @@ directory .
 #
 #cell_la_SOURCES = cell.h cell.cc #PROBABLEMENTE YA NO VA MAS!!
 #color_la_SOURCES = color.h color.cc
-#displace_la_SOURCES = displace.h displace.cc
-#dispvol_la_SOURCES = dispvol.h dispvol.cc
 #dlpoly_la_SOURCES = dlpoly.h dlpoly.cc
 #energy_la_SOURCES = energy.h energy.cc
 #ewald_la_SOURCES = ewald.h ewald.cc
