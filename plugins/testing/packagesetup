@@ -237,6 +237,13 @@ directory .
        pkgconfig += liblpmd-2.0
     end
 
+    module moleculecm.so
+       language = c++
+       sources = moleculecm.cc
+       installpath = lib/lpmd
+       pkgconfig += liblpmd-2.0
+    end
+
     module monitor.so
        language = c++
        sources = monitor.cc
@@ -397,18 +404,17 @@ directory .
 #
 #cell_la_SOURCES = cell.h cell.cc #PROBABLEMENTE YA NO VA MAS!!
 #color_la_SOURCES = color.h color.cc
-#energy_la_SOURCES = energy.h energy.cc
+#energy_la_SOURCES = energy.h energy.cc #PROBABLEMENTE YA NO VA MAS!!
 #ewald_la_SOURCES = ewald.h ewald.cc
-#moleculecm_la_SOURCES = moleculecm.h moleculecm.cc
 #nosehoover_la_SOURCES = nosehoover.h nosehoover.cc
-#pressure_la_SOURCES = pressure.h pressure.cc
+#pressure_la_SOURCES = pressure.h pressure.cc #PROBABLEMENTE YA NO VA MAS!!
 #quenchedmd_la_SOURCES = quenchedmd.h quenchedmd.cc
 #rawbinary_la_SOURCES = rawbinary.h rawbinary.cc
 #replicate_la_SOURCES = replicate.h replicate.cc
-#rvcorr_la_SOURCES = rvcorr.h rvcorr.cc
+#rvcorr_la_SOURCES = rvcorr.h rvcorr.cc #EN STANDBY
 #selectatoms_la_SOURCES = selectatoms.h selectatoms.cc
 #shear_la_SOURCES = shear.h shear.cc
-#thermalneedle_la_SOURCES = thermalneedle.h thermalneedle.cc
+#thermalneedle_la_SOURCES = thermalneedle.h thermalneedle.cc #PROBABLEMENTE YA NO VA MAS!! 
 #tempprofile_la_SOURCES = tempprofile.h tempprofile.cc
 #velocityverlet_la_SOURCES = velocityverlet.h velocityverlet.cc
 #verlet_la_SOURCES = verlet.h verlet.cc

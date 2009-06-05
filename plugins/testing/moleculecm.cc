@@ -4,8 +4,7 @@
 
 #include "moleculecm.h"
 
-#include <lpmd/md.h>
-#include <lpmd/simulationcell.h>
+#include <lpmd/simulation.h>
 
 #include <iostream>
 
@@ -20,7 +19,7 @@ MoleculeCMModifier::MoleculeCMModifier(std::string args): Module("moleculecm")
  DefineKeyword("radius", "0.0");
  // hasta aqui los valores por omision
  ProcessArguments(args);
- radius = GetDouble("radius");
+ radius = double((*this)["radius"]);
 }
 
 MoleculeCMModifier::~MoleculeCMModifier() { }
@@ -39,29 +38,32 @@ void MoleculeCMModifier::ShowHelp() const
  std::cout << " apply moleculecm                                                            \n\n";
 }
 
-void MoleculeCMModifier::Apply(SimulationCell & sc)
+void MoleculeCMModifier::Apply(Simulation & con)
 {
- std::vector<Neighbor> nlist;
- std::list<Atom> tmplist;
- int * used = new int[sc.size()];
- for (unsigned long int i=0;i<sc.size();++i) used[i] = 0;
- for (unsigned long int i=0;i<sc.size();++i) 
+ lpmd::BasicParticleSet & atoms = con.Atoms();
+ lpmd::BasicCell & cell = con.Cell();
+
+ std::list<lpmd::Atom> tmplist;
+ int * used = new int[atoms.Size()];
+ for (long int i=0;i<atoms.Size();++i) used[i] = 0;
+ for (long int i=0;i<atoms.Size();++i) 
  {
-  nlist.clear();
+  //nlist.clear();
   Vector cmpos; 
   double m = 0.0;
   if (used[i] == 0)
   {
-   cmpos = cmpos + (sc[i].Mass()*sc[i].Position());
-   m += sc[i].Mass();
-   sc.BuildNeighborList(i, nlist, true, radius);
-   Neighbor * closest = NULL;
-   for (unsigned long int k=0;k<nlist.size();++k)
+   cmpos = cmpos + (atoms[i].Mass()*atoms[i].Position());
+   m += atoms[i].Mass();
+   lpmd::NeighborList & nlist = con.Neighbors(i,true,radius);
+   lpmd::AtomPair * closest = NULL;
+   for (long int k=0;k<nlist.Size();++k)
    {
-    Neighbor & nn = nlist[k];
+    lpmd::AtomPair & nn = nlist[k];
     if (nn.r < radius)
     {
-     if (used[nn.j->Index()] == 0)
+#warning Index no va más??
+//     if (used[nn.j->Index()] == 0)
      {
       if (closest == NULL) closest = &nn;
       else if (nn.r < closest->r) closest = &nn;
@@ -70,21 +72,22 @@ void MoleculeCMModifier::Apply(SimulationCell & sc)
    }
    if (closest != NULL)
    {
-    cmpos = cmpos + ((closest->j)->Mass()*(sc[i].Position()+closest->rij));
+    cmpos = cmpos + ((closest->j)->Mass()*(atoms[i].Position()+closest->rij));
     m += (closest->j)->Mass();
     cmpos = (1.0/m)*cmpos;
-    tmplist.push_back(Atom(sc[i].Species(), cmpos));
+    tmplist.push_back(Atom(atoms[i].Symbol(), cmpos));
     used[i] = 1;
-    used[closest->j->Index()] = 1;
+#warning otro Index()
+//    used[closest->j->Index()] = 1;
    }
   }
  }
- sc.clear(); // FIXME debe borrar los atomos en memoria tambien 
- for (std::list<Atom>::const_iterator it=tmplist.begin();it!=tmplist.end();++it) sc.Create(new Atom(*it));
+#warning antiguo fixme de borrar atomos en memoria también.
+ atoms.Clear(); // FIXME debe borrar los atomos en memoria tambien 
+#warning que era esto!! .. no debería actuar ahora directo sobre atoms.?¿?
+// for (std::list<Atom>::const_iterator it=tmplist.begin();it!=tmplist.end();++it) sc.Create(new Atom(*it));
  delete [] used;
 }
-
-void MoleculeCMModifier::Apply(MD & md) { Apply(md.GetCell()); }
 
 // Esto se incluye para que el modulo pueda ser cargado dinamicamente
 Module * create(std::string args) { return new MoleculeCMModifier(args); }
