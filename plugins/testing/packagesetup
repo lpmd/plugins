@@ -67,6 +67,13 @@ directory .
        pkgconfig += liblpmd-2.0
     end
 
+    module constantforce.so
+       language = c++
+       sources = constantforce.cc
+       installpath = lib/lpmd
+       pkgconfig += liblpmd-2.0
+    end
+
     module cordnum.so
        language = c++
        sources = cordnum.cc
@@ -353,9 +360,7 @@ directory .
 # Aca los plugins que faltan por agregar a la compilacion
 #
 #cell_la_SOURCES = cell.h cell.cc #PROBABLEMENTE YA NO VA MAS!!
-#cellscaling_la_SOURCES = cellscaling.h cellscaling.cc
 #color_la_SOURCES = color.h color.cc
-#constantforce_la_SOURCES = constantforce.h constantforce.cc
 #densityprofile_la_SOURCES = densityprofile.h densityprofile.cc
 #displace_la_SOURCES = displace.h displace.cc
 #dispvol_la_SOURCES = dispvol.h dispvol.cc

@@ -18,8 +18,8 @@ class ConstantForcePotential: public lpmd::Potential, public lpmd::Module
   void ShowHelp() const;
 
   //Metodos Propios del modulo constantforce
-  double energy(lpmd::SimulationCell & sc);
-  void UpdateForces(lpmd::SimulationCell & sc);
+  double energy(lpmd::Configuration & con);
+  void UpdateForces(lpmd::Configuration & con);
 
  private:
   double fx, fy, fz;

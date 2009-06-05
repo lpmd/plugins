@@ -4,7 +4,7 @@
 
 #include "constantforce.h"
 
-#include <lpmd/simulationcell.h>
+#include <lpmd/simulation.h>
 #include <lpmd/session.h>
 
 #include <iostream>
@@ -13,16 +13,16 @@ using namespace lpmd;
 
 ConstantForcePotential::ConstantForcePotential(std::string args): Module("constantforce") 
 { 
- AssignParameter("version", "1.0"); 
- AssignParameter("apirequired", "1.1"); 
+ AssignParameter("version", "2.0"); 
+ AssignParameter("apirequired", "2.0"); 
  AssignParameter("bugreport", "gnm@gnm.cl"); 
  //
  DefineKeyword("forcevector");
  // hasta aqui los valores por omision
  ProcessArguments(args);
- fx = GetDouble("fx");
- fy = GetDouble("fy");
- fz = GetDouble("fz");
+ fx = double((*this)["fx"]);
+ fy = double((*this)["fy"]);
+ fz = double((*this)["fz"]);
 }
 
 ConstantForcePotential::~ConstantForcePotential() { }
@@ -58,18 +58,17 @@ void ConstantForcePotential::ShowHelp() const
  std::cout << " atomos de Argon.                                                              \n";
 }
 
-double ConstantForcePotential::energy(SimulationCell & sc) { return 0.0; }
+double ConstantForcePotential::energy(Configuration & con) { return 0.0; }
 
-void ConstantForcePotential::UpdateForces(SimulationCell & sc) 
+void ConstantForcePotential::UpdateForces(Configuration & con) 
 { 
- const double forcefactor = GlobalSession.GetDouble("forcefactor");
- for (unsigned long int i=0;i<sc.size();++i)
+ lpmd::BasicParticleSet & atoms = con.Atoms();
+ const double forcefactor = double(Parameter(con.GetTag(con, "forcefactor")));
+ for (long int i=0;i<atoms.Size();++i)
  {
-  const Atom & atom_i = sc[i];
-  double mi = atom_i.Mass();
+  double mi = atoms[i].Mass();
   Vector ff(fx, fy, fz);
-  const Vector & acci = atom_i.Acceleration(); 
-  sc.SetAcceleration(i, acci + ff*(forcefactor/mi));
+  atoms[i].Acceleration() = atoms[i].Acceleration() + ff*(forcefactor/mi);
  }
 }
 
