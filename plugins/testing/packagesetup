@@ -335,6 +335,13 @@ directory .
        pkgconfig += liblpmd-2.0
     end
 
+    module rawbinary.so
+       language = c++
+       sources = rawbinary.cc
+       installpath = lib/lpmd
+       pkgconfig += liblpmd-2.0
+    end
+
     module rotate.so
        language = c++
        sources = rotate.cc
@@ -421,7 +428,6 @@ directory .
 #energy_la_SOURCES = energy.h energy.cc #PROBABLEMENTE YA NO VA MAS!!
 #ewald_la_SOURCES = ewald.h ewald.cc
 #pressure_la_SOURCES = pressure.h pressure.cc #PROBABLEMENTE YA NO VA MAS!!
-#rawbinary_la_SOURCES = rawbinary.h rawbinary.cc
 #replicate_la_SOURCES = replicate.h replicate.cc
 #rvcorr_la_SOURCES = rvcorr.h rvcorr.cc #EN STANDBY
 #selectatoms_la_SOURCES = selectatoms.h selectatoms.cc

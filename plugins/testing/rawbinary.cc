@@ -5,21 +5,23 @@
 #include "rawbinary.h"
 
 #include <lpmd/util.h>
-#include <lpmd/simulationcell.h>
+#include <lpmd/simulation.h>
+#include <lpmd/atom.h>
 
 using namespace lpmd;
 
 RawBinFormat::RawBinFormat(std::string args): Module("rawbinary")
 {
+ ParamList & param = (*this);
  AssignParameter("level", "0");
  AssignParameter("each", "1");
  AssignParameter("replacecell", "false");
  // hasta aqui los valores por omision
  ProcessArguments(args);
- readfile = writefile = GetString("file");
- interval = GetInteger("each");
- level = GetInteger("level");
- rcell = GetBool("replacecell");
+ readfile = writefile = param["file"];
+ interval = int(param["each"]);
+ level = int(param["level"]);
+ rcell = bool(param["replacecell"]);
 }
 
 RawBinFormat::~RawBinFormat() { }
@@ -64,10 +66,12 @@ void RawBinFormat::ReadHeader(std::istream & is) const
 // 
 // Lee una configuracion desde un archivo RawBinary
 //
-bool RawBinFormat::ReadCell(std::istream & is, SimulationCell & sc) const
+bool RawBinFormat::ReadCell(std::istream & is, Configuration & con) const
 {
- sc.MetaData().AssignParameter("level",ToString<int>(level));
- if (GetString("replacecell") == "true") throw PluginError("rawbinary", "This format does not contain any cell vectors.");
+ //sc.MetaData().AssignParameter("level",ToString<int>(level));
+ lpmd::BasicParticleSet & atoms = con.Atoms();
+ int level = int(Parameter(con.GetTag(con,"level")));
+ if ((*this)["replacecell"] == "true") throw PluginError("rawbinary", "This format does not contain any cell vectors.");
  long int s = 0;
  int lvl = level;
  is.read((char *)(&s), sizeof(long int));
@@ -101,21 +105,23 @@ bool RawBinFormat::ReadCell(std::istream & is, SimulationCell & sc) const
     acc[q] = p;
    }
   }
-  sc.Create(new Atom(symbol, pos, vel, acc));
+  atoms.Append(Atom(ElemSym[symbol], pos, vel, acc));
  }
  return true;
 }
 
-void RawBinFormat::WriteHeader(std::ostream & os, std::vector<lpmd::SimulationCell> *cell) const
+void RawBinFormat::WriteHeader(std::ostream & os, lpmd::SimulationHistory * sh) const
 {
  // El formato RawBinary no tiene ningun header especial
 }
 
-void RawBinFormat::WriteCell(std::ostream & out, SimulationCell & sc) const
+void RawBinFormat::WriteCell(std::ostream & out, lpmd::Configuration & con) const
 {
- sc.MetaData().AssignParameter("level",ToString<int>(level));
+ lpmd::BasicParticleSet & atoms = con.Atoms();
+ //sc.MetaData().AssignParameter("level",ToString<int>(level));
+ int level = int(Parameter(con.GetTag(con,"level")));
  long int totsize = 0, expsize;
- long int s = sc.size();
+ long int s = atoms.Size();
  expsize = sizeof(long int)+sizeof(int)+s*(sizeof(int)+3*sizeof(double)*(level+1));
  char * buffer = new char[expsize];
  memcpy((void *)(&buffer[totsize]), (void *)(&s), sizeof(long int));
@@ -126,10 +132,10 @@ void RawBinFormat::WriteCell(std::ostream & out, SimulationCell & sc) const
  for (long int i=0;i<s;++i)
  {
   double p;
-  int symbol = sc[i].Species();
+  int symbol = atoms[i].Z();
   memcpy((void *)(&buffer[totsize]), (void *)(&symbol), sizeof(int));
   totsize += sizeof(int);
-  Vector pos = sc[i].Position();
+  Vector pos = atoms[i].Position();
   for (int q=0;q<3;++q)
   {
    p = pos[q];
@@ -138,7 +144,7 @@ void RawBinFormat::WriteCell(std::ostream & out, SimulationCell & sc) const
   }
   if (level > 0) 
   {
-   Vector vel = sc[i].Velocity();
+   Vector vel = atoms[i].Velocity();
    for (int q=0;q<3;++q)
    {
     p = vel[q]; 
@@ -148,7 +154,7 @@ void RawBinFormat::WriteCell(std::ostream & out, SimulationCell & sc) const
   }
   if (level > 1)
   {
-   Vector acc = sc[i].Acceleration();
+   Vector acc = atoms[i].Acceleration();
    for (int q=0;q<3;++q)
    {
     p = acc[q]; 
