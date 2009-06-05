@@ -4,7 +4,7 @@
 
 #include "nosehoover.h"
 
-#include <lpmd/simulationcell.h>
+#include <lpmd/simulation.h>
 #include <lpmd/potential.h>
 #include <lpmd/session.h>
 
@@ -22,10 +22,10 @@ NoseHoover::NoseHoover(std::string args): Module("nosehoover")
  DefineKeyword("t", "300.0");
  // hasta aqui los valores por omision
  ProcessArguments(args);
- dt = GetDouble("dt");
- start = GetInteger("start");
- q = GetDouble("fmass");
- temp = GetDouble("t");
+ dt = double((*this)["dt"]);
+ start = int((*this)["start"]);
+ q = double((*this)["fmass"]);
+ temp = double((*this)["t"]);
 }
 
 NoseHoover::~NoseHoover() { }
@@ -54,18 +54,23 @@ void NoseHoover::ShowHelp() const
  std::cout << " simulacion.                                                                   \n";
 }
 
-void NoseHoover::Initialize(SimulationCell & sc, Potential & p)
+void NoseHoover::Initialize(Simulation & sc, Potential & p)
 {
- for (unsigned long int i=0;i<sc.size();++i) auxlist.push_back(Vector());
+ for (long int i=0;i<sc.Atoms().Size();++i) auxlist.push_back(Vector());
+#warning llamado a UseOldCell, que no se usa más?
+ /*
  UseOldCell(sc);
  SimulationCell & oldsc = OldCell();
  p.UpdateForces(oldsc);
  friction = 0.0;
+ */
 }
 
-void NoseHoover::AdvancePosition(SimulationCell & sc, long i)
+void NoseHoover::AdvancePosition(Simulation & sim, long i)
 {
- const double kboltzmann = GlobalSession.GetDouble("kboltzmann");
+ const double kboltzmann = double(Parameter(sim.GetTag(sim,"kboltzmann")));
+#warning de nuevo uso de OldCell ... confusion!!
+ /*
  SimulationCell & oldsc = OldCell();
  const Atom & now = sc[i];
  const Atom & old = oldsc[i];
@@ -76,17 +81,20 @@ void NoseHoover::AdvancePosition(SimulationCell & sc, long i)
  Vector newpos = now.Position() + now.Velocity()*dt + (2.0/3.0)*newacc*dt*dt - (1.0/6.0)*old.Acceleration()*dt*dt;
  oldsc.SetAcceleration(i, newacc);
  sc.SetPosition(i, newpos);
+ */
 }
 
-void NoseHoover::AdvanceVelocity(SimulationCell & sc, long i)
+void NoseHoover::AdvanceVelocity(Simulation & sim, long i)
 {
+#warning nuevamente uso de OldCell ... more confusion!!!!
+ /*
  SimulationCell & oldsc = OldCell();
  const Atom & now = sc[i];
  const Atom & old = oldsc[i];
  sc.SetVelocity(i, now.Velocity() + (1.0/3.0)*now.Acceleration()*dt + (5.0/6.0)*old.Acceleration()*dt - (1.0/6.0)*auxlist[i]*dt);
+ */
 }
 
 // Esto se incluye para que el modulo pueda ser cargado dinamicamente
 Module * create(std::string args) { return new NoseHoover(args); }
 void destroy(Module * m) { delete m; }
-

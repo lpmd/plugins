@@ -265,6 +265,13 @@ directory .
        pkgconfig += liblpmd-2.0
     end
 
+    module nosehoover.so
+       language = c++
+       sources = nosehoover.cc
+       installpath = lib/lpmd
+       pkgconfig += liblpmd-2.0
+    end
+
     module nullintegrator.so
        language = c++
        sources = nullintegrator.cc
@@ -406,7 +413,6 @@ directory .
 #color_la_SOURCES = color.h color.cc
 #energy_la_SOURCES = energy.h energy.cc #PROBABLEMENTE YA NO VA MAS!!
 #ewald_la_SOURCES = ewald.h ewald.cc
-#nosehoover_la_SOURCES = nosehoover.h nosehoover.cc
 #pressure_la_SOURCES = pressure.h pressure.cc #PROBABLEMENTE YA NO VA MAS!!
 #quenchedmd_la_SOURCES = quenchedmd.h quenchedmd.cc
 #rawbinary_la_SOURCES = rawbinary.h rawbinary.cc

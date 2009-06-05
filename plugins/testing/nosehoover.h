@@ -10,9 +10,7 @@
 #include <lpmd/stepper.h>
 #include <lpmd/plugin.h>
 
-#include <vector>
-
-class NoseHoover: public lpmd::TwoStepIntegrator, public lpmd::Stepper, public lpmd::Module
+class NoseHoover: public lpmd::TwoStepIntegrator, public lpmd::Module
 {
  public:
    //Metodos Generales
@@ -21,9 +19,9 @@ class NoseHoover: public lpmd::TwoStepIntegrator, public lpmd::Stepper, public l
    void ShowHelp() const;
 
    //Metodos Propios del Modulo NoseHoover
-   void Initialize(lpmd::SimulationCell & sc, lpmd::Potential & p);
-   void AdvancePosition(lpmd::SimulationCell & sc, long i);
-   void AdvanceVelocity(lpmd::SimulationCell & sc, long i);
+   void Initialize(lpmd::Simulation & sim, lpmd::Potential & p);
+   void AdvancePosition(lpmd::Simulation & sim, long i);
+   void AdvanceVelocity(lpmd::Simulation & sim, long i);
 
  private:
       double q;
