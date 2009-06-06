@@ -22,6 +22,7 @@ TemperatureModifier::TemperatureModifier(std::string args): Module("temperature"
  DefineKeyword("end");
  DefineKeyword("each");
  DefineKeyword("t", "300.0");
+ DefineKeyword("filterby", "none");
  // hasta aqui los valores por omision
  ProcessArguments(args);
  temp = double(params["t"]);

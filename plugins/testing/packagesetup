@@ -356,6 +356,13 @@ directory .
        pkgconfig += liblpmd-2.0
     end
 
+    module setvelocity.so
+       language = c++
+       sources = setvelocity.cc
+       installpath = lib/lpmd
+       pkgconfig += liblpmd-2.0
+    end
+
     module skewstart.so
        language = c++
        sources = skewstart.cc

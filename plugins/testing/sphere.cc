@@ -38,7 +38,7 @@ class SphereSelector: public Selector<BasicParticleSet>
    RefParticleSet innerps;
 };
 
-SphereFilter::SphereFilter(std::string args): Module("temperature"), selector(0)
+SphereFilter::SphereFilter(std::string args): Module("sphere"), selector(0)
 {
  ParamList & params = (*this);
  AssignParameter("version", "1.0"); 
