@@ -15,15 +15,11 @@
 #include <lpmd/property.h>
 #include <lpmd/plugin.h>
 
-
-
-class DispVol: public lpmd::StoredValue<lpmd::Matrix>, public lpmd::TemporalProperty, public lpmd::Module
+class DispVol: public lpmd::StoredValue<lpmd::Matrix>, public lpmd::TemporalProperty, public lpmd::Plugin
 {
  public:
   DispVol(std::string args);
   ~DispVol();
-
-  std::string Keywords() const;
 
   void Evaluate(lpmd::ConfigurationSet & hist, lpmd::Potential & pot);
 

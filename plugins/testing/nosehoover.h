@@ -10,7 +10,7 @@
 #include <lpmd/stepper.h>
 #include <lpmd/plugin.h>
 
-class NoseHoover: public lpmd::TwoStepIntegrator, public lpmd::Module
+class NoseHoover: public lpmd::TwoStepIntegrator, public lpmd::Plugin
 {
  public:
    //Metodos Generales

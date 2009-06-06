@@ -8,11 +8,8 @@
 
 using namespace lpmd;
 
-NullMetalPotential::NullMetalPotential(std::string args): Module("nullmetalpotential") 
+NullMetalPotential::NullMetalPotential(std::string args): Plugin("nullmetalpotential", "2.0")
 { 
- AssignParameter("version", "1.0"); 
- AssignParameter("apirequired", "1.1"); 
- AssignParameter("bugreport", "gnm@gnm.cl"); 
  //
  ProcessArguments(args); 
 }
@@ -51,6 +48,6 @@ double NullMetalPotential::deltaU2(const double &rhobar, const int &N, const dou
 double NullMetalPotential::VirialCorrection(const double &rhobar, const int &N, const double &rhoi) const { return 0.0; }
 
 // Esto se incluye para que el modulo pueda ser cargado dinamicamente
-Module * create(std::string args) {return new NullMetalPotential(args);}
-void destroy(Module * m) { delete m; }
+Plugin * create(std::string args) {return new NullMetalPotential(args);}
+void destroy(Plugin * m) { delete m; }
 

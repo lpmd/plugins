@@ -9,7 +9,7 @@
 #include <lpmd/atomselector.h>
 #include <lpmd/plugin.h>
 
-class SphereFilter: public lpmd::SystemFilter, public lpmd::Module
+class SphereFilter: public lpmd::SystemFilter, public lpmd::Plugin
 {
  public:
   SphereFilter(std::string args);

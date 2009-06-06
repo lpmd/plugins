@@ -38,12 +38,9 @@ class SphereSelector: public Selector<BasicParticleSet>
    RefParticleSet innerps;
 };
 
-SphereFilter::SphereFilter(std::string args): Module("sphere"), selector(0)
+SphereFilter::SphereFilter(std::string args): Plugin("sphere", "1.0"), selector(0)
 {
  ParamList & params = (*this);
- AssignParameter("version", "1.0"); 
- AssignParameter("apirequired", "1.1"); 
- AssignParameter("bugreport", "gnm@gnm.cl"); 
  //
  DefineKeyword("start");
  DefineKeyword("end");
@@ -79,6 +76,6 @@ Selector<BasicParticleSet> & SphereFilter::CreateSelector()
 }
 
 // Esto se incluye para que el modulo pueda ser cargado dinamicamente
-Module * create(std::string args) { return new SphereFilter(args); }
-void destroy(Module * m) { delete m; }
+Plugin * create(std::string args) { return new SphereFilter(args); }
+void destroy(Plugin * m) { delete m; }
 

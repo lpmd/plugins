@@ -8,7 +8,7 @@
 
 using namespace lpmd;
 
-FinnisSinclair::FinnisSinclair(std::string args): Module("finnissinclair")
+FinnisSinclair::FinnisSinclair(std::string args): Plugin("finnissinclair", "2.0")
 {
  ParamList & params = (*this);
  ProcessArguments(args); 
@@ -23,12 +23,6 @@ FinnisSinclair::FinnisSinclair(std::string args): Module("finnissinclair")
 
 void FinnisSinclair::ShowHelp() const
 {
- std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
- std::cout << " Module Name        = finnissinclair                                           \n";
- std::cout << " Module Version     = 1.0                                                      \n";
- std::cout << " Support API lpmd   = 1.0.0                                                    \n";
- std::cout << " Problems Report to = gnm@gnm.cl                                               \n";
- std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
  std::cout << "      El modulo implementa el potencial de FinnisSinclair para interaccion de  \n";
  std::cout << " atomos metalicos.                                                             \n";
@@ -41,7 +35,6 @@ void FinnisSinclair::ShowHelp() const
  std::cout << "      B             : Especifica el valor de beta para el potencial.           \n";
  std::cout << "      c             : Especifica primer radio de corte (cutoff_1=c).           \n";
  std::cout << "      d             : Especifica segundo radio de corte (cutoff_2=d).          \n";
- std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " Example                                                                       \n";
  std::cout << " Cargando el Modulo :                                                          \n";
  std::cout << " use FinnisSinclair as FS                                                      \n";
@@ -57,11 +50,7 @@ void FinnisSinclair::ShowHelp() const
  std::cout << " potential FS Cu Au                                                          \n\n";
  std::cout << "      De esta forma fijamos el potencial de FinnisSinclair entre los atomos de \n";
  std::cout << " cobre y oro con las constantes seteadas en FS.                                \n";
- std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
-
 }
-
-std::string FinnisSinclair::Keywords() const { return " c0 c1 c2 A B c d "; }
 
 double FinnisSinclair::pairEnergy(const double &r) const
 {
@@ -100,6 +89,6 @@ double FinnisSinclair::deltaU1(const double &rhobar, const int &N) const{	return
 double FinnisSinclair::deltaU2(const double &rhobar, const int &N, const double &rhoi) const { return 0.0; }
 
 // Esto se incluye para que el modulo pueda ser cargado dinámicamente
-Module * create(std::string args) {return new FinnisSinclair(args);}
-void destroy(Module * m) { delete m; }
+Plugin * create(std::string args) {return new FinnisSinclair(args);}
+void destroy(Plugin * m) { delete m; }
 

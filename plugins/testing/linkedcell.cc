@@ -203,12 +203,9 @@ SubCell & LinkedCellManager::GetSubCellByAtom(long i) const
 //
 //
 
-LinkedCellCellManager::LinkedCellCellManager(std::string args): Module("linkedcell"), lcm(NULL) 
+LinkedCellCellManager::LinkedCellCellManager(std::string args): Plugin("linkedcell", "2.0"), lcm(NULL) 
 { 
  ParamList & params = (*this);
- AssignParameter("version", "1.0"); 
- AssignParameter("apirequired", "1.1"); 
- AssignParameter("bugreport", "gnm@gnm.cl"); 
  //
  DefineKeyword("cutoff");
  DefineKeyword("nx", "7");
@@ -339,6 +336,6 @@ void LinkedCellCellManager::BuildNeighborList(Configuration & sc, long i, Neighb
 }
 
 // Esto se incluye para que el modulo pueda ser cargado dinamicamente
-Module * create(std::string args) { return new LinkedCellCellManager(args); }
-void destroy(Module * m) { delete m; }
+Plugin * create(std::string args) { return new LinkedCellCellManager(args); }
+void destroy(Plugin * m) { delete m; }
 

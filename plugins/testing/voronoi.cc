@@ -52,12 +52,6 @@ VoronoiGenerator::~VoronoiGenerator() { }
 
 void VoronoiGenerator::ShowHelp() const
 {
- std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
- std::cout << " Module Name        = voronoi                                                	\n";
- std::cout << " Module Version     = 1.0                                                      \n";
- std::cout << " Support API lpmd   = 1.0.0                                                    \n";
- std::cout << " Problems Report to = gnm@gnm.cl                                               \n";
- std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
  std::cout << "      This module is used to generate a nanostructured crystal.                \n";
  std::cout << " General Options   >>                                                         	\n";
@@ -66,7 +60,6 @@ void VoronoiGenerator::ShowHelp() const
  std::cout << "      type    : Specifies the cell type (sc, bcc, fcc).                        \n";
  std::cout << "      a       : Lattice constant.                                              \n";
  std::cout << "      grains  : Number of grains to put in the simulation cell                 \n";
- std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " Example                                                                       \n";
  std::cout << " Module calling :                                                              \n";
  std::cout << " input module=voronoi symbol=Ar type=fcc a=3.61 grains=10                      \n";
@@ -76,12 +69,6 @@ void VoronoiGenerator::ShowHelp() const
  std::cout << "      cutted crystal. The number of resulting atoms depends on the number of		\n";
  std::cout << "      grains you choose and the size of the simulation cell (the more grains   \n";
  std::cout << "      you put, the smaller they become, and less atoms you have).               \n";
- std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
-}
-
-std::string VoronoiGenerator::Keywords() const
-{
- return "symbol a cells type";
 }
 
 void VoronoiGenerator::Generate(SimulationCell & sc) const

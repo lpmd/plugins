@@ -23,11 +23,20 @@ class BondedPair: public IndexTrio
   Vector center;
 };
 
-CommonNeighborAnalysis::CommonNeighborAnalysis(std::string args): Module("cna")
+CommonNeighborAnalysis::CommonNeighborAnalysis(std::string args): Plugin("cna", "2.0")
 {
  ParamList & params = (*this);
- AssignParameter("mode", "statistics");
- AssignParameter("species", "all");
+ //
+ DefineKeyword("rcut");
+ DefineKeyword("reference");
+ DefineKeyword("mode", "statistics");
+ DefineKeyword("species", "all");
+ DefineKeyword("filterby", "none");
+ DefineKeyword("start");
+ DefineKeyword("end");
+ DefineKeyword("each");
+ DefineKeyword("output");
+ //
  ProcessArguments(args);
  std::string m = params["mode"];
  if (m == "full") mode = 0;
@@ -64,12 +73,6 @@ CommonNeighborAnalysis::~CommonNeighborAnalysis() { }
 
 void CommonNeighborAnalysis::ShowHelp() const
 {
- std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
- std::cout << " Module Name        = cna                                                      \n";
- std::cout << " Module Version     = 1.0                                                      \n";
- std::cout << " Support API lpmd   = 1.0.0                                                    \n";
- std::cout << " Problems Report to = gnm@gnm.cl                                               \n";
- std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
  std::cout << "      Modulo utilizado para realizar Common Neighbor Analysis (CNA) a un       \n";
  std::cout << "      conjunto de configuraciones atomicas. Este metodo permite una determina- \n";
@@ -98,10 +101,7 @@ void CommonNeighborAnalysis::ShowHelp() const
  std::cout << " enduse                                                                        \n";
  std::cout << " Llamando al Modulo :                                                          \n";  
  std::cout << " property cna start=1 each=10 end=100                                          \n\n";
- std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
 }
-
-std::string CommonNeighborAnalysis::Keywords() const { return "rcut mode reference species start end step output"; }
 
 std::vector<long int> AddSegmentToChain(std::vector<long int> & cnm, std::map<long int, std::vector<long int> > & bonds, std::vector<long int> & chain, std::vector<long int> & longest)
 {
@@ -138,6 +138,7 @@ void CommonNeighborAnalysis::Evaluate(Configuration & conf, Potential & pot)
  const long n = atoms.Size();
  std::vector<BondedPair> data;
  NeighborList * neighbormatrix = new NeighborList[n];
+ DebugStream() << "-> Computing Common Neighbor Analysis (CNA) over " << n << " atoms\n";
  DebugStream() << "-> Building neighbor lists\n";
  for (long i=0;i<n;++i)
  {
@@ -335,6 +336,6 @@ void CommonNeighborAnalysis::Evaluate(Configuration & conf, Potential & pot)
 }
 
 // Esto se incluye para que el modulo pueda ser cargado dinamicamente
-Module * create(std::string args) { return new CommonNeighborAnalysis(args); }
-void destroy(Module * m) { delete m; }
+Plugin * create(std::string args) { return new CommonNeighborAnalysis(args); }
+void destroy(Plugin * m) { delete m; }
 

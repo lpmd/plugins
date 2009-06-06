@@ -10,13 +10,10 @@
 
 using namespace lpmd;
 
-XYZFormat::XYZFormat(std::string args): Module("xyz")
+XYZFormat::XYZFormat(std::string args): Plugin("xyz", "2.0")
 {
  ParamList & params = (*this);
  linecounter = new long int;
- AssignParameter("version", "1.0"); 
- AssignParameter("apirequired", "1.1"); 
- AssignParameter("bugreport", "gnm@gnm.cl"); 
  //
  DefineKeyword("file");
  DefineKeyword("level", "0");
@@ -185,6 +182,6 @@ void XYZFormat::WriteCell(std::ostream & out, Configuration & sc) const
 }
 
 // Esto se incluye para que el modulo pueda ser cargado dinamicamente
-Module * create(std::string args) { return new XYZFormat(args); }
-void destroy(Module * m) { delete m; }
+Plugin * create(std::string args) { return new XYZFormat(args); }
+void destroy(Plugin * m) { delete m; }
 

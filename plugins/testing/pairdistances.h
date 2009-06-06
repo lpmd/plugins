@@ -10,7 +10,7 @@
 #include <lpmd/property.h>
 #include <lpmd/plugin.h>
 
-class PairDistances: public lpmd::StoredValue<lpmd::Matrix>, public lpmd::InstantProperty, public lpmd::Module
+class PairDistances: public lpmd::StoredValue<lpmd::Matrix>, public lpmd::InstantProperty, public lpmd::Plugin
 {
  public:
   //Metodos Generales

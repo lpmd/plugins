@@ -8,7 +8,7 @@
 #include <lpmd/potential.h>
 #include <lpmd/plugin.h>
 
-class ConstantForcePotential: public lpmd::Potential, public lpmd::Module
+class ConstantForcePotential: public lpmd::Potential, public lpmd::Plugin
 {
  public:
   //Metodos Generales

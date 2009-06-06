@@ -11,7 +11,7 @@
 #include <lpmd/array.h>
 #include <string>
 
-class LPMDFormat: public lpmd::CellFormat, public lpmd::Module
+class LPMDFormat: public lpmd::CellFormat, public lpmd::Plugin
 {
  public:
    //Metodos Generales

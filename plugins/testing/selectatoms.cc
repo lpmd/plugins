@@ -47,6 +47,7 @@ SelectAtomsModifier::~SelectAtomsModifier() { }
 
 void SelectAtomsModifier::SetParameter(std::string name)
 {
+ #warning "SetParameter es horrible! mejorar los parametros"
  if (name == "index") 
  {
   AssignParameter("from_index", GetNextWord());

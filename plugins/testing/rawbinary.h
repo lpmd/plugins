@@ -11,14 +11,13 @@
 #include <lpmd/array.h>
 #include <string.h>
 
-class RawBinFormat: public lpmd::CellFormat, public lpmd::Module
+class RawBinFormat: public lpmd::CellFormat, public lpmd::Plugin
 {
  public:
   //Metodos Generales
   RawBinFormat(std::string args);
   virtual ~RawBinFormat();
   void ShowHelp() const;
-  std::string Keywords() const;
 
   void ReadHeader(std::istream & is) const;
   bool ReadCell(std::istream & is, lpmd::Configuration & con) const;

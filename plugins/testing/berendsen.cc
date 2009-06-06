@@ -13,12 +13,9 @@
 
 using namespace lpmd;
 
-BerendsenModifier::BerendsenModifier(std::string args): Module("berendsen")
+BerendsenModifier::BerendsenModifier(std::string args): Plugin("berendsen", "2.0")
 {
  ParamList & params = (*this);
- AssignParameter("version", "1.0"); 
- AssignParameter("apirequired", "1.1"); 
- AssignParameter("bugreport", "gnm@gnm.cl"); 
  //
  DefineKeyword("start");
  DefineKeyword("end");
@@ -101,7 +98,7 @@ void BerendsenModifier::Apply(lpmd::Simulation & sim)
 }
 
 // Esto se incluye para que el modulo pueda ser cargado dinamicamente
-Module * create(std::string args) { return new BerendsenModifier(args); }
-void destroy(Module * m) { delete m; }
+Plugin * create(std::string args) { return new BerendsenModifier(args); }
+void destroy(Plugin * m) { delete m; }
 
 

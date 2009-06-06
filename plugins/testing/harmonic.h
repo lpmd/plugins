@@ -8,7 +8,7 @@
 #include <lpmd/pairpotential.h>
 #include <lpmd/plugin.h>
 
-class Harmonic: public lpmd::PairPotential, public lpmd::Module
+class Harmonic: public lpmd::PairPotential, public lpmd::Plugin
 {
  public: 
   //Metodos Generales

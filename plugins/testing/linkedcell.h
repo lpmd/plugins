@@ -102,7 +102,7 @@ class LinkedCellManager
    SubCell * subcells;
 };
 
-class LinkedCellCellManager: public lpmd::CellManager, public lpmd::Module
+class LinkedCellCellManager: public lpmd::CellManager, public lpmd::Plugin
 {
  public:
 

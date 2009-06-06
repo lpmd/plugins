@@ -14,22 +14,19 @@
 #include <lpmd/configurationset.h>
 #include <lpmd/storedconfiguration.h>
 
-
 #include <lpmd/simulation.h>
 #include <lpmd/properties.h>
 
 #include <sstream>
-
 
 #include <lpmd/storedvalue.h>
 #include <lpmd/matrix.h>
 #include <lpmd/property.h>
 #include <lpmd/plugin.h>
 
-
 using namespace lpmd;
 
-DispVol::DispVol(std::string args): Module("dispvol")
+DispVol::DispVol(std::string args): Plugin("dispvol", "2.0")
 {
  ParamList & params = (*this);
  AssignParameter("t", "5");
@@ -40,8 +37,6 @@ DispVol::DispVol(std::string args): Module("dispvol")
 }
 
 DispVol::~DispVol() { if (m != NULL) delete m; }
-
-std::string DispVol::Keywords() const { return "t output"; }
 
 void DispVol::Evaluate(lpmd::ConfigurationSet & hist, Potential & pot)
 {
@@ -90,6 +85,6 @@ void DispVol::Evaluate(lpmd::ConfigurationSet & hist, Potential & pot)
 }
 
 // Esto se incluye para que el modulo pueda ser cargado dinamicamente
-Module * create(std::string args) { return new DispVol(args); }
-void destroy(Module * m) { delete m; }
+Plugin * create(std::string args) { return new DispVol(args); }
+void destroy(Plugin * m) { delete m; }
 

@@ -8,12 +8,8 @@
 
 using namespace lpmd;
 
-NullPairPotential::NullPairPotential(std::string args): Module("nullpairpotential") 
+NullPairPotential::NullPairPotential(std::string args): Plugin("nullpairpotential", "2.0")
 { 
- AssignParameter("version", "1.0"); 
- AssignParameter("apirequired", "1.1"); 
- AssignParameter("bugreport", "gnm@gnm.cl"); 
- //
  ProcessArguments(args); 
 }
 
@@ -37,7 +33,7 @@ double NullPairPotential::pairEnergy(const double & r) const { return 0.0; }
 Vector NullPairPotential::pairForce(const Vector & r) const { return Vector(); }
 
 // Esto se incluye para que el modulo pueda ser cargado dinamicamente
-Module * create(std::string args) { return new NullPairPotential(args); }
-void destroy(Module * m) { delete m; }
+Plugin * create(std::string args) { return new NullPairPotential(args); }
+void destroy(Plugin * m) { delete m; }
 
 

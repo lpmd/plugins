@@ -8,11 +8,8 @@
 
 using namespace lpmd;
 
-MSD::MSD(std::string args): Module("msd")
+MSD::MSD(std::string args): Plugin("msd", "2.0")
 {
- AssignParameter("version", "1.0"); 
- AssignParameter("apirequired", "1.1"); 
- AssignParameter("bugreport", "gnm@gnm.cl"); 
  //
  ProcessArguments(args);
 }
@@ -93,6 +90,6 @@ void MSD::Evaluate(ConfigurationSet & hist, Potential & pot)
 }
 
 // Esto se incluye para que el modulo pueda ser cargado dinamicamente
-Module * create(std::string args) { return new MSD(args); }
-void destroy(Module * m) { delete m; }
+Plugin * create(std::string args) { return new MSD(args); }
+void destroy(Plugin * m) { delete m; }
 

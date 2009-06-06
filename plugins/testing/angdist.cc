@@ -14,14 +14,10 @@
 
 using namespace lpmd;
 
-AngDist::AngDist(std::string args): Module("angdist")
+AngDist::AngDist(std::string args): Plugin("angdist", "2.0")
 {
  ParamList & param = (*this);
  m = NULL;
- //
- AssignParameter("version", "1.0");
- AssignParameter("apirequired", "1.1");
- AssignParameter("bugreport", "gnm@gnm.cl");
  //
  DefineKeyword("atoms");
  DefineKeyword("rcut");
@@ -47,6 +43,7 @@ AngDist::~AngDist()
 
 void AngDist::SetParameter(std::string name)
 {
+ #warning "SetParameter es horrible! mejorar los parametros"
  if (name == "atoms")
  {
   AssignParameter("atoms", GetNextWord());
@@ -232,5 +229,6 @@ void AngDist::Evaluate(lpmd::Configuration & con, lpmd::Potential & pot)
 }
 
 // Esto se incluye para que el modulo pueda ser cargado dinamicamente
-Module * create(std::string args) { return new AngDist(args); }
-void destroy(Module * m) { delete m; }
+Plugin * create(std::string args) { return new AngDist(args); }
+void destroy(Plugin * m) { delete m; }
+

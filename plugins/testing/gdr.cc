@@ -11,12 +11,9 @@
 
 using namespace lpmd;
 
-Gdr::Gdr(std::string args): Module("gdr")
+Gdr::Gdr(std::string args): Plugin("gdr", "2.0")
 {
  ParamList & params=(*this);
- AssignParameter("version", "1.0"); 
- AssignParameter("apirequired", "1.1"); 
- AssignParameter("bugreport", "gnm@gnm.cl"); 
  //
  DefineKeyword("rcut");
  DefineKeyword("start");
@@ -73,6 +70,6 @@ void Gdr::Evaluate(Configuration & con, Potential & pot)
 }
 
 // Esto se incluye para que el modulo pueda ser cargado dinamicamente
-Module * create(std::string args) { return new Gdr(args); }
-void destroy(Module * m) { delete m; }
+Plugin * create(std::string args) { return new Gdr(args); }
+void destroy(Plugin * m) { delete m; }
 

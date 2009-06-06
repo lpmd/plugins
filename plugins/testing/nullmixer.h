@@ -10,7 +10,7 @@
 
 using namespace lpmd;
 
-class NullMixer: public SystemMixer, public Module
+class NullMixer: public SystemMixer, public Plugin
 {
  public:
 

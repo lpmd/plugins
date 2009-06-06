@@ -11,12 +11,9 @@
 
 using namespace lpmd;
 
-NullIntegrator::NullIntegrator(std::string args): Module("nullintegrator")
+NullIntegrator::NullIntegrator(std::string args): Plugin("nullintegrator", "2.0")
 {
  ParamList & params = (*this);
- AssignParameter("version", "1.0"); 
- AssignParameter("apirequired", "1.1"); 
- AssignParameter("bugreport", "gnm@gnm.cl"); 
  //
  DefineKeyword("start", "1");
  // hasta aqui los valores por omision
@@ -44,7 +41,7 @@ void NullIntegrator::ShowHelp() const
 void NullIntegrator::Advance(Simulation & sim, Potential & p) { p.UpdateForces(sim); }
 
 // Esto se incluye para que el modulo pueda ser cargado dinamicamente
-Module * create(std::string args) { return new NullIntegrator(args); }
-void destroy(Module * m) { delete m; }
+Plugin * create(std::string args) { return new NullIntegrator(args); }
+void destroy(Plugin * m) { delete m; }
 
 

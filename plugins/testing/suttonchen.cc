@@ -8,12 +8,9 @@
 
 using namespace lpmd;
 
-SuttonChen::SuttonChen(std::string args): Module("suttonchen")
+SuttonChen::SuttonChen(std::string args): Plugin("suttonchen", "2.0")
 {
  ParamList & params = (*this);
- AssignParameter("version", "1.0"); 
- AssignParameter("apirequired", "1.1"); 
- AssignParameter("bugreport", "gnm@gnm.cl"); 
  //
  DefineKeyword("e");
  DefineKeyword("a");
@@ -104,6 +101,6 @@ double SuttonChen::VirialCorrection(const double &rhobar, const int &N, const do
 }
 
 // Esto se inlcuye para que el modulo pueda ser cargado dinamicamente
-Module * create(std::string args) {return new SuttonChen(args);}
-void destroy(Module * m) { delete m; }
+Plugin * create(std::string args) {return new SuttonChen(args);}
+void destroy(Plugin * m) { delete m; }
 

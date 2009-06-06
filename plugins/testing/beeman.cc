@@ -9,12 +9,9 @@
 
 using namespace lpmd;
 
-Beeman::Beeman(std::string args): Module("beeman")
+Beeman::Beeman(std::string args): Plugin("beeman", "2.0")
 {
  ParamList & params = (*this);
- AssignParameter("version", "1.0"); 
- AssignParameter("apirequired", "1.1"); 
- AssignParameter("bugreport", "gnm@gnm.cl"); 
  //
  DefineKeyword("dt", "1.0");
  DefineKeyword("start", "1");
@@ -77,5 +74,6 @@ void Beeman::AdvanceVelocity(Simulation & sim, long i)
 }
 
 // Esto se incluye para que el modulo pueda ser cargado dinamicamente
-Module * create(std::string args) { return new Beeman(args); }
-void destroy(Module * m) { delete m; }
+Plugin * create(std::string args) { return new Beeman(args); }
+void destroy(Plugin * m) { delete m; }
+

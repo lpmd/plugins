@@ -24,7 +24,7 @@ double LinkedCellCellManager2::DistanceFunction(double dx, double dy, double dz)
  return (dr[0]*dr[0]+dr[1]*dr[1]+dr[2]*dr[2]);
 }
 
-LinkedCellCellManager2::LinkedCellCellManager2(std::string args): Module("lc2")
+LinkedCellCellManager2::LinkedCellCellManager2(std::string args): Plugin("lc2", "1.0")
 { 
  ParamList & params = (*this);
  AssignParameter("cutoff", "7.0");
@@ -109,6 +109,6 @@ void LinkedCellCellManager2::BuildNeighborList(Configuration & sc, long i, Neigh
 }
 
 // Esto se incluye para que el modulo pueda ser cargado dinamicamente
-Module * create(std::string args) { return new LinkedCellCellManager2(args); }
-void destroy(Module * m) { delete m; }
+Plugin * create(std::string args) { return new LinkedCellCellManager2(args); }
+void destroy(Plugin * m) { delete m; }
 

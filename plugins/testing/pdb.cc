@@ -12,12 +12,9 @@
 
 using namespace lpmd;
 
-PDBFormat::PDBFormat(std::string args): Module("pdb")
+PDBFormat::PDBFormat(std::string args): Plugin("pdb", "1.0")
 {
  ParamList & params = (*this);
- AssignParameter("version", "1.0"); 
- AssignParameter("apirequired", "1.1"); 
- AssignParameter("bugreport", "gnm@gnm.cl"); 
  //
  DefineKeyword("file");
  DefineKeyword("each", "1");
@@ -130,6 +127,6 @@ bool PDBFormat::ReadCell(std::istream & is, Configuration & con) const
 }
 
 // Esto se incluye para que el modulo pueda ser cargado dinamicamente
-Module * create(std::string args) { return new PDBFormat(args); }
-void destroy(Module * m) { delete m; }
+Plugin * create(std::string args) { return new PDBFormat(args); }
+void destroy(Plugin * m) { delete m; }
 

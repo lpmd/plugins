@@ -10,7 +10,7 @@
 
 using namespace lpmd;
 
-RawBinFormat::RawBinFormat(std::string args): Module("rawbinary")
+RawBinFormat::RawBinFormat(std::string args): Plugin("rawbinary", "2.0")
 {
  ParamList & param = (*this);
  AssignParameter("level", "0");
@@ -28,12 +28,6 @@ RawBinFormat::~RawBinFormat() { }
 
 void RawBinFormat::ShowHelp() const
 {
- std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
- std::cout << " Module Name        = rawbinary                                                \n";
- std::cout << " Module Version     = 1.0                                                      \n";
- std::cout << " Support API lpmd   = 1.0.0                                                    \n";
- std::cout << " Problems Report to = gnm@gnm.cl                                               \n";
- std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
  std::cout << "      El modulo es utilizado para la lectura/escritura de archivos en formato  \n";
  std::cout << " binario.                                                                      \n";
@@ -43,19 +37,12 @@ void RawBinFormat::ShowHelp() const
  std::cout << "      file          : Especifica el archivo que posee el formato lpmd.         \n";
  std::cout << "      level         : Se especifica el nivel del formato de rawbinary, estos son \n";
  std::cout << "                      0/1/2 <-> pos/pos-vel/pos-vel-ace.                       \n";
- std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " Example                                                                       \n";
  std::cout << " Llamando al modulo :                                                          \n";
  std::cout << " input module=rawbinary file=inputfile.raw level=0                             \n";
  std::cout << " output module=rawbinary file=outputfile.raw level=1 each=5                    \n\n";
  std::cout << "      De esta forma podemos leer o escribir archivos en formato rawbinary, en  \n";
  std::cout << "      el caso de la salida, es necesaria la opcion each.                       \n";
- std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
-}
-
-std::string RawBinFormat::Keywords() const
-{
- return "file each level replacecell";
 }
 
 void RawBinFormat::ReadHeader(std::istream & is) const
@@ -176,6 +163,6 @@ void RawBinFormat::WriteCell(std::ostream & out, lpmd::Configuration & con) cons
 }
 
 // Esto se incluye para que el modulo pueda ser cargado dinamicamente
-Module * create(std::string args) { return new RawBinFormat(args); }
-void destroy(Module * m) { delete m; }
+Plugin * create(std::string args) { return new RawBinFormat(args); }
+void destroy(Plugin * m) { delete m; }
 

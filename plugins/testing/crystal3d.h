@@ -10,14 +10,13 @@
 
 using namespace lpmd;
 
-class CrystalGenerator: public lpmd::CellGenerator, public lpmd::Module
+class CrystalGenerator: public lpmd::CellGenerator, public lpmd::Plugin
 {
  public:
    //Metodos Generales
    CrystalGenerator(std::string args);
    virtual ~CrystalGenerator();
    void ShowHelp() const;
-   std::string Keywords() const;
 
    //Metodos Propios del modulo fccgenerator
    void Generate(Configuration & config) const;

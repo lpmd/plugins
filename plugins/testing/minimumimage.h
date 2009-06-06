@@ -10,7 +10,7 @@
 
 using namespace lpmd;
 
-class MinimumImageCellManager: public CellManager, public Module
+class MinimumImageCellManager: public CellManager, public Plugin
 {
  public:
 

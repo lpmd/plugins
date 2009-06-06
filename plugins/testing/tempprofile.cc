@@ -18,7 +18,6 @@ TempProfile::TempProfile(std::string args): Module("tempprofile", false)
 {
  m = NULL;
  AssignParameter("version", "1.0"); 
- AssignParameter("apirequired", "1.1"); 
  AssignParameter("bugreport", "gnm@gnm.cl");
  //
  DefineKeyword("start");
@@ -47,6 +46,7 @@ TempProfile::~TempProfile()
 
 void TempProfile::SetParameter(std::string name)
 {
+ #warning "SetParameter es horrible! mejorar los parametros"
  if (name == "axis") 
  {
   AssignParameter("axis", GetNextWord());

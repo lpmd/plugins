@@ -12,12 +12,9 @@
 
 using namespace lpmd;
 
-Mol2Format::Mol2Format(std::string args): Module("mol2")
+Mol2Format::Mol2Format(std::string args): Plugin("mol2", "2.0")
 {
  ParamList & params = (*this);
- AssignParameter("version", "1.0"); 
- AssignParameter("apirequired", "1.1"); 
- AssignParameter("bugreport", "gnm@gnm.cl"); 
  //
  DefineKeyword("file");
  DefineKeyword("each", "1");
@@ -129,6 +126,6 @@ bool Mol2Format::ReadCell(std::istream & is, Configuration & con) const
 }
 
 // Esto se incluye para que el modulo pueda ser cargado dinamicamente
-Module * create(std::string args) { return new Mol2Format(args); }
-void destroy(Module * m) { delete m; }
+Plugin * create(std::string args) { return new Mol2Format(args); }
+void destroy(Plugin * m) { delete m; }
 

@@ -9,7 +9,7 @@
 #include <lpmd/plugin.h>
 #include <lpmd/vector.h>
 
-class NullMetalPotential: public lpmd::MetalPotential , public lpmd::Module
+class NullMetalPotential: public lpmd::MetalPotential , public lpmd::Plugin
 {
  public:
   //Metodos Generales

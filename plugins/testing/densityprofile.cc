@@ -13,12 +13,9 @@
 
 using namespace lpmd;
 
-DensityProfile::DensityProfile(std::string args): Module("densityprofile")
+DensityProfile::DensityProfile(std::string args): Plugin("densityprofile", "2.0")
 {
  lpmd::ParamList & params = (*this);
- AssignParameter("version", "1.0"); 
- AssignParameter("apirequired", "1.1"); 
- AssignParameter("bugreport", "gnm@gnm.cl"); 
  //
  DefineKeyword("start");
  DefineKeyword("end");
@@ -45,6 +42,7 @@ DensityProfile::~DensityProfile()
 
 void DensityProfile::SetParameter(std::string name)
 {
+ #warning "SetParameter es horrible! mejorar los parametros"
  if (name == "axis") 
  {
   AssignParameter("axis", GetNextWord());
@@ -260,7 +258,7 @@ void DensityProfile::Evaluate(lpmd::Configuration & con, lpmd::Potential & pot)
 }
 
 // Esto se incluye para que el modulo pueda ser cargado dinamicamente
-Module * create(std::string args) { return new DensityProfile(args); }
-void destroy(Module * m) { delete m; }
+Plugin * create(std::string args) { return new DensityProfile(args); }
+void destroy(Plugin * m) { delete m; }
 
 

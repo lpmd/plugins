@@ -8,7 +8,7 @@
 #include <lpmd/systemmodifier.h>
 #include <lpmd/plugin.h>
 
-class ReplicateModifier: public lpmd::SystemModifier, public lpmd::Module
+class ReplicateModifier: public lpmd::SystemModifier, public lpmd::Plugin
 {
  public:
 

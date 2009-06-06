@@ -10,7 +10,7 @@
 
 using namespace lpmd;
 
-class SkewStartGenerator: public lpmd::CellGenerator, public lpmd::Module
+class SkewStartGenerator: public lpmd::CellGenerator, public lpmd::Plugin
 {
  public:
   //Metodos Generales

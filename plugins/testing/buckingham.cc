@@ -8,12 +8,9 @@
 
 using namespace lpmd;
 
-Buckingham::Buckingham(std::string args): Module("buckingham")
+Buckingham::Buckingham(std::string args): Plugin("buckingham", "2.0")
 {
  ParamList & params = (*this);
- AssignParameter("version", "1.0"); 
- AssignParameter("apirequired", "1.1"); 
- AssignParameter("bugreport", "gnm@gnm.cl"); 
  //
  DefineKeyword("B1");
  DefineKeyword("B2");
@@ -80,5 +77,5 @@ Vector Buckingham::pairForce(const Vector & r) const
 }
 
 // Esto se incluye para que el modulo pueda ser cargado dinamicamente
-Module * create(std::string args) { return new Buckingham(args); }
-void destroy(Module * m) { delete m; }
+Plugin * create(std::string args) { return new Buckingham(args); }
+void destroy(Plugin * m) { delete m; }

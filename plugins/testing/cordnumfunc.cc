@@ -12,12 +12,9 @@
 
 using namespace lpmd;
 
-CordNumFunc::CordNumFunc(std::string args): Module("cordnumfunc")
+CordNumFunc::CordNumFunc(std::string args): Plugin("cordnumfunc", "2.0")
 {
  ParamList & params = (*this);
- AssignParameter("version", "1.0"); 
- AssignParameter("apirequired", "1.1"); 
- AssignParameter("bugreport", "gnm@gnm.cl"); 
  //
  DefineKeyword("atoms");
  DefineKeyword("start");
@@ -43,6 +40,7 @@ CordNumFunc::~CordNumFunc()
 
 void CordNumFunc::SetParameter(std::string name)
 {
+ #warning "SetParameter es horrible! mejorar los parametros"
  if (name == "atoms")
  {
   AssignParameter("atoms", GetNextWord());
@@ -200,6 +198,6 @@ void CordNumFunc::Evaluate(lpmd::Configuration & con, Potential & pot)
 }
 
 // Esto se incluye para que el modulo pueda ser cargado dinamicamente
-Module * create(std::string args) { return new CordNumFunc(args); }
-void destroy(Module * m) { delete m; }
+Plugin * create(std::string args) { return new CordNumFunc(args); }
+void destroy(Plugin * m) { delete m; }
 

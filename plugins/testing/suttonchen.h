@@ -9,7 +9,7 @@
 #include <lpmd/plugin.h>
 #include <lpmd/vector.h>
 
-class SuttonChen: public lpmd::MetalPotential , public lpmd::Module
+class SuttonChen: public lpmd::MetalPotential , public lpmd::Plugin
 {
  public:
   //Metodos Generales

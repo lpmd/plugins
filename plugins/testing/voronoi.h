@@ -15,7 +15,6 @@ class VoronoiGenerator: public lpmd::CellGenerator, public lpmd::Module
   VoronoiGenerator(std::string args); 
   virtual ~VoronoiGenerator();
   void ShowHelp() const;
-  std::string Keywords() const;
 
   //Metodos propios del modulo voronoi
   void Generate(lpmd::SimulationCell & sc) const;

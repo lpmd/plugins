@@ -13,7 +13,6 @@ using namespace lpmd;
 Verlet::Verlet(std::string args): Module("verlet")
 {
  AssignParameter("version", "1.0"); 
- AssignParameter("apirequired", "1.1"); 
  AssignParameter("bugreport", "gnm@gnm.cl"); 
  //
  DefineKeyword("dt", "1.0");

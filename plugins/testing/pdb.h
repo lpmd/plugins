@@ -8,7 +8,7 @@
 #include <lpmd/cellformat.h>
 #include <lpmd/plugin.h>
 
-class PDBFormat: public lpmd::CellFormat, public lpmd::Module
+class PDBFormat: public lpmd::CellFormat, public lpmd::Plugin
 {
  public:
    //Metodos Generales

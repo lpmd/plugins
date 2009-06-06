@@ -8,12 +8,9 @@
 
 using namespace lpmd;
 
-Gupta::Gupta(std::string args): Module("gupta")
+Gupta::Gupta(std::string args): Plugin("gupta", "2.0")
 {
  ParamList & params = (*this);
- AssignParameter("version", "1.0"); 
- AssignParameter("apirequired", "1.1"); 
- AssignParameter("bugreport", "gnm@gnm.cl"); 
  //
  DefineKeyword("A");
  DefineKeyword("r0");
@@ -114,6 +111,6 @@ double Gupta::VirialCorrection(const double &rhobar, const int &N, const double 
 }
 
 // Esto se inlcuye para que el modulo pueda ser cargado dinamicamente
-Module * create(std::string args) {return new Gupta(args);}
-void destroy(Module * m) { delete m; }
+Plugin * create(std::string args) {return new Gupta(args);}
+void destroy(Plugin * m) { delete m; }
 

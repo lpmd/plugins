@@ -8,7 +8,7 @@
 #include <lpmd/pairpotential.h>
 #include <lpmd/plugin.h>
 
-class NullPairPotential: public lpmd::PairPotential, public lpmd::Module
+class NullPairPotential: public lpmd::PairPotential, public lpmd::Plugin
 {
  public: 
   //Metodos Generales

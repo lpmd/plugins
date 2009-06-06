@@ -9,7 +9,7 @@
 #include <lpmd/plugin.h>
 #include <lpmd/vector.h>
 
-class Gupta: public lpmd::MetalPotential , public lpmd::Module
+class Gupta: public lpmd::MetalPotential , public lpmd::Plugin
 {
  public:
   //Metodos Generales

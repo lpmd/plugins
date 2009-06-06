@@ -17,7 +17,6 @@ class Ewald: public lpmd::Potential, public lpmd::Module
   Ewald(std::string args); 
   ~Ewald();
   void ShowHelp() const;
-  std::string Keywords() const;
 
   //Metodos Proopios de modulo ewald
   double energy(lpmd::SimulationCell & sc);

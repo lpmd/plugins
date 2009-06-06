@@ -59,7 +59,7 @@ extern "C" void LC_Destroy(LinkedCell * lc);
 
 using namespace lpmd;
 
-class LinkedCellCellManager2: public lpmd::CellManager, public lpmd::Module
+class LinkedCellCellManager2: public lpmd::CellManager, public lpmd::Plugin
 {
  public:
 

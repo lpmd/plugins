@@ -10,7 +10,7 @@
 #include <lpmd/property.h>
 #include <lpmd/plugin.h>
 
-class Gdr: public lpmd::StoredValue<lpmd::Matrix>, public lpmd::InstantProperty, public lpmd::Module
+class Gdr: public lpmd::StoredValue<lpmd::Matrix>, public lpmd::InstantProperty, public lpmd::Plugin
 {
  public:
   //Metodos Generales

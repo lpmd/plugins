@@ -8,12 +8,9 @@
 
 using namespace lpmd;
 
-Morse::Morse(std::string args): Module("morse") 
+Morse::Morse(std::string args): Plugin("morse", "2.0")
 { 
  ParamList & params = (*this);
- AssignParameter("version", "1.0"); 
- AssignParameter("apirequired", "1.1"); 
- AssignParameter("bugreport", "gnm@gnm.cl"); 
  //
  DefineKeyword("depth");
  DefineKeyword("a");
@@ -64,5 +61,5 @@ Vector Morse::pairForce(const Vector & r) const
 }
 
 // Esto se incluye para que el modulo pueda ser cargado dinamicamente
-Module * create(std::string args) { return new Morse(args); }
-void destroy(Module * m) { delete m; }
+Plugin * create(std::string args) { return new Morse(args); }
+void destroy(Plugin * m) { delete m; }

@@ -14,7 +14,7 @@
 
 using namespace lpmd;
 
-class Beeman: public lpmd::TwoStepIntegrator, public lpmd::Module
+class Beeman: public lpmd::TwoStepIntegrator, public lpmd::Plugin
 {
  public:
    //Metodos Generales

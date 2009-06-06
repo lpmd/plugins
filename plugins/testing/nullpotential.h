@@ -11,7 +11,7 @@
 
 using namespace lpmd;
 
-class NullPotential: public lpmd::Potential, public lpmd::Module
+class NullPotential: public lpmd::Potential, public lpmd::Plugin
 {
  public:
   //Metodos Generales

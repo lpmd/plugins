@@ -12,7 +12,7 @@
 
 using namespace lpmd;
 
-class MSD: public StoredValue<Matrix>, public TemporalProperty, public Module
+class MSD: public StoredValue<Matrix>, public TemporalProperty, public Plugin
 {
  public:
   MSD(std::string args);

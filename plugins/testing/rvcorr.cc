@@ -32,19 +32,12 @@ RVCorr::~RVCorr() { if (m != NULL) delete m; }
 
 void RVCorr::ShowHelp() const
 {
- std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
- std::cout << " Module Name        = rvcorr                                                   \n";
- std::cout << " Module Version     = 1.0                                                      \n";
- std::cout << " Support API lpmd   = 1.0.0                                                    \n";
- std::cout << " Problems Report to = gnm@gnm.cl                                               \n";
- std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
  std::cout << " General Options   >>                                                          \n";
  std::cout << "      bins          : Especifica el numero de divisiones entre 0 y rcut.       \n";
  std::cout << "      rcut          : Especifica el radio maximo para el calculo de rvcorr     \n";
  std::cout << "      output        : Fichero en el que se graba rvcorr.                       \n";
  std::cout << "      average       : Setea si calculo o no el promedio de cada calculo.       \n";
- std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " Example                                                                       \n";
  std::cout << " Cargando el Modulo :                                                          \n";
  std::cout << " use rvcorr                                                                    \n";
@@ -55,10 +48,7 @@ void RVCorr::ShowHelp() const
  std::cout << " enduse                                                                        \n";
  std::cout << " Llamando al Modulo :                                                          \n";  
  std::cout << " property rvcorr start=1 each=10 end=100                                       \n\n";
- std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
 }
-
-std::string RVCorr::Keywords() const { return "rcut bins start end each output average"; }
 
 void RVCorr::Evaluate(SimulationCell & simcell, Potential & pot)
 {

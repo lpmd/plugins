@@ -8,7 +8,7 @@
 #include <lpmd/visualizer.h>
 #include <lpmd/plugin.h>
 
-class PrintAtomsVisualizer: public lpmd::Visualizer, public lpmd::Module
+class PrintAtomsVisualizer: public lpmd::Visualizer, public lpmd::Plugin
 {
  public:
 

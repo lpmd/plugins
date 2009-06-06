@@ -11,12 +11,9 @@
 
 using namespace lpmd;
 
-VaspFormat::VaspFormat(std::string args): Module("vasp")
+VaspFormat::VaspFormat(std::string args): Plugin("vasp", "2.0")
 {
  ParamList & params = (*this);
- AssignParameter("version", "1.0"); 
- AssignParameter("apirequired", "1.1"); 
- AssignParameter("bugreport", "gnm@gnm.cl"); 
  //
  DefineKeyword("file");
  DefineKeyword("species", "NULL");
@@ -203,6 +200,6 @@ void VaspFormat::WriteCell(std::ostream & out, Configuration & con) const
 }
 
 // Esto se incluye para que el modulo pueda ser cargado dinamicamente
-Module * create(std::string args) { return new VaspFormat(args); }
-void destroy(Module * m) { delete m; }
+Plugin * create(std::string args) { return new VaspFormat(args); }
+void destroy(Plugin * m) { delete m; }
 

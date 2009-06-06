@@ -9,12 +9,9 @@
 
 using namespace lpmd;
 
-MinimumImageCellManager::MinimumImageCellManager(std::string args): Module("minimumimage")
+MinimumImageCellManager::MinimumImageCellManager(std::string args): Plugin("minimumimage", "2.0")
 { 
  ParamList & params = (*this);
- AssignParameter("version", "1.0"); 
- AssignParameter("apirequired", "1.1"); 
- AssignParameter("bugreport", "gnm@gnm.cl"); 
  //
  DefineKeyword("cutoff", "0.0");
  // hasta aqui los valores por omision
@@ -78,7 +75,7 @@ void MinimumImageCellManager::BuildNeighborList(Configuration & conf, long i, Ne
 }
 
 // Esto se incluye para que el modulo pueda ser cargado dinamicamente
-Module * create(std::string args) { return new MinimumImageCellManager(args); }
-void destroy(Module * m) { delete m; }
+Plugin * create(std::string args) { return new MinimumImageCellManager(args); }
+void destroy(Plugin * m) { delete m; }
 
 

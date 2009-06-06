@@ -11,12 +11,9 @@
 
 using namespace lpmd;
 
-MonitorVisualizer::MonitorVisualizer(std::string args): Module("monitor")
+MonitorVisualizer::MonitorVisualizer(std::string args): Plugin("monitor", "1.0")
 {
  ParamList & params = (*this);
- AssignParameter("version", "1.0"); 
- AssignParameter("apirequired", "1.1"); 
- AssignParameter("bugreport", "gnm@gnm.cl"); 
  //
  DefineKeyword("start");
  DefineKeyword("end");
@@ -55,6 +52,6 @@ void MonitorVisualizer::Apply(const Simulation & sim)
 }
 
 // Esto se incluye para que el modulo pueda ser cargado dinamicamente
-Module * create(std::string args) { return new MonitorVisualizer(args); }
-void destroy(Module * m) { delete m; }
+Plugin * create(std::string args) { return new MonitorVisualizer(args); }
+void destroy(Plugin * m) { delete m; }
 

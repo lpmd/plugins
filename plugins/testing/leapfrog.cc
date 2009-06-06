@@ -11,12 +11,9 @@
 
 using namespace lpmd;
 
-Leapfrog::Leapfrog(std::string args): Module("leapfrog")
+Leapfrog::Leapfrog(std::string args): Plugin("leapfrog", "2.0")
 {
  ParamList & params = (*this);
- AssignParameter("version", "1.0"); 
- AssignParameter("apirequired", "1.1"); 
- AssignParameter("bugreport", "gnm@gnm.cl"); 
  //
  DefineKeyword("dt", "1.0");
  DefineKeyword("start", "1");
@@ -74,7 +71,6 @@ void Leapfrog::Advance(Simulation & sim, long i)
 }
 
 // Esto se incluye para que el modulo pueda ser cargado dinamicamente
-Module * create(std::string args) { return new Leapfrog(args); }
-void destroy(Module * m) { delete m; }
-
+Plugin * create(std::string args) { return new Leapfrog(args); }
+void destroy(Plugin * m) { delete m; }
 

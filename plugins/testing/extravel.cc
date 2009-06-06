@@ -11,11 +11,8 @@
 
 using namespace lpmd;
 
-ExtraVelModifier::ExtraVelModifier(std::string args): Module("extravel") 
+ExtraVelModifier::ExtraVelModifier(std::string args): Plugin("extravel", "1.0")
 { 
- AssignParameter("version", "1.0"); 
- AssignParameter("apirequired", "1.1"); 
- AssignParameter("bugreport", "gnm@gnm.cl"); 
  //
  DefineKeyword("start");
  DefineKeyword("end");
@@ -60,6 +57,6 @@ void ExtraVelModifier::Apply(Simulation & sim)
 }
 
 // Esto se incluye para que el modulo pueda ser cargado dinamicamente
-Module * create(std::string args) { return new ExtraVelModifier(args); }
-void destroy(Module * m) { delete m; }
+Plugin * create(std::string args) { return new ExtraVelModifier(args); }
+void destroy(Plugin * m) { delete m; }
 

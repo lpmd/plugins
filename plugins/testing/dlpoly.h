@@ -9,7 +9,7 @@
 #include <lpmd/plugin.h>
 #include <lpmd/simulation.h>
 
-class DlPolyFormat: public lpmd::CellFormat, public lpmd::Module
+class DlPolyFormat: public lpmd::CellFormat, public lpmd::Plugin
 {
  public:
   //Metodos Generales

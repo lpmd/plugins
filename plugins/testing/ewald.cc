@@ -28,17 +28,10 @@ Ewald::~Ewald() { delete kpoints; }
 
 void Ewald::ShowHelp() const
 {
- std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
- std::cout << " Module Name        = ewald                                                  \n";
- std::cout << " Module Version     = 1.0                                                      \n";
- std::cout << " Support API lpmd   = 1.0.0                                                    \n";
- std::cout << " Problems Report to = gnm@gnm.cl                                               \n";
- std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
  std::cout << "      El modulo activa el potencial electrostatico calculado usando suma de    \n";
  std::cout << "      Ewald.                                                                   \n";
  std::cout << " General Options   >>                                                          \n";
- std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " Example                                                                       \n";
  std::cout << " Cargando el Modulo :                                                          \n";
  std::cout << " use ewald                                                                     \n";
@@ -48,10 +41,7 @@ void Ewald::ShowHelp() const
  std::cout << " Llamando al modulo :                                                          \n";
  std::cout << " potential ewald                                                               \n\n";
  std::cout << "      De esta forma activa el potencial de ewald entre todas las especies      \n";
- std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
 }
-
-std::string Ewald::Keywords() const { return "alpha etol surfacedipole"; }
 
 void Ewald::BuildKPointMesh(SimulationCell & sc)
 {

@@ -8,12 +8,8 @@
 
 using namespace lpmd;
 
-NullPotential::NullPotential(std::string args): Module("nullpotential") 
+NullPotential::NullPotential(std::string args): Plugin("nullpotential", "2.0")
 { 
- AssignParameter("version", "1.0"); 
- AssignParameter("apirequired", "1.1"); 
- AssignParameter("bugreport", "gnm@gnm.cl"); 
- //
  ProcessArguments(args); 
 }
 
@@ -39,7 +35,7 @@ double NullPotential::energy(Configuration & conf) { return 0.0; }
 void NullPotential::UpdateForces(Configuration & conf) { }
 
 // Esto se incluye para que el modulo pueda ser cargado dinamicamente
-Module * create(std::string args) { return new NullPotential(args); }
-void destroy(Module * m) { delete m; }
+Plugin * create(std::string args) { return new NullPotential(args); }
+void destroy(Plugin * m) { delete m; }
 
 

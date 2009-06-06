@@ -11,7 +11,7 @@
 #include <lpmd/plugin.h>
 #include <lpmd/util.h>
 
-class DensityProfile: public lpmd::StoredValue<lpmd::Matrix>, public lpmd::InstantProperty, public lpmd::Module
+class DensityProfile: public lpmd::StoredValue<lpmd::Matrix>, public lpmd::InstantProperty, public lpmd::Plugin
 {
  public:
   //Metodos Generales

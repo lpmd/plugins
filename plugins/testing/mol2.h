@@ -8,7 +8,7 @@
 #include <lpmd/cellformat.h>
 #include <lpmd/plugin.h>
 
-class Mol2Format: public lpmd::CellFormat, public lpmd::Module
+class Mol2Format: public lpmd::CellFormat, public lpmd::Plugin
 {
  public:
    //Metodos Generales

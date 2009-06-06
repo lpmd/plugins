@@ -8,12 +8,8 @@
 
 using namespace lpmd;
 
-NullMixer::NullMixer(std::string args): Module("nullmixer")
+NullMixer::NullMixer(std::string args): Plugin("nullmixer", "1.0")
 {
- AssignParameter("version", "1.0"); 
- AssignParameter("apirequired", "1.1"); 
- AssignParameter("bugreport", "gnm@gnm.cl"); 
- //
  ProcessArguments(args);
 }
 
@@ -35,6 +31,6 @@ Configuration & NullMixer::Apply(Configuration & config1, Configuration & config
 }
 
 // Esto se incluye para que el modulo pueda ser cargado dinamicamente
-Module * create(std::string args) { return new NullMixer(args); }
-void destroy(Module * m) { delete m; }
+Plugin * create(std::string args) { return new NullMixer(args); }
+void destroy(Plugin * m) { delete m; }
 

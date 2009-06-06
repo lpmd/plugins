@@ -8,7 +8,7 @@
 #include <lpmd/systemmodifier.h>
 #include <lpmd/plugin.h>
 
-class BerendsenModifier: public lpmd::SystemModifier, public lpmd::Module
+class BerendsenModifier: public lpmd::SystemModifier, public lpmd::Plugin
 {
  public:
    //Metodos Generales

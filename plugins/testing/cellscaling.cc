@@ -11,12 +11,9 @@
 
 using namespace lpmd;
 
-CellScalingModifier::CellScalingModifier(std::string args): Module("cellscaling")
+CellScalingModifier::CellScalingModifier(std::string args): Plugin("cellscaling", "2.0")
 {
- lpmd::ParamList & params = (*this);
- AssignParameter("version", "1.0"); 
- AssignParameter("apirequired", "1.1"); 
- AssignParameter("bugreport", "gnm@gnm.cl"); 
+ ParamList & params = (*this);
  //
  axis = -1;
  DefineKeyword("start");
@@ -120,7 +117,7 @@ void CellScalingModifier::Apply(Simulation & sim)
 }
 
 // Esto se incluye para que el modulo pueda ser cargado dinamicamente
-Module * create(std::string args) { return new CellScalingModifier(args); }
-void destroy(Module * m) { delete m; }
+Plugin * create(std::string args) { return new CellScalingModifier(args); }
+void destroy(Plugin * m) { delete m; }
 
 

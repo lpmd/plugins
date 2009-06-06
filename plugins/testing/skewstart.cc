@@ -10,12 +10,9 @@
 
 using namespace lpmd;
 
-SkewStartGenerator::SkewStartGenerator(std::string args): Module("skewstart") 
+SkewStartGenerator::SkewStartGenerator(std::string args): Plugin("skewstart", "2.0")
 { 
  ParamList & params = (*this);
- AssignParameter("version", "1.0"); 
- AssignParameter("apirequired", "1.1"); 
- AssignParameter("bugreport", "gnm@gnm.cl"); 
  //
  DefineKeyword("atoms");
  DefineKeyword("symbol", "H");
@@ -67,5 +64,5 @@ void SkewStartGenerator::Generate(Configuration & config) const
 }
 
 // Esto se incluye para que el modulo pueda ser cargado dinamicamente
-Module * create(std::string args) { return new SkewStartGenerator(args); }
-void destroy(Module * m) { delete m; }
+Plugin * create(std::string args) { return new SkewStartGenerator(args); }
+void destroy(Plugin * m) { delete m; }

@@ -11,12 +11,9 @@
 
 using namespace lpmd;
 
-DlPolyFormat::DlPolyFormat(std::string args): Module("dlpoly")
+DlPolyFormat::DlPolyFormat(std::string args): Plugin("dlpoly", "2.0")
 {
  ParamList & param = (*this);
- AssignParameter("version", "2.0"); 
- AssignParameter("apirequired", "2.0"); 
- AssignParameter("bugreport", "gnm@gnm.cl"); 
  //
  DefineKeyword("file");
  DefineKeyword("each", "1");
@@ -155,6 +152,6 @@ void DlPolyFormat::WriteCell(std::ostream & out, Configuration & con) const
 }
 
 // Esto se incluye para que el modulo pueda ser cargado dinamicamente
-Module * create(std::string args) { return new DlPolyFormat(args); }
-void destroy(Module * m) { delete m; }
+Plugin * create(std::string args) { return new DlPolyFormat(args); }
+void destroy(Plugin * m) { delete m; }
 

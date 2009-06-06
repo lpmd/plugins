@@ -31,14 +31,13 @@ inline bool operator<(const IndexTrio & t1, const IndexTrio & t2)
  return false;
 }
 
-class CommonNeighborAnalysis: public lpmd::StoredValue<lpmd::Matrix>, public lpmd::InstantProperty, public lpmd::Module
+class CommonNeighborAnalysis: public lpmd::StoredValue<lpmd::Matrix>, public lpmd::InstantProperty, public lpmd::Plugin
 {
  public:
   //Metodos Generales
   CommonNeighborAnalysis(std::string args);
   ~CommonNeighborAnalysis();
   void ShowHelp() const;
-  std::string Keywords() const;
 
   void Evaluate(lpmd::Configuration & config, lpmd::Potential & pot);
 

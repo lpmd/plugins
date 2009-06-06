@@ -9,7 +9,7 @@
 #include <lpmd/plugin.h>
 #include <lpmd/vector.h>
 
-class CellScalingModifier: public lpmd::SystemModifier, public lpmd::Module
+class CellScalingModifier: public lpmd::SystemModifier, public lpmd::Plugin
 {
  public:
 

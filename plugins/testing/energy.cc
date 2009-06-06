@@ -12,7 +12,6 @@ using namespace lpmd;
 Energy::Energy(std::string args): Module("energy") 
 { 
  AssignParameter("version", "1.0"); 
- AssignParameter("apirequired", "1.1"); 
  AssignParameter("bugreport", "gnm@gnm.cl"); 
  //
  ProcessArguments(args); 

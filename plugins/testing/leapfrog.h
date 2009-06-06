@@ -11,7 +11,7 @@
 
 using namespace lpmd;
 
-class Leapfrog: public OneStepIntegrator, public Module
+class Leapfrog: public OneStepIntegrator, public Plugin
 {
  public:
   //Metodos Generales

@@ -10,7 +10,7 @@
 #include <lpmd/plugin.h>
 #include <lpmd/array.h>
 
-class MonitorVisualizer: public lpmd::Visualizer, public lpmd::Module
+class MonitorVisualizer: public lpmd::Visualizer, public lpmd::Plugin
 {
  public:
    MonitorVisualizer(std::string args);

@@ -11,7 +11,7 @@
 
 using namespace lpmd;
 
-DisplaceModifier::DisplaceModifier(std::string args): Module("displace")
+DisplaceModifier::DisplaceModifier(std::string args): Plugin("displace", "2.0")
 {
  ParamList & params = (*this);
  AssignParameter("x", "1.0");
@@ -29,27 +29,14 @@ DisplaceModifier::~DisplaceModifier() { }
 
 void DisplaceModifier::ShowHelp() const
 {
- std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
- std::cout << " Module Name        = displace                                                 \n";
- std::cout << " Module Version     = 1.0                                                      \n";
- std::cout << " Support API lpmd   = 1.0.0                                                    \n";
- std::cout << " Problems Report to = gnm@gnm.cl                                               \n";
- std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
  std::cout << " General Options   >>                                                          \n";
  std::cout << "      x             : Coord. X del vector de desplazamiento                    \n";
  std::cout << "      y             : Coord. Y del vector de desplazamiento                    \n";
  std::cout << "      z             : Coord. Z del vector de desplazamiento                    \n";
- std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " Example                                                                       \n";
  std::cout << " Cargando el Modulo :                                                          \n";
  std::cout << " prepare displace x=1.0 y=0.0 z=0.0                                            \n";
- std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
-}
-
-std::string DisplaceModifier::Keywords() const
-{
- return "x y z start end each";
 }
 
 void DisplaceModifier::Apply(lpmd::Simulation & sim)
@@ -63,6 +50,6 @@ void DisplaceModifier::Apply(lpmd::Simulation & sim)
 }
 
 // Esto se incluye para que el modulo pueda ser cargado dinamicamente
-Module * create(std::string args) { return new DisplaceModifier(args); }
-void destroy(Module * m) { delete m; }
+Plugin * create(std::string args) { return new DisplaceModifier(args); }
+void destroy(Plugin * m) { delete m; }
 

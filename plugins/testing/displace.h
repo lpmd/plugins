@@ -9,7 +9,7 @@
 #include <lpmd/vector.h>
 #include <lpmd/plugin.h>
 
-class DisplaceModifier: public lpmd::SystemModifier, public lpmd::Module
+class DisplaceModifier: public lpmd::SystemModifier, public lpmd::Plugin
 {
  public:
   //Metodos Generales
@@ -17,7 +17,6 @@ class DisplaceModifier: public lpmd::SystemModifier, public lpmd::Module
   ~DisplaceModifier();
 
   void ShowHelp() const;
-  std::string Keywords() const;
 
   //Metodos Propios
   void Apply(lpmd::Simulation & sim);

@@ -8,7 +8,7 @@
 #include <lpmd/systemmodifier.h>
 #include <lpmd/plugin.h>
 
-class MoleculeCMModifier: public lpmd::SystemModifier, public lpmd::Module
+class MoleculeCMModifier: public lpmd::SystemModifier, public lpmd::Plugin
 {
  public:
 

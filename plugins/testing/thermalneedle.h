@@ -16,7 +16,6 @@ class ThermalNeedleModifier: public lpmd::SystemModifier, public lpmd::Module
   ThermalNeedleModifier(std::string args);
   ~ThermalNeedleModifier();
   void ShowHelp() const;
-  std::string Keywords() const;
 
   //Metodos Propios
   void Apply(lpmd::SimulationCell & sc);

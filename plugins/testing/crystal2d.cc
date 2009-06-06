@@ -9,7 +9,7 @@
 
 using namespace lpmd;
 
-Crystal2DGenerator::Crystal2DGenerator(std::string args): Module("crystal2d")
+Crystal2DGenerator::Crystal2DGenerator(std::string args): Plugin("crystal2d", "2.0")
 {
  ParamList & params = (*this);
  AssignParameter("a", "1");
@@ -33,12 +33,6 @@ Crystal2DGenerator::~Crystal2DGenerator() { }
 
 void Crystal2DGenerator::ShowHelp() const
 {
- std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
- std::cout << " Module Name        = crystal2d                                                \n";
- std::cout << " Module Version     = 1.0                                                      \n";
- std::cout << " Support API lpmd   = 1.0.0                                                    \n";
- std::cout << " Problems Report to = gnm@gnm.cl                                               \n";
- std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
  std::cout << "      El modulo es utilizado para crear celdas bidimensionales.                \n";
  std::cout << " General Options   >>                                                          \n";
@@ -48,18 +42,11 @@ void Crystal2DGenerator::ShowHelp() const
  std::cout << "      symbol        : Especifica la especie atomica, utilizando su simbolo.    \n";
  std::cout << "      nx            : Repeticiones en la direccion X.                          \n";
  std::cout << "      ny            : Repeticiones en la direccion Y.                          \n";
- std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " Example                                                                       \n";
  std::cout << " Utilizando el Modulo :                                                        \n";
  std::cout << " input crystalfcc symbol=Ar nx=2 ny=2 nz=2                                     \n";
  std::cout << " input crystalfcc Ar 2 2 2                                                   \n\n";
  std::cout << "      De esta forma creamos una celda de entrada de tipo SC en la simulacion.  \n";
- std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
-}
-
-std::string Crystal2DGenerator::Keywords() const
-{
- return "a b gamma symbol nx ny";
 }
 
 void Crystal2DGenerator::Generate(Configuration & conf) const
@@ -88,7 +75,7 @@ void Crystal2DGenerator::Generate(Configuration & conf) const
 }
 
 // Esto se incluye para que el modulo pueda ser cargado dinamicamente
-Module * create(std::string args) { return new Crystal2DGenerator(args); }
-void destroy(Module * m) { delete m; }
+Plugin * create(std::string args) { return new Crystal2DGenerator(args); }
+void destroy(Plugin * m) { delete m; }
 
 

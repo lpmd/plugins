@@ -10,12 +10,9 @@
 
 using namespace lpmd;
 
-LPMDFormat::LPMDFormat(std::string args): Module("lpmd")
+LPMDFormat::LPMDFormat(std::string args): Plugin("lpmd", "2.0")
 {
  ParamList & params = (*this);
- AssignParameter("version", "2.0"); 
- AssignParameter("apirequired", "1.1"); 
- AssignParameter("bugreport", "gnm@gnm.cl"); 
  //
  linecounter = new long int;
  DefineKeyword("file");
@@ -274,6 +271,6 @@ void LPMDFormat::WriteCell(std::ostream & out, Configuration & con) const
 }
 
 // Esto se incluye para que el modulo pueda ser cargado dinamicamente
-Module * create(std::string args) { return new LPMDFormat(args); }
-void destroy(Module * m) { delete m; }
+Plugin * create(std::string args) { return new LPMDFormat(args); }
+void destroy(Plugin * m) { delete m; }
 

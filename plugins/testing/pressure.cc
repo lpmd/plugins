@@ -12,7 +12,6 @@ using namespace lpmd;
 Pressure::Pressure(std::string args): Module("pressure") 
 { 
  AssignParameter("version", "1.0"); 
- AssignParameter("apirequired", "1.1"); 
  AssignParameter("bugreport", "gnm@gnm.cl"); 
  //
  ProcessArguments(args); 

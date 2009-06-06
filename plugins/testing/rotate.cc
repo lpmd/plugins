@@ -10,7 +10,7 @@
 
 using namespace lpmd;
 
-RotateModifier::RotateModifier(std::string args): Module("rotate")
+RotateModifier::RotateModifier(std::string args): Plugin("rotate", "2.0")
 {
  ParamList & params = (*this);
  AssignParameter("x", "1.0");
@@ -43,12 +43,6 @@ RotateModifier::~RotateModifier() { }
 
 void RotateModifier::ShowHelp() const
 {
- std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
- std::cout << " Module Name        = rotate                                                   \n";
- std::cout << " Module Version     = 1.0                                                      \n";
- std::cout << " Support API lpmd   = 1.0.0                                                    \n";
- std::cout << " Problems Report to = gnm@gnm.cl                                               \n";
- std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
  std::cout << "      El modulo es utilizado para rotar el sistema en torno a un eje en un     \n";
  std::cout << " angulo determinado. Puede aplicarse al inicio en la instruccion \"prepare\"   \n";
@@ -58,16 +52,9 @@ void RotateModifier::ShowHelp() const
  std::cout << "      y             : Coord. Y del eje de rotacion                             \n";
  std::cout << "      z             : Coord. Z del eje de rotacion                             \n";
  std::cout << "      angle         : Angulo de rotacion (en grados)                           \n";
- std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " Example                                                                       \n";
  std::cout << " Cargando el Modulo :                                                          \n";
  std::cout << " prepare rotate x=1.0 y=0.0 z=0.0 angle=45.0                                   \n";
- std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
-}
-
-std::string RotateModifier::Keywords() const
-{
- return "x y z angle start end each";
 }
 
 void RotateModifier::Apply(Configuration & conf)
@@ -101,6 +88,6 @@ void RotateModifier::Apply(Simulation & md)
 }
 
 // Esto se incluye para que el modulo pueda ser cargado dinamicamente
-Module * create(std::string args) { return new RotateModifier(args); }
-void destroy(Module * m) { delete m; }
+Plugin * create(std::string args) { return new RotateModifier(args); }
+void destroy(Plugin * m) { delete m; }
 

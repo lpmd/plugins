@@ -11,7 +11,7 @@
 
 using namespace lpmd;
 
-class ZLPFormat: public CellFormat, public Module
+class ZLPFormat: public CellFormat, public Plugin
 {
  public:
    //Metodos Generales

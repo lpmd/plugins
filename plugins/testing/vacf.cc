@@ -7,13 +7,10 @@
 
 using namespace lpmd;
 
-Vacf::Vacf(std::string args): Module("vacf")
+Vacf::Vacf(std::string args): Plugin("vacf", "2.0")
 {
  ParamList & param = (*this);
  m = NULL;
- AssignParameter("version", "1.0"); 
- AssignParameter("apirequired", "1.1"); 
- AssignParameter("bugreport", "gnm@gnm.cl"); 
  AssignParameter("dt","0");
  //
  ProcessArguments(args);
@@ -28,5 +25,5 @@ void Vacf::Evaluate(lpmd::ConfigurationSet & hist, Potential & pot)
 }
 
 // Esto se incluye para que el modulo pueda ser cargado dinamicamente
-Module * create(std::string args) { return new Vacf(args); }
-void destroy(Module * m) { delete m; }
+Plugin * create(std::string args) { return new Vacf(args); }
+void destroy(Plugin * m) { delete m; }

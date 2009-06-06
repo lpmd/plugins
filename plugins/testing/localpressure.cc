@@ -15,7 +15,7 @@
 
 using namespace lpmd;
 
-LocalPressure::LocalPressure(std::string args): Module("localpressure")
+LocalPressure::LocalPressure(std::string args): Plugin("localpressure", "2.0")
 {
  ParamList & param = (*this);
  // hasta aqui los valores por omision
@@ -39,23 +39,13 @@ LocalPressure::~LocalPressure() { }
 
 void LocalPressure::ShowHelp() const
 {
- std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
- std::cout << " Module Name        = localpressure                                            \n";
- std::cout << " Module Version     = 1.0                                                      \n";
- std::cout << " Support API lpmd   = 1.0.0                                                    \n";
- std::cout << " Problems Report to = gnm@gnm.cl                                               \n";
- std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
  std::cout << " General Options   >>                                                          \n";
- std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " Example                                                                       \n";
  std::cout << " Cargando el Modulo :                                                          \n";
  std::cout << " Llamando al Modulo :                                                          \n";  
  std::cout << " property localpressure start=1 each=10 end=100                              \n\n";
- std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
 }
-
-std::string LocalPressure::Keywords() const { return "nx ny nz rcut start end each output average"; }
 
 void LocalPressure::Evaluate(Configuration & sim, Potential & pot)
 { 
@@ -126,7 +116,7 @@ void LocalPressure::Evaluate(Configuration & sim, Potential & pot)
 }
 
 // Esto se incluye para que el modulo pueda ser cargado dinamicamente
-Module * create(std::string args) { return new LocalPressure(args); }
-void destroy(Module * m) { delete m; }
+Plugin * create(std::string args) { return new LocalPressure(args); }
+void destroy(Plugin * m) { delete m; }
 
 

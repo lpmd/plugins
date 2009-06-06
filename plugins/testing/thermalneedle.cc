@@ -30,12 +30,6 @@ ThermalNeedleModifier::~ThermalNeedleModifier() { }
 
 void ThermalNeedleModifier::ShowHelp() const
 {
- std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
- std::cout << " Module Name        = thermalneedle                                            \n";
- std::cout << " Module Version     = 1.0                                                      \n";
- std::cout << " Support API lpmd   = 1.0.0                                                    \n";
- std::cout << " Problems Report to = gnm@gnm.cl                                               \n";
- std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
  std::cout << "      El modulo es utilizado para escalar la temperatura de un grupo de        \n";
  std::cout << " particulas, en una zona esferica ubicada en 'center' y de radio 'radius'.     \n";
@@ -44,7 +38,6 @@ void ThermalNeedleModifier::ShowHelp() const
  std::cout << "      center        : Centro donde se ubica la esfera, debe ser entregado en   \n";
  std::cout << "                      formato de vector '<X,Y,Z>'.                             \n";
  std::cout << "      radius        : Radio de la esfera en donde se aplica la temperatura.    \n";
- std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " Example                                                                       \n";
  std::cout << " Cargando el Modulo :                                                          \n";
  std::cout << " use thermalneedle                                                             \n";
@@ -55,12 +48,6 @@ void ThermalNeedleModifier::ShowHelp() const
  std::cout << " Llamando al modulo                                                            \n";
  std::cout << " apply thermalneedle start=1000 each=10 end=1000                             \n\n";
  std::cout << "      De esta forma aplicamos el termostato entre 100 y 1000 cada 10 steps.    \n";
- std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
-}
-
-std::string ThermalNeedleModifier::Keywords() const
-{
- return "temperature center radius start end each";
 }
 
 void ThermalNeedleModifier::Apply(SimulationCell & sc)

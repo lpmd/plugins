@@ -11,12 +11,9 @@
 
 using namespace lpmd;
 
-TemperatureModifier::TemperatureModifier(std::string args): Module("temperature")
+TemperatureModifier::TemperatureModifier(std::string args): Plugin("temperature", "2.0")
 {
  ParamList & params = (*this);
- AssignParameter("version", "1.0"); 
- AssignParameter("apirequired", "1.1"); 
- AssignParameter("bugreport", "gnm@gnm.cl"); 
  //
  DefineKeyword("start");
  DefineKeyword("end");
@@ -55,7 +52,7 @@ void TemperatureModifier::Apply(Simulation & sim)
 }
 
 // Esto se incluye para que el modulo pueda ser cargado dinamicamente
-Module * create(std::string args) { return new TemperatureModifier(args); }
-void destroy(Module * m) { delete m; }
+Plugin * create(std::string args) { return new TemperatureModifier(args); }
+void destroy(Plugin * m) { delete m; }
 
 

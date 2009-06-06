@@ -12,7 +12,7 @@
 
 using namespace lpmd;
 
-class RotateModifier: public lpmd::SystemModifier, public lpmd::Module
+class RotateModifier: public lpmd::SystemModifier, public lpmd::Plugin
 {
  public:
   //Metodos Generales
@@ -20,7 +20,6 @@ class RotateModifier: public lpmd::SystemModifier, public lpmd::Module
   ~RotateModifier();
 
   void ShowHelp() const;
-  std::string Keywords() const;
 
   //Metodos Propios
   void Apply(Configuration & conf);

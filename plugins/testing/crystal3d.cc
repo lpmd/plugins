@@ -9,12 +9,9 @@
 
 using namespace lpmd;
 
-CrystalGenerator::CrystalGenerator(std::string args): Module("crystal3d")
+CrystalGenerator::CrystalGenerator(std::string args): Plugin("crystal3d", "1.0")
 {
  ParamList & params = (*this);
- AssignParameter("version", "1.0"); 
- AssignParameter("apirequired", "1.1"); 
- AssignParameter("bugreport", "gnm@gnm.cl"); 
  //
  DefineKeyword("nx", "1");
  DefineKeyword("ny", "1");
@@ -48,11 +45,6 @@ void CrystalGenerator::ShowHelp() const
  std::cout << " input crystal3d symbol=Ar type=fcc nx=3 ny=3 nz=3                                 \n";
  std::cout << " input crystal3d Ar fcc 3 3 3                                                      \n\n";
  std::cout << "      De esta forma creamos una celda de entrada de tipo FCC en la simulacion.     \n";
-}
-
-std::string CrystalGenerator::Keywords() const
-{
- return "symbol type nx ny nz";
 }
 
 void CrystalGenerator::Generate(Configuration & conf) const
@@ -118,7 +110,7 @@ void CrystalGenerator::Generate(Configuration & conf) const
 }
 
 // Esto se incluye para que el modulo pueda ser cargado dinamicamente
-Module * create(std::string args) { return new CrystalGenerator(args); }
-void destroy(Module * m) { delete m; }
+Plugin * create(std::string args) { return new CrystalGenerator(args); }
+void destroy(Plugin * m) { delete m; }
 
 

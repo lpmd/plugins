@@ -9,14 +9,13 @@
 #include <lpmd/plugin.h>
 #include <lpmd/vector.h>
 
-class FinnisSinclair: public lpmd::MetalPotential , public lpmd::Module
+class FinnisSinclair: public lpmd::MetalPotential , public lpmd::Plugin
 {
  public:
   //Metodos Generales
   FinnisSinclair(std::string args);
   ~FinnisSinclair(){};
   void ShowHelp() const;
-  std::string Keywords() const;
 
   //Metodos Propios de modulo FinnisSinclair
   double pairEnergy(const double &r) const;

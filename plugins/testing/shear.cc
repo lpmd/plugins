@@ -38,27 +38,14 @@ ShearModifier::~ShearModifier() { }
 
 void ShearModifier::ShowHelp() const
 {
- std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
- std::cout << " Module Name        = shear                                                    \n";
- std::cout << " Module Version     = 1.0                                                      \n";
- std::cout << " Support API lpmd   = 1.0.0                                                    \n";
- std::cout << " Problems Report to = gnm@gnm.cl                                               \n";
- std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
  std::cout << " General Options   >>                                                          \n";
  std::cout << "      axis          : Eje en que se produce el cizalle                         \n";
  std::cout << "      normal        : Eje perpendicular al eje de cizalle                      \n";
  std::cout << "      strain        : Desplazamiento maximo a aplicar es strain*L(normal)      \n";
- std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " Example                                                                       \n";
  std::cout << " Cargando el Modulo :                                                          \n";
  std::cout << " prepare shear axis=X normal=Y strain=0.01                                     \n";
- std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
-}
-
-std::string ShearModifier::Keywords() const
-{
- return "axis normal strain start end each";
 }
 
 void ShearModifier::Apply(SimulationCell & sc)

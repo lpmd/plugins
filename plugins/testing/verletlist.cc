@@ -30,8 +30,6 @@ void VerletListCellManager::Show(std::ostream & os) const
  if (fabs(cutoff) < 1E-10) os << "   No cutoff was defined." << '\n';
 }
 
-std::string VerletListCellManager::Keywords() const { return "cutoff"; }
-
 void VerletListCellManager::Reset() { }
 
 void VerletListCellManager::UpdateCell(SimulationCell & sc) 

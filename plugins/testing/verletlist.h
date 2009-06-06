@@ -16,7 +16,6 @@ class VerletListCellManager: public lpmd::CellManager, public lpmd::Module
    ~VerletListCellManager();
 
    void Show(std::ostream & os) const;
-   std::string Keywords() const;
 
    void Reset();
    void UpdateCell(SimulationCell & sc);

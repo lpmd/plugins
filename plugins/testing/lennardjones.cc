@@ -8,12 +8,9 @@
 
 using namespace lpmd;
 
-LennardJones::LennardJones(std::string args): Module("lennardjones") 
+LennardJones::LennardJones(std::string args): Plugin("lennardjones", "2.0")
 { 
  ParamList & params = (*this);
- AssignParameter("version", "1.0"); 
- AssignParameter("apirequired", "1.1"); 
- AssignParameter("bugreport", "gnm@gnm.cl"); 
  //
  DefineKeyword("sigma");
  DefineKeyword("epsilon");
@@ -68,6 +65,6 @@ Vector LennardJones::pairForce(const Vector & r) const
 }
 
 // Esto se incluye para que el modulo pueda ser cargado dinamicamente
-Module * create(std::string args) { return new LennardJones(args); }
-void destroy(Module * m) { delete m; }
+Plugin * create(std::string args) { return new LennardJones(args); }
+void destroy(Plugin * m) { delete m; }
 

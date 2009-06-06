@@ -10,11 +10,8 @@
 
 using namespace lpmd;
 
-NoseHoover::NoseHoover(std::string args): Module("nosehoover")
+NoseHoover::NoseHoover(std::string args): Plugin("nosehoover", "2.0")
 {
- AssignParameter("version", "1.0"); 
- AssignParameter("apirequired", "1.1"); 
- AssignParameter("bugreport", "gnm@gnm.cl"); 
  //
  DefineKeyword("fmass");
  DefineKeyword("dt", "1.0");
@@ -96,5 +93,5 @@ void NoseHoover::AdvanceVelocity(Simulation & sim, long i)
 }
 
 // Esto se incluye para que el modulo pueda ser cargado dinamicamente
-Module * create(std::string args) { return new NoseHoover(args); }
-void destroy(Module * m) { delete m; }
+Plugin * create(std::string args) { return new NoseHoover(args); }
+void destroy(Plugin * m) { delete m; }

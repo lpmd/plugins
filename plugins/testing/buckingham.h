@@ -8,7 +8,7 @@
 #include <lpmd/pairpotential.h>
 #include <lpmd/plugin.h>
 
-class Buckingham: public lpmd::PairPotential , public lpmd::Module
+class Buckingham: public lpmd::PairPotential , public lpmd::Plugin
 {
  public:
 

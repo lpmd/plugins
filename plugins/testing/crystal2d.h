@@ -10,7 +10,7 @@
 
 using namespace lpmd;
 
-class Crystal2DGenerator: public lpmd::CellGenerator, public lpmd::Module
+class Crystal2DGenerator: public lpmd::CellGenerator, public lpmd::Plugin
 {
  public:
    
@@ -18,7 +18,6 @@ class Crystal2DGenerator: public lpmd::CellGenerator, public lpmd::Module
   Crystal2DGenerator(std::string args);
   virtual ~Crystal2DGenerator();
   void ShowHelp() const;
-  std::string Keywords() const;
 
   //Metodos Propios del module scgnerator
   void Generate(Configuration & conf) const;

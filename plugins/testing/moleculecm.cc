@@ -10,11 +10,8 @@
 
 using namespace lpmd;
 
-MoleculeCMModifier::MoleculeCMModifier(std::string args): Module("moleculecm")
+MoleculeCMModifier::MoleculeCMModifier(std::string args): Plugin("moleculecm", "2.0")
 {
- AssignParameter("version", "1.0"); 
- AssignParameter("apirequired", "1.1"); 
- AssignParameter("bugreport", "gnm@gnm.cl"); 
  //
  DefineKeyword("radius", "0.0");
  // hasta aqui los valores por omision
@@ -90,7 +87,7 @@ void MoleculeCMModifier::Apply(Simulation & con)
 }
 
 // Esto se incluye para que el modulo pueda ser cargado dinamicamente
-Module * create(std::string args) { return new MoleculeCMModifier(args); }
-void destroy(Module * m) { delete m; }
+Plugin * create(std::string args) { return new MoleculeCMModifier(args); }
+void destroy(Plugin * m) { delete m; }
 
 

@@ -11,11 +11,8 @@
 
 using namespace lpmd;
 
-ConstantForcePotential::ConstantForcePotential(std::string args): Module("constantforce") 
+ConstantForcePotential::ConstantForcePotential(std::string args): Plugin("constantforce", "2.0")
 { 
- AssignParameter("version", "2.0"); 
- AssignParameter("apirequired", "2.0"); 
- AssignParameter("bugreport", "gnm@gnm.cl"); 
  //
  DefineKeyword("forcevector");
  // hasta aqui los valores por omision
@@ -29,6 +26,7 @@ ConstantForcePotential::~ConstantForcePotential() { }
 
 void ConstantForcePotential::SetParameter(std::string name) 
 { 
+ #warning "SetParameter es horrible! mejorar los parametros"
  if (name == "forcevector") 
  {
   AssignParameter("fx", GetNextWord());
@@ -73,7 +71,7 @@ void ConstantForcePotential::UpdateForces(Configuration & con)
 }
 
 // Esto se incluye para que el modulo pueda ser cargado dinamicamente
-Module * create(std::string args) { return new ConstantForcePotential(args); }
-void destroy(Module * m) { delete m; }
+Plugin * create(std::string args) { return new ConstantForcePotential(args); }
+void destroy(Plugin * m) { delete m; }
 
 

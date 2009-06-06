@@ -15,7 +15,6 @@ using namespace lpmd;
 ColorModifier::ColorModifier(std::string args): Module("color")
 {
  AssignParameter("version", "1.0"); 
- AssignParameter("apirequired", "2.0"); 
  AssignParameter("bugreport", "gnm@gnm.cl"); 
  //
  DefineKeyword("start");

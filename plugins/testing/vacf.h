@@ -10,7 +10,7 @@
 #include <lpmd/property.h>
 #include <lpmd/plugin.h>
 
-class Vacf: public lpmd::StoredValue<lpmd::Matrix>, public lpmd::TemporalProperty, public lpmd::Module
+class Vacf: public lpmd::StoredValue<lpmd::Matrix>, public lpmd::TemporalProperty, public lpmd::Plugin
 {
  public:
   //Metodos Generales

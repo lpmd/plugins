@@ -11,7 +11,7 @@
 
 using namespace lpmd;
 
-class NullIntegrator: public lpmd::Integrator, public lpmd::Module
+class NullIntegrator: public lpmd::Integrator, public lpmd::Plugin
 {
  public: 
   //Metodos Generales

@@ -10,12 +10,9 @@
 
 using namespace lpmd;
 
-ReplicateModifier::ReplicateModifier(std::string args): Module("replicate")
+ReplicateModifier::ReplicateModifier(std::string args): Plugin("replicate", "2.0")
 {
  ParamList & param = (*this);
- AssignParameter("version", "1.0"); 
- AssignParameter("apirequired", "1.1"); 
- AssignParameter("bugreport", "gnm@gnm.cl"); 
  //
  DefineKeyword("nx", "1");
  DefineKeyword("ny", "1");
@@ -98,7 +95,7 @@ void ReplicateModifier::Apply(Simulation & con)
 
 
 // Esto se incluye para que el modulo pueda ser cargado dinamicamente
-Module * create(std::string args) { return new ReplicateModifier(args); }
-void destroy(Module * m) { delete m; }
+Plugin * create(std::string args) { return new ReplicateModifier(args); }
+void destroy(Plugin * m) { delete m; }
 
 

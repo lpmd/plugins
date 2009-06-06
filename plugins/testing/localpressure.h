@@ -11,14 +11,13 @@
 #include <lpmd/plugin.h>
 #include <lpmd/simulation.h>
 
-class LocalPressure: public lpmd::StoredValue<lpmd::Matrix>, public lpmd::InstantProperty, public lpmd::Module
+class LocalPressure: public lpmd::StoredValue<lpmd::Matrix>, public lpmd::InstantProperty, public lpmd::Plugin
 {
  public:
   //Metodos Generales
   LocalPressure(std::string args);
   ~LocalPressure();
   void ShowHelp() const;
-  std::string Keywords() const;
 
   //Metodos Propios de modulo localpressure
   void Evaluate(lpmd::Configuration & con, lpmd::Potential & pot);

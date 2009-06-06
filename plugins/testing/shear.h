@@ -17,7 +17,6 @@ class ShearModifier: public lpmd::SystemModifier, public lpmd::Module
   ~ShearModifier();
 
   void ShowHelp() const;
-  std::string Keywords() const;
 
   //Metodos Propios
   void Apply(lpmd::SimulationCell & sc);

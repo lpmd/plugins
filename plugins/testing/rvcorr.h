@@ -17,7 +17,6 @@ class RVCorr: public lpmd::Value<lpmd::Matrix>, public lpmd::InstantProperty, pu
   RVCorr(std::string args);
   ~RVCorr();
   void ShowHelp() const;
-  std::string Keywords() const;
 
   //Metodos Propios de modulo rvcorr
   const lpmd::Matrix & CurrentValue() const { return *m; }

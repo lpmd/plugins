@@ -8,12 +8,9 @@
 
 using namespace lpmd;
 
-Harmonic::Harmonic(std::string args): Module("harmonic") 
+Harmonic::Harmonic(std::string args): Plugin("harmonic", "2.0")
 { 
  ParamList & params = (*this);
- AssignParameter("version", "1.0"); 
- AssignParameter("apirequired", "1.1"); 
- AssignParameter("bugreport", "gnm@gnm.cl"); 
  //
  DefineKeyword("k");
  DefineKeyword("a");
@@ -59,5 +56,5 @@ Vector Harmonic::pairForce(const Vector & r) const
 }
 
 // Esto se incluye para que el modulo pueda ser cargado dinamicamente
-Module * create(std::string args) { return new Harmonic(args); }
-void destroy(Module * m) { delete m; }
+Plugin * create(std::string args) { return new Harmonic(args); }
+void destroy(Plugin * m) { delete m; }
