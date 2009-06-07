@@ -21,7 +21,6 @@ class Vacf: public lpmd::StoredValue<lpmd::Matrix>, public lpmd::TemporalPropert
   void Evaluate(lpmd::ConfigurationSet & hist, lpmd::Potential & pot);
 
  private:
-  lpmd::Matrix * m;
   double dt;
 };
 

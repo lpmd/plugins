@@ -10,14 +10,12 @@
 #include <lpmd/property.h>
 #include <lpmd/plugin.h>
 
-using namespace lpmd;
-
-class MSD: public StoredValue<Matrix>, public TemporalProperty, public Plugin
+class MSD: public lpmd::StoredValue<lpmd::Matrix>, public lpmd::TemporalProperty, public lpmd::Plugin
 {
  public:
   MSD(std::string args);
 
-  void Evaluate(ConfigurationSet & hist, Potential & pot);
+  void Evaluate(lpmd::ConfigurationSet & hist, lpmd::Potential & pot);
 };
 
 #endif

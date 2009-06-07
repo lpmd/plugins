@@ -10,14 +10,13 @@ using namespace lpmd;
 Vacf::Vacf(std::string args): Plugin("vacf", "2.0")
 {
  ParamList & param = (*this);
- m = NULL;
  AssignParameter("dt","0");
  //
  ProcessArguments(args);
  dt = param["dt"];
 }
 
-Vacf::~Vacf() { if (m != NULL) delete m; }
+Vacf::~Vacf() { }
 
 void Vacf::Evaluate(lpmd::ConfigurationSet & hist, Potential & pot)
 {

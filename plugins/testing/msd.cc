@@ -17,9 +17,11 @@ MSD::MSD(std::string args): Plugin("msd", "2.0")
 void MSD::Evaluate(ConfigurationSet & hist, Potential & pot)
 {
  long int N = hist.Size(); // number of configurations, not number of atoms
+ DebugStream() << "-> Computing MSD over " << N << " configurations\n";
+ long int nat = hist[0].Atoms().Size(); // number of atoms
+ DebugStream() << "-> First configuration has " << nat << " atoms\n";
  const Array<int> & elements = hist[0].Atoms().Elements();
  int nsp = elements.Size();
- long int nat = hist[0].Atoms().Size(); // number of atoms
  double ** msd = new double*[(int)(N-1)/2];
  for (int i=0;i<(int)(N-1)/2;i++) 
  {
