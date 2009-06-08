@@ -398,6 +398,13 @@ directory .
        pkgconfig += liblpmd-2.0
     end
 
+    module tempprofile.so
+       language = c++
+       sources = tempprofile.cc
+       installpath = lib/lpmd
+       pkgconfig += liblpmd-2.0
+    end
+
     module tempscaling.so
        language = c++
        sources = tempscaling.cc
@@ -451,7 +458,6 @@ directory .
 #pressure_la_SOURCES = pressure.h pressure.cc #PROBABLEMENTE YA NO VA MAS!!
 #rvcorr_la_SOURCES = rvcorr.h rvcorr.cc #EN STANDBY
 #selectatoms_la_SOURCES = selectatoms.h selectatoms.cc
-#shear_la_SOURCES = shear.h shear.cc
 #thermalneedle_la_SOURCES = thermalneedle.h thermalneedle.cc #PROBABLEMENTE YA NO VA MAS!! 
 #tempprofile_la_SOURCES = tempprofile.h tempprofile.cc
 #velocityverlet_la_SOURCES = velocityverlet.h velocityverlet.cc

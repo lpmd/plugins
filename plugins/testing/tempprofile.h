@@ -5,12 +5,13 @@
 #ifndef __TEMPPROFILE_H__
 #define __TEMPPROFILE_H__
 
-#include <lpmd/value.h>
+#include <lpmd/storedvalue.h>
 #include <lpmd/matrix.h>
-#include <lpmd/instantproperty.h>
+#include <lpmd/property.h>
 #include <lpmd/plugin.h>
+#include <lpmd/util.h>
 
-class TempProfile: public lpmd::Value<lpmd::Matrix>, public lpmd::InstantProperty, public lpmd::Module
+class TempProfile: public lpmd::StoredValue<lpmd::Matrix>, public lpmd::InstantProperty, public lpmd::Plugin
 {
  public:
   //Metodos Generales
@@ -21,8 +22,7 @@ class TempProfile: public lpmd::Value<lpmd::Matrix>, public lpmd::InstantPropert
   void ShowHelp() const;
 
   //Metodos Propios de modulo gdr
-  const lpmd::Matrix & CurrentValue() const { return *m; }
-  void Evaluate(lpmd::SimulationCell & simcell, lpmd::Potential & pot);
+  void Evaluate(lpmd::Configuration & con, lpmd::Potential & pot);
 
  private:
     lpmd::Matrix * m;

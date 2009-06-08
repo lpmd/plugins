@@ -6,20 +6,17 @@
 
 #include <lpmd/matrix.h>
 #include <lpmd/util.h>
-#include <lpmd/neighbor.h>
-#include <lpmd/simulationcell.h>
+#include <lpmd/simulation.h>
+#include <lpmd/plugin.h>
 #include <lpmd/session.h>
 
 #include <sstream>
 
 using namespace lpmd;
 
-TempProfile::TempProfile(std::string args): Module("tempprofile", false)
+TempProfile::TempProfile(std::string args): Plugin("tempprofile", "2.0")
 {
- m = NULL;
- AssignParameter("version", "1.0"); 
- AssignParameter("bugreport", "gnm@gnm.cl");
- //
+ ParamList & param = (*this);
  DefineKeyword("start");
  DefineKeyword("end");
  DefineKeyword("each");
@@ -31,17 +28,16 @@ TempProfile::TempProfile(std::string args): Module("tempprofile", false)
  range[1][0]=0.0e0;range[1][1]=0.0e0;
  range[2][0]=0.0e0;range[2][1]=0.0e0;
  ProcessArguments(args);
- bins = GetInteger("bins");
- start = GetInteger("start");
- end = GetInteger("end");
- each = GetInteger("each");
- outputfile = GetString("output");
- do_average = GetBool("average");
+ bins = int(param["bins"]);
+ start = int(param["start"]);
+ end = int(param["end"]);
+ each = int(param["each"]);
+ OutputFile() = param["output"];
+ do_average = bool(param["average"]);
 }
 
 TempProfile::~TempProfile()
 {
- if (m != NULL) delete m;
 }
 
 void TempProfile::SetParameter(std::string name)
@@ -50,7 +46,7 @@ void TempProfile::SetParameter(std::string name)
  if (name == "axis") 
  {
   AssignParameter("axis", GetNextWord());
-  std::string eje=GetString("axis");
+  std::string eje=(*this)["axis"];
   if((eje == "X" || eje == "x") || eje == "0") axis=0;
   else if((eje == "Y" || eje == "y") || eje == "1") axis=1;
   else if((eje == "Z" || eje == "z") || eje == "2") axis=2;
@@ -127,22 +123,25 @@ void TempProfile::ShowHelp() const
  std::cout << " la simulacion entre 1 y 100 cada 10 pasos.                                    \n";
 }
 
-void TempProfile::Evaluate(SimulationCell & simcell, Potential & pot)
+void TempProfile::Evaluate(Configuration & con, Potential & pot)
 {
+ lpmd::BasicParticleSet & atoms = con.Atoms();
+ lpmd::BasicCell & cell = con.Cell();
+ lpmd::Array<int> elements = atoms.Elements();
  if (bins == 0) throw PluginError("tempprofile", "Error in calculation: Wrong value for \"bins\".");
 
  //Vectores base, celda de simulacion.
- if(range[0][0]==0 && range[0][1]==0) {range[0][0]=0;range[0][1]=(simcell.GetCell()[0]).Module();}
- if(range[1][0]==0 && range[1][1]==0) {range[1][0]=0;range[1][1]=(simcell.GetCell()[1]).Module();}
- if(range[2][0]==0 && range[2][1]==0) {range[2][0]=0;range[2][1]=(simcell.GetCell()[2]).Module();}
+ if(range[0][0]==0 && range[0][1]==0) {range[0][0]=0;range[0][1]=cell[0].Module();}
+ if(range[1][0]==0 && range[1][1]==0) {range[1][0]=0;range[1][1]=cell[1].Module();}
+ if(range[2][0]==0 && range[2][1]==0) {range[2][0]=0;range[2][1]=cell[2].Module();}
 
  if(range[0][0]==range[0][1]) throw PluginError("tempprofile", "Error in cell range in axis X.");
  if(range[1][0]==range[1][1]) throw PluginError("tempprofile", "Error in cell range in axis Y.");
  if(range[2][0]==range[2][1]) throw PluginError("tempprofile", "Error in cell range in axis Z.");
 
- Vector na = simcell.GetCell()[0]; na.Normalize();
- Vector nb = simcell.GetCell()[1]; nb.Normalize();
- Vector nc = simcell.GetCell()[2]; nc.Normalize();
+ Vector na = cell[0]; na.Normalize();
+ Vector nb = cell[1]; nb.Normalize();
+ Vector nc = cell[2]; nc.Normalize();
 
  Vector la = na*range[0][1]-na*range[0][0];
  Vector lb = nb*range[1][1]-nb*range[1][0];
@@ -155,8 +154,8 @@ void TempProfile::Evaluate(SimulationCell & simcell, Potential & pot)
  else if(axis==2) {dr=lc.Module()/double(bins);}
  else {throw PluginError("tempprofile", "Error in axis setting to set 'dr'!.");}
 
- int nsp = simcell.SpeciesList().size();
- unsigned long int N = simcell.size();
+ int nsp = elements.Size();
+ long int N = atoms.Size();
  long int *nab = new long int[bins];
  double **temp, *tempt;
  temp = new double*[bins];
@@ -169,29 +168,27 @@ void TempProfile::Evaluate(SimulationCell & simcell, Potential & pot)
   for (int j=0;j<(int)(nsp);j++) temp[i][j]=0.0e0;
  }
  int s=0;
- const std::list<std::string> lst = simcell.SpeciesList();
-
- const double kin2ev = GlobalSession.GetDouble("kin2ev");
- const double kboltzmann = GlobalSession.GetDouble("kboltzmann");
- for (std::list<std::string>::const_iterator it=lst.begin();it!=lst.end();++it)	   
+ const double kin2ev = double(Parameter(con.GetTag(con,"kin2ev")));
+ const double kboltzmann = double(Parameter(con.GetTag(con,"kboltzmann")));
+ for (int i=0;i<elements.Size();++i)	   
  {
   //Asigna la especie correspondiente.
-  int e = ElemNum(*it);
+  int e = elements[i];
   //Cuenta los atomos de la especie e.
   int ne=0;
-  for(unsigned long int m=0;m<N;m++)
+  for(long int m=0;m<N;m++)
   {
-   if(simcell[m].Species()==e) ne++;
+   if(atoms[m].Z()==e) ne++;
   }
   //Comienza la iteracion principal para el calculo.
-  for(unsigned long int i=0;i<N;++i)
+  for(long int i=0;i<N;++i)
   {
-   if(simcell[i].Species()==e)
+   if(atoms[i].Z()==e)
    {
     //vemos la ubicacion atomica respecto a nuestra "rejilla".
-    lpmd::Vector position = simcell[i].Position();
-    lpmd::Vector velocity = simcell[i].Velocity();
-    double m = simcell[i].Mass();
+    lpmd::Vector position = atoms[i].Position();
+    lpmd::Vector velocity = atoms[i].Velocity();
+    double m = atoms[i].Mass();
     double x = position[0];
     double y = position[1];
     double z = position[2];
@@ -226,7 +223,7 @@ void TempProfile::Evaluate(SimulationCell & simcell, Potential & pot)
  }
  //Calcula el valor de temp(r) total.
  int j=0;
- for(std::list<std::string>::const_iterator it=lst.begin();it!=lst.end();++it)
+ for(int i=0;i<elements.Size();++i)
  {
   for(int i=0;i<bins;i++)
   {
@@ -237,29 +234,29 @@ void TempProfile::Evaluate(SimulationCell & simcell, Potential & pot)
  //
  // Output of rho(r)
  //
- if (m != NULL) delete m;
- m = new Matrix(3 + nsp, bins);
+ lpmd::Matrix & m  = CurrentValue();
+ m = lpmd::Matrix(3 + nsp, bins);
 
  // Asigna los labels al objeto Matrix para cada columna
- m->SetLabel(0, "r");
- m->SetLabel(1, "t");
- m->SetLabel(nsp+2, "total Temp(r)");
+ m.SetLabel(0, "r");
+ m.SetLabel(1, "t");
+ m.SetLabel(nsp+2, "total Temp(r)");
  j=2;
- for (std::list<std::string>::const_iterator it=lst.begin();it!=lst.end();++it)
+ for (int i=0;i<elements.Size();++i)
  {
-  m->SetLabel(j, (*it)+" temp(r)");
+  m.SetLabel(j, elements[i]+" temp(r)");
   j++;
  }
  // 
  for(int i=0;i<bins;i++)
  {
-  m->Set(0, i, dr*i);
-  m->Set(1, i, counter);
+  m.Set(0, i, dr*i);
+  m.Set(1, i, counter);
   for(int j=0;j<(int)(nsp);j++)
   {
-   m->Set(j+2, i, temp[i][j]);
+   m.Set(j+2, i, temp[i][j]);
   }
-  m->Set(nsp+2, i, tempt[i]);
+  m.Set(nsp+2, i, tempt[i]);
  }
  delete [] tempt;
  for (int i=0;i<bins;i++) delete [] temp[i];
@@ -269,7 +266,7 @@ void TempProfile::Evaluate(SimulationCell & simcell, Potential & pot)
 }
 
 // Esto se incluye para que el modulo pueda ser cargado dinamicamente
-Module * create(std::string args) { return new TempProfile(args); }
-void destroy(Module * m) { delete m; }
+Plugin * create(std::string args) { return new TempProfile(args); }
+void destroy(Plugin * m) { delete m; }
 
 
