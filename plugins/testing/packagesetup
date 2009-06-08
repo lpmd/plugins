@@ -440,6 +440,13 @@ directory .
        pkgconfig += liblpmd-2.0
     end
 
+    module verlet.so
+       language = c++
+       sources = verlet.cc
+       installpath = lib/lpmd
+       pkgconfig += liblpmd-2.0
+    end
+
     module xyz.so
        language = c++
        sources = xyz.cc
@@ -466,7 +473,6 @@ directory .
 #rvcorr_la_SOURCES = rvcorr.h rvcorr.cc #EN STANDBY
 #selectatoms_la_SOURCES = selectatoms.h selectatoms.cc
 #thermalneedle_la_SOURCES = thermalneedle.h thermalneedle.cc #PROBABLEMENTE YA NO VA MAS!! 
-#verlet_la_SOURCES = verlet.h verlet.cc
 #verletlist_la_SOURCES = verletlist.h verletlist.cc
 #voronoi_la_SOURCES = voronoi.h voronoi.cc
 

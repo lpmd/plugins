@@ -9,7 +9,7 @@
 #include <lpmd/stepper.h>
 #include <lpmd/plugin.h>
 
-class Verlet: public lpmd::OneStepIntegrator, public lpmd::Stepper, public lpmd::Module
+class Verlet: public lpmd::OneStepIntegrator, public lpmd::Plugin
 {
  public:
   //Metodos Generales
@@ -18,8 +18,8 @@ class Verlet: public lpmd::OneStepIntegrator, public lpmd::Stepper, public lpmd:
   void ShowHelp() const;
 
   //Metodos propios modulo verlet
-  void Initialize(lpmd::SimulationCell & sc, lpmd::Potential & p);
-  void Advance(lpmd::SimulationCell & sc, long i);
+  void Initialize(lpmd::Simulation & sim, lpmd::Potential & p);
+  void Advance(lpmd::Simulation & sim, long i);
 };
 
 

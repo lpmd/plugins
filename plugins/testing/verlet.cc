@@ -4,23 +4,20 @@
 
 #include "verlet.h"
 
-#include <lpmd/simulationcell.h>
+#include <lpmd/simulation.h>
 
 #include <iostream>
 
 using namespace lpmd;
 
-Verlet::Verlet(std::string args): Module("verlet")
+Verlet::Verlet(std::string args): Plugin("verlet", "2.0")
 {
- AssignParameter("version", "1.0"); 
- AssignParameter("bugreport", "gnm@gnm.cl"); 
- //
  DefineKeyword("dt", "1.0");
  DefineKeyword("start", "1");
  // hasta aqui los valores por omision
  ProcessArguments(args);
- dt = GetDouble("dt");
- start = GetInteger("start");
+ dt = double((*this)["dt"]);
+ start = int((*this)["start"]);
 }
 
 Verlet::~Verlet() { }
@@ -45,23 +42,24 @@ void Verlet::ShowHelp() const
  std::cout << " simulacion.                                                                   \n";
 }
 
-void Verlet::Initialize(SimulationCell & sc, Potential & p) { UseOldCell(sc); }
+void Verlet::Initialize(Simulation & sim, Potential & p) { UseOldConfig(sim); }
 
-void Verlet::Advance(SimulationCell & sc, long i)
+void Verlet::Advance(Simulation & sim, long i)
 {
- SimulationCell & oldsc = OldCell();
- const Atom & now = sc[i];
- Vector oldpos = oldsc[i].Position();
- Vector newpos = 2.0*now.Position() - oldpos + now.Acceleration()*dt*dt;
- oldsc.SetPosition(i, now.Position());
- oldsc[i].Velocity() = now.Velocity();
- sc.SetPosition(i, newpos);
- const Vector newvel = sc.GetCell().Displacement(oldpos, sc[i].Position())/(2.0*dt);
- sc[i].Velocity() = newvel;
+ lpmd::BasicParticleSet & atoms = sim.Atoms();
+ lpmd::BasicParticleSet & oldatoms = OldConfig().Atoms();
+ lpmd::BasicCell & cell = sim.Cell();
+ Vector oldpos = oldatoms[i].Position();
+ Vector newpos = 2.0*atoms[i].Position() - oldatoms[i].Position() + atoms[i].Acceleration()*dt*dt;
+ oldatoms[i].Position() = atoms[i].Position();
+ oldatoms[i].Velocity() = atoms[i].Velocity();
+ atoms[i].Position() = newpos;
+ Vector newvel = cell.Displacement(oldpos, atoms[i].Position())/(2.0*dt);
+ atoms[i].Velocity() = newvel;
 }
 
 // Esto se incluye para que el modulo pueda ser cargado dinamicamente
-Module * create(std::string args) { return new Verlet(args); }
-void destroy(Module * m) { delete m; }
+Plugin * create(std::string args) { return new Verlet(args); }
+void destroy(Plugin * m) { delete m; }
 
 
