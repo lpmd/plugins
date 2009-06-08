@@ -9,7 +9,7 @@
 #include <lpmd/vector.h>
 #include <lpmd/plugin.h>
 
-class ShearModifier: public lpmd::SystemModifier, public lpmd::Module
+class ShearModifier: public lpmd::SystemModifier, public lpmd::Plugin
 {
  public:
   //Metodos Generales
@@ -19,8 +19,7 @@ class ShearModifier: public lpmd::SystemModifier, public lpmd::Module
   void ShowHelp() const;
 
   //Metodos Propios
-  void Apply(lpmd::SimulationCell & sc);
-  void Apply(lpmd::MD & md);
+  void Apply(lpmd::Simulation & sim);
  
  private:
    int shear_axis, perp_axis;

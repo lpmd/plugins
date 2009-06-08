@@ -363,6 +363,13 @@ directory .
        pkgconfig += liblpmd-2.0
     end
 
+    module shear.so
+       language = c++
+       sources = shear.cc
+       installpath = lib/lpmd
+       pkgconfig += liblpmd-2.0
+    end
+
     module skewstart.so
        language = c++
        sources = skewstart.cc
@@ -442,7 +449,6 @@ directory .
 #energy_la_SOURCES = energy.h energy.cc #PROBABLEMENTE YA NO VA MAS!!
 #ewald_la_SOURCES = ewald.h ewald.cc
 #pressure_la_SOURCES = pressure.h pressure.cc #PROBABLEMENTE YA NO VA MAS!!
-#replicate_la_SOURCES = replicate.h replicate.cc
 #rvcorr_la_SOURCES = rvcorr.h rvcorr.cc #EN STANDBY
 #selectatoms_la_SOURCES = selectatoms.h selectatoms.cc
 #shear_la_SOURCES = shear.h shear.cc

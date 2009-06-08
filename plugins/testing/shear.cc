@@ -4,34 +4,35 @@
 
 #include "shear.h"
 
-#include <lpmd/simulationcell.h>
+#include <lpmd/simulation.h>
 #include <lpmd/util.h>
-#include <lpmd/md.h>
+#include <lpmd/plugin.h>
 
 #include <iostream>
 
 using namespace lpmd;
 
-ShearModifier::ShearModifier(std::string args): Module("shear")
+ShearModifier::ShearModifier(std::string args): Plugin("shear", "2.0")
 {
+ ParamList & param = (*this);
  AssignParameter("axis", "X");
  AssignParameter("normal", "Y");
  AssignParameter("strain", "0.01");
  // 
  ProcessArguments(args);
- if ((GetString("axis") == "x") || (GetString("axis") == "X")) shear_axis = 0;
- else if ((GetString("axis") == "y") || (GetString("axis") == "Y")) shear_axis = 1;
- else if ((GetString("axis") == "z") || (GetString("axis") == "Z")) shear_axis = 2;
+ if ((param["axis"] == "x") || (param["axis"] == "X")) shear_axis = 0;
+ else if ((param["axis"] == "y") || (param["axis"] == "Y")) shear_axis = 1;
+ else if ((param["axis"] == "z") || (param["axis"] == "Z")) shear_axis = 2;
  else throw PluginError("shear", "Invalid shear axis");
- if ((GetString("normal") == "x") || (GetString("normal") == "X")) perp_axis = 0;
- else if ((GetString("normal") == "y") || (GetString("normal") == "Y")) perp_axis = 1;
- else if ((GetString("normal") == "z") || (GetString("normal") == "Z")) perp_axis = 2;
+ if ((param["normal"] == "x") || (param["normal"] == "X")) perp_axis = 0;
+ else if ((param["normal"] == "y") || (param["normal"] == "Y")) perp_axis = 1;
+ else if ((param["normal"] == "z") || (param["normal"] == "Z")) perp_axis = 2;
  else throw PluginError("shear", "Invalid normal axis");
  if (shear_axis == perp_axis) throw PluginError("shear", "Shear axis must be orthogonal to normal axis");
- strain = GetDouble("strain");
- start = GetInteger("start");
- end = GetInteger("end");
- each = GetInteger("each");
+ strain = double(param["strain"]);
+ start = int(param["start"]);
+ end = int(param["end"]);
+ each = int(param["each"]);
 }
 
 ShearModifier::~ShearModifier() { }
@@ -48,32 +49,28 @@ void ShearModifier::ShowHelp() const
  std::cout << " prepare shear axis=X normal=Y strain=0.01                                     \n";
 }
 
-void ShearModifier::Apply(SimulationCell & sc)
+void ShearModifier::Apply(Simulation & sim)
 {
+ lpmd::BasicParticleSet & atoms = sim.Atoms();
+ lpmd::BasicCell & cell = sim.Cell();
  // primero cambia la forma de la celda...
  Vector deformation(0.0, 0.0, 0.0);
- deformation[shear_axis] = strain*sc.GetCell()[perp_axis].Module(); 
- Vector newaxis = sc.GetCell()[perp_axis]+deformation;
- newaxis = newaxis*double(sc.GetCell()[perp_axis].Module())/double(newaxis.Module());
- sc.GetCell()[perp_axis] = newaxis;
+ deformation[shear_axis] = strain*cell[perp_axis].Module(); 
+ Vector newaxis = cell[perp_axis]+deformation;
+ newaxis = newaxis*double(cell[perp_axis].Module())/double(newaxis.Module());
+ cell[perp_axis] = newaxis;
  
  // luego desplaza los atomos
  Vector offset(0.0, 0.0, 0.0);
- for (unsigned long int i=0;i<sc.size();++i)
+ for (long int i=0;i<atoms.Size();++i)
  {
-  Vector pos = sc[i].Position(); 
+  Vector pos = atoms[i].Position(); 
   offset[shear_axis] = pos[perp_axis]*strain; 
-  sc.SetPosition(i, pos+offset);
+  atoms[i].Position() = pos+offset;
  }
 }
 
-void ShearModifier::Apply(MD & md)
-{
- SimulationCell & sc = md.GetCell();
- Apply(sc);
-}
-
 // Esto se incluye para que el modulo pueda ser cargado dinamicamente
-Module * create(std::string args) { return new ShearModifier(args); }
-void destroy(Module * m) { delete m; }
+Plugin * create(std::string args) { return new ShearModifier(args); }
+void destroy(Plugin * m) { delete m; }
 
