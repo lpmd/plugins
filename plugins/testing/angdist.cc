@@ -17,7 +17,6 @@ using namespace lpmd;
 AngDist::AngDist(std::string args): Plugin("angdist", "2.0")
 {
  ParamList & param = (*this);
- m = NULL;
  //
  DefineKeyword("atoms");
  DefineKeyword("rcut");
@@ -38,7 +37,6 @@ AngDist::AngDist(std::string args): Plugin("angdist", "2.0")
 
 AngDist::~AngDist()
 {
- if (m != NULL) delete m;
 }
 
 void AngDist::SetParameter(std::string name)
@@ -136,12 +134,13 @@ void AngDist::Evaluate(lpmd::Configuration & con, lpmd::Potential & pot)
  }
 #warning Armado propio de triples, ¿debería ser método de la api?
  lpmd::Array <int> elements = part.Elements();
- Array<std::string> lst;
+ lpmd::Array <std::string> lst;
+ lst.Clear();
  for (int i=0;i<elements.Size();++i)
  {
-  for (int j=0;j<elements.Size();++i)
+  for (int j=0;j<elements.Size();++j)
   {
-   for (int k=0;k<elements.Size();++i)
+   for (int k=0;k<elements.Size();++k)
    {
     std::ostringstream ostr ;
     ostr << ElemSym[elements[i]] << "-" << ElemSym[elements[j]] << "-" <<ElemSym[elements[k]];

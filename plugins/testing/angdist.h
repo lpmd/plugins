@@ -29,7 +29,6 @@ class AngDist: public lpmd::StoredValue<lpmd::Matrix>, public lpmd::InstantPrope
     void Evaluate(lpmd::Configuration & con, lpmd::Potential & pot);
 
  private:
-    lpmd::Matrix * m;
     int nb;
     std::map<std::string, double> rcut;
     int na;
