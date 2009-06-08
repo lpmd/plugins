@@ -152,11 +152,11 @@ void CordNum::Evaluate(Configuration & con, Potential & pot)
   //Hace funcional cada una de las especies de los pares.
   lpmd::Array<std::string> loa = StringSplit(pairs[i],'-'); // lista de atomos
   int e1 = ElemNum(loa[0]);
-  int e2 = ElemNum(loa[1]); 
+  int e2 = ElemNum(loa[1]);
   double rc12 = rcut[loa[0]+"-"+loa[1]];
   //Cuenta los atomos de la especie 1.
   int ne1=0;
-  for (unsigned long int i=0;i<N;i++) {if(atoms[i].Z()==e1) ne1++;}
+  for (unsigned long int i=0;i<N;++i) {if(atoms[i].Z()==e1) ne1++;}
   //Comienzan las iteraciones.
   for (unsigned long int i=0;i<N;++i)
   {
@@ -169,7 +169,7 @@ void CordNum::Evaluate(Configuration & con, Potential & pot)
      const lpmd::AtomPair & nn = nlist[k];
      if(nn.j->Z()==e2)
      {
-      if(nn.r<=rc12*rc12)
+      if(nn.r<=rc12)
       {
        histo[s][i]++;
       }
