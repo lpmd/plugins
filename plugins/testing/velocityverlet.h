@@ -9,7 +9,7 @@
 #include <lpmd/stepper.h>
 #include <lpmd/plugin.h>
 
-class VelocityVerlet: public lpmd::TwoStepIntegrator, public lpmd::Stepper, public lpmd::Module
+class VelocityVerlet: public lpmd::TwoStepIntegrator, public lpmd::Plugin
 {
  public:
   //Metodos Generales
@@ -18,9 +18,9 @@ class VelocityVerlet: public lpmd::TwoStepIntegrator, public lpmd::Stepper, publ
   void ShowHelp() const;
 
   //Metodos Propios modulo velocityverlet
-  void Initialize(lpmd::SimulationCell & sc, lpmd::Potential & p);
-  void AdvancePosition(lpmd::SimulationCell & sc, long i);
-  void AdvanceVelocity(lpmd::SimulationCell & sc, long i);
+  void Initialize(lpmd::Simulation & sim, lpmd::Potential & p);
+  void AdvancePosition(lpmd::Simulation & sim, long i);
+  void AdvanceVelocity(lpmd::Simulation & sim, long i);
 };
 
 #endif
