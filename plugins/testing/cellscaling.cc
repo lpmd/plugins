@@ -66,7 +66,7 @@ void CellScalingModifier::ShowHelp() const
  std::cout << " Example                                                                       \n";
  std::cout << " Cargando el Modulo :                                                          \n";
  std::cout << " use cellscaling                                                               \n";
- std::cout << "     precent 20                                                                \n";
+ std::cout << "     percent 20                                                                \n";
  std::cout << "     axis X                                                                    \n";
  std::cout << "     constant true                                                             \n";
  std::cout << " enduse                                                                        \n";

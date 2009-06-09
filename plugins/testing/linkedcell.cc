@@ -273,7 +273,8 @@ void LinkedCellCellManager::BuildNeighborList(Configuration & sc, long i, Neighb
    nn.r = nn.rij.Module();
    if ((nn.r < rcut) && (nn.r > 0.001)) 
    {
-    nlist.Append(nn); // FIXME: hay un bug al usar integradores onestep
+#warning Hay un bug en integradores onestep
+    nlist.Append(nn);
     nwin++;
    }
    else if (nn.r > rcut) nfail++;
@@ -297,7 +298,8 @@ void LinkedCellCellManager::BuildNeighborList(Configuration & sc, long i, Neighb
    nn.r = nn.rij.Module();
    if ((nn.r < rcut) && (nn.r > 0.001))
    {
-    nlist.Append(nn); // FIXME: hay un bug al usar integradores onestep
+#warning Hay un bug en integradores onestep
+    nlist.Append(nn);
     nwin++;
    }
    else if (nn.r > rcut) nfail++;
@@ -321,7 +323,8 @@ void LinkedCellCellManager::BuildNeighborList(Configuration & sc, long i, Neighb
     nn.r = nn.rij.Module();
     if ((nn.r < rcut) && (nn.r > 0.001)) 
     {
-     nlist.Append(nn); // FIXME: hay un bug al usar integradores onestep
+#warning Hay un bug en integradores onestep.
+     nlist.Append(nn); 
      nwin++;
     }
     else if (nn.r > rcut) nfail++;

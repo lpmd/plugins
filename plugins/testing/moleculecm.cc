@@ -80,7 +80,7 @@ void MoleculeCMModifier::Apply(Simulation & con)
   }
  }
 #warning antiguo fixme de borrar atomos en memoria también.
- atoms.Clear(); // FIXME debe borrar los atomos en memoria tambien 
+ atoms.Clear(); 
 #warning que era esto!! .. no debería actuar ahora directo sobre atoms.?¿?
 // for (std::list<Atom>::const_iterator it=tmplist.begin();it!=tmplist.end();++it) sc.Create(new Atom(*it));
  delete [] used;

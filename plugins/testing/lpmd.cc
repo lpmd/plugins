@@ -168,7 +168,7 @@ bool LPMDFormat::ReadCell(std::istream & is, Configuration & con) const
    double colors=-1.0e0;
    for (long int k=1 ; k < hdr.Size() ; ++k)
    {
-    //FIXME : color seteado a cero mientras tanto, para no usar GetSpcColor
+#warning Color seteado a cero mientras tanto, para no usar GetSpcColor
     if (hdr[k] == "SYM") {sym=words[k-1]; color = Vector(0,0,0); } //GetSpcColor(N);}
     if (hdr[k] == "X") X=atof(words[k-1].c_str());
     if (hdr[k] == "Y") Y=atof(words[k-1].c_str());
@@ -186,14 +186,14 @@ bool LPMDFormat::ReadCell(std::istream & is, Configuration & con) const
    Vector vel(VX,VY,VZ);
    Vector ace(AX,AY,AZ);
    part.Append(Atom(sym,pos,vel,ace));
-   //FIXME : Hay que asignar el color de alguna forma!!!
+#warning Hay que asignar el color de alguna forma!!!
    atomcount++;
    //part.SetFracPosition(atomcount, pos);
    //part.SetVelocity(atomcount, vel);
    //part.SetColor(atomcount, color);
    //if(colors>=0 && colors <=1) sc[i].SetColor(colors);
    //sc.SetAcceleration(atomcount++, ace);
-   //NOTE : falta asignar la propiedad del atomo.
+#warning Falta asignar la propiedad del atomo?
   }
   else throw PluginError("lpmd", "An unidentified line was found in the file \""+readfile+"\", line "+ToString<int>(*linecounter));
  }
@@ -238,8 +238,7 @@ void LPMDFormat::WriteCell(std::ostream & out, Configuration & con) const
  BasicParticleSet & part = con.Atoms();
  BasicCell & cell = con.Cell();
 
- //FIXME : Metadata que no va mas hay que usar TAGS
- //sc.MetaData().AssignParameter("level",ToString<int>(level));
+ level = int(Params(con.GetTag(con,"level")));
  out << part.Size() << std::endl;
  out << cell[0] << " " << cell[1] << " " << cell[2] << std::endl;
  for (long int i=0;i<part.Size();i++)
@@ -260,7 +259,7 @@ void LPMDFormat::WriteCell(std::ostream & out, Configuration & con) const
   {
    for (long int j=0 ; j < extra.Size() ; ++j)
    {
-    //FIXME : Comentadas Opciones COLOR para lpmd2
+#warning Comentadas Opciones COLOR para lpmd2
     //if(extra[j] == "RGB") {lpmd::Vector tmp=part[i].Color(); FormattedWrite(out,tmp); }
     //if(extra[j] == "C") {double color=part[i].ColorS(); out << "          " << color;} 
     if(extra[j] == "TYPE") { out << "          " << "ATOMTYPE"; }

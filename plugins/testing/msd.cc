@@ -43,7 +43,7 @@ void MSD::Evaluate(ConfigurationSet & hist, Potential & pot)
   {
    scratch_atoms[0].Position() = hist[t-1].Atoms()[i].Position();
    scratch_atoms[1].Position() = hist[t].Atoms()[i].Position();
-   // FIXME: inlining por mientras tenemos un metodo como sc.VectorDistance
+#warning inlining por mientras tenemos un metodos como sc.VectorDistance.
    const Vector & v0 = scratch_atoms[0].Position();
    const Vector & v1 = scratch_atoms[1].Position();
    noperiodic[t][i] = noperiodic[t-1][i] + cell.Displacement(v0, v1);
