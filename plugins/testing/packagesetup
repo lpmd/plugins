@@ -223,6 +223,13 @@ directory .
        pkgconfig += liblpmd-2.0
     end
 
+    module metropoli.so
+       language = c++
+       sources = metropoli.cc
+       installpath = lib/lpmd
+       pkgconfig += liblpmd-2.0
+    end
+
     module minimumimage.so
        language = c++
        sources = minimumimage.cc
