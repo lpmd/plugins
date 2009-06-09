@@ -15,9 +15,9 @@ TempScalingModifier::TempScalingModifier(std::string args): Plugin("tempscaling"
 {
  ParamList & params = (*this);
  //
- DefineKeyword("start");
- DefineKeyword("end");
- DefineKeyword("each");
+ DefineKeyword("start", "0");
+ DefineKeyword("end", "-1");
+ DefineKeyword("each", "1");
  DefineKeyword("from", "300.0");
  DefineKeyword("to", "300.0");
  // hasta aqui los valores por omision

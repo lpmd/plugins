@@ -17,9 +17,9 @@ ColorModifier::ColorModifier(std::string args): Module("color")
  AssignParameter("version", "1.0"); 
  AssignParameter("bugreport", "gnm@gnm.cl"); 
  //
- DefineKeyword("start");
- DefineKeyword("end");
- DefineKeyword("each");
+ DefineKeyword("start", "0");
+ DefineKeyword("end", "-1");
+ DefineKeyword("each", "1");
  DefineKeyword("type", "vel");
  // hasta aqui los valores por omision
  ProcessArguments(args);

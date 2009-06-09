@@ -14,9 +14,9 @@ PrintAtomsVisualizer::PrintAtomsVisualizer(std::string args): Plugin("printatoms
 {
  ParamList & params = (*this);
  //
- DefineKeyword("start");
- DefineKeyword("end");
- DefineKeyword("each");
+ DefineKeyword("start", "0");
+ DefineKeyword("end", "-1");
+ DefineKeyword("each", "1");
  DefineKeyword("from", "-1");
  DefineKeyword("to", "-1");
  ProcessArguments(args);

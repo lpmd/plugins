@@ -17,9 +17,9 @@ CordNumFunc::CordNumFunc(std::string args): Plugin("cordnumfunc", "2.0")
  ParamList & params = (*this);
  //
  DefineKeyword("atoms");
- DefineKeyword("start");
- DefineKeyword("end");
- DefineKeyword("each");
+ DefineKeyword("start", "0");
+ DefineKeyword("end", "-1");
+ DefineKeyword("each", "1");
  DefineKeyword("rcut");
  DefineKeyword("output");
  DefineKeyword("bins", "200");

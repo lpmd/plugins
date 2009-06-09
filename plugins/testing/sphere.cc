@@ -42,9 +42,9 @@ SphereFilter::SphereFilter(std::string args): Plugin("sphere", "1.0"), selector(
 {
  ParamList & params = (*this);
  //
- DefineKeyword("start");
- DefineKeyword("end");
- DefineKeyword("each");
+ DefineKeyword("start", "0");
+ DefineKeyword("end", "-1");
+ DefineKeyword("each", "1");
  DefineKeyword("radius");
  DefineKeyword("center");
  // hasta aqui los valores por omision

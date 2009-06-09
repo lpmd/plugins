@@ -32,9 +32,9 @@ CommonNeighborAnalysis::CommonNeighborAnalysis(std::string args): Plugin("cna", 
  DefineKeyword("mode", "statistics");
  DefineKeyword("species", "all");
  DefineKeyword("filterby", "none");
- DefineKeyword("start");
- DefineKeyword("end");
- DefineKeyword("each");
+ DefineKeyword("start", "0");
+ DefineKeyword("end", "-1");
+ DefineKeyword("each", "1");
  DefineKeyword("output");
  //
  ProcessArguments(args);

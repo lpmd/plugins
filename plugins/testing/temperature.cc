@@ -15,9 +15,9 @@ TemperatureModifier::TemperatureModifier(std::string args): Plugin("temperature"
 {
  ParamList & params = (*this);
  //
- DefineKeyword("start");
- DefineKeyword("end");
- DefineKeyword("each");
+ DefineKeyword("start", "0");
+ DefineKeyword("end", "-1");
+ DefineKeyword("each", "1");
  DefineKeyword("t", "300.0");
  DefineKeyword("filterby", "none");
  // hasta aqui los valores por omision

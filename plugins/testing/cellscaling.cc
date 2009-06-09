@@ -16,9 +16,9 @@ CellScalingModifier::CellScalingModifier(std::string args): Plugin("cellscaling"
  ParamList & params = (*this);
  //
  axis = -1;
- DefineKeyword("start");
- DefineKeyword("end");
- DefineKeyword("each");
+ DefineKeyword("start", "0");
+ DefineKeyword("end", "-1");
+ DefineKeyword("each", "1");
  DefineKeyword("percent", "0.0");
  DefineKeyword("axis", "all");
  AssignParameter("constant", "true");

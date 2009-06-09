@@ -14,9 +14,9 @@ using namespace lpmd;
 ExtraVelModifier::ExtraVelModifier(std::string args): Plugin("extravel", "1.0")
 { 
  //
- DefineKeyword("start");
- DefineKeyword("end");
- DefineKeyword("each");
+ DefineKeyword("start", "0");
+ DefineKeyword("end", "-1");
+ DefineKeyword("each", "1");
  ProcessArguments(args); 
  start = int((*this)["start"]);
  end = int((*this)["end"]);

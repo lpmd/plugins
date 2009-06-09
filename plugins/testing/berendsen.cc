@@ -17,9 +17,9 @@ BerendsenModifier::BerendsenModifier(std::string args): Plugin("berendsen", "2.0
 {
  ParamList & params = (*this);
  //
- DefineKeyword("start");
- DefineKeyword("end");
- DefineKeyword("each");
+ DefineKeyword("start", "0");
+ DefineKeyword("end", "-1");
+ DefineKeyword("each", "1");
  DefineKeyword("from", "300.0");
  DefineKeyword("to", "300.0");
  DefineKeyword("tau", "400.0");

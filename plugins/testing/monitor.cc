@@ -15,9 +15,9 @@ MonitorVisualizer::MonitorVisualizer(std::string args): Plugin("monitor", "1.0")
 {
  ParamList & params = (*this);
  //
- DefineKeyword("start");
- DefineKeyword("end");
- DefineKeyword("each");
+ DefineKeyword("start", "0");
+ DefineKeyword("end", "-1");
+ DefineKeyword("each", "1");
  DefineKeyword("properties", "step");
  DefineKeyword("output", "-");
  ProcessArguments(args);

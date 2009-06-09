@@ -18,9 +18,9 @@ PairDistances::PairDistances(std::string args): Plugin("pairdistances", "2.0")
  ParamList & params = (*this);
  //
  DefineKeyword("rcut");
- DefineKeyword("start");
- DefineKeyword("end");
- DefineKeyword("each");
+ DefineKeyword("start", "0");
+ DefineKeyword("end", "-1");
+ DefineKeyword("each", "1");
  DefineKeyword("output");
  ProcessArguments(args);
  rcut = params["rcut"];
