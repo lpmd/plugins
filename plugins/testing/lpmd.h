@@ -30,7 +30,7 @@ class LPMDFormat: public lpmd::CellFormat, public lpmd::Plugin
  private:
    long int * linecounter;
    long int interval;
-   long int level;
+   mutable long int level;
    lpmd::Array<std::string> extra;
    bool rcell;
    mutable lpmd::Array<std::string> hdr;
