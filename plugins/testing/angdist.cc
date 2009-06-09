@@ -177,10 +177,9 @@ void AngDist::Evaluate(lpmd::Configuration & con, lpmd::Potential & pot)
        {
 	if(mm.j->Z()==e3 && mm.r*mm.r <= rc23*rc23)
 	{
-#warning Angle debe pasarse a la API!
 	 Vector a = cell.Displacement(part[i].Position(), nn.j->Position());
 	 Vector b = cell.Displacement(part[i].Position(), mm.j->Position());
-	 double angle= acos(Dot(a,b)/ (a.Module()*b.Module()));
+	 double angle= Angle(a,b);
 	 int ig=(long)floor(nb*(angle/M_PI));
 	 if(nn.j->Z()==mm.j->Z())
 	 {
