@@ -2,7 +2,7 @@
 //
 //
 
-#include "box.h"
+#include "element.h"
 
 #include <lpmd/simulation.h>
 #include <lpmd/refparticleset.h>
@@ -12,16 +12,16 @@
 
 using namespace lpmd;
 
-class BoxSelector: public Selector<BasicParticleSet>
+class ElementSelector: public Selector<BasicParticleSet>
 {
  public:
-   BoxSelector(const Box & b): box(b) { }
+   ElementSelector(std::string s) {symbol = s;}
 
    const BasicParticleSet & SelectFrom(const BasicParticleSet & ps) 
    { 
     innerps.Clear();
     for (long int i=0;i<ps.Size();++i) 
-      if (box.IsInside(ps[i].Position())) innerps.Append(ps[i]);
+      if (ps[i].Symbol()==symbol) innerps.Append(ps[i]);
     return innerps;
    }
 
@@ -29,59 +29,49 @@ class BoxSelector: public Selector<BasicParticleSet>
    { 
     innerps.Clear();
     for (long int i=0;i<ps.Size();++i) 
-      if (!box.IsInside(ps[i].Position())) innerps.Append(ps[i]);
+      if (ps[i].Symbol()!=symbol) innerps.Append(ps[i]);
     return innerps;
    }
 
  private:
-   Box box;
+   std::string symbol;
    RefParticleSet innerps;
 };
 
-BoxFilter::BoxFilter(std::string args): Plugin("box", "1.0"), selector(0)
+ElementFilter::ElementFilter(std::string args): Plugin("element", "1.0"), selector(0)
 {
  ParamList & params = (*this);
  //
  DefineKeyword("start", "0");
  DefineKeyword("end", "-1");
  DefineKeyword("each", "1");
- DefineKeyword("x","0-0");
- DefineKeyword("y","0-0");
- DefineKeyword("z","0-0");
+ DefineKeyword("sym","e");
  // hasta aqui los valores por omision
  ProcessArguments(args);
  start = int(params["start"]);
  end = int(params["end"]);
  each = int(params["each"]);
- lpmd::Array<std::string> sx = StringSplit(params["x"],'-');
- lpmd::Array<std::string> sy = StringSplit(params["y"],'-');
- lpmd::Array<std::string> sz = StringSplit(params["z"],'-');
- if (sx.Size()!=2 || sx.Size()!=2 || sx.Size()!=2) throw PluginError("box", "Bad, settings in parameters");
- x[0] = atof(sx[0].c_str());x[1] = atof(sx[1].c_str());
- y[0] = atof(sy[0].c_str());y[1] = atof(sy[1].c_str());
- z[0] = atof(sz[0].c_str());z[1] = atof(sz[1].c_str());
+ sym = params["sym"];
 }
 
-BoxFilter::~BoxFilter() { delete selector; }
+ElementFilter::~ElementFilter() { delete selector; }
 
-void BoxFilter::ShowHelp() const
+void ElementFilter::ShowHelp() const
 {
  std::cout << " General Info      >>                                                          \n";
  std::cout << " General Options   >>                                                          \n";
  std::cout << " Example                                                                       \n";
- std::cout << " filter box x=0-10 y=15-20 z=5-10                                              \n";
+ std::cout << " filter symbol sym=Ar                                                          \n";
  std::cout << '\n';
 }
 
-Selector<BasicParticleSet> & BoxFilter::CreateSelector()
+Selector<BasicParticleSet> & ElementFilter::CreateSelector()
 {
- Box box_region(x[0], x[1], y[0], y[1], z[0], z[1]);
  if (selector != 0) delete selector;
- selector = new BoxSelector(box_region);
+ selector = new ElementSelector(sym);
  return *selector;
 }
 
 // Esto se incluye para que el modulo pueda ser cargado dinamicamente
-Plugin * create(std::string args) { return new BoxFilter(args); }
+Plugin * create(std::string args) { return new ElementFilter(args); }
 void destroy(Plugin * m) { delete m; }
-
