@@ -49,14 +49,14 @@ void UndoPBCModifier::ShowHelp() const
  std::cout << " desde el paso 0 hasta el 1000 cada 300.                                       \n";
 }
 
-void UndoPBCModifier::Initialize(Simulation & sim, Potential & pot){old  = sim;}
+//void UndoPBCModifier::Initialize(Simulation & sim, Potential & pot){old  = sim;}
 
 void UndoPBCModifier::Apply(Simulation & sim)
 {
  lpmd::BasicParticleSet & atoms = sim.Atoms();
  lpmd::BasicCell & cell = sim.Cell();
 // int N=2;
-
+/*
  Vector ** noperiodic = new Vector*[N];
  for (int t=0;t<N;++t) noperiodic[t] = new Vector[nat];
  for (int i=0;i<nat;++i) noperiodic[0][i] = part[i].Position();
@@ -68,7 +68,7 @@ void UndoPBCModifier::Apply(Simulation & sim)
    atoms[1].Position() = sim.Atoms()[i].Position();
    noperiodic[t][i] = noperiodic[t-1][i] + cell.Displacement(part[0].Position(), part[1].Position());
   }
-
+*/
 
 }
 

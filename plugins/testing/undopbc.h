@@ -24,7 +24,6 @@ class UndoPBCModifier: public lpmd::SystemModifier, public lpmd::Plugin
 
  private:
   int counter;
-  lpmd::Configuration old;
 };
 
 #endif

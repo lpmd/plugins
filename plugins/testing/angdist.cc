@@ -132,7 +132,6 @@ void AngDist::Evaluate(lpmd::Configuration & con, lpmd::Potential & pot)
  { 
   for (int j=0;j<(int)(nsp*nsp*nsp);j++) ang[i][j]=0.0e0;
  }
-#warning Armado propio de triples, ¿debería ser método de la api?
  lpmd::Array <int> elements = part.Elements();
  lpmd::Array <std::string> lst;
  lst.Clear();
