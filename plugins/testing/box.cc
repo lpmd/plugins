@@ -45,20 +45,17 @@ BoxFilter::BoxFilter(std::string args): Plugin("sphere", "1.0"), selector(0)
  DefineKeyword("start", "0");
  DefineKeyword("end", "-1");
  DefineKeyword("each", "1");
- DefineKeyword("x");
- DefineKeyword("y");
- DefineKeyword("z");
+ DefineKeyword("x","0-0");
+ DefineKeyword("y","0-0");
+ DefineKeyword("z","0-0");
  // hasta aqui los valores por omision
  ProcessArguments(args);
  start = int(params["start"]);
  end = int(params["end"]);
  each = int(params["each"]);
- std::cerr << "x="<<(*this)["x"];
- std::cerr << "y="<<(*this)["y"];
- std::cerr << "z="<<(*this)["z"];
- lpmd::Array<std::string> sx = StringSplit((*this)["x"],'-');
- lpmd::Array<std::string> sy = StringSplit((*this)["y"],'-');
- lpmd::Array<std::string> sz = StringSplit((*this)["z"],'-');
+ lpmd::Array<std::string> sx = StringSplit(params["x"],'-');
+ lpmd::Array<std::string> sy = StringSplit(params["y"],'-');
+ lpmd::Array<std::string> sz = StringSplit(params["z"],'-');
  if (sx.Size()!=2 || sx.Size()!=2 || sx.Size()!=2) throw PluginError("box", "Bad, settings in parameters");
  x[0] = atof(sx[0].c_str());x[1] = atof(sx[1].c_str());
  y[0] = atof(sy[0].c_str());y[1] = atof(sy[1].c_str());
