@@ -419,6 +419,13 @@ directory .
        pkgconfig += liblpmd-2.0
     end
 
+    module undopbc.so
+       language = c++
+       sources = undopbc.cc
+       installpath = lib/lpmd
+       pkgconfig += liblpmd-2.0
+    end
+
     module vacf.so
        language = c++
        sources = vacf.cc

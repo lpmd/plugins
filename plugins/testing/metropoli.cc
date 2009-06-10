@@ -70,6 +70,8 @@ void Metropoli::Advance(Simulation & sim, long i)
  {
   npe += pots[j].energy(sim);
  }
+ std::cerr << "nke = " << nke << " - npe = "<<npe<<'\n';
+ std::cerr << "ken = " << kenergy << " - pen = " <<penergy<<'\n';
  if ((nke+npe)<(kenergy+penergy))
  {
   atoms[i].Position() = newpos;
