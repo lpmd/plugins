@@ -106,7 +106,8 @@ void LocalPressure::Evaluate(Configuration & sim, Potential & pot)
    catch (std::exception &e) { throw PluginError("localpressure", "Cannot calculate local stress with a non-pair potential."); }
   }
   int k = ind[0]+n[0]*ind[1]+n[0]*n[1]*ind[2];
-  const double pressfactor = double(Parameter(sim.GetTag(sim, "pressfactor")));
+  //const double pressfactor = double(Parameter(sim.GetTag(sim, "pressfactor")));
+  const double pressfactor = double(GlobalSession["pressfactor"]);
   for (int p=0;p<3;++p)
    for (int q=0;q<3;++q)
    {

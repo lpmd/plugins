@@ -61,7 +61,8 @@ double ConstantForcePotential::energy(Configuration & con) { return 0.0; }
 void ConstantForcePotential::UpdateForces(Configuration & con) 
 { 
  lpmd::BasicParticleSet & atoms = con.Atoms();
- const double forcefactor = double(Parameter(con.GetTag(con, "forcefactor")));
+// const double forcefactor = double(Parameter(con.GetTag(con, "forcefactor")));
+ const double forcefactor = double(GlobalSession["forcefactor"]);
  for (long int i=0;i<atoms.Size();++i)
  {
   double mi = atoms[i].Mass();

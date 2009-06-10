@@ -65,7 +65,8 @@ void NoseHoover::Initialize(Simulation & sc, Potential & p)
 
 void NoseHoover::AdvancePosition(Simulation & sim, long i)
 {
- const double kboltzmann = double(Parameter(sim.GetTag(sim,"kboltzmann")));
+ //const double kboltzmann = double(Parameter(sim.GetTag(sim,"kboltzmann")));
+ const double kboltzmann = double(GlobalSession["kboltzmann"]);
 #warning de nuevo uso de OldCell ... confusion!!
  /*
  SimulationCell & oldsc = OldCell();

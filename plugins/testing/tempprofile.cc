@@ -168,8 +168,8 @@ void TempProfile::Evaluate(Configuration & con, Potential & pot)
   for (int j=0;j<(int)(nsp);j++) temp[i][j]=0.0e0;
  }
  int s=0;
- const double kin2ev = double(Parameter(con.GetTag(con,"kin2ev")));
- const double kboltzmann = double(Parameter(con.GetTag(con,"kboltzmann")));
+ const double kin2ev = double(GlobalSession["kin2ev"]);
+ const double kboltzmann = double(GlobalSession["kboltzmann"]);
  for (int i=0;i<elements.Size();++i)	   
  {
   //Asigna la especie correspondiente.

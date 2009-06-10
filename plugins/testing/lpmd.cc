@@ -238,7 +238,7 @@ void LPMDFormat::WriteCell(std::ostream & out, Configuration & con) const
  BasicParticleSet & part = con.Atoms();
  BasicCell & cell = con.Cell();
 
- level = int(Parameter(con.GetTag(con,"level")));
+ level = int(Parameter(con.GetTag(con, Tag("level"))));
  out << part.Size() << std::endl;
  out << cell[0] << " " << cell[1] << " " << cell[2] << std::endl;
  for (long int i=0;i<part.Size();i++)
