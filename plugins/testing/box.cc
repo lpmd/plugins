@@ -53,6 +53,9 @@ BoxFilter::BoxFilter(std::string args): Plugin("sphere", "1.0"), selector(0)
  start = int(params["start"]);
  end = int(params["end"]);
  each = int(params["each"]);
+ std::cerr << "x="<<(*this)["x"];
+ std::cerr << "y="<<(*this)["y"];
+ std::cerr << "z="<<(*this)["z"];
  lpmd::Array<std::string> sx = StringSplit((*this)["x"],'-');
  lpmd::Array<std::string> sy = StringSplit((*this)["y"],'-');
  lpmd::Array<std::string> sz = StringSplit((*this)["z"],'-');
