@@ -46,6 +46,13 @@ directory .
        pkgconfig += liblpmd-2.0
     end
 
+    module box.so
+       language = c++
+       sources = box.cc
+       installpath = lib/lpmd
+       pkgconfig += liblpmd-2.0
+    end
+
     module buckingham.so
        language = c++
        sources = buckingham.cc
