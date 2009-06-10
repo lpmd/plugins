@@ -137,6 +137,13 @@ directory .
        pkgconfig += liblpmd-2.0
     end
 
+    module element.so
+       language = c++
+       sources = element.cc
+       installpath = lib/lpmd
+       pkgconfig += liblpmd-2.0
+    end
+
     module euler.so
        language = c++
        sources = euler.cc
