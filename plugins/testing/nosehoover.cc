@@ -7,6 +7,7 @@
 #include <lpmd/simulation.h>
 #include <lpmd/potential.h>
 #include <lpmd/session.h>
+#include <lpmd/properties.h>
 
 using namespace lpmd;
 
@@ -51,46 +52,37 @@ void NoseHoover::ShowHelp() const
  std::cout << " simulacion.                                                                   \n";
 }
 
-void NoseHoover::Initialize(Simulation & sc, Potential & p)
+void NoseHoover::Initialize(Simulation & sim, Potential & p)
 {
- for (long int i=0;i<sc.Atoms().Size();++i) auxlist.push_back(Vector());
-#warning llamado a UseOldCell, que no se usa más?
- /*
- UseOldCell(sc);
- SimulationCell & oldsc = OldCell();
+ for (long int i=0;i<sim.Atoms().Size();++i) auxlist.push_back(Vector());
+ UseOldConfig(sim);
+ Configuration & oldsc = OldConfig();
  p.UpdateForces(oldsc);
  friction = 0.0;
- */
 }
 
 void NoseHoover::AdvancePosition(Simulation & sim, long i)
 {
- //const double kboltzmann = double(Parameter(sim.GetTag(sim,"kboltzmann")));
  const double kboltzmann = double(GlobalSession["kboltzmann"]);
-#warning de nuevo uso de OldCell ... confusion!!
- /*
- SimulationCell & oldsc = OldCell();
- const Atom & now = sc[i];
- const Atom & old = oldsc[i];
+ 
+ Configuration & oldsc = OldConfig();
+ Atom now = sim.Atoms()[i];
+ Atom old = oldsc.Atoms()[i];
  auxlist[i] = old.Acceleration();
- friction += ((3.0*sc.size()/q)*kboltzmann*(sc.Temperature()-temp)*dt);
+ friction += ((3.0*sim.Atoms().Size()/q)*kboltzmann*(Temperature(sim.Atoms())-temp)*dt);
  const Vector newacc = now.Acceleration() - now.Velocity()*friction;
- sc.SetAcceleration(i, newacc);
+ sim.Atoms()[i].Acceleration() = newacc;
  Vector newpos = now.Position() + now.Velocity()*dt + (2.0/3.0)*newacc*dt*dt - (1.0/6.0)*old.Acceleration()*dt*dt;
- oldsc.SetAcceleration(i, newacc);
- sc.SetPosition(i, newpos);
- */
+ oldsc.Atoms()[i].Acceleration() =  newacc;
+ sim.Atoms()[i].Position() = newpos;
 }
 
 void NoseHoover::AdvanceVelocity(Simulation & sim, long i)
 {
-#warning nuevamente uso de OldCell ... more confusion!!!!
- /*
- SimulationCell & oldsc = OldCell();
- const Atom & now = sc[i];
- const Atom & old = oldsc[i];
- sc.SetVelocity(i, now.Velocity() + (1.0/3.0)*now.Acceleration()*dt + (5.0/6.0)*old.Acceleration()*dt - (1.0/6.0)*auxlist[i]*dt);
- */
+ Configuration & oldsc = OldConfig();
+ Atom now = sim.Atoms()[i];
+ Atom old = oldsc.Atoms()[i];
+ sim.Atoms()[i].Velocity() = now.Velocity() + (1.0/3.0)*now.Acceleration()*dt + (5.0/6.0)*old.Acceleration()*dt - (1.0/6.0)*auxlist[i]*dt;
 }
 
 // Esto se incluye para que el modulo pueda ser cargado dinamicamente
