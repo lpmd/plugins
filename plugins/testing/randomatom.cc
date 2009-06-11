@@ -66,7 +66,41 @@ void RandomAtomModifier::Apply(Simulation & conf)
  }
  else if(type=="del")
  {
-  double density = atoms.Size()/cell.Volume();
+  double mass = 0.0e0;
+  for(int i=0;i<atoms.Size();++i)
+  {
+   mass += atoms[i].Mass();
+  }
+  double density = mass/cell.Volume();
+  while(random.Size()<tochange)
+  {
+   int rnd = drand48()*atoms.Size();
+   if (rnd!=0) random.AppendUnique(rnd);
+  }
+  //first delete atoms.
+  for (int i=0;i<random.Size();++i)
+  {
+   atoms.Delete(random[i]);
+  }
+  //adjust cell parameters to original density.
+  mass = 0.0e0;
+  for(int i=0;i<atoms.Size();++i)
+  {
+   mass += atoms[i].Mass();
+  }
+  double newdens=0.5*density;
+  while(fabs(newdens-density)>1E-2)
+  {
+   if(newdens > density)
+   {
+    for (int j=0;j<3;++j) cell[j] = cell[j] + cell[j]*0.01;
+   }
+   else if(newdens < density)
+   {
+    for (int j=0;j<3;++j) cell[j] = cell[j] - cell[j]*0.01;
+   }
+   newdens = mass/cell.Volume();
+  }
  }
  else
  {
@@ -77,4 +111,3 @@ void RandomAtomModifier::Apply(Simulation & conf)
 // Esto se incluye para que el modulo pueda ser cargado dinamicamente
 Plugin * create(std::string args) { return new RandomAtomModifier(args); }
 void destroy(Plugin * m) { delete m; }
-
