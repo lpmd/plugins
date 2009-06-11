@@ -5,6 +5,7 @@
 #include "printatoms.h"
 
 #include <lpmd/simulation.h>
+#include <lpmd/colorhandler.h>
 
 #include <iostream>
 
@@ -17,14 +18,12 @@ PrintAtomsVisualizer::PrintAtomsVisualizer(std::string args): Plugin("printatoms
  DefineKeyword("start", "0");
  DefineKeyword("end", "-1");
  DefineKeyword("each", "1");
- DefineKeyword("from", "-1");
- DefineKeyword("to", "-1");
+ DefineKeyword("tags", "x,y,z");
  ProcessArguments(args);
- from_at = int(params["from"]);
- to_at = int(params["to"]);
  start = int(params["start"]);
  end = int(params["end"]);
  each = int(params["each"]);
+ tags = StringSplit(params["tags"], ',');
 }
 
 PrintAtomsVisualizer::~PrintAtomsVisualizer() { }
@@ -47,17 +46,33 @@ void PrintAtomsVisualizer::ShowHelp() const
 void PrintAtomsVisualizer::Apply(const Simulation & sim) 
 { 
  const BasicParticleSet & atoms = sim.Atoms();
+ std::cout << "-> ";
  for (long int i=0;i<atoms.Size();++i) 
  {  
-  if ((i >= from_at) && (i <= to_at)) 
+  const Vector & pos = atoms[i].Position();
+  const Vector & vel = atoms[i].Velocity();
+  const Vector & acc = atoms[i].Acceleration();
+  for (int j=0;j<tags.Size();++j)
   {
-   std::cout << "-> Atom " << i << " : " << atoms[i].Symbol() << '\n'; 
-   std::cout << "   Position     : " << atoms[i].Position() << '\n';
-   std::cout << "   Velocity     : " << atoms[i].Velocity() << '\n';
-   std::cout << "   Acceleration : " << atoms[i].Acceleration() << '\n';
+   const std::string & tag = tags[j];
+   std::cout << tag << "=";
+   if (tag == "x") std::cout << pos[0];
+   else if (tag == "y") std::cout << pos[1];
+   else if (tag == "z") std::cout << pos[2];
+   else if (tag == "vx") std::cout << vel[0];
+   else if (tag == "vy") std::cout << vel[1];
+   else if (tag == "vz") std::cout << vel[2];
+   else if (tag == "ax") std::cout << acc[0];
+   else if (tag == "ay") std::cout << acc[1];
+   else if (tag == "az") std::cout << acc[2];
+   else if ((tag == "r") && ColorHandler::HaveColor(atoms[i])) std::cout << ColorHandler::ColorOfAtom(atoms[i])[0];
+   else if ((tag == "g") && ColorHandler::HaveColor(atoms[i])) std::cout << ColorHandler::ColorOfAtom(atoms[i])[1];
+   else if ((tag == "b") && ColorHandler::HaveColor(atoms[i])) std::cout << ColorHandler::ColorOfAtom(atoms[i])[2];
+   else if (atoms.Have(atoms[i], Tag(tag))) std::cout << atoms.GetTag(atoms[i], Tag(tag));
+   std::cout << " ";
   }
+  std::cout << '\n';
  }
- std::cout << '\n';
 }
 
 // Esto se incluye para que el modulo pueda ser cargado dinamicamente

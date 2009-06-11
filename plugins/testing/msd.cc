@@ -41,13 +41,9 @@ void MSD::Evaluate(ConfigurationSet & hist, Potential & pot)
  for (int t=1;t<N;++t)
   for (long int i=0;i<nat;++i)
   {
-   scratch_atoms[0].Position() = hist[t-1].Atoms()[i].Position();
-   scratch_atoms[1].Position() = hist[t].Atoms()[i].Position();
-#warning inlining por mientras tenemos un metodos como sc.VectorDistance.
-   const Vector & v0 = scratch_atoms[0].Position();
-   const Vector & v1 = scratch_atoms[1].Position();
+   const Vector & v0 = scratch_atoms[0].Position() = hist[t-1].Atoms()[i].Position();
+   const Vector & v1 = scratch_atoms[1].Position() = hist[t].Atoms()[i].Position();
    noperiodic[t][i] = noperiodic[t-1][i] + cell.Displacement(v0, v1);
-   // noperiodic[t][i] = noperiodic[t-1][i] + scratch.VectorDistance(0, 1);
   }
 
  //

@@ -237,9 +237,9 @@ directory .
        pkgconfig += liblpmd-2.0
     end
 
-    module metropoli.so
+    module metropolis.so
        language = c++
-       sources = metropoli.cc
+       sources = metropolis.cc
        installpath = lib/lpmd
        pkgconfig += liblpmd-2.0
     end
@@ -514,11 +514,8 @@ directory .
 #
 # Aca los plugins que faltan por agregar a la compilacion
 #
-#cell_la_SOURCES = cell.h cell.cc #PROBABLEMENTE YA NO VA MAS!!
 #color_la_SOURCES = color.h color.cc
-#energy_la_SOURCES = energy.h energy.cc #PROBABLEMENTE YA NO VA MAS!!
 #ewald_la_SOURCES = ewald.h ewald.cc
-#pressure_la_SOURCES = pressure.h pressure.cc #PROBABLEMENTE YA NO VA MAS!!
 #rvcorr_la_SOURCES = rvcorr.h rvcorr.cc #EN STANDBY
 #selectatoms_la_SOURCES = selectatoms.h selectatoms.cc
 #thermalneedle_la_SOURCES = thermalneedle.h thermalneedle.cc #PROBABLEMENTE YA NO VA MAS!! 

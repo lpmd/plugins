@@ -5,8 +5,10 @@
 #ifndef __PRINTATOMS_SM_H__
 #define __PRINTATOMS_SM_H__
 
+#include <lpmd/array.h>
 #include <lpmd/visualizer.h>
 #include <lpmd/plugin.h>
+#include <string>
 
 class PrintAtomsVisualizer: public lpmd::Visualizer, public lpmd::Plugin
 {
@@ -21,7 +23,7 @@ class PrintAtomsVisualizer: public lpmd::Visualizer, public lpmd::Plugin
   void Apply(const lpmd::Simulation & sim);
 
  private:
-  long int from_at, to_at;
+   lpmd::Array<std::string> tags;
 };
 
 #endif

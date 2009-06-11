@@ -32,8 +32,6 @@ DispVol::DispVol(std::string args): Plugin("dispvol", "2.0")
  AssignParameter("t", "5");
  ProcessArguments(args);
  delta_t = int(params["t"]);
-#warning Por qué no pasa outputfile si se inlcuye property.h?
-// OutputFile() = params["output"];
 }
 
 DispVol::~DispVol() { if (m != NULL) delete m; }

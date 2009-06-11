@@ -2,7 +2,7 @@
 //
 //
 
-#include "metropoli.h"
+#include "metropolis.h"
 
 #include <lpmd/simulation.h>
 #include <lpmd/properties.h>
