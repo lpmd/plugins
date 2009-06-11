@@ -64,9 +64,7 @@ void Gdr::Evaluate(Configuration & con, Potential & pot)
 {
  // fabs(rcut) < 1e-05 used to avoid comparing doubles
  if (nb == 0 || fabs(rcut) < 1e-05) throw PluginError("gdr", "Error in calculation: Cutoff or bins have wrong value.");
- //CurrentValue() = *(gdr(con,pot,nb,rcut));
  gdr(con,pot,nb,rcut,CurrentValue());
- #warning "GDR: memory leak?"
 }
 
 // Esto se incluye para que el modulo pueda ser cargado dinamicamente

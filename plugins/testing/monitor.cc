@@ -48,7 +48,7 @@ void MonitorVisualizer::Apply(const Simulation & sim)
 { 
  for (int p=0;p<property_array.Size();++p) 
      (*output_stream) << sim.GetTag(sim, Tag(property_array[p])) << "  ";
- (*output_stream) << '\n';
+ (*output_stream) << std::endl;
 }
 
 // Esto se incluye para que el modulo pueda ser cargado dinamicamente

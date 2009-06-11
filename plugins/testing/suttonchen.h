@@ -23,10 +23,6 @@ class SuttonChen: public lpmd::MetalPotential , public lpmd::Plugin
   double F(const double &rhoi) const;
   lpmd::Vector PairForce(const lpmd::Vector &rij) const;
   lpmd::Vector ManyBodies(const lpmd::Vector &rij, const double &rhoi, const double &rhoj) const;
-  double deltarhoi(const double & rhobar) const;
-  double deltaU1(const double & rhobar, const int & N) const;
-  double deltaU2(const double & rhobar, const int & N, const double & rhoi) const;
-  double VirialCorrection(const double &rhobar, const int &N, const double &rhoi) const;
 
  private:
   double e,a,n,m,c,rcut;

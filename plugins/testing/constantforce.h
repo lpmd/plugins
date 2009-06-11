@@ -14,16 +14,14 @@ class ConstantForcePotential: public lpmd::Potential, public lpmd::Plugin
   //Metodos Generales
   ConstantForcePotential(std::string args);
   ~ConstantForcePotential();
-  void SetParameter(std::string name);
+
   void ShowHelp() const;
 
-  //Metodos Propios del modulo constantforce
   double energy(lpmd::Configuration & con);
   void UpdateForces(lpmd::Configuration & con);
 
  private:
-  double fx, fy, fz;
-
+  lpmd::Vector force;
 };
 
 

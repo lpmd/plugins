@@ -45,13 +45,13 @@ ElementFilter::ElementFilter(std::string args): Plugin("element", "1.0"), select
  DefineKeyword("start", "0");
  DefineKeyword("end", "-1");
  DefineKeyword("each", "1");
- DefineKeyword("sym","e");
+ DefineKeyword("symbol","e");
  // hasta aqui los valores por omision
  ProcessArguments(args);
  start = int(params["start"]);
  end = int(params["end"]);
  each = int(params["each"]);
- sym = params["sym"];
+ sym = params["symbol"];
 }
 
 ElementFilter::~ElementFilter() { delete selector; }
@@ -61,7 +61,7 @@ void ElementFilter::ShowHelp() const
  std::cout << " General Info      >>                                                          \n";
  std::cout << " General Options   >>                                                          \n";
  std::cout << " Example                                                                       \n";
- std::cout << " filter symbol sym=Ar                                                          \n";
+ std::cout << " filter element symbol=Ar                                                      \n";
  std::cout << '\n';
 }
 
@@ -75,3 +75,4 @@ Selector<BasicParticleSet> & ElementFilter::CreateSelector()
 // Esto se incluye para que el modulo pueda ser cargado dinamicamente
 Plugin * create(std::string args) { return new ElementFilter(args); }
 void destroy(Plugin * m) { delete m; }
+

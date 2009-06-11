@@ -14,27 +14,13 @@ using namespace lpmd;
 ConstantForcePotential::ConstantForcePotential(std::string args): Plugin("constantforce", "2.0")
 { 
  //
- DefineKeyword("forcevector");
+ DefineKeyword("force");
  // hasta aqui los valores por omision
  ProcessArguments(args);
- fx = double((*this)["fx"]);
- fy = double((*this)["fy"]);
- fz = double((*this)["fz"]);
+ force = Vector((*this)["force"].c_str());
 }
 
 ConstantForcePotential::~ConstantForcePotential() { }
-
-void ConstantForcePotential::SetParameter(std::string name) 
-{ 
- #warning "SetParameter es horrible! mejorar los parametros"
- if (name == "forcevector") 
- {
-  AssignParameter("fx", GetNextWord());
-  AssignParameter("fy", GetNextWord());
-  AssignParameter("fz", GetNextWord());
- }
- else Module::SetParameter(name);
-}
 
 void ConstantForcePotential::ShowHelp() const
 {
@@ -48,7 +34,7 @@ void ConstantForcePotential::ShowHelp() const
  std::cout << " Example                                                                       \n";
  std::cout << " Cargando el Modulo :                                                          \n";
  std::cout << " use constantforce as gravity                                                  \n";
- std::cout << "     forcevector 0.0 0.0 -9.8                                                  \n";
+ std::cout << "     force <0.0,0.0,-9.8>                                                      \n";
  std::cout << " enduse                                                                        \n";
  std::cout << " Llamando al modulo :                                                          \n";
  std::cout << " potential gravity Ar Ar                                                     \n\n";
@@ -61,18 +47,15 @@ double ConstantForcePotential::energy(Configuration & con) { return 0.0; }
 void ConstantForcePotential::UpdateForces(Configuration & con) 
 { 
  lpmd::BasicParticleSet & atoms = con.Atoms();
-// const double forcefactor = double(Parameter(con.GetTag(con, "forcefactor")));
  const double forcefactor = double(GlobalSession["forcefactor"]);
  for (long int i=0;i<atoms.Size();++i)
  {
   double mi = atoms[i].Mass();
-  Vector ff(fx, fy, fz);
-  atoms[i].Acceleration() = atoms[i].Acceleration() + ff*(forcefactor/mi);
+  atoms[i].Acceleration() = atoms[i].Acceleration() + force*(forcefactor/mi);
  }
 }
 
 // Esto se incluye para que el modulo pueda ser cargado dinamicamente
 Plugin * create(std::string args) { return new ConstantForcePotential(args); }
 void destroy(Plugin * m) { delete m; }
-
 

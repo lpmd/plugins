@@ -16,8 +16,10 @@ class ExtraVelModifier: public lpmd::SystemModifier, public lpmd::Plugin
   ~ExtraVelModifier();
   void ShowHelp() const;
 
-  //Metodos Propios
   void Apply(lpmd::Simulation & sim);
+
+ private:
+  lpmd::Vector velocity;
 };
 
 #endif

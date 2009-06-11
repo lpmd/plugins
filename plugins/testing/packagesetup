@@ -25,6 +25,13 @@ directory .
        flags += -fPIC
     end
 
+    module addvelocity.so
+       language = c++
+       sources = addvelocity.cc
+       installpath = lib/lpmd
+       pkgconfig += liblpmd-2.0
+    end
+
     module angdist.so
        language = c++
        sources = angdist.cc
@@ -147,13 +154,6 @@ directory .
     module euler.so
        language = c++
        sources = euler.cc
-       installpath = lib/lpmd
-       pkgconfig += liblpmd-2.0
-    end
-
-    module extravel.so
-       language = c++
-       sources = extravel.cc
        installpath = lib/lpmd
        pkgconfig += liblpmd-2.0
     end

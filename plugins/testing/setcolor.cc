@@ -41,7 +41,9 @@ void SetColorModifier::ShowHelp() const
 void SetColorModifier::Apply(Simulation & sim)
 {
  BasicParticleSet & atoms = sim.Atoms();
- DebugStream() << "-> Applying color " << color << " to " << atoms.Size() << " atoms\n";  
+ DebugStream() << "-> Applying color ";
+ FormattedWrite(DebugStream(), color);
+ DebugStream() << " to " << atoms.Size() << " atoms\n";  
  for (long int i=0;i<atoms.Size();++i) ColorHandler::ColorOfAtom(atoms[i]) = color;
 }
 
