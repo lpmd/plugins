@@ -7,6 +7,7 @@
 #include <lpmd/util.h>
 #include <lpmd/simulation.h>
 #include <lpmd/atom.h>
+#include <lpmd/colorhandler.h>
 
 using namespace lpmd;
 
@@ -164,12 +165,11 @@ bool LPMDFormat::ReadCell(std::istream & is, Configuration & con) const
    double X=0.0e0,Y=0.0e0,Z=0.0e0;
    double VX=0.0e0,VY=0.0e0,VZ=0.0e0;
    double AX=0.0e0,AY=0.0e0,AZ=0.0e0;
-   lpmd::Vector color(0,0,0);
-   double colors=-1.0e0;
+   lpmd::Color color(0,0,0);
+//   double colors=-1.0e0;
    for (long int k=1 ; k < hdr.Size() ; ++k)
    {
-#warning Color seteado a cero mientras tanto, para no usar GetSpcColor
-    if (hdr[k] == "SYM") {sym=words[k-1]; color = Vector(0,0,0); } //GetSpcColor(N);}
+    if (hdr[k] == "SYM") sym=words[k-1];
     if (hdr[k] == "X") X=atof(words[k-1].c_str());
     if (hdr[k] == "Y") Y=atof(words[k-1].c_str());
     if (hdr[k] == "Z") Z=atof(words[k-1].c_str());
@@ -180,19 +180,16 @@ bool LPMDFormat::ReadCell(std::istream & is, Configuration & con) const
     if (hdr[k] == "AY") AY=atof(words[k-1].c_str());
     if (hdr[k] == "AZ") AZ=atof(words[k-1].c_str());
     if (hdr[k] == "RGB") color = Vector(words[k-1].c_str());
-    if (hdr[k] == "C") colors=atof(words[k-1].c_str());
+//    if (hdr[k] == "C") colors=atof(words[k-1].c_str());
    }
    Vector pos = cell.Cartesian(Vector(X,Y,Z));
    Vector vel(VX,VY,VZ);
    Vector ace(AX,AY,AZ);
+   lpmd::Atom atm(sym,pos,vel,ace);
+   if (!ColorHandler::HaveColor(atm)) ColorHandler::ColorOfAtom(atm) = ColorHandler::DefaultColor(atm);
+   if ((color[0]!=0 || color[1]!=0) || (color[2]!=0)) ColorHandler::ColorOfAtom(atm) = color;
    part.Append(Atom(sym,pos,vel,ace));
-#warning Hay que asignar el color de alguna forma!!!
    atomcount++;
-   //part.SetFracPosition(atomcount, pos);
-   //part.SetVelocity(atomcount, vel);
-   //part.SetColor(atomcount, color);
-   //if(colors>=0 && colors <=1) sc[i].SetColor(colors);
-   //sc.SetAcceleration(atomcount++, ace);
 #warning Falta asignar la propiedad del atomo?
   }
   else throw PluginError("lpmd", "An unidentified line was found in the file \""+readfile+"\", line "+ToString<int>(*linecounter));
@@ -259,8 +256,7 @@ void LPMDFormat::WriteCell(std::ostream & out, Configuration & con) const
   {
    for (long int j=0 ; j < extra.Size() ; ++j)
    {
-#warning Comentadas Opciones COLOR para lpmd2
-    //if(extra[j] == "RGB") {lpmd::Vector tmp=part[i].Color(); FormattedWrite(out,tmp); }
+    if(extra[j] == "RGB") {lpmd::Vector tmp = ColorHandler::ColorOfAtom(part[i]); FormattedWrite(out,tmp); }
     //if(extra[j] == "C") {double color=part[i].ColorS(); out << "          " << color;} 
     if(extra[j] == "TYPE") { out << "          " << "ATOMTYPE"; }
    }
