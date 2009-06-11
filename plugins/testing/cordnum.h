@@ -31,6 +31,7 @@ class CordNum: public lpmd::StoredValue<lpmd::Matrix>, public lpmd::InstantPrope
   int na;
   std::vector<std::string> satoms; //atomic symbols.
   bool do_average;
+  double cutoff;
 };
 
 #endif

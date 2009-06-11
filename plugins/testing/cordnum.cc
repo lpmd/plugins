@@ -24,6 +24,7 @@ CordNum::CordNum(std::string args): Plugin("cordnum", "2.0")
  DefineKeyword("maxn");
  DefineKeyword("output");
  DefineKeyword("average", "false");
+ DefineKeyword("cutoff","0");
  ProcessArguments(args);
  nb = int(params["maxn"]);
  start = int(params["start"]);
@@ -31,6 +32,7 @@ CordNum::CordNum(std::string args): Plugin("cordnum", "2.0")
  each = int(params["each"]);
  OutputFile() = params["output"];
  do_average = bool(params["average"]);
+ cutoff = double(params["cutoff"]);
 }
 
 CordNum::~CordNum()
@@ -99,6 +101,8 @@ void CordNum::ShowHelp() const
  std::cout << "                      radio de corte.                                          \n";
  std::cout << "      output        : Archivo de salida para la informacion de la distribucion.\n";
  std::cout << "      average       : True/False Para promediar o no las distribuciones.       \n";
+ std::cout << "      cutoff        : Radio de corte para la lista de vecinos, si no se asigna \n";
+ std::cout << "                      un valor, toma el valor de 2*rcut                        \n";
  std::cout << '\n';
  std::cout << " Example                                                                       \n";
  std::cout << " Cargando el Modulo :                                                          \n";
@@ -158,12 +162,12 @@ void CordNum::Evaluate(Configuration & con, Potential & pot)
   int ne1=0;
   for (unsigned long int i=0;i<N;++i) {if(atoms[i].Z()==e1) ne1++;}
   //Comienzan las iteraciones.
+  if (cutoff == 0) cutoff = rc12*2;
   for (unsigned long int i=0;i<N;++i)
   {
    if(atoms[i].Z()==e1)
    {
-#warning nuevamente CMCutoff .. reemplazado por rc12 por2
-    lpmd::NeighborList & nlist = con.Neighbors(i,true,rc12*2);
+    lpmd::NeighborList & nlist = con.Neighbors(i,true,cutoff);
     for(long int k=0;k<nlist.Size();++k)
     {
      const lpmd::AtomPair & nn = nlist[k];

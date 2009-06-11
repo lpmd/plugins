@@ -38,7 +38,6 @@ void MoleculeCMModifier::ShowHelp() const
 void MoleculeCMModifier::Apply(Simulation & con)
 {
  lpmd::BasicParticleSet & atoms = con.Atoms();
- lpmd::BasicCell & cell = con.Cell();
 
  std::list<lpmd::Atom> tmplist;
  int * used = new int[atoms.Size()];
