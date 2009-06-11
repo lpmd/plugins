@@ -34,6 +34,7 @@ class AngDist: public lpmd::StoredValue<lpmd::Matrix>, public lpmd::InstantPrope
     int na;
     bool do_average;
     std::vector<std::string> satoms; //simbolos de los atomos.
+    double cutoff;
 };
 
 #endif

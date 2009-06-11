@@ -25,6 +25,7 @@ AngDist::AngDist(std::string args): Plugin("angdist", "2.0")
  DefineKeyword("output");
  DefineKeyword("bins", "200");
  DefineKeyword("average", "false");
+ DefineKeyword("curtoff", "0");
  // 
  ProcessArguments(args);
  nb = int(param["bins"]);
@@ -33,6 +34,7 @@ AngDist::AngDist(std::string args): Plugin("angdist", "2.0")
  each = int(param["each"]);
  OutputFile() = param["output"];
  do_average = bool(param["average"]);
+ cutoff = double(param["cutoff"]);
 }
 
 AngDist::~AngDist()
@@ -100,6 +102,8 @@ void AngDist::ShowHelp() const
  std::cout << "                      radio de corte.                                          \n";
  std::cout << "      output        : Archivo de salida para la informacion de la distribucion.\n";
  std::cout << "      average       : True/False Para promediar o no las distribuciones.       \n";
+ std::cout << "      cutoff        : Radio de corte general para calculo de angulos.          \n";
+ std::cout << "                      Si no se especifica toma la suma de los radios de corte. \n";
  std::cout << '\n';
  std::cout << " Example                                                                       \n";
  std::cout << " Cargando el Modulo :                                                          \n";
@@ -158,12 +162,12 @@ void AngDist::Evaluate(lpmd::Configuration & con, lpmd::Potential & pot)
   int e3 = ElemNum(loa[2]);
   double rc12 = rcut[loa[0]+"-"+loa[1]];
   double rc23 = rcut[loa[1]+"-"+loa[2]];
+  if(cutoff==0) cutoff = rc12+rc23;
   for(unsigned long int i=0;i<N;++i)
   {
    if (part[i].Z()==e2)
    {
-#warning Que pasará com CMCutoff() ??? ahora esta rempplazado por rc12+rc23
-    lpmd::NeighborList & nlist = con.Neighbors(i,true,rc12+rc23);
+    lpmd::NeighborList & nlist = con.Neighbors(i,true,cutoff);
     for (long int k=0;k<nlist.Size();++k)
     {
      const lpmd::AtomPair & nn = nlist[k];
