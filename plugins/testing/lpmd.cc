@@ -166,7 +166,6 @@ bool LPMDFormat::ReadCell(std::istream & is, Configuration & con) const
    double VX=0.0e0,VY=0.0e0,VZ=0.0e0;
    double AX=0.0e0,AY=0.0e0,AZ=0.0e0;
    lpmd::Color color(0,0,0);
-//   double colors=-1.0e0;
    for (long int k=1 ; k < hdr.Size() ; ++k)
    {
     if (hdr[k] == "SYM") sym=words[k-1];
@@ -180,7 +179,7 @@ bool LPMDFormat::ReadCell(std::istream & is, Configuration & con) const
     if (hdr[k] == "AY") AY=atof(words[k-1].c_str());
     if (hdr[k] == "AZ") AZ=atof(words[k-1].c_str());
     if (hdr[k] == "RGB") color = Vector(words[k-1].c_str());
-//    if (hdr[k] == "C") colors=atof(words[k-1].c_str());
+    if (hdr[k] == "C") color=ColorFromScalar(atof(words[k-1].c_str()));
    }
    Vector pos = cell.Cartesian(Vector(X,Y,Z));
    Vector vel(VX,VY,VZ);
@@ -257,7 +256,6 @@ void LPMDFormat::WriteCell(std::ostream & out, Configuration & con) const
    for (long int j=0 ; j < extra.Size() ; ++j)
    {
     if(extra[j] == "RGB") {lpmd::Vector tmp = ColorHandler::ColorOfAtom(part[i]); FormattedWrite(out,tmp); }
-    //if(extra[j] == "C") {double color=part[i].ColorS(); out << "          " << color;} 
     if(extra[j] == "TYPE") { out << "          " << "ATOMTYPE"; }
    }
   }
