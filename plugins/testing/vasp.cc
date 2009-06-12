@@ -141,6 +141,7 @@ bool VaspFormat::ReadCell(std::istream & is, Configuration & con) const
    }
   }
  }
+ con.SetTag(con, Tag("level"), 0);
  return true;
 }
 

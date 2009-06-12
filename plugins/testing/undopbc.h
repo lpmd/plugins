@@ -16,17 +16,14 @@ class UndoPBCModifier: public lpmd::SystemModifier, public lpmd::Plugin
   //Metodos Generales 
   UndoPBCModifier(std::string args);
   ~UndoPBCModifier();
-  void Show(std::ostream & os) const;
   void ShowHelp() const;
 
-  //Metodos Propios de modulo cellscaling
   void Apply(lpmd::Simulation & sim);
 
  private:
-  int counter;
+  lpmd::Vector * oldpositions;
+  bool first_apply;
 };
 
 #endif
-
-
 

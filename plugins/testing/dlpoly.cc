@@ -73,6 +73,7 @@ bool DlPolyFormat::ReadCell(std::istream & is, Configuration & con) const
  getline(is, tmp);
  std::istringstream ost(tmp);
  ost >> fkey >> pbk;
+ con.SetTag(con, Tag("level"), fkey);
  for (int i=0;i<3;++i)
  {
   getline(is, tmp);

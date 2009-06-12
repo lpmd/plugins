@@ -16,7 +16,6 @@ CordNumFunc::CordNumFunc(std::string args): Plugin("cordnumfunc", "2.0")
 {
  ParamList & params = (*this);
  //
- DefineKeyword("atoms");
  DefineKeyword("start", "0");
  DefineKeyword("end", "-1");
  DefineKeyword("each", "1");
@@ -34,30 +33,7 @@ CordNumFunc::CordNumFunc(std::string args): Plugin("cordnumfunc", "2.0")
  do_average = bool(params["average"]);
 }
 
-CordNumFunc::~CordNumFunc()
-{
-}
-
-void CordNumFunc::SetParameter(std::string name)
-{
- #warning "SetParameter es horrible! mejorar los parametros"
- if (name == "atoms")
- {
-  AssignParameter("atoms", GetNextWord());
-  na = int((*this)["atoms"]);
-  for(int i=0;i<na;i++) { satoms.push_back(GetNextWord()); }
- }
- else Module::SetParameter(name);
-}
-
-void CordNumFunc::Show(std::ostream & os) const
-{
- Module::Show(os);
- os << "   Atoms Number= " << na << '\n';
- os << "   Atoms       = ";
- for(unsigned int i=0;i<satoms.size();i++) std::cout << satoms[i] << "\t";
- os << std::endl;
-}
+CordNumFunc::~CordNumFunc() { }
 
 void CordNumFunc::ShowHelp() const
 {
@@ -69,8 +45,6 @@ void CordNumFunc::ShowHelp() const
  std::cout << " General Options   >>                                                          \n";
  std::cout << "      bins          : Numero de seccion en el que se divide el rango de la     \n";
  std::cout << "                      funcion entre 0 y rcut.                                  \n";
- std::cout << "      atoms         : Especifica el Numero de especies atomicas y sus simbolos \n";
- std::cout << "                      para el calculo de el numero de cordinacion              \n";
  std::cout << "      rcut          : Se especifica el valor del radio de corte maximo de la   \n";
  std::cout << "                      funcion.                                                 \n";
  std::cout << "      output        : Archivo de salida para la informacion de la distribucion.\n";
@@ -80,7 +54,6 @@ void CordNumFunc::ShowHelp() const
  std::cout << " Cargando el Modulo :                                                          \n";
  std::cout << " use cordnumfunc                                                               \n";
  std::cout << "     bins 200                                                                  \n";
- std::cout << "     atoms 2 Ge O                                                              \n";
  std::cout << "     rcut 10.0                                                                 \n";
  std::cout << "     output cordnumfunc.dat                                                    \n";
  std::cout << "     average false                                                             \n";

@@ -11,7 +11,7 @@
 
 using namespace lpmd;
 
-UndoPBCModifier::UndoPBCModifier(std::string args): Plugin("cellscaling", "2.0")
+UndoPBCModifier::UndoPBCModifier(std::string args): Plugin("cellscaling", "2.0"), oldpositions(0)
 {
  ParamList & params = (*this);
  //
@@ -20,14 +20,13 @@ UndoPBCModifier::UndoPBCModifier(std::string args): Plugin("cellscaling", "2.0")
  DefineKeyword("each", "1");
  // hasta aqui los valores por omision
  ProcessArguments(args);
+ start = int(params["start"]);
+ end = int(params["end"]);
+ each = int(params["each"]);
+ first_apply = true;
 }
 
-UndoPBCModifier::~UndoPBCModifier() { }
-
-void UndoPBCModifier::Show(std::ostream & os) const
-{
- Module::Show(os);
-}
+UndoPBCModifier::~UndoPBCModifier() { delete [] oldpositions; }
 
 void UndoPBCModifier::ShowHelp() const
 {
@@ -35,13 +34,8 @@ void UndoPBCModifier::ShowHelp() const
  std::cout << "      El modulo es utilizado para posicionar los atomos sin condiciones        \n";
  std::cout << " periodicas de borde.                                                          \n";
  std::cout << " General Options   >>                                                          \n";
- std::cout << "      percent       : Indica el porcentaje en el que se escalara la celda,     \n";
- std::cout << "                      puede ser positivo(expandir) o negativo(comprimir).      \n";
- std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
- std::cout << " Example                                                                       \n";
- std::cout << " Cargando el Modulo :                                                          \n";
+ std::cout << " Example:                                                                      \n";
  std::cout << " use undopbc                                                                   \n";
- std::cout << "     constant true                                                             \n";
  std::cout << " enduse                                                                        \n";
  std::cout << " Llamando al modulo :                                                          \n";
  std::cout << " apply undopbc start=0 each=300 end=1000                                     \n\n";
@@ -49,31 +43,26 @@ void UndoPBCModifier::ShowHelp() const
  std::cout << " desde el paso 0 hasta el 1000 cada 300.                                       \n";
 }
 
-//void UndoPBCModifier::Initialize(Simulation & sim, Potential & pot){old  = sim;}
-
 void UndoPBCModifier::Apply(Simulation & sim)
 {
  lpmd::BasicParticleSet & atoms = sim.Atoms();
  lpmd::BasicCell & cell = sim.Cell();
-// int N=2;
-/*
- Vector ** noperiodic = new Vector*[N];
- for (int t=0;t<N;++t) noperiodic[t] = new Vector[nat];
- for (int i=0;i<nat;++i) noperiodic[0][i] = part[i].Position();
-
-// for (int t=1;t<N;++t)
-  for (int i=0;i<nat;++i)
+ if (first_apply)
+ {
+  oldpositions = new Vector[atoms.Size()];
+  for (long int i=0;i<atoms.Size();++i) oldpositions[i] = atoms[i].Position(); 
+  first_apply = false;
+ }
+ else
+ {
+  for (long int i=0;i<atoms.Size();++i)
   {
-   atoms[0].Position() = old.Atoms()[i].Position();
-   atoms[1].Position() = sim.Atoms()[i].Position();
-   noperiodic[t][i] = noperiodic[t-1][i] + cell.Displacement(part[0].Position(), part[1].Position());
+   atoms[i].Position() = oldpositions[i] + cell.Displacement(oldpositions[i], atoms[i].Position());
   }
-*/
-
+ }
 }
 
 // Esto se incluye para que el modulo pueda ser cargado dinamicamente
 Plugin * create(std::string args) { return new UndoPBCModifier(args); }
 void destroy(Plugin * m) { delete m; }
-
 

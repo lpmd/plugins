@@ -55,7 +55,6 @@ void RawBinFormat::ReadHeader(std::istream & is) const
 //
 bool RawBinFormat::ReadCell(std::istream & is, Configuration & con) const
 {
- //sc.MetaData().AssignParameter("level",ToString<int>(level));
  lpmd::BasicParticleSet & atoms = con.Atoms();
  int level = int(Parameter(con.GetTag(con, Tag("level"))));
  if ((*this)["replacecell"] == "true") throw PluginError("rawbinary", "This format does not contain any cell vectors.");
@@ -105,7 +104,6 @@ void RawBinFormat::WriteHeader(std::ostream & os, lpmd::SimulationHistory * sh) 
 void RawBinFormat::WriteCell(std::ostream & out, lpmd::Configuration & con) const
 {
  lpmd::BasicParticleSet & atoms = con.Atoms();
- //sc.MetaData().AssignParameter("level",ToString<int>(level));
  int level = int(Parameter(con.GetTag(con, Tag("level"))));
  long int totsize = 0, expsize;
  long int s = atoms.Size();

@@ -10,6 +10,8 @@
 #include <lpmd/pairpotential.h>
 #include <lpmd/session.h>
 #include <lpmd/basiccell.h>
+#include <lpmd/combinedpotential.h>
+#include <lpmd/error.h>
 
 #include <sstream>
 
@@ -49,9 +51,10 @@ void LocalPressure::ShowHelp() const
 
 void LocalPressure::Evaluate(Configuration & sim, Potential & pot)
 { 
-#warning como tomar los potenciales si evaluate no recive simulaitons ... solo configurations.
- //PotentialArray & p_array = dynamic_cast<PotentialArray &>(pot);
- //lpmd::CombinedPotential & p_array = pot.Potentials();
+ CombinedPotential * p_array_ptr = 0;
+ try { p_array_ptr = dynamic_cast<CombinedPotential *>(&pot); }
+ catch (std::exception & e) { throw PluginError("localpressure", "Potentials are not active, cannot compute individual stress tensors"); }
+ CombinedPotential & p_array = *p_array_ptr;
  lpmd::BasicParticleSet & atoms = sim.Atoms();
  lpmd::BasicCell & cell = sim.Cell();
 
@@ -96,17 +99,15 @@ void LocalPressure::Evaluate(Configuration & sim, Potential & pot)
    try
    {
     const lpmd::AtomPair & nn = nlist[i];
-//    int s2 = (nn.j)->Z();
-#warning como usar CombinedPotential para retornar el potencial entre dos especies.
-//    PairPotential & ppot = dynamic_cast<PairPotential &>(p_array.Get(s1, s2));
-//    Vector ff = ppot.pairForce(nn.rij);
-//    for (int p=0;p<3;++p)
-//     for (int q=0;q<3;++q) stress[p][q] -= (nn.rij)[p]*ff[q];
+    int s2 = (nn.j)->Z();
+    const PairPotential & ppot = dynamic_cast<const PairPotential &>(p_array.PotentialForElements(s1, s2));
+    Vector ff = ppot.pairForce(nn.rij);
+    for (int p=0;p<3;++p)
+     for (int q=0;q<3;++q) stress[p][q] -= (nn.rij)[p]*ff[q];
    }
    catch (std::exception &e) { throw PluginError("localpressure", "Cannot calculate local stress with a non-pair potential."); }
   }
   int k = ind[0]+n[0]*ind[1]+n[0]*n[1]*ind[2];
-  //const double pressfactor = double(Parameter(sim.GetTag(sim, "pressfactor")));
   const double pressfactor = double(GlobalSession["pressfactor"]);
   for (int p=0;p<3;++p)
    for (int q=0;q<3;++q)

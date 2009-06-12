@@ -150,6 +150,7 @@ bool ZLPFormat::ReadCell(std::istream & is, Configuration & conf) const
  long int natoms;
  ibufstr >> lvl;
  ibufstr >> natoms;
+ conf.SetTag(conf, Tag("level"), lvl);
  //std::cerr << "DEBUG Number of atoms = " << natoms << '\n';
  for (int j=0;j<3;++j)
  { 

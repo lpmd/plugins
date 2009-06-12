@@ -108,12 +108,14 @@ bool XYZFormat::ReadCell(std::istream & is, Configuration & sc) const
   {
    Vector pos(atof(words[1].c_str()),atof(words[2].c_str()),atof(words[3].c_str()));
    part.Append(Atom(words[0], pos));
+   sc.SetTag(sc, Tag("level"), 0);
   }
   else if (words.Size() == 7)
   {
    Vector pos(atof(words[1].c_str()),atof(words[2].c_str()),atof(words[3].c_str()));
    Vector vel(atof(words[4].c_str()),atof(words[5].c_str()),atof(words[6].c_str()));
    part.Append(Atom(words[0], pos, vel));
+   sc.SetTag(sc, Tag("level"), 1);
   }
   else if (words.Size() == 10)
   {
@@ -121,6 +123,7 @@ bool XYZFormat::ReadCell(std::istream & is, Configuration & sc) const
    Vector vel(atof(words[4].c_str()),atof(words[5].c_str()),atof(words[6].c_str()));
    Vector ace(atof(words[7].c_str()),atof(words[8].c_str()),atof(words[9].c_str()));
    part.Append(Atom(words[0], pos, vel, ace));
+   sc.SetTag(sc, Tag("level"), 2);
   }
   else throw PluginError("xyz", "An unidentified line was found in the file \""+readfile+"\", line "+ToString<int>(*linecounter));
  }

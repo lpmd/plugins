@@ -75,6 +75,7 @@ void LPMDFormat::ReadHeader(std::istream & is) const
    hdr.Append(std::string("HDR"));
    hdr.Append(std::string("SYM"));
    hdr.Append(std::string("X"));hdr.Append(std::string("Y"));hdr.Append(std::string("Z"));
+   level = 0;
   }
   else if (words.Size()==7)
   {
@@ -82,6 +83,7 @@ void LPMDFormat::ReadHeader(std::istream & is) const
    hdr.Append(std::string("SYM"));
    hdr.Append(std::string("X"));hdr.Append(std::string("Y"));hdr.Append(std::string("Z"));
    hdr.Append(std::string("VX"));hdr.Append(std::string("VY"));hdr.Append(std::string("VZ"));
+   level = 1;
   }
   else if (words.Size()==10)
   {
@@ -90,6 +92,7 @@ void LPMDFormat::ReadHeader(std::istream & is) const
    hdr.Append(std::string("X"));hdr.Append(std::string("Y"));hdr.Append(std::string("Z"));
    hdr.Append(std::string("VX"));hdr.Append(std::string("VY"));hdr.Append(std::string("VZ"));
    hdr.Append(std::string("FX"));hdr.Append(std::string("FY"));hdr.Append(std::string("FZ"));
+   level = 2;
   }
   else
   {
@@ -131,6 +134,7 @@ bool LPMDFormat::ReadCell(std::istream & is, Configuration & con) const
  getline(is, tmp);                                     // Vectores de la celda
  (*linecounter)++;
  words = StringSplit(tmp, ' '); 
+ con.SetTag(con, Tag("level"), level);
  if(words.Size()==9)
  {
   if ((*this)["replacecell"] == "true")

@@ -42,7 +42,7 @@ TempProfile::~TempProfile()
 
 void TempProfile::SetParameter(std::string name)
 {
- #warning "SetParameter es horrible! mejorar los parametros"
+ //#warning "SetParameter es horrible! mejorar los parametros"
  if (name == "axis") 
  {
   AssignParameter("axis", GetNextWord());

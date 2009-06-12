@@ -16,18 +16,15 @@ class CordNumFunc: public lpmd::StoredValue<lpmd::Matrix>, public lpmd::InstantP
   //Metodos Generales
   CordNumFunc(std::string args);
   ~CordNumFunc();
-  void SetParameter(std::string name);
-  void Show(std::ostream & os) const;
+
   void ShowHelp() const;
 
-  //Metodos Propios de la clase cordnumfunc
   void Evaluate(lpmd::Configuration & con, lpmd::Potential & pot);
 
  private:
   int nb;
   double cut;
   int na;
-  std::vector<std::string> satoms; //atomic symbols.
   bool do_average;
 };
 
