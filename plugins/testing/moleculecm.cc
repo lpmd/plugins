@@ -39,6 +39,10 @@ void MoleculeCMModifier::Apply(Simulation & con)
 {
  lpmd::BasicParticleSet & atoms = con.Atoms();
 
+ // Construct an "index table" so we don't have to depend on Atom::Index()
+ std::map<BasicAtom *, long int> indices;
+ for (long int i=0;i<atoms.Size();++i) indices[&atoms[i]] = i;
+
  std::list<lpmd::Atom> tmplist;
  int * used = new int[atoms.Size()];
  for (long int i=0;i<atoms.Size();++i) used[i] = 0;
@@ -58,8 +62,7 @@ void MoleculeCMModifier::Apply(Simulation & con)
     lpmd::AtomPair & nn = nlist[k];
     if (nn.r < radius)
     {
-#warning Index no va más??
-//     if (used[nn.j->Index()] == 0)
+     if (used[indices[nn.j]] == 0)
      {
       if (closest == NULL) closest = &nn;
       else if (nn.r < closest->r) closest = &nn;
@@ -73,15 +76,12 @@ void MoleculeCMModifier::Apply(Simulation & con)
     cmpos = (1.0/m)*cmpos;
     tmplist.push_back(Atom(atoms[i].Symbol(), cmpos));
     used[i] = 1;
-#warning otro Index()
-//    used[closest->j->Index()] = 1;
+    used[indices[closest->j]] = 1;
    }
   }
  }
-#warning antiguo fixme de borrar atomos en memoria también.
  atoms.Clear(); 
-#warning que era esto!! .. no debería actuar ahora directo sobre atoms.?¿?
-// for (std::list<Atom>::const_iterator it=tmplist.begin();it!=tmplist.end();++it) sc.Create(new Atom(*it));
+ for (std::list<Atom>::const_iterator it=tmplist.begin();it!=tmplist.end();++it) atoms.Append(Atom(*it));
  delete [] used;
 }
 

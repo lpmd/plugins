@@ -70,10 +70,16 @@ IndexFilter::IndexFilter(std::string args): Plugin("element", "1.0"), selector(0
   ct++;
   found=tmp.find(",");
  }
- if(ct>0) index = StringSplit(params["index"],',');
- else if (ct==0) index = StringSplit(params["index"],'-');
- int n = index.Size();
- DebugStream() << "Reading " << n << " index to modify."<<'\n';
+ if (ct > 0) index = StringSplit(params["index"],',');
+ else if (ct == 0)
+ {
+  Array<std::string> limits = StringSplit(params["index"],'-');
+  if (limits.Size() != 2) throw PluginError("index", "Wrong specification of \"index\" range");
+  for (int i=atoi(limits[0].c_str());i<=atoi(limits[1].c_str());++i)
+      index.Append(ToString<int>(i));
+ }
+ if (args != "dummyargument") 
+    DebugStream() << "-> Reading " << index.Size() << " indices to filter." << '\n';
 }
 
 IndexFilter::~IndexFilter() { delete selector; }

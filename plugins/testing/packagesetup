@@ -39,6 +39,13 @@ directory .
        pkgconfig += liblpmd-2.0
     end
 
+    module average.so
+       language = c++
+       sources = average.cc
+       installpath = lib/lpmd
+       pkgconfig += liblpmd-2.0
+    end
+
     module beeman.so
        language = c++
        sources = beeman.cc
@@ -524,7 +531,6 @@ directory .
 #color_la_SOURCES = color.h color.cc
 #ewald_la_SOURCES = ewald.h ewald.cc
 #rvcorr_la_SOURCES = rvcorr.h rvcorr.cc #EN STANDBY
-#selectatoms_la_SOURCES = selectatoms.h selectatoms.cc
 #thermalneedle_la_SOURCES = thermalneedle.h thermalneedle.cc #PROBABLEMENTE YA NO VA MAS!! 
 #verletlist_la_SOURCES = verletlist.h verletlist.cc
 #voronoi_la_SOURCES = voronoi.h voronoi.cc

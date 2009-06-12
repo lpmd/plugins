@@ -18,12 +18,12 @@ PrintAtomsVisualizer::PrintAtomsVisualizer(std::string args): Plugin("printatoms
  DefineKeyword("start", "0");
  DefineKeyword("end", "-1");
  DefineKeyword("each", "1");
- DefineKeyword("tags", "x,y,z");
+ DefineKeyword("print", "index,x,y,z");
  ProcessArguments(args);
  start = int(params["start"]);
  end = int(params["end"]);
  each = int(params["each"]);
- tags = StringSplit(params["tags"], ',');
+ tags = StringSplit(params["print"], ',');
 }
 
 PrintAtomsVisualizer::~PrintAtomsVisualizer() { }
@@ -46,12 +46,12 @@ void PrintAtomsVisualizer::ShowHelp() const
 void PrintAtomsVisualizer::Apply(const Simulation & sim) 
 { 
  const BasicParticleSet & atoms = sim.Atoms();
- std::cout << "-> ";
  for (long int i=0;i<atoms.Size();++i) 
  {  
   const Vector & pos = atoms[i].Position();
   const Vector & vel = atoms[i].Velocity();
   const Vector & acc = atoms[i].Acceleration();
+  std::cout << "-> ";
   for (int j=0;j<tags.Size();++j)
   {
    const std::string & tag = tags[j];

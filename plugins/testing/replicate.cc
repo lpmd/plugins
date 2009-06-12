@@ -87,12 +87,7 @@ void ReplicateModifier::Apply(Simulation & con)
  cell[0] = cell[0]*nx;
  cell[1] = cell[1]*ny;
  cell[2] = cell[2]*nz;
- //Asigna el index() a cada atomo de la celda.
-#warning no hay clearforces ni assignindex
- //sc.AssignIndex();
- //sc.ClearForces();
 }
-
 
 // Esto se incluye para que el modulo pueda ser cargado dinamicamente
 Plugin * create(std::string args) { return new ReplicateModifier(args); }

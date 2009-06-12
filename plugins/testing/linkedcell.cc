@@ -23,9 +23,7 @@ void BasicSubCell::ClearAtoms()
  atomhead = atomtail = NULL; 
 }
 
-SubCell::SubCell(): BasicSubCell(), ifirst(0), isecond(0), iwall(0), neighbors(NULL) 
-{ 
-}
+SubCell::SubCell(): BasicSubCell(), ifirst(0), isecond(0), iwall(0), neighbors(NULL) { }
 
 SubCell::~SubCell() { delete [] neighbors; }
 
@@ -271,18 +269,15 @@ void LinkedCellCellManager::BuildNeighborList(Configuration & sc, long i, Neighb
    nn.j = &atoms[ak->i];
    nn.rij = nn.j->Position() - this_atom.Position();
    nn.r = nn.rij.Module();
-   if ((nn.r < rcut) && (nn.r > 0.001)) 
+   if (nn.r < rcut)
    {
-#warning Hay un bug en integradores onestep
     nlist.Append(nn);
     nwin++;
    }
    else if (nn.r > rcut) nfail++;
   }
  }
- // 
- //std::cerr << "DEBUG First half: " << subcell.GetNumberOfFirstHalf() << '\n';
- //std::cerr << "DEBUG Second half: " << subcell.GetNumberOfSecondHalf() << '\n';
+ //
  for (long p=0;p<subcell.GetNumberOfFirstHalf();++p)
  {
   NeighborSubCell & nscell = subcell.GetFirstHalfNeighbor(p);
@@ -296,9 +291,8 @@ void LinkedCellCellManager::BuildNeighborList(Configuration & sc, long i, Neighb
    const Vector newpos = nn.j->Position()+disp;
    nn.rij = newpos-this_atom.Position();
    nn.r = nn.rij.Module();
-   if ((nn.r < rcut) && (nn.r > 0.001))
+   if (nn.r < rcut)
    {
-#warning Hay un bug en integradores onestep
     nlist.Append(nn);
     nwin++;
    }
@@ -321,9 +315,8 @@ void LinkedCellCellManager::BuildNeighborList(Configuration & sc, long i, Neighb
     const Vector newpos = nn.j->Position()+disp;
     nn.rij = newpos-this_atom.Position();
     nn.r = nn.rij.Module();
-    if ((nn.r < rcut) && (nn.r > 0.001)) 
+    if (nn.r < rcut)
     {
-#warning Hay un bug en integradores onestep.
      nlist.Append(nn); 
      nwin++;
     }
