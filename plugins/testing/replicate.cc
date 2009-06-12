@@ -60,19 +60,11 @@ void ReplicateModifier::Apply(Simulation & con)
      atoms.Append(Atom(ElemSym[base_z[p]], original_cell.Cartesian(position)));
     }
    }
- std::cerr << "DEBUG Atoms: " << atoms.Size() << '\n';
- std::cerr << "DEBUG MinimumPairDistance: " << con.MinimumPairDistance() << '\n';
- std::cerr << "DEBUG cell a = " << cell[0] << '\n';
- std::cerr << "DEBUG cell b = " << cell[1] << '\n';
- std::cerr << "DEBUG cell c = " << cell[2] << '\n';
  for (long int i=0;i<atoms.Size();++i) atoms[i].Velocity() = Vector(0.0, 0.0, 0.0);
  for (long int i=0;i<atoms.Size();++i) atoms[i].Acceleration() = Vector(0.0, 0.0, 0.0);
  cell[0] *= nx;
  cell[1] *= ny;
  cell[2] *= nz;
- std::cerr << "DEBUG cell a = " << cell[0] << '\n';
- std::cerr << "DEBUG cell b = " << cell[1] << '\n';
- std::cerr << "DEBUG cell c = " << cell[2] << '\n';
 }
 
 // Esto se incluye para que el modulo pueda ser cargado dinamicamente
