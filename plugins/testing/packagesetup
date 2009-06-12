@@ -193,6 +193,13 @@ directory .
        pkgconfig += liblpmd-2.0
     end
 
+    module index.so
+       language = c++
+       sources = index.cc
+       installpath = lib/lpmd
+       pkgconfig += liblpmd-2.0
+    end
+
     module leapfrog.so
        language = c++
        sources = leapfrog.cc
