@@ -40,53 +40,39 @@ void ReplicateModifier::Apply(Simulation & con)
 {
  lpmd::BasicParticleSet & atoms = con.Atoms();
  lpmd::BasicCell & cell = con.Cell();
- unsigned long int Ntmp = atoms.Size();
- //Atom * atomos;
- //atomos = new Atom[Ntmp];
- //for (unsigned long int i=0;i<Ntmp;i++) atomos[i]=sc[i];
- //for (unsigned long int i=0;i<Ntmp;i++) { sc.Create(new Atom(atomos[i]));}
- for (unsigned long i=1;i<nx;i++)
+ Cell original_cell(cell);
+ Array<Vector> base_positions;
+ Array<int> base_z;
+ for (long int i=0;i<atoms.Size();++i) 
  {
-  for (unsigned long int j=0;j<Ntmp;j++)
-  {
-   std::string symb = atoms[j].Symbol();
-   lpmd::Vector pos = atoms[j].Position() + cell[0]*i;
-   lpmd::Vector vel = atoms[j].Velocity();
-   lpmd::Vector acc = atoms[j].Acceleration();
-   lpmd::Atom atm = Atom(symb,pos,vel,acc);
-   atoms.Append(atm);
-  }
+  base_positions.Append(cell.Fractional(atoms[i].Position()));
+  base_z.Append(atoms[i].Z());
  }
- Ntmp = atoms.Size();
- for (unsigned long i=1;i<ny;i++)
- {
-  for(unsigned long int j=0;j<Ntmp;j++)
-  {
-   std::string symb = atoms[j].Symbol();
-   lpmd::Vector pos = atoms[j].Position() + cell[0]*i;
-   lpmd::Vector vel = atoms[j].Velocity();
-   lpmd::Vector acc = atoms[j].Acceleration();
-   lpmd::Atom atm = Atom(symb,pos,vel,acc);
-   atoms.Append(atm);
-  }
- }
- Ntmp = atoms.Size();
- for (unsigned long i=1;i<nz;i++)
- {
-  for (unsigned long int j=0;j<Ntmp;j++)
-  {
-   std::string symb = atoms[j].Symbol();
-   lpmd::Vector pos = atoms[j].Position() + cell[0]*i;
-   lpmd::Vector vel = atoms[j].Velocity();
-   lpmd::Vector acc = atoms[j].Acceleration();
-   lpmd::Atom atm = Atom(symb,pos,vel,acc);
-   atoms.Append(atm);
-  }
- }
- //Resetea los vectores base de la celda.
- cell[0] = cell[0]*nx;
- cell[1] = cell[1]*ny;
- cell[2] = cell[2]*nz;
+ atoms.Clear();
+ for (int k=0;k<nz;++k)
+  for (int j=0;j<ny;++j)
+   for (int i=0;i<nx;++i)
+   {
+    for (long int p=0;p<base_positions.Size();++p)
+    {
+     Vector scaled_base(base_positions[p][0]/double(nx), base_positions[p][1]/double(ny), base_positions[p][2]/double(nz));
+     Vector position = (scaled_base+Vector(i/double(nx), j/double(ny), k/double(nz)));
+     atoms.Append(Atom(ElemSym[base_z[p]], original_cell.Cartesian(position)));
+    }
+   }
+ std::cerr << "DEBUG Atoms: " << atoms.Size() << '\n';
+ std::cerr << "DEBUG MinimumPairDistance: " << con.MinimumPairDistance() << '\n';
+ std::cerr << "DEBUG cell a = " << cell[0] << '\n';
+ std::cerr << "DEBUG cell b = " << cell[1] << '\n';
+ std::cerr << "DEBUG cell c = " << cell[2] << '\n';
+ for (long int i=0;i<atoms.Size();++i) atoms[i].Velocity() = Vector(0.0, 0.0, 0.0);
+ for (long int i=0;i<atoms.Size();++i) atoms[i].Acceleration() = Vector(0.0, 0.0, 0.0);
+ cell[0] *= nx;
+ cell[1] *= ny;
+ cell[2] *= nz;
+ std::cerr << "DEBUG cell a = " << cell[0] << '\n';
+ std::cerr << "DEBUG cell b = " << cell[1] << '\n';
+ std::cerr << "DEBUG cell c = " << cell[2] << '\n';
 }
 
 // Esto se incluye para que el modulo pueda ser cargado dinamicamente

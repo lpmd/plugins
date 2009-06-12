@@ -251,13 +251,6 @@ directory .
        pkgconfig += liblpmd-2.0
     end
 
-    module metropolis.so
-       language = c++
-       sources = metropolis.cc
-       installpath = lib/lpmd
-       pkgconfig += liblpmd-2.0
-    end
-
     module minimumimage.so
        language = c++
        sources = minimumimage.cc
@@ -526,13 +519,11 @@ directory .
     end
 
 #
-# Aca los plugins que faltan por agregar a la compilacion
+# Plugins en standby 
 #
-#color_la_SOURCES = color.h color.cc
 #ewald_la_SOURCES = ewald.h ewald.cc
-#rvcorr_la_SOURCES = rvcorr.h rvcorr.cc #EN STANDBY
-#thermalneedle_la_SOURCES = thermalneedle.h thermalneedle.cc #PROBABLEMENTE YA NO VA MAS!! 
 #verletlist_la_SOURCES = verletlist.h verletlist.cc
+#metropolis_la_SOURCES = metropolis.h metropolis.cc
 #voronoi_la_SOURCES = voronoi.h voronoi.cc
 
 end

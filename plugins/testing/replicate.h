@@ -21,7 +21,7 @@ class ReplicateModifier: public lpmd::SystemModifier, public lpmd::Plugin
   void Apply(lpmd::Simulation & con);
 
  private:
-  unsigned long nx, ny, nz;
+  int nx, ny, nz;
 };
 
 #endif

@@ -13,10 +13,10 @@ using namespace lpmd;
 RotateModifier::RotateModifier(std::string args): Plugin("rotate", "2.0")
 {
  ParamList & params = (*this);
- AssignParameter("x", "1.0");
- AssignParameter("y", "0.0");
- AssignParameter("z", "0.0");
- AssignParameter("angle", "0.0");
+ DefineKeyword("x", "1.0");
+ DefineKeyword("y", "0.0");
+ DefineKeyword("z", "0.0");
+ DefineKeyword("angle", "0.0");
  // 
  ProcessArguments(args);
  axis = Vector(double(params["x"]), double(params["y"]), double(params["z"]));
@@ -61,7 +61,6 @@ void RotateModifier::Apply(Configuration & conf)
 {
  BasicParticleSet & atoms = conf.Atoms();
  BasicCell & cell = conf.Cell();
- // Vector center = (sc.GetCell()[0]+sc.GetCell()[1]+sc.GetCell()[2])*0.5;
  Vector center = (cell[0]+cell[1]+cell[2])*0.5;
  for (long i=0;i<atoms.Size();++i)
  {
@@ -75,9 +74,7 @@ void RotateModifier::Apply(Configuration & conf)
    for (int i=0;i<3;++i) rv[j] += rotmat[j][i]*pos[i];
    pos[j] = rv[j];
   }
-  // untranslate
-//  sc.SetPosition(i, pos+center); 
-   atoms[i].Position() = cell.ScaleByCell(pos+center);
+  atoms[i].Position() = cell.FittedInside(pos+center);
  }
 }
 

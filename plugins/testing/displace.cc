@@ -14,9 +14,9 @@ using namespace lpmd;
 DisplaceModifier::DisplaceModifier(std::string args): Plugin("displace", "2.0")
 {
  ParamList & params = (*this);
- AssignParameter("x", "1.0");
- AssignParameter("y", "0.0");
- AssignParameter("z", "0.0");
+ DefineKeyword("x", "1.0");
+ DefineKeyword("y", "0.0");
+ DefineKeyword("z", "0.0");
  // 
  ProcessArguments(args);
  offset = Vector(double(params["x"]), double(params["y"]), double(params["z"]));
@@ -42,10 +42,10 @@ void DisplaceModifier::ShowHelp() const
 void DisplaceModifier::Apply(lpmd::Simulation & sim)
 {
  lpmd::BasicParticleSet & atoms = sim.Atoms();
-
+ lpmd::BasicCell & cell = sim.Cell();
  for (long int i=0;i<atoms.Size();++i)
  {
-  atoms[i].Position() = atoms[i].Position() + offset;
+  atoms[i].Position() = cell.FittedInside(atoms[i].Position()+offset);
  }
 }
 
