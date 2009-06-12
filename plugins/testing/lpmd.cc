@@ -166,6 +166,7 @@ bool LPMDFormat::ReadCell(std::istream & is, Configuration & con) const
    double VX=0.0e0,VY=0.0e0,VZ=0.0e0;
    double AX=0.0e0,AY=0.0e0,AZ=0.0e0;
    lpmd::Color color(0,0,0);
+   bool color_active = false;
    for (long int k=1 ; k < hdr.Size() ; ++k)
    {
     if (hdr[k] == "SYM") sym=words[k-1];
@@ -178,20 +179,19 @@ bool LPMDFormat::ReadCell(std::istream & is, Configuration & con) const
     if (hdr[k] == "AX") AX=atof(words[k-1].c_str());
     if (hdr[k] == "AY") AY=atof(words[k-1].c_str());
     if (hdr[k] == "AZ") AZ=atof(words[k-1].c_str());
-    if (hdr[k] == "RGB") color = Vector(words[k-1].c_str());
-    if (hdr[k] == "C") color=ColorFromScalar(atof(words[k-1].c_str()));
+    if (hdr[k] == "RGB") { color = Vector(words[k-1].c_str()); color_active = true; }
+    if (hdr[k] == "C") { color=ColorFromScalar(atof(words[k-1].c_str())); color_active = true; }
    }
    Vector pos = cell.Cartesian(Vector(X,Y,Z));
    Vector vel(VX,VY,VZ);
    Vector ace(AX,AY,AZ);
    lpmd::Atom atm(sym,pos,vel,ace);
-   if (!ColorHandler::HaveColor(atm)) ColorHandler::ColorOfAtom(atm) = ColorHandler::DefaultColor(atm);
-   if ((color[0]!=0 || color[1]!=0) || (color[2]!=0)) ColorHandler::ColorOfAtom(atm) = color;
-   part.Append(Atom(sym,pos,vel,ace));
-   atomcount++;
-#warning Falta asignar la propiedad del atomo?
+   part.Append(atm);
+   const BasicAtom & realatom = part[atomcount];
+   if (color_active) ColorHandler::ColorOfAtom(realatom) = color;
   }
   else throw PluginError("lpmd", "An unidentified line was found in the file \""+readfile+"\", line "+ToString<int>(*linecounter));
+  atomcount++;
  }
  return true;
 }
@@ -255,8 +255,13 @@ void LPMDFormat::WriteCell(std::ostream & out, Configuration & con) const
   {
    for (long int j=0 ; j < extra.Size() ; ++j)
    {
-    if(extra[j] == "RGB") {lpmd::Vector tmp = ColorHandler::ColorOfAtom(part[i]); FormattedWrite(out,tmp); }
-    if(extra[j] == "TYPE") { out << "          " << "ATOMTYPE"; }
+    if ((extra[j] == "RGB") || (extra[j] == "rgb"))
+    { 
+     lpmd::Vector tmp = ColorHandler::ColorOfAtom(part[i]); 
+     out << " ";
+     FormattedWrite(out,tmp); 
+    }
+    else if ((extra[j] == "TYPE") || (extra[j] == "type")) { out << "          " << "ATOMTYPE"; }
    }
   }
   out << '\n';
