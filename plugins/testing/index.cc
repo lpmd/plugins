@@ -63,7 +63,7 @@ IndexFilter::IndexFilter(std::string args): Plugin("element", "1.0"), selector(0
  end = int(params["end"]);
  each = int(params["each"]);
  std::string tmp = params["index"];
- size_t found=NULL;
+ size_t found = std::string::npos;
  int ct=-1;
  while(found!=std::string::npos)
  {

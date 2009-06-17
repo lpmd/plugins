@@ -66,6 +66,7 @@ void NoseHoover::AdvancePosition(Simulation & sim, long i)
  const double kboltzmann = double(GlobalSession["kboltzmann"]);
  
  Configuration & oldsc = OldConfig();
+ BasicCell & cell = sim.Cell();
  Atom now = sim.Atoms()[i];
  Atom old = oldsc.Atoms()[i];
  auxlist[i] = old.Acceleration();
@@ -74,7 +75,7 @@ void NoseHoover::AdvancePosition(Simulation & sim, long i)
  sim.Atoms()[i].Acceleration() = newacc;
  Vector newpos = now.Position() + now.Velocity()*dt + (2.0/3.0)*newacc*dt*dt - (1.0/6.0)*old.Acceleration()*dt*dt;
  oldsc.Atoms()[i].Acceleration() =  newacc;
- sim.Atoms()[i].Position() = newpos;
+ sim.Atoms()[i].Position() = cell.FittedInside(newpos);
 }
 
 void NoseHoover::AdvanceVelocity(Simulation & sim, long i)

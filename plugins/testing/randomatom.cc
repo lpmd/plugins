@@ -56,7 +56,7 @@ void RandomAtomModifier::Apply(Simulation & conf)
  {
   while(random.Size()<tochange)
   {
-   int rnd = drand48()*atoms.Size();
+   int rnd = int(drand48()*atoms.Size());
    if (rnd!=0) random.AppendUnique(rnd);
   }
   for (int i=0;i<random.Size();++i)
@@ -74,7 +74,7 @@ void RandomAtomModifier::Apply(Simulation & conf)
   double density = mass/cell.Volume();
   while(random.Size()<tochange)
   {
-   int rnd = drand48()*atoms.Size();
+   int rnd = int(drand48()*atoms.Size());
    if (rnd!=0) random.AppendUnique(rnd);
   }
   //first delete atoms.

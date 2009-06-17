@@ -47,10 +47,11 @@ void VelocityVerlet::Initialize(Simulation & sim, Potential & p) { UseOldConfig(
 void VelocityVerlet::AdvancePosition(Simulation & sim, long i)
 {
  lpmd::BasicParticleSet & atoms = sim.Atoms(); 
+ lpmd::BasicCell & cell = sim.Cell();
  lpmd::BasicParticleSet & oldatoms = OldConfig().Atoms(); 
  Vector newpos = atoms[i].Position() + atoms[i].Velocity()*dt + 0.5*atoms[i].Acceleration()*dt*dt;
  oldatoms[i].Acceleration() = atoms[i].Acceleration();
- atoms[i].Position() = newpos;
+ atoms[i].Position() = cell.FittedInside(newpos);
 }
 
 void VelocityVerlet::AdvanceVelocity(Simulation & sim, long i)

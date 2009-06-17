@@ -53,7 +53,7 @@ void Verlet::Advance(Simulation & sim, long i)
  Vector newpos = 2.0*atoms[i].Position() - oldatoms[i].Position() + atoms[i].Acceleration()*dt*dt;
  oldatoms[i].Position() = atoms[i].Position();
  oldatoms[i].Velocity() = atoms[i].Velocity();
- atoms[i].Position() = newpos;
+ atoms[i].Position() = cell.FittedInside(newpos);
  Vector newvel = cell.Displacement(oldpos, atoms[i].Position())/(2.0*dt);
  atoms[i].Velocity() = newvel;
 }
