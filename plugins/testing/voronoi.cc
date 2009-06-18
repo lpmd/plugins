@@ -1,24 +1,27 @@
 //
 //
 //
-
 #include "voronoi.h"
-#include "plugincommon.h"
-#include <algorithm>
-#include <functional>
 
 #include <lpmd/atom.h>
-#include <lpmd/simulationcell.h>
+#include <lpmd/configuration.h>
+#include <lpmd/cell.h>
+
+
+//#include "plugincommon.h"
+//#include <algorithm>
+//#include <functional>
 
 #include <cmath>
 
 using namespace lpmd;
-double rmin;					// Minimum separation between atoms
-
+//double rmin;					// Minimum separation between atoms
+/*
 void SkewStart(int n, double x, double y, double z, Vector *centers)
 {
  // FIXME: int() corrige los warning, pero hay que chequear si es lo correcto o no
- SimulationCell cell(int(x), int(y), int(z), true, true, true);
+ OrthogonalCell cell(int(x), int(y), int(z));
+// ParticleSet atomos;
  int h, k, l;
  double dx, dy, dz;
  h = int(pow(double(n), 2.0/3.0));
@@ -29,23 +32,28 @@ void SkewStart(int n, double x, double y, double z, Vector *centers)
  dz = l / double(n);
  for (long i=0;i<n;++i)
  {
-  cell.Create(new Atom(18, Vector()));
-  cell.SetFracPosition(i, Vector(dx*double(i)+0.25, dy*double(i)+0.25, dz*double(i)+0.25));
+//  atomos[i].Position() = cell.ScaleByCell(Vector(dx*double(i), dy*double(i), dz*double(i)));
  }
  for (long i=0;i<n;++i)
  {
-  centers[i]=x*cell[i].Position()[0]*e1+y*cell[i].Position()[1]*e2+z*cell[i].Position()[2]*e3;
+//  centers[i]=x*cell[i].Position()[0]*e1+y*cell[i].Position()[1]*e2+z*cell[i].Position()[2]*e3;
  }
 }
-
-VoronoiGenerator::VoronoiGenerator(std::string args): Module("voronoi") 
+*/
+VoronoiGenerator::VoronoiGenerator(std::string args): Plugin("voronoi","2.0") 
 {
- AssignParameter("type","sc");
+ ParamList & params = (*this);
+ //
+ DefineKeyword("symbol","Ar");
+ DefineKeyword("type","sc");
+ DefineKeyword("grains","2");
+ DefineKeyword("a","3.61");
+ // hasta aqui los valores por omision
  ProcessArguments(args); 
- spc = ElemNum(GetString("symbol"));
- a = GetDouble("a");
- Ncell = GetInteger("cells");
- type = GetString("type");
+ spc = ElemNum((*this)["symbol"]);
+ type = (*this)["type"];
+ a = double(params["a"]);
+ grains = int(params["grains"]);
 }
 
 VoronoiGenerator::~VoronoiGenerator() { }
@@ -71,91 +79,83 @@ void VoronoiGenerator::ShowHelp() const
  std::cout << "      you put, the smaller they become, and less atoms you have).               \n";
 }
 
-void VoronoiGenerator::Generate(SimulationCell & sc) const
+void VoronoiGenerator::Generate(lpmd::Configuration & conf) const
 {
- SimulationCell basecell(1, 1, 1, false, false, false);  // cell es la celda de simulacion
- Vector base[3];
- base[0]=a*e1; 	base[1]=a*e2; 	base[2]=a*e3;
- // WE SET THE VECTORS OF THE CELL
- for (int i=0; i<3; i++) basecell.GetCell()[i] = base[i];
+/* OrthogonalCell basecell(a,a,a);  // cell es la celda de simulacion
+ BasicParticleSet & atoms = conf.Atoms();
+ BasicCell & celda = conf.Cell();
+ bool create_atoms = (atoms.Size() == 0);
  // NOW WE FIX THE BASIC CELL
  //-- Simple cubic lattices --//
  if (type=="sc")
  {
   rmin=0.9*a;
-  Atom atm;
-  atm.SetSpc(spc); atm.SetPos(0*e1); basecell.Create(new Atom(atm));
+  const lpmd::Vector t=0*e1;
+  if(create_atoms) atoms.Append(Atom(spc,t));
  }
  //-- Face-centered cubic lattices --//
  else if (type=="fcc")
  {
   rmin=0.9*a/sqrt(2);
-  Atom atm[4];
-  Vector t[4];
+  lpmd::Vector t[4];
   t[0]=0*e1; t[1]=0.5*a*(e2+e3); t[2]=0.5*a*(e1+e3); t[3]=0.5*a*(e1+e2);
-  for (int i=0; i<4; i++){ atm[i].SetSpc(spc); atm[i].SetPos(t[i]); basecell.Create(new Atom(atm[i]));}
+ 
+  if(create_atoms)
+  {
+   for (int i=0; i<4; i++) atoms.Append(Atom(spc,t[i]));
+  }
+  
  }
  //-- Body-centered cubic lattices --//
  else if (type=="bcc")
  {
   rmin=0.9*sqrt(3)*a/2.0;
-  Atom atm[2];
-  Vector t[2];
+  lpmd::Vector t[2];
   t[0]=0*e1; t[1]=0.5*a*(e1+e2+e3);
-  for (int i=0; i<2; i++){ atm[i].SetSpc(spc); atm[i].SetPos(t[i]); basecell.Create(new Atom(atm[i]));}
+ 
+  if(create_atoms)
+  {
+   for (int i=0; i<2; i++) atoms.Append(Atom(spc,t[i]));
+  }
  }
 
  unsigned long nx,ny,nz;
- const Cell & scell = sc.GetCell();
- double V=scell.Volume();
- double x=scell[0].Module();
- double y=scell[1].Module();
- double z=scell[2].Module();
- nx=int(2.2*pow(V/(double)Ncell,1.0/3.0)/a); ny=nx; nz=nx;
- Vector *centers=new Vector [Ncell];
- Vector *CellColor=new Vector [Ncell];
+ double V=celda.Volume();
+ double x=celda[0].Module();
+ double y=celda[1].Module();
+ double z=celda[2].Module();
+ nx=int(2.2*pow(V/(double)grains,1.0/3.0)/a); ny=nx; nz=nx;
+ lpmd::Vector *centers=new Vector [grains];
+ lpmd::Vector *CellColor=new Vector [grains];
 
- randomize();
  std::cout<<"\nRUNNING VORONOI PLUGIN:"<<std::endl;
 
  // CHOOSE CENTERS AND REPLICATE CELLS
- SkewStart(Ncell, x, y, z, centers);
- for (int i=0; i<Ncell; i++)
+// SkewStart(grains, x, y, z, centers);
+ for (int i=0; i<grains; i++)
  {
-  Vector rotate=dazar(0,2*M_PI)*e1+dazar(0,2*M_PI)*e2+dazar(0,2*M_PI)*e3;
+  Vector rotate=2*M_PI*drand48()*e1+2*M_PI*drand48()*e2+2*M_PI*drand48()*e3;
   // We put a new replicated cell in "cellcenter"
-  ReplicateRotate(basecell, centers[i], CellColor[i], nx, ny, nz, rotate, sc);
+//  ReplicateRotate(basecell, centers[i], CellColor[i], nx, ny, nz, rotate, sc);
  }
 
  // OUTSIDE ELIMINATION: ELIMINATE OUTSIDE ATOMS
  std::cout << "Elimination of atoms out of the cell..."<<std::endl;
- for (long i=0;i<sc.size();i++)
+ for (long i=0;i<atoms.Size();i++)
  {
   bool kill=false;
-  Vector pos = sc[i].Position();
-<<<<<<< .mine
-<<<<<<< .mine
-  if      (pos.GetX()<0 || pos.GetX()>sc.GetVector(0).Mod()) {sc.Remove(sc[i]); kill=true;}
-  else if (pos.GetY()<0 || pos.GetY()>sc.GetVector(1).Mod()) {sc.Remove(sc[i]); kill=true;}
-  else if (pos.GetZ()<0 || pos.GetZ()>sc.GetVector(2).Mod()) {sc.Remove(sc[i]); kill=true;}
-=======
-  if 		 (pos[0]<0 || pos[0]>sc.GetVector(0).Module()) {sc.Destroy(&sc[i]); kill=true;}
-  else if (pos[1]<0 || pos[1]>sc.GetVector(1).Module()) {sc.Destroy(&sc[i]); kill=true;}
-  else if (pos[2]<0 || pos[2]>sc.GetVector(2).Module()) {sc.Destroy(&sc[i]); kill=true;}
-=======
-  if (pos[0]<0 || pos[0]>sc.GetCell()[0].Module()) {sc.Destroy(&sc[i]); kill=true;}
-  else if (pos[1]<0 || pos[1]>sc.GetCell()[1].Module()) {sc.Destroy(&sc[i]); kill=true;}
-  else if (pos[2]<0 || pos[2]>sc.GetCell()[2].Module()) {sc.Destroy(&sc[i]); kill=true;}
->>>>>>> .r774
->>>>>>> .r701
+  Vector pos = atoms[i].Position();
+  if (pos[0]<0 || pos[0]>celda[0].Module()) {atoms.Delete(i); kill=true;}
+  else if (pos[1]<0 || pos[1]>celda[1].Module()) {atoms.Delete(i); kill=true;}
+  else if (pos[2]<0 || pos[2]>celda[2].Module()) {atoms.Delete(i); kill=true;}
   
   if (kill) i--;
  }
-
-
+*/
+/*
  // ELIMINATION BY CUTTING PLANE
  std::cout<< "Separating grains..."<<std::endl;
- for (unsigned long int i=0; i<sc.size(); i++)
+ for (unsigned long int i=0; i<atoms.Size(); i++)
  {
   bool eliminated=false;
   for(int n=0; n<Ncell; n++)
@@ -181,9 +181,9 @@ void VoronoiGenerator::Generate(SimulationCell & sc) const
 
  // PAIRS ELIMINATION: NOW THAT THE CELL IS FULL OF CELLS FILLED WITH ATOMS, WE ELIMINATE THE CLOSEST ATOMS
  std::cout << "Eliminating closest atoms..."<<std::endl;
- for (unsigned long i=0; i<sc.size(); i++)
+ for (unsigned long i=0; i<atoms.Size(); i++)
  {
-  for (unsigned long j=i+1; j<sc.size(); j++)
+  for (unsigned long j=i+1; j<atoms.Size(); j++)
   {
    if(sc.Distance(i,j)<rmin)
    {
@@ -192,15 +192,17 @@ void VoronoiGenerator::Generate(SimulationCell & sc) const
    }
   }
  }
-
+*/
  // Updating positions (impose periodic boudary conditions)
- for (unsigned long i=0; i<sc.size(); i++) sc.SetPosition(i,sc[i].Position()+1.5*(x*e1+y*e2+z*e3));
+// for (unsigned long i=0; i<atoms.Size(); i++) atoms[i].Position()=atoms[i].Position()+1.5*(x*e1+y*e2+z*e3);
 
- delete [] CellColor;
- delete [] centers;
+// delete [] CellColor;
+// delete [] centers;
  std::cout<<"Ready."<<std::endl;
+ 
 }
 
 // Esto se incluye para que el modulo pueda ser cargado dinamicamente
-Module * create(std::string args) { return new VoronoiGenerator(args); }
-void destroy(Module * m) { delete m; }
+Plugin * create(std::string args) { return new VoronoiGenerator(args); }
+void destroy(Plugin * m) { delete m; }
+

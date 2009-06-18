@@ -2,8 +2,8 @@
 //
 //
 
-#ifndef __CRYSTALFCC_H__
-#define __CRYSTALFCC_H__
+#ifndef __CRYSTAL3D_H__
+#define __CRYSTAL3D_H__
 
 #include <lpmd/cellgenerator.h>
 #include <lpmd/plugin.h>

@@ -510,6 +510,13 @@ directory .
        pkgconfig += liblpmd-2.0
     end
 
+    module voronoi.so
+       language = c++
+       sources = voronoi.cc
+       installpath = lib/lpmd
+       pkgconfig += liblpmd-2.0
+    end
+
     module xyz.so
        language = c++
        sources = xyz.cc

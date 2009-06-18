@@ -8,7 +8,7 @@
 #include <lpmd/cellgenerator.h>
 #include <lpmd/plugin.h>
 
-class VoronoiGenerator: public lpmd::CellGenerator, public lpmd::Module
+class VoronoiGenerator: public lpmd::CellGenerator, public lpmd::Plugin
 {
  public:
   //Metodos Generales
@@ -17,13 +17,13 @@ class VoronoiGenerator: public lpmd::CellGenerator, public lpmd::Module
   void ShowHelp() const;
 
   //Metodos propios del modulo voronoi
-  void Generate(lpmd::SimulationCell & sc) const;
+  void Generate(lpmd::Configuration & conf) const;
 
  private:
-  long Ncell;			// Number of cells with atoms
-  double a;				// Net parameter (size of the base cell)
-  int spc;				// which species (atomic number)
-  std::string type;	// type of base cell
+  int spc;              // which species (atomic number)
+  std::string type;     // type of base cell
+  double a;             // Lattice constant (size of the base cell of each grain)
+  int grains;          // Number of cells (grains) in to put in the configuration
 };
 
 #endif

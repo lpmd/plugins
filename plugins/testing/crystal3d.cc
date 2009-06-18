@@ -36,6 +36,7 @@ void CrystalGenerator::ShowHelp() const
  std::cout << "      FCC (face-centered cubic), HCP (Hexagonal close-packed) y SC (simple cubic). \n";
  std::cout << " General Options   >>                                                              \n";
  std::cout << "      symbol        : Especifica la especie atomica, utilizando su simbolo.        \n";
+ std::cout << "      type          : Especifica el tipo de celda unitaria (fcc, bcc, hcp, sc).    \n";
  std::cout << "      nx            : Repeticiones en la direccion X.                              \n";
  std::cout << "      ny            : Repeticiones en la direccion Y.                              \n";
  std::cout << "      nz            : Repeticiones en la direccion Z.                              \n";
