@@ -356,6 +356,13 @@ directory .
        pkgconfig += liblpmd-2.0
     end
 
+    module propertycolor.so
+       language = c++
+       sources = propertycolor.cc
+       installpath = lib/lpmd
+       pkgconfig += liblpmd-2.0
+    end
+
     module printatoms.so
        language = c++
        sources = printatoms.cc
