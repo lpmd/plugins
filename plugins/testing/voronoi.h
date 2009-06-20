@@ -20,7 +20,7 @@ class VoronoiGenerator: public lpmd::CellGenerator, public lpmd::Plugin
   void Generate(lpmd::Configuration & conf) const;
 
  private:
-  int spc;              // which species (atomic number)
+  std::string spc;              // which species (atomic number)
   std::string type;     // type of base cell
   double a;             // Lattice constant (size of the base cell of each grain)
   int grains;          // Number of cells (grains) in to put in the configuration
