@@ -10,8 +10,14 @@ using namespace lpmd;
 
 MSD::MSD(std::string args): Plugin("msd", "2.0")
 {
- //
+ ParamList & params = (*this);
+
+ DefineKeyword("rcutmin");
+ DefineKeyword("rcutmax");
  ProcessArguments(args);
+ //
+ rcutmin = double(params["rcutmin"]);
+ rcutmax = double(params["rcutmax"]);
 }
 
 void MSD::Evaluate(ConfigurationSet & hist, Potential & pot)
@@ -23,10 +29,16 @@ void MSD::Evaluate(ConfigurationSet & hist, Potential & pot)
  const Array<int> & elements = hist[0].Atoms().Elements();
  int nsp = elements.Size();
  double ** msd = new double*[(int)(N-1)/2];
+ double ** J0 = new double*[(int)(N-1)/2];
+ double ** J1 = new double*[(int)(N-1)/2];
+ double ** Jr = new double*[(int)(N-1)/2];
  for (int i=0;i<(int)(N-1)/2;i++) 
  {
   msd[i] = new double[nsp];
-  for (int j=0;j<nsp;j++) msd[i][j]=0.0e0;
+  J0[i] = new double[nsp];
+  J1[i] = new double[nsp];
+  Jr[i] = new double[nsp];
+  for (int j=0;j<nsp;j++) { msd[i][j]=J0[i][j]=J1[i][j]=Jr[i][j]=0.0e0; }
  }
 
  //
@@ -64,7 +76,14 @@ void MSD::Evaluate(ConfigurationSet & hist, Potential & pot)
    {
     for (long int i=0;i<nat;i++)  // loop sobre todos los atomos
     {
-     if (hist[t0].Atoms()[i].Z() == elements[e1]) msd[t][e1] += (noperiodic[t0+t][i]-noperiodic[t0][i]).SquareModule();
+     if (hist[t0].Atoms()[i].Z() == elements[e1])
+     {
+      double rr2 = (noperiodic[t0+t][i]-noperiodic[t0][i]).SquareModule();
+      msd[t][e1] += (rr2);
+      if (rr2 < rcutmin*rcutmin) J0[t][e1]++; 
+      else if (rr2 > rcutmax*rcutmax) Jr[t][e1]++;
+      else J1[t][e1]++;
+     }
     }
    }
   }
@@ -76,15 +95,56 @@ void MSD::Evaluate(ConfigurationSet & hist, Potential & pot)
  //
  // Output MSD
  //
+ ParamList & params = (*this);
  Matrix & m = CurrentValue();
- m = Matrix(nsp+1, (int)(N-1)/2);
+ bool jmode = (params.Defined("rcutmin") && (fabs(double(params["rcutmin"])) >= 0.1));
+ if (jmode) m = Matrix(4*nsp+1, (int)(N-1)/2);
+ else m = Matrix(nsp+1, (int)(N-1)/2);
  m.SetLabel(0, "time");
- for (int j=0;j<nsp;++j) m.SetLabel(j+1, "MSD");
+
+ int k = 1;
+ for (int q=0;q<elements.Size();++q)
+ { 
+  const std::string spec = ElemSym[elements[q]];
+  m.SetLabel(k, "MSD-"+spec);
+  if (jmode)
+  {
+   m.SetLabel(k+1, "J0-"+spec);
+   m.SetLabel(k+2, "J1-"+spec);
+   m.SetLabel(k+3, "Jr-"+spec);
+   k += 4;
+  }
+  else k++;
+ }
  for(int i=0;i<(int)(N-1)/2;++i)
  {
   m.Set(0, i, i);
-  for(int j=0;j<nsp;++j) m.Set(j+1, i, msd[i][j]/double(nat*(N-1)/2));
+  for(int j=0;j<nsp;j=j)
+  {
+   m.Set(j+1, i, msd[i][j]/double(nat*(N-1)/2));
+   if (jmode)
+   {
+    double integ = J0[i][j]+J1[i][j]+Jr[i][j];
+    m.Set(j+2, i, J0[i][j]/integ);
+    m.Set(j+3, i, J1[i][j]/integ);
+    m.Set(j+4, i, Jr[i][j]/integ);
+    j += 4;
+   }
+   else j++;
+  }
  }
+
+ for (int i=0;i<(int)(N-1)/2;i++) 
+ {
+  delete [] msd[i];
+  delete [] J0[i];
+  delete [] J1[i];
+  delete [] Jr[i];
+ }
+ delete [] msd;
+ delete [] J0;
+ delete [] J1;
+ delete [] Jr;
 }
 
 // Esto se incluye para que el modulo pueda ser cargado dinamicamente

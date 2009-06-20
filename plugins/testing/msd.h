@@ -16,6 +16,9 @@ class MSD: public lpmd::StoredValue<lpmd::Matrix>, public lpmd::TemporalProperty
   MSD(std::string args);
 
   void Evaluate(lpmd::ConfigurationSet & hist, lpmd::Potential & pot);
+
+ private:
+  double rcutmin, rcutmax;
 };
 
 #endif
