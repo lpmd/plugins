@@ -183,7 +183,7 @@ bool LPMDFormat::ReadCell(std::istream & is, Configuration & con) const
     if (hdr[k] == "AX") AX=atof(words[k-1].c_str());
     if (hdr[k] == "AY") AY=atof(words[k-1].c_str());
     if (hdr[k] == "AZ") AZ=atof(words[k-1].c_str());
-    if (hdr[k] == "RGB") { color = Vector(words[k-1].c_str()); color_active = true; }
+    if (hdr[k] == "RGB" || hdr[k] == "rgb") { color = Vector(words[k-1].c_str()); color_active = true; }
     if (hdr[k] == "C") { color=ColorFromScalar(atof(words[k-1].c_str())); color_active = true; }
    }
    Vector pos = cell.Cartesian(Vector(X,Y,Z));
@@ -238,7 +238,7 @@ void LPMDFormat::WriteCell(std::ostream & out, Configuration & con) const
  BasicParticleSet & part = con.Atoms();
  BasicCell & cell = con.Cell();
 
- level = int(Parameter(con.GetTag(con, Tag("level"))));
+ //level = int(Parameter(con.GetTag(con, Tag("level"))));
  out << part.Size() << std::endl;
  out << cell[0] << " " << cell[1] << " " << cell[2] << std::endl;
  for (long int i=0;i<part.Size();i++)
