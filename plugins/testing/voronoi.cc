@@ -19,7 +19,7 @@ double rmin;					// Minimum separation between atoms
 void SkewStart(int n, double x, double y, double z, Vector *centers)
 {
  // FIXME: int() corrige los warning, pero hay que chequear si es lo correcto o no
- OrthogonalCell celda(int(x), int(y), int(z));
+ OrthogonalCell celda(x, y, z);
  ParticleSet atomos;
  int h, k, l;
  double dx, dy, dz;
