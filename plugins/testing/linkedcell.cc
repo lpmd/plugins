@@ -205,7 +205,7 @@ LinkedCellCellManager::LinkedCellCellManager(std::string args): Plugin("linkedce
 { 
  ParamList & params = (*this);
  //
- DefineKeyword("cutoff");
+ DefineKeyword("cutoff", "10");
  DefineKeyword("nx", "7");
  DefineKeyword("ny", "7");
  DefineKeyword("nz", "7");
