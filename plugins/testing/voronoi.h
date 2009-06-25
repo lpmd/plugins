@@ -7,6 +7,11 @@
 
 #include <lpmd/cellgenerator.h>
 #include <lpmd/plugin.h>
+#include <lpmd/particleset.h>
+#include <lpmd/configuration.h>
+#include <lpmd/orthogonalcell.h>
+
+using namespace lpmd;
 
 class VoronoiGenerator: public lpmd::CellGenerator, public lpmd::Plugin
 {
@@ -20,10 +25,12 @@ class VoronoiGenerator: public lpmd::CellGenerator, public lpmd::Plugin
   void Generate(lpmd::Configuration & conf) const;
 
  private:
-  std::string spc;              // which species (atomic number)
-  std::string type;     // type of base cell
-  double a;             // Lattice constant (size of the base cell of each grain)
+  std::string spc;     // which species (atomic number)
+  std::string type;    // type of base cell
+  double a;            // Lattice constant (size of the base cell of each grain)
   int grains;          // Number of cells (grains) in to put in the configuration
+
+
 };
 
 #endif
