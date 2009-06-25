@@ -1,6 +1,7 @@
 //
 //
 //
+
 #include "voronoi.h"
 
 #include <cmath>
@@ -137,7 +138,7 @@ void VoronoiGenerator::Generate(lpmd::Configuration & conf) const
   
   if (kill)
   {
-   for(int j=i; j<atoms.Size();++j)ColorHandler::ColorOfAtom(atoms[j])=ColorHandler::ColorOfAtom(atoms[j+1]);
+   //for(int j=i; j<atoms.Size();++j)ColorHandler::ColorOfAtom(atoms[j])=ColorHandler::ColorOfAtom(atoms[j+1]);
    i--;
   }
  }
@@ -160,7 +161,7 @@ void VoronoiGenerator::Generate(lpmd::Configuration & conf) const
      if ( Dot(pos,sep/sep.Module())>0.5*sep.Module() && atmclr==CellColor[n])
      {
       atoms.Delete(i);
-      for(int j=i; j<atoms.Size();++j)ColorHandler::ColorOfAtom(atoms[j])=ColorHandler::ColorOfAtom(atoms[j+1]);
+      //for(int j=i; j<atoms.Size();++j)ColorHandler::ColorOfAtom(atoms[j])=ColorHandler::ColorOfAtom(atoms[j+1]);
       eliminated=true; i--;
     }
     }
@@ -181,7 +182,7 @@ void VoronoiGenerator::Generate(lpmd::Configuration & conf) const
    if(dis<rmin)
    {
     atoms.Delete(i);
-    for(int j=i; j<atoms.Size();++j) ColorHandler::ColorOfAtom(atoms[j])=ColorHandler::ColorOfAtom(atoms[j+1]);
+    //for(int j=i; j<atoms.Size();++j) ColorHandler::ColorOfAtom(atoms[j])=ColorHandler::ColorOfAtom(atoms[j+1]);
     i=0; break;
    }
   }

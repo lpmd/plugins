@@ -293,6 +293,13 @@ directory .
        pkgconfig += liblpmd-2.0
     end
 
+    module mobility.so
+       language = c++
+       sources = mobility.cc
+       installpath = lib/lpmd
+       pkgconfig += liblpmd-2.0
+    end
+
     module msd.so
        language = c++
        sources = msd.cc
