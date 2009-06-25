@@ -9,6 +9,7 @@
 #include <sstream>
 #include <iomanip>
 #include <lpmd/simulationhistory.h>
+#include <lpmd/particleset.h>
 
 using namespace lpmd;
 
@@ -193,7 +194,23 @@ void DlPolyFormat::WriteCell(std::ostream & out, Configuration & con) const
 {
  lpmd::BasicParticleSet & atoms = con.Atoms();
  lpmd::BasicCell & cell = con.Cell();
-#warning SortBySpecies, falta.
+ //Sort by species
+ lpmd::Array<int> elements = atoms.Elements();
+ lpmd::ParticleSet tmp;
+ tmp.Clear();
+ for(int i=0;i<elements.Size();++i)
+ {
+  for(int j=0;j<atoms.Size();++j)
+  {
+   if(atoms[j].Z() == elements[i]) tmp.Append(atoms[j]);
+  }
+ }
+ atoms.Clear();
+ for(int i=0;i<tmp.Size();++i)
+ {
+  atoms.Append(tmp[i]);
+ }
+ //End Sort
  con.SetTag(con, Tag("level"), level);
  char * buf = new char[512];
  if (ftype=="CONFIG")
