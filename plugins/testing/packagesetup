@@ -412,6 +412,13 @@ directory .
        pkgconfig += liblpmd-2.0
     end
 
+    module rvcorr.so
+       language = c++
+       sources = rvcorr.cc
+       installpath = lib/lpmd
+       pkgconfig += liblpmd-2.0
+    end
+
     module setcolor.so
        language = c++
        sources = setcolor.cc
@@ -552,7 +559,6 @@ directory .
 #ewald_la_SOURCES = ewald.h ewald.cc
 #verletlist_la_SOURCES = verletlist.h verletlist.cc
 #metropolis_la_SOURCES = metropolis.h metropolis.cc
-#voronoi_la_SOURCES = voronoi.h voronoi.cc
 
 end
 
