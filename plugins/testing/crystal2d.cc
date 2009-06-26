@@ -68,7 +68,7 @@ void Crystal2DGenerator::Generate(Configuration & conf) const
   for (long i=0;i<nx;++i)
   {
    atoms.Append(Atom(spc));
-   atoms[cc++].Position() = cell.ScaleByCell(j*baseA + i*baseB);
+   atoms[cc++].Position() = cell.FittedInside(cell.Cartesian(j*baseA + i*baseB));
   }
 }
 
