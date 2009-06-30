@@ -454,6 +454,13 @@ directory .
        pkgconfig += liblpmd-2.0
     end
 
+    module sitecoord.so
+       language = c++
+       sources = sitecoord.cc
+       installpath = lib/lpmd
+       pkgconfig += liblpmd-2.0
+    end
+
     module sphere.so
        language = c++
        sources = sphere.cc
