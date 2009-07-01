@@ -24,8 +24,8 @@ class AtomTrail: public lpmd::StoredValue<lpmd::Matrix>, public lpmd::InstantPro
   void Evaluate(lpmd::Configuration & config, lpmd::Potential & pot);
 
  private:
-    int nx, ny;
-    std::string plane, species;
+    int nx, ny, nz;
+    std::string plane, species, mode;
 };
 
 #endif
