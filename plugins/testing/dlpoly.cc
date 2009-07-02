@@ -16,11 +16,12 @@ using namespace lpmd;
 DlPolyFormat::DlPolyFormat(std::string args): Plugin("dlpoly", "2.0"), dt(0.0)
 {
  lpmd::ParamList & param = (*this);
- AssignParameter("each", "1");
- AssignParameter("level", "0");
- AssignParameter("periodicity", "1");
- AssignParameter("replacecell", "false");
- AssignParameter("ftype","CONFIG");
+ DefineKeyword("file");
+ DefineKeyword("each", "1");
+ DefineKeyword("level", "0");
+ DefineKeyword("periodicity", "1");
+ DefineKeyword("replacecell", "false");
+ DefineKeyword("ftype","CONFIG");
  // hasta aqui los valores por omision
  ProcessArguments(args);
  readfile = writefile = param["file"];
