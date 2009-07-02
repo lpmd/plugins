@@ -55,7 +55,8 @@ void TempScalingModifier::Apply(Simulation & sim)
 {
  double set_temp = ValueAtStep(sim.CurrentStep(), fromtemp, totemp);
  DebugStream() << "-> Rescaling temperature to T = " << set_temp << '\n';  
- sim.SetTemperature(set_temp);
+ lpmd::BasicParticleSet & atoms = sim.Atoms();
+ sim.SetTemperature(set_temp,(atoms.HaveAny(Tag("fixedvel"))||atoms.HaveAny(Tag("fixedpos"))));
 }
 
 // Esto se incluye para que el modulo pueda ser cargado dinamicamente

@@ -200,6 +200,13 @@ directory .
        pkgconfig += liblpmd-2.0
     end
 
+    module hardspheres.so
+       language = c++
+       sources = hardspheres.cc
+       installpath = lib/lpmd
+       pkgconfig += liblpmd-2.0
+    end
+
     module harmonic.so
        language = c++
        sources = harmonic.cc

@@ -48,7 +48,8 @@ void TemperatureModifier::ShowHelp() const
 void TemperatureModifier::Apply(Simulation & sim)
 {
  DebugStream() << "-> Rescaling temperature to T = " << temp << '\n';  
- sim.SetTemperature(temp);
+ lpmd::BasicParticleSet & atoms = sim.Atoms();
+ sim.SetTemperature(temp,(atoms.HaveAny(Tag("fixedvel"))||atoms.HaveAny(Tag("fixedpos"))));
 }
 
 // Esto se incluye para que el modulo pueda ser cargado dinamicamente
