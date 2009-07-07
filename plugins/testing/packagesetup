@@ -356,6 +356,13 @@ directory .
        pkgconfig += liblpmd-2.0
     end
 
+    module osciforce.so
+       language = c++
+       sources = osciforce.cc
+       installpath = liblpmd
+       pkgconfig += liblpmd-2.0
+    end
+
     module pairdistances.so
        language = c++
        sources = pairdistances.cc
