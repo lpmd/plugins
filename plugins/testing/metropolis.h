@@ -2,19 +2,19 @@
 //
 //
 
-#ifndef __METROPOLI_H__
-#define __METROPOLI_H__
+#ifndef __METROPOLIS_H__
+#define __METROPOLIS_H__
 
 #include <lpmd/onestepintegrator.h>
 #include <lpmd/stepper.h>
 #include <lpmd/plugin.h>
 
-class Metropoli: public lpmd::OneStepIntegrator, public lpmd::Plugin
+class Metropolis: public lpmd::OneStepIntegrator, public lpmd::Plugin
 {
  public:
   //Metodos Generales
-  Metropoli(std::string args);
-  ~Metropoli();
+  Metropolis(std::string args);
+  ~Metropolis();
   void ShowHelp() const;
 
   //Metodos propios modulo verlet
@@ -22,7 +22,7 @@ class Metropoli: public lpmd::OneStepIntegrator, public lpmd::Plugin
   void Advance(lpmd::Simulation & sim, long i);
  private:
   double Temp;
-  double rand;
+  double rand,percent;
 };
 
 

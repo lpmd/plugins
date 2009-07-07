@@ -11,7 +11,7 @@
 
 using namespace lpmd;
 
-OsciForcePotential::OsciForcePotential(std::string args): Plugin("constantforce", "2.0")
+OsciForcePotential::OsciForcePotential(std::string args): Plugin("osciforce", "1.0")
 { 
  //
  DefineKeyword("force");

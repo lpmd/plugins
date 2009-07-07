@@ -6,24 +6,28 @@
 
 #include <lpmd/simulation.h>
 #include <lpmd/properties.h>
+#include <lpmd/session.h>
 
 #include <cmath>
 #include <iostream>
 
 using namespace lpmd;
 
-Metropoli::Metropoli(std::string args): Plugin("metropoli", "2.0")
+Metropolis::Metropolis(std::string args): Plugin("metropoli", "2.0")
 {
  DefineKeyword("start", "1");
+ DefineKeyword("temp","0.0");
+ DefineKeyword("percent","5");
  // hasta aqui los valores por omision
  ProcessArguments(args);
  start = int((*this)["start"]);
  Temp = double((*this)["temp"]);
+ percent = double((*this)["percent"]);
 }
 
-Metropoli::~Metropoli() { }
+Metropolis::~Metropolis() { }
 
-void Metropoli::ShowHelp() const
+void Metropolis::ShowHelp() const
 {
  std::cout << " General Info      >>                                                          \n";
  std::cout << "      El modulo es utilizado para minimzar utilizando el metodo de metropoli.  \n";
@@ -44,15 +48,14 @@ void Metropoli::ShowHelp() const
  std::cout << " simulacion.                                                                   \n";
 }
 
-void Metropoli::Initialize(Simulation & sim, Potential & p) { UseOldConfig(sim); }
+void Metropolis::Initialize(Simulation & sim, Potential & p) { UseOldConfig(sim); }
 
-void Metropoli::Advance(Simulation & sim, long i)
+void Metropolis::Advance(Simulation & sim, long i)
 {
- const double kboltzmann = double(Parameter(sim.GetTag(sim,"kboltzmann")));
+ const double kboltzmann = double(GlobalSession["kboltzmann"]);
  lpmd::BasicParticleSet & atoms = sim.Atoms();
- //lpmd::BasicParticleSet & oldatoms = OldConfig().Atoms();
  lpmd::CombinedPotential & pots = sim.Potentials();
- double kenergy = KineticEnergy(atoms);
+ lpmd::BasicCell & cell = sim.Cell();
  double penergy = 0.0e0;
  double min = sim.MinimumPairDistance();
  for(int j=0;j<pots.Size();++j)
@@ -60,23 +63,20 @@ void Metropoli::Advance(Simulation & sim, long i)
   penergy += pots[j].energy(sim);
  }
  Vector oldpos = atoms[i].Position();
- std::cerr << "min = " << min*20/100 << '\n';
- Vector random = RandomVector(min*20/100);
- Vector newpos = atoms[i].Position() + random;
+ Vector random = RandomVector(min*percent/100);
+ Vector newpos = cell.FittedInside(atoms[i].Position() + random);
  atoms[i].Position() = newpos;
- double nke = KineticEnergy(atoms);
+ pots.UpdateForces(sim);
  double npe = 0.0e0;
  for(int j=0;j<pots.Size();++j)
  {
   npe += pots[j].energy(sim);
  }
- std::cerr << "nke = " << nke << " - npe = "<<npe<<'\n';
- std::cerr << "ken = " << kenergy << " - pen = " <<penergy<<'\n';
- if ((nke+npe)<(kenergy+penergy))
+ if ((npe)<(penergy))
  {
   atoms[i].Position() = newpos;
  }
- else if(exp(-(nke+npe-kenergy-penergy)/kboltzmann*Temp)<1)
+ else if(exp(-(npe-penergy)/kboltzmann*Temp)<1)
  {
   atoms[i].Position() = newpos;
  }
@@ -84,8 +84,9 @@ void Metropoli::Advance(Simulation & sim, long i)
  {
   atoms[i].Position() = oldpos;
  }
+ pots.UpdateForces(sim);
 }
 
 // Esto se incluye para que el modulo pueda ser cargado dinamicamente
-Plugin * create(std::string args) { return new Metropoli(args); }
+Plugin * create(std::string args) { return new Metropolis(args); }
 void destroy(Plugin * m) { delete m; }
