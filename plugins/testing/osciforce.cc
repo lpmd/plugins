@@ -31,20 +31,23 @@ OsciForcePotential::~OsciForcePotential() { }
 void OsciForcePotential::ShowHelp() const
 {
  std::cout << " General Info      >>                                                          \n";
- std::cout << "      El modulo setea una fuerza constante, es utilizado para trabajo con un   \n";
- std::cout << " set de particulas que se quieran configurar con cierta fuerza.                \n";
+ std::cout << "      El modulo setea una fuerza variable, es utilizado para trabajo con un    \n";
+ std::cout << " set de particulas que se quieran configurar con ese tipo de fuerzas.          \n";
  std::cout << " General Options   >>                                                          \n";
- std::cout << "      forcevector   : Seguido por 3 numeros reales que indican un vector para  \n";
- std::cout << "                      la fuerza.                                               \n";
+ std::cout << "      force        : Especifica el vector fuerza máximo en torno al cuál se    \n";
+ std::cout << "                     oscila.                                                   \n";
+ std::cout << "      phase        : Especifica una fase adicional (default=0)                 \n";
+ std::cout << "      n            : número de subintervalos para la evaluación                \n";
  std::cout << '\n';
  std::cout << " Example                                                                       \n";
  std::cout << " Cargando el Modulo :                                                          \n";
- std::cout << " use constantforce as gravity                                                  \n";
+ std::cout << " use osciforce as sinforce                                                     \n";
  std::cout << "     force <0.0,0.0,-9.8>                                                      \n";
+ std::cout << "     n 50                                                                      \n";
  std::cout << " enduse                                                                        \n";
  std::cout << " Llamando al modulo :                                                          \n";
- std::cout << " potential gravity Ar Ar                                                     \n\n";
- std::cout << "      De esta forma aplicamos una fuerza constante a la interaccion de los     \n";
+ std::cout << " potential sinforce Ar Ar                                                    \n\n";
+ std::cout << "      De esta forma aplicamos una fuerza oscilatoria a la interaccion de los   \n";
  std::cout << " atomos de Argon.                                                              \n";
 }
 
@@ -60,6 +63,7 @@ void OsciForcePotential::UpdateForces(Configuration & con)
   double mi = atoms[i].Mass();
   atoms[i].Acceleration() = atoms[i].Acceleration() + tmpforce*(forcefactor/mi);
  }
+ counter++;
 }
 
 // Esto se incluye para que el modulo pueda ser cargado dinamicamente
