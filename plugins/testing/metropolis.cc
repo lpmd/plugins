@@ -76,7 +76,8 @@ void Metropolis::Advance(Simulation & sim, long i)
  {
   atoms[i].Position() = newpos;
  }
- else if(exp(-(npe-penergy)/kboltzmann*Temp)<1)
+ double r = exp(-(npe-penergy)/(kboltzmann*Temp));
+ if (drand48() < r)
  {
   atoms[i].Position() = newpos;
  }
