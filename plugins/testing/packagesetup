@@ -250,6 +250,13 @@ directory .
        libraries += lclib.a
     end
 
+    module lc3.so
+       language = c++
+       sources = lc3.cc
+       installpath = lib/lpmd
+       pkgconfig += liblpmd-2.0
+    end
+
     module localpressure.so
        language = c++
        sources = localpressure.cc
