@@ -29,6 +29,7 @@ class LinkedCell3: public lpmd::CellManager, public lpmd::Plugin
     int * head, * tail, * subcell;
     long cells_inside;
     long * atomlist;
+    bool mode;
 };
 
 #endif
