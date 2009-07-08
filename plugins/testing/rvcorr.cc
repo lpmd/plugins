@@ -61,21 +61,23 @@ void RVCorr::ShowHelp() const
 void RVCorr::Evaluate(Configuration & conf, Potential & pot)
 {
  lpmd::BasicParticleSet & atoms = conf.Atoms();
- lpmd::BasicCell & cell = conf.Cell();
 
  double dr = rcut/ double(nb);
  lpmd::Array<int> esp = atoms.Elements();
  int nsp = esp.Size();
  int N = atoms.Size();
 
- double **g, *gt;
+ double **g, **cnt;
  g = new double*[nb];
- for(int i=0;i<nb;i++) { g[i]=new double[(int)(nsp*(nsp+1)/2)]; }
- gt = new double[nb]; //total gdr
+ cnt = new double*[nb];
  for(int i=0;i<nb;i++) 
  { 
-  gt[i]=0.0e0;
-  for(int j=0;j<(int)(nsp*(nsp+1)/2);j++) g[i][j]=0.0e0;
+  g[i] = new double[(int)(nsp*(nsp+1)/2)];
+  cnt[i] = new double[(int)(nsp*(nsp+1)/2)];
+ }
+ for(int i=0;i<nb;i++) 
+ { 
+  for(int j=0;j<(int)(nsp*(nsp+1)/2);j++) g[i][j] = cnt[i][j] = 0.0e0;
  }
  int s=0;
  lpmd::Array<std::string> pairs;
@@ -107,11 +109,12 @@ void RVCorr::Evaluate(Configuration & conf, Potential & pot)
      const lpmd::AtomPair & nn = nlist[k];
      if(nn.j->Symbol()==loa[1])
      {
-      if(nn.r*nn.r<=rcut*rcut)
+      if (nn.r*nn.r<=rcut*rcut)
       {
        int ig=(long)floor(nn.r/dr);
        double rvcorr = (Dot(nn.i->Velocity(), nn.j->Velocity())/(nn.i->Velocity().Module()*nn.j->Velocity().Module()));
-       g[ig][s] += rvcorr*(cell.Volume())/(4.0e0*M_PI*nn.r*nn.r*dr*ne1*ne2);
+       g[ig][s] += rvcorr;
+       cnt[ig][s] += 1.0;
       }
      }
     }
@@ -120,35 +123,11 @@ void RVCorr::Evaluate(Configuration & conf, Potential & pot)
   s++;
  }
 
- //Calcula el valor de rvcorr(r) total.
- int j=0;
- for(long int i=0;i<pairs.Size();++i)
- {
-  lpmd::Array<std::string> loa = lpmd::SplitSpeciesPair(pairs[i]); // lista de atomos
-  int e1 = ElemNum(loa[0]);
-  int e2 = ElemNum(loa[1]);
-  int ne1=0,ne2=0;
-  for(int m=0;m<N;m++)
-  {
-   if(atoms[m].Symbol()==loa[0]) ne1++;
-   if(atoms[m].Symbol()==loa[1]) ne2++;
-  }
-  double ce1 = (double)ne1/(double)N;
-  double ce2 = (double)ne2/(double)N;
-  for(int i=0;i<nb;i++)
-  {
-   if(e1==e2) gt[i] = gt[i]+ce1*ce2*g[i][j];
-   else {gt[i]=gt[i]+2*ce1*ce2*g[i][j];}
-  }
-  j++;
- }
-
  Matrix & m = CurrentValue();
- m = lpmd::Matrix(2 + nsp*(nsp+1)/2, nb);
+ m = lpmd::Matrix(1 + nsp*(nsp+1)/2, nb);
  // Asigna los labels al objeto Matrix para cada columna
  m.SetLabel(0, "r");
- m.SetLabel(nsp*(nsp+1)/2+1, "total rvcorr(r)");
- j=1;
+ int j=1;
  for (long int i=0;i<pairs.Size();++i)
  {
   m.SetLabel(j, pairs[i]+" rvcorr(r)");
@@ -160,13 +139,13 @@ void RVCorr::Evaluate(Configuration & conf, Potential & pot)
   m.Set(0, i, dr*i);
   for(int j=0;j<(int)(nsp*(nsp+1)/2);j++)
   {
-   m.Set(j+1, i, g[i][j]);
+   double nu_value = ((fabs(cnt[i][j]) > 1.0E-8) ? (g[i][j]/cnt[i][j]) : 0.0);
+   m.Set(j+1, i, nu_value);
   }
-  m.Set(nsp*(nsp+1)/2+1, i, gt[i]);
  }
- delete [] gt;
- for (int i=0;i<nb;i++) delete [] g[i];
+ for (int i=0;i<nb;i++) { delete [] g[i]; delete [] cnt[i]; }
  delete [] g;
+ delete [] cnt;
 }
 
 // Esto se incluye para que el modulo pueda ser cargado dinamicamente
