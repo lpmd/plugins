@@ -27,6 +27,7 @@ LinkedCell3::LinkedCell3(std::string args): Plugin("lc3", "1.0")
  // 
  //
  //
+ head = tail = 0;
  atomlist = 0;
  subcell = 0;
 }
@@ -97,7 +98,9 @@ void LinkedCell3::UpdateCell(Configuration & conf)
  //
  //
  //
+ if (head != 0) delete [] head;
  head = new int[nx*ny*nz];
+ if (tail != 0) delete [] tail;
  tail = new int[nx*ny*nz];
  //
  if (subcell == 0)
