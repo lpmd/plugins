@@ -177,12 +177,10 @@ void VoronoiGenerator::Generate(lpmd::Configuration & conf) const
  {
   for (long j=i+1; j<atoms.Size(); ++j)
   {
-   Vector sep=atoms[i].Position()-atoms[j].Position();
-   double dis=sep.Module();
+   double dis=celda.Displacement(atoms[i].Position(), atoms[j].Position()).Module();
    if(dis<rmin)
    {
     atoms.Delete(i);
-    //for(int j=i; j<atoms.Size();++j) ColorHandler::ColorOfAtom(atoms[j])=ColorHandler::ColorOfAtom(atoms[j+1]);
     i=0; break;
    }
   }
