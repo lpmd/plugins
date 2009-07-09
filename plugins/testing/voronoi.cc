@@ -12,7 +12,7 @@ using namespace lpmd;
   void Replicate(OrthogonalCell & unitcell, ParticleSet & unitset, unsigned long nx, unsigned long ny, unsigned long nz);
   void Rotate(OrthogonalCell & unitcell, ParticleSet & unitset, Vector rotate);
   void ReplicateRotate(//
-  OrthogonalCell unitcell, ParticleSet unitset, Vector & cellcenter, Vector &CellColor,//
+  double i, double grains, OrthogonalCell unitcell, ParticleSet unitset, Vector & cellcenter, Vector &CellColor,//
   unsigned long na, unsigned long nb, unsigned long nc, Vector rotate, BasicParticleSet & atoms);
 
 
@@ -117,17 +117,17 @@ void VoronoiGenerator::Generate(lpmd::Configuration & conf) const
  for (int i=0; i<grains; ++i)
  {
   Vector rotate=2*M_PI*drand48()*e1+2*M_PI*drand48()*e2+2*M_PI*drand48()*e3;
-  ReplicateRotate(basecell, ps, centers[i], CellColor[i], nx, ny, nz, rotate, atoms);
+  ReplicateRotate(i, grains, basecell, ps, centers[i], CellColor[i], nx, ny, nz, rotate, atoms);
  } 
  
  std::cout << " -> Cell volume: "<<V<<" cubic angstroms."<<std::endl;
- std::cout << " -> Creating "<<grains<<" grains. Estimated average grain volume: "<<V/grains<<" cubic angstroms."<<std::endl;
+ std::cout << " -> Creating "<<grains<<" grains. Estimated average grain diameter: "<<pow(V/grains,1.0/3.0)<<" angstroms."<<std::endl;
  std::cout << " -> Unitary "<< type <<" cell replicated "<<nx<<" times in each axis..."<<std::endl;
  std::cout << " -> Replicated unitary cells were rotated and moved into the cell with Skew-Start method..."<<std::endl;
 
  //-------------------- 1ST ELIMINATION -------------------//
  // OUTSIDE ELIMINATION: Eliminate the atoms out of the cell
- std::cout << " -> Elimination of atoms out of the cell..."<<std::endl;
+ std::cout << " -> Eliminating atoms out of the cell..."<<std::endl;
  for (long i=0;i<atoms.Size();++i)
  {
   bool kill=false;
@@ -214,7 +214,7 @@ void SkewStart(int n, double x, double y, double z, Vector *centers)
  dz = l / double(n);
  for (long i=0;i<n;++i)
  {
-  atomos[i].Position() = celda.FittedInside(celda.Cartesian(Vector(dx*double(i), dy*double(i), dz*double(i))));
+  atomos[i].Position()=celda.FittedInside(celda.Cartesian(Vector(dx*double(i)+0.5, dy*double(i)+0.5, dz*double(i)+0.5)));
   centers[i]=atomos[i].Position();
  }
 }
@@ -284,7 +284,7 @@ void Rotate(OrthogonalCell & unitcell, ParticleSet & unitset, Vector rotate)
 
 
 void ReplicateRotate(//
-  OrthogonalCell unitcell, ParticleSet unitset, Vector & cellcenter, Vector &CellColor,//
+  double i, double grains, OrthogonalCell unitcell, ParticleSet unitset, Vector & cellcenter, Vector &CellColor,//
   unsigned long na, unsigned long nb, unsigned long nc,//
   Vector rotate, BasicParticleSet & atoms)
 {
@@ -295,8 +295,7 @@ void ReplicateRotate(//
 
  Vector centro=0.5*(uc[0]+uc[1]+uc[2]);
  unsigned long N = us.Size();
- double r=drand48(), g=drand48(), b=drand48();
- CellColor = Color(r,g,b);
+ CellColor = ColorFromScalar(i/grains);
  for(unsigned long i=0;i<N;++i)
  {
   Vector vct=us[i].Position()+(cellcenter-centro);
