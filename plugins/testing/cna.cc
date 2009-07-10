@@ -162,7 +162,7 @@ void CommonNeighborAnalysis::Evaluate(Configuration & conf, Potential & pot)
     rightpair = (rightpair || ((atoms[i].Z() == spc2) && (nn.j->Z() == spc1)));
     if (!rightpair) continue;
    }
-   if (nn.r >= rcut) continue;  
+   if (nn.r2 >= rcut*rcut) continue;  
    unsigned int cna_indices[3];
    long int j = indices[nn.j];
    NeighborList & jlist = neighbormatrix[j];
@@ -171,7 +171,7 @@ void CommonNeighborAnalysis::Evaluate(Configuration & conf, Potential & pot)
    for (long int jt=0;jt<jlist.Size();++jt)
    {
     const AtomPair & jnn = jlist[jt];
-    if (jnn.r >= rcut) continue;
+    if (jnn.r2 >= rcut*rcut) continue;
     if ((indices[jnn.j] != i) && (indices[jnn.j] != j)) cn.push_back(indices[jnn.j]);
    }
    for (std::list<long int>::const_iterator qt=cn.begin();qt!=cn.end();++qt)
@@ -211,7 +211,7 @@ void CommonNeighborAnalysis::Evaluate(Configuration & conf, Potential & pot)
     }
     cna_indices[2] = longest.size()-1;
    }
-   data.push_back(BondedPair(cna_indices[0], cna_indices[1], cna_indices[2], i, indices[nn.j], nn.r, atoms[i].Position()+nn.rij*0.5));
+   data.push_back(BondedPair(cna_indices[0], cna_indices[1], cna_indices[2], i, indices[nn.j], sqrt(nn.r2), atoms[i].Position()+nn.rij*0.5));
   }
  }
  delete [] neighbormatrix;

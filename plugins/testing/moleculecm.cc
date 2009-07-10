@@ -60,12 +60,12 @@ void MoleculeCMModifier::Apply(Simulation & con)
    for (long int k=0;k<nlist.Size();++k)
    {
     lpmd::AtomPair & nn = nlist[k];
-    if (nn.r < radius)
+    if (nn.r2 < radius*radius)
     {
      if (used[indices[nn.j]] == 0)
      {
       if (closest == NULL) closest = &nn;
-      else if (nn.r < closest->r) closest = &nn;
+      else if (nn.r2 < closest->r2) closest = &nn;
      }
     }
    }

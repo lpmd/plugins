@@ -268,13 +268,13 @@ void LinkedCellCellManager::BuildNeighborList(Configuration & sc, long i, Neighb
    nn.i = &this_atom;
    nn.j = &atoms[ak->i];
    nn.rij = nn.j->Position() - this_atom.Position();
-   nn.r = nn.rij.Module();
-   if (nn.r < rcut)
+   nn.r2 = nn.rij.SquareModule();
+   if (nn.r2 < rcut*rcut)
    {
     nlist.Append(nn);
     nwin++;
    }
-   else if (nn.r > rcut) nfail++;
+   else if (nn.r2 > rcut*rcut) nfail++;
   }
  }
  //
@@ -290,13 +290,13 @@ void LinkedCellCellManager::BuildNeighborList(Configuration & sc, long i, Neighb
    nn.j = &atoms[ak->i];
    const Vector newpos = nn.j->Position()+disp;
    nn.rij = newpos-this_atom.Position();
-   nn.r = nn.rij.Module();
-   if (nn.r < rcut)
+   nn.r2 = nn.rij.SquareModule();
+   if (nn.r2 < rcut*rcut)
    {
     nlist.Append(nn);
     nwin++;
    }
-   else if (nn.r > rcut) nfail++;
+   else if (nn.r2 > rcut*rcut) nfail++;
   }
  }
  // 
@@ -314,13 +314,13 @@ void LinkedCellCellManager::BuildNeighborList(Configuration & sc, long i, Neighb
     nn.j = &atoms[ak->i];
     const Vector newpos = nn.j->Position()+disp;
     nn.rij = newpos-this_atom.Position();
-    nn.r = nn.rij.Module();
-    if (nn.r < rcut)
+    nn.r2 = nn.rij.SquareModule();
+    if (nn.r2 < rcut*rcut)
     {
      nlist.Append(nn); 
      nwin++;
     }
-    else if (nn.r > rcut) nfail++;
+    else if (nn.r2 > rcut*rcut) nfail++;
    }
   }
  }

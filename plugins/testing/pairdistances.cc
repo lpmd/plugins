@@ -70,7 +70,7 @@ void PairDistances::Evaluate(Configuration & conf, Potential & pot)
  for (long int i=0;i<total_list.Size();++i)
  {
   const AtomPair & nn = total_list[i];
-  m.Set(0, i, nn.r);
+  m.Set(0, i, sqrt(nn.r2));
   m.Set(1, i, nn.i_index);
   m.Set(2, i, nn.j_index);
  }

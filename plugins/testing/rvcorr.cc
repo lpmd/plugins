@@ -109,9 +109,9 @@ void RVCorr::Evaluate(Configuration & conf, Potential & pot)
      const lpmd::AtomPair & nn = nlist[k];
      if(nn.j->Symbol()==loa[1])
      {
-      if (nn.r*nn.r<=rcut*rcut)
+      if (nn.r2<=rcut*rcut)
       {
-       int ig=(long)floor(nn.r/dr);
+       int ig=(long)floor(sqrt(nn.r2)/dr);
        double rvcorr = (Dot(nn.i->Velocity(), nn.j->Velocity())/(nn.i->Velocity().Module()*nn.j->Velocity().Module()));
        g[ig][s] += rvcorr;
        cnt[ig][s] += 1.0;

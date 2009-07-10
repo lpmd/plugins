@@ -171,14 +171,14 @@ void AngDist::Evaluate(lpmd::Configuration & con, lpmd::Potential & pot)
     for (long int k=0;k<nlist.Size();++k)
     {
      const lpmd::AtomPair & nn = nlist[k];
-     if(nn.j->Z()==e1 && nn.r*nn.r <= rc12*rc12)
+     if(nn.j->Z()==e1 && nn.r2 <= rc12*rc12)
      {
       for (long int l=0;l<nlist.Size();++l)
       {
        const lpmd::AtomPair & mm = nlist[l];
        if(&mm!=&nn)
        {
-	if(mm.j->Z()==e3 && mm.r*mm.r <= rc23*rc23)
+	if(mm.j->Z()==e3 && mm.r2 <= rc23*rc23)
 	{
 	 Vector a = cell.Displacement(part[i].Position(), nn.j->Position());
 	 Vector b = cell.Displacement(part[i].Position(), mm.j->Position());

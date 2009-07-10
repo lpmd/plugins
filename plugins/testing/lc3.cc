@@ -195,8 +195,8 @@ void LinkedCell3::BuildNeighborList(Configuration & conf, long i, NeighborList &
    nn.j = &atoms[z];
    nn.rij = cell.Displacement(nn.i->Position(), nn.j->Position());
    //nn.rij = nn.j->Position() - nn.i->Position();
-   nn.r = nn.rij.Module();
-   if (nn.r < rcut) nlist.Append(nn);
+   nn.r2 = nn.rij.SquareModule();
+   if (nn.r2 < rcut*rcut) nlist.Append(nn);
   }
  }
 }

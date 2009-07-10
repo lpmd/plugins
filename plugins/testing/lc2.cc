@@ -101,7 +101,7 @@ void LinkedCellCellManager2::BuildNeighborList(Configuration & sc, long i, Neigh
   nn.rij = cell.Displacement(nn.i->Position(), atoms[p->j].Position());
   //std::cerr << "DEBUG " << Vector(p->dr[0], p->dr[1], p->dr[2]) << "   " << nn.rij << '\n';
   //nn.r = sqrt(p->r2);
-  nn.r = nn.rij.Module();
+  nn.r2 = nn.rij.SquareModule();
   nlist.Append(nn);
  }
  free(neighbors);

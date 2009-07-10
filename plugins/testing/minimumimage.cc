@@ -58,8 +58,8 @@ void MinimumImageCellManager::BuildNeighborList(Configuration & conf, long i, Ne
    {
     nn.j = &(atoms[j]);
     nn.rij = cell.Displacement(ipos, nn.j->Position());
-    nn.r = nn.rij.Module();
-    if (nn.r < rcu) nlist.Append(nn);
+    nn.r2 = nn.rij.SquareModule();
+    if (nn.r2 < rcu*rcu) nlist.Append(nn);
    }
  }
  else
@@ -68,8 +68,8 @@ void MinimumImageCellManager::BuildNeighborList(Configuration & conf, long i, Ne
   {
    nn.j = &(atoms[j]);
    nn.rij = cell.Displacement(ipos, nn.j->Position());
-   nn.r = nn.rij.Module();
-   if (nn.r < rcu) nlist.Append(nn);
+   nn.r2 = nn.rij.SquareModule();
+   if (nn.r2 < rcu*rcu) nlist.Append(nn);
   }
  }
 }

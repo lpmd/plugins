@@ -117,9 +117,9 @@ void CordNumFunc::Evaluate(lpmd::Configuration & con, Potential & pot)
      const lpmd::AtomPair & nn = nlist[k];
      if(nn.j->Z()==e2)
      {
-      if(nn.r*nn.r<rcut*rcut)
+      if(nn.r2<rcut*rcut)
       {
-       int in=(long)floor(nn.r/dr);
+       int in=(long)floor(sqrt(nn.r2)/dr);
        histo[s][in]++;
       }
      }
