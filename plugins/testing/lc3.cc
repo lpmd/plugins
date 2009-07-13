@@ -52,7 +52,7 @@ void LinkedCell3::UpdateCell(Configuration & conf)
   double minx = cell[0].Module();
   double miny = cell[1].Module();
   double minz = cell[2].Module();
-  double fnn = double(cutoff/4); //NOTE : Approximated value.
+  double fnn = double(cutoff/5.0e0); //NOTE : Approximated value. one atom by cell.
   int n = 1;
   while(true)
   {
@@ -147,12 +147,12 @@ void LinkedCell3::UpdateCell(Configuration & conf)
   int i = int(floor(nx*fpos[0]));
   int j = int(floor(ny*fpos[1]));
   int k = int(floor(nz*fpos[2]));
-  if (i < 0) i += nx;
-  else if (i > nx-1) i -= nx;
-  if (j < 0) j += ny;
-  else if (j > ny-1) j -= ny;
-  if (k < 0) k += nz;
-  else if (k > nz-1) k -= nz;
+  //if (i < 0) i += nx;
+  if (i > nx-1) i -= nx;
+  //if (j < 0) j += ny;
+  if (j > ny-1) j -= ny;
+  //if (k < 0) k += nz;
+  if (k > nz-1) k -= nz;
   long q = k*(nx*ny)+j*nx+i;
   //
   if (head[q] == -1) head[q] = tail[q] = r;
@@ -174,21 +174,25 @@ void LinkedCell3::BuildNeighborList(Configuration & conf, long i, NeighborList &
  int p = int(floor(nx*fpos[0]));
  int q = int(floor(ny*fpos[1]));
  int r = int(floor(nz*fpos[2]));
- if (p < 0) p += nx;
- else if (p > nx-1) p -= nx;
- if (q < 0) q += ny;
- else if (q > ny-1) q -= ny;
- if (r < 0) r += nz;
- else if (r > nz-1) r -= nz;
+ //if (p < 0) p += nx;
+ if (p > nx-1) p -= nx;
+ //if (q < 0) q += ny;
+ if (q > ny-1) q -= ny;
+ //if (r < 0) r += nz;
+ if (r > nz-1) r -= nz;
  long cind = r*(nx*ny)+q*nx+p;
  //
  AtomPair nn;
  nlist.Clear();
  nn.i = &atoms[i];
- for (int c=0;c<cells_inside;++c)
+ int c=0;long z=0;
+#ifdef _OPENMP
+#pragma omp parallel for private( c, z )
+#endif
+ for (c=0;c<cells_inside;++c)
  {
   int neighbor_cell = subcell[cind*cells_inside+c];
-  for (long z=head[neighbor_cell];z != -1;z=atomlist[z])
+  for (z=head[neighbor_cell];z != -1;z=atomlist[z])
   {
    if (z == i) continue;
    if ((full == false) && (z > i)) continue;
