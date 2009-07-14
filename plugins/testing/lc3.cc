@@ -27,15 +27,14 @@ LinkedCell3::LinkedCell3(std::string args): Plugin("lc3", "1.0")
  // 
  //
  //
- head = tail = 0;
  atomlist = 0;
  subcell = 0;
+ nwin = nfail = 0.0;
 }
 
 LinkedCell3::~LinkedCell3() 
 { 
- delete [] head;
- delete [] tail;
+ if (nwin+nfail > 0.0) DebugStream() << "-> LC3 Efficiency: " << 100.0*nwin/(nwin+nfail) << "%\n";
  delete [] atomlist;
  delete [] subcell;
 }
@@ -46,7 +45,6 @@ void LinkedCell3::UpdateCell(Configuration & conf)
 {
  BasicParticleSet & atoms = conf.Atoms();
  BasicCell & cell = conf.Cell();
- if (atomlist == 0) atomlist = new long[atoms.Size()];
  if (mode == true)
  {
   double minx = cell[0].Module();
@@ -98,11 +96,6 @@ void LinkedCell3::UpdateCell(Configuration & conf)
  //
  //
  //
- if (head != 0) delete [] head;
- head = new int[nx*ny*nz];
- if (tail != 0) delete [] tail;
- tail = new int[nx*ny*nz];
- //
  if (subcell == 0)
  {
   double d = cell[0].Module()/double(nx);
@@ -138,8 +131,9 @@ void LinkedCell3::UpdateCell(Configuration & conf)
     }
  }
 
+ if (atomlist == 0) atomlist = new long[nx*ny*nz];
  //
- for (long q=0;q<nx*ny*nz;++q) head[q] = tail[q] = -1;
+ for (long i=0;i<(nx*ny*nz);++i) atomlist[i] = -1;
  for (long r=0;r<atoms.Size();++r)
  {
   const Vector fpos = cell.Fractional(atoms[r].Position());
@@ -153,15 +147,10 @@ void LinkedCell3::UpdateCell(Configuration & conf)
   if (j > ny-1) j -= ny;
   //if (k < 0) k += nz;
   if (k > nz-1) k -= nz;
-  long q = k*(nx*ny)+j*nx+i;
   //
-  if (head[q] == -1) head[q] = tail[q] = r;
-  else 
-  {
-   atomlist[tail[q]] = r;
-   tail[q] = r;   
-  }
-  atomlist[r] = -1;
+  long q = k*(nx*ny)+j*nx+i;
+  assert(atomlist[q] == -1);
+  atomlist[q] = r;
  }
 }
 
@@ -185,23 +174,22 @@ void LinkedCell3::BuildNeighborList(Configuration & conf, long i, NeighborList &
  AtomPair nn;
  nlist.Clear();
  nn.i = &atoms[i];
- int c=0;long z=0;
+ int * c=0;long z=0;
 #ifdef _OPENMP
 #pragma omp parallel for private( c, z )
 #endif
- for (c=0;c<cells_inside;++c)
+ c = &(subcell[cind*cells_inside]);
+ for (int q=0;q<cells_inside;++q)
  {
-  int neighbor_cell = subcell[cind*cells_inside+c];
-  for (z=head[neighbor_cell];z != -1;z=atomlist[z])
-  {
-   if (z == i) continue;
-   if ((full == false) && (z > i)) continue;
-   nn.j = &atoms[z];
-   nn.rij = cell.Displacement(nn.i->Position(), nn.j->Position());
-   //nn.rij = nn.j->Position() - nn.i->Position();
-   nn.r2 = nn.rij.SquareModule();
-   if (nn.r2 < rcut*rcut) nlist.Append(nn);
-  }
+  z = atomlist[*(c++)];
+  if ((z < 0) || (z == i)) continue;
+  if ((z > i) && (full == false)) continue;
+  nn.j = &atoms[z];
+  nn.rij = cell.Displacement(nn.i->Position(), nn.j->Position());
+  //nn.rij = nn.j->Position() - nn.i->Position();
+  nn.r2 = nn.rij.SquareModule();
+  if (nn.r2 < rcut*rcut) { nlist.Append(nn); nwin += 1.0; }
+  else { nfail += 1.0; }
  }
 }
 
