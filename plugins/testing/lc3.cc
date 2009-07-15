@@ -134,6 +134,7 @@ void LinkedCell3::UpdateCell(Configuration & conf)
  if (atomlist == 0) atomlist = new long[nx*ny*nz];
  //
  for (long i=0;i<(nx*ny*nz);++i) atomlist[i] = -1;
+ bool update=false;
  for (long r=0;r<atoms.Size();++r)
  {
   const Vector fpos = cell.Fractional(atoms[r].Position());
@@ -149,8 +150,23 @@ void LinkedCell3::UpdateCell(Configuration & conf)
   if (k > nz-1) k -= nz;
   //
   long q = k*(nx*ny)+j*nx+i;
-  assert(atomlist[q] == -1);
+  //assert(atomlist[q] == -1);
+  if(atomlist[q] != -1)   
+  {
+   update=true;
+  }
   atomlist[q] = r;
+ }
+ if (update==true) 
+ {  
+  DebugStream() << "-> Update nx-ny-nz to = " << nx <<"-"<<ny<<"-"<<nz<<'\n';
+  nx=nx+2;
+  ny=ny+2;
+  nz=nz+2;
+  if (subcell != 0) { delete [] subcell; subcell = 0; }
+  if (atomlist !=0 ) { delete [] atomlist; atomlist = 0; }
+  nwin=nfail=0;  
+  UpdateCell(conf);
  }
 }
 
