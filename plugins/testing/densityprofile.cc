@@ -183,12 +183,12 @@ void DensityProfile::Evaluate(lpmd::Configuration & con, lpmd::Potential & pot)
    if(atoms[m].Z()==elements[i]) ne++;
   }
   //Comienza la iteracion principal para el calculo.
-  for(unsigned long int i=0;i<N;++i)
+  for(unsigned long int j=0;j<N;++j)
   {
-   if(atoms[i].Z()==elements[i])
+   if(atoms[j].Z()==elements[i])
    {
     //vemos la ubicacion atomica respecto a nuestra "rejilla".
-    lpmd::Vector position = atoms[i].Position();
+    lpmd::Vector position = atoms[j].Position();
     double m = atoms[i].Mass();
     double x = position[0];
     double y = position[1];
@@ -220,9 +220,9 @@ void DensityProfile::Evaluate(lpmd::Configuration & con, lpmd::Potential & pot)
  for(int i=0;i<elements.Size();++i)
  {
   //Comienza la asignacion principal para g(r) total.
-  for(int i=0;i<bins;i++)
+  for(int k=0;k<bins;k++)
   {
-   rhot[i] += rho[i][j];
+   rhot[k] += rho[k][j];
   }
   j++;
  }
