@@ -50,7 +50,7 @@ void LinkedCell3::UpdateCell(Configuration & conf)
   double minx = cell[0].Module();
   double miny = cell[1].Module();
   double minz = cell[2].Module();
-  double fnn = double(cutoff/5.0e0); //NOTE : Approximated value. one atom by cell.
+  double fnn = conf.MinimumPairDistance();
   int n = 1;
   while(true)
   {
@@ -61,7 +61,7 @@ void LinkedCell3::UpdateCell(Configuration & conf)
    else if (actual>previo) {n--;break;}
    else continue;
   }
-  if ((n%2)!=0) n--;
+  if ((n%2)!=0) n++;
   nx = n;
   DebugStream() << "-> Using nx = " << nx << " subdivision scheme."<<'\n';
   n=1;
@@ -74,7 +74,7 @@ void LinkedCell3::UpdateCell(Configuration & conf)
    else if (actual>previo) {n--;break;}
    else continue;
   }
-  if ((n%2)!=0) n--;
+  if ((n%2)!=0) n++;
   ny = n;
   DebugStream() << "-> Using ny = " << ny << " subidvision scheme."<<'\n';
   n=1;
@@ -87,7 +87,7 @@ void LinkedCell3::UpdateCell(Configuration & conf)
    else if (actual>previo) {n--;break;}
    else continue;
   }
-  if ((n%2)!=0) n--;
+  if ((n%2)!=0) n++;
   nz = n;
   DebugStream() << "-> Using nz = " << nz << " subdivision scheme." << '\n';
   n=1;
@@ -175,9 +175,6 @@ void LinkedCell3::BuildNeighborList(Configuration & conf, long i, NeighborList &
  nlist.Clear();
  nn.i = &atoms[i];
  int * c=0;long z=0;
-#ifdef _OPENMP
-#pragma omp parallel for private( c, z )
-#endif
  c = &(subcell[cind*cells_inside]);
  for (int q=0;q<cells_inside;++q)
  {
