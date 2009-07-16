@@ -373,7 +373,14 @@ directory .
     module osciforce.so
        language = c++
        sources = osciforce.cc
-       installpath = liblpmd
+       installpath = lib/lpmd
+       pkgconfig += liblpmd-2.0
+    end
+
+    module overlap.so
+       language = c++
+       sources = overlap.cc
+       installpath = lib/lpmd
        pkgconfig += liblpmd-2.0
     end
 
