@@ -3,6 +3,7 @@
 //
 
 #include "lc3.h"
+#include <omp.h>
 
 using namespace lpmd;
 
@@ -50,7 +51,7 @@ void LinkedCell3::UpdateCell(Configuration & conf)
   double minx = cell[0].Module();
   double miny = cell[1].Module();
   double minz = cell[2].Module();
-  double fnn = conf.MinimumPairDistance();
+  double fnn = cutoff/2.75;
   int n = 1;
   while(true)
   {
@@ -135,7 +136,11 @@ void LinkedCell3::UpdateCell(Configuration & conf)
  //
  for (long i=0;i<(nx*ny*nz);++i) atomlist[i] = -1;
  bool update=false;
- for (long r=0;r<atoms.Size();++r)
+ long r=0;
+#ifdef _OPENMP
+#pragma omp parallel for private ( r )
+#endif
+ for (r=0;r<atoms.Size();++r)
  {
   const Vector fpos = cell.Fractional(atoms[r].Position());
   //
@@ -199,7 +204,6 @@ void LinkedCell3::BuildNeighborList(Configuration & conf, long i, NeighborList &
   if ((z > i) && (full == false)) continue;
   nn.j = &atoms[z];
   nn.rij = cell.Displacement(nn.i->Position(), nn.j->Position());
-  //nn.rij = nn.j->Position() - nn.i->Position();
   nn.r2 = nn.rij.SquareModule();
   if (nn.r2 < rcut*rcut) { nlist.Append(nn); nwin += 1.0; }
   else { nfail += 1.0; }
