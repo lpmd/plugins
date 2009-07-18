@@ -23,6 +23,7 @@ directory .
        sources = lclib.c
        flags += -fPIC
        flags += -fPIC
+       openmp = false
     end
 
     module addvelocity.so
