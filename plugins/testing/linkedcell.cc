@@ -10,10 +10,10 @@ LinkedCell::LinkedCell(std::string args): Plugin("linkedcell", "2.0")
 { 
  ParamList & params = (*this);
  DefineKeyword("cutoff", "7.0");
- DefineKeyword("nx", "0");
- DefineKeyword("ny", "0");
- DefineKeyword("nz", "0");
- DefineKeyword("mode", "auto");
+ DefineKeyword("nx", "6");
+ DefineKeyword("ny", "6");
+ DefineKeyword("nz", "6");
+ DefineKeyword("mode", "noauto");
  // 
  ProcessArguments(args);
  cutoff = double(params["cutoff"]);
@@ -109,6 +109,16 @@ void LinkedCell::UpdateCell(Configuration & conf)
   if (cell[2].Module()/double(nz) < d) d = cell[2].Module()/double(nz);
   int side = int(ceil((cutoff/d)-0.5));
   cells_inside = (2*side+1)*(2*side+1)*(2*side+1);
+  if (cells_inside < 27) 
+  {
+   nx+=2;ny+=2;nz+=2;
+   DebugStream() << "-> Extremely small values of nx,ny,nz."<<'\n';
+   DebugStream() << "-> Update nx-ny-nz to = " << nx <<"-"<<ny<<"-"<<nz<<'\n';
+   if (subcell != 0) { delete [] subcell; subcell = 0; }
+   if (atomlist !=0 ) { delete [] atomlist; atomlist = 0; }
+   //nwin=nfail=0;
+   UpdateCell(conf);
+  }
   DebugStream() << "-> Using " << cells_inside << " neighboring subcells\n";
   subcell = new int[(nx*ny*nz)*cells_inside];
   int z[3];
@@ -150,11 +160,11 @@ void LinkedCell::UpdateCell(Configuration & conf)
   int i = int(floor(nx*fpos[0]));
   int j = int(floor(ny*fpos[1]));
   int k = int(floor(nz*fpos[2]));
-  //if (i < 0) i += nx;
+//  if (i < 0) i += nx;
   if (i > nx-1) i -= nx;
-  //if (j < 0) j += ny;
+//  if (j < 0) j += ny;
   if (j > ny-1) j -= ny;
-  //if (k < 0) k += nz;
+//  if (k < 0) k += nz;
   if (k > nz-1) k -= nz;
   long q = k*(nx*ny)+j*nx+i;
   //
@@ -177,11 +187,11 @@ void LinkedCell::BuildNeighborList(Configuration & conf, long i, NeighborList & 
  int p = int(floor(nx*fpos[0]));
  int q = int(floor(ny*fpos[1]));
  int r = int(floor(nz*fpos[2]));
- //if (p < 0) p += nx;
+// if (p < 0) p += nx;
  if (p > nx-1) p -= nx;
- //if (q < 0) q += ny;
+// if (q < 0) q += ny;
  if (q > ny-1) q -= ny;
- //if (r < 0) r += nz;
+// if (r < 0) r += nz;
  if (r > nz-1) r -= nz;
  long cind = r*(nx*ny)+q*nx+p;
  //
@@ -189,9 +199,9 @@ void LinkedCell::BuildNeighborList(Configuration & conf, long i, NeighborList & 
  nlist.Clear();
  nn.i = &atoms[i];
  int c=0;long z=0;
-#ifdef _OPENMP
-#pragma omp parallel for private( c, z )
-#endif
+//#ifdef _OPENMP
+//#pragma omp parallel for private( c, z )
+//#endif
  for (c=0;c<cells_inside;++c)
  {
   int neighbor_cell = subcell[cind*cells_inside+c];
