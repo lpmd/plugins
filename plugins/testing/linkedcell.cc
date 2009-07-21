@@ -51,7 +51,7 @@ void LinkedCell::UpdateCell(Configuration & conf)
   double minx = cell[0].Module();
   double miny = cell[1].Module();
   double minz = cell[2].Module();
-  double fnn = double(cutoff/2.75e0); //NOTE : Approximated value. one atom by cell.
+  double fnn = double(cutoff/5.0e0); //NOTE : Approximated value. one atom by cell.
   int n = 1;
   while(true)
   {
@@ -97,6 +97,7 @@ void LinkedCell::UpdateCell(Configuration & conf)
  //
  //
  //
+
  if (head != 0) delete [] head;
  head = new int[nx*ny*nz];
  if (tail != 0) delete [] tail;
@@ -109,10 +110,10 @@ void LinkedCell::UpdateCell(Configuration & conf)
   if (cell[2].Module()/double(nz) < d) d = cell[2].Module()/double(nz);
   int side = int(ceil((cutoff/d)-0.5));
   cells_inside = (2*side+1)*(2*side+1)*(2*side+1);
-  if (cells_inside < 27) 
+  if (cells_inside < 27 || d > cutoff) 
   {
    nx+=2;ny+=2;nz+=2;
-   DebugStream() << "-> Extremely small values of nx,ny,nz."<<'\n';
+   DebugStream() << "-> Extremely small values of nx,ny,nz or d>cutoff."<<'\n';
    DebugStream() << "-> Update nx-ny-nz to = " << nx <<"-"<<ny<<"-"<<nz<<'\n';
    if (subcell != 0) { delete [] subcell; subcell = 0; }
    if (atomlist !=0 ) { delete [] atomlist; atomlist = 0; }
@@ -198,22 +199,20 @@ void LinkedCell::BuildNeighborList(Configuration & conf, long i, NeighborList & 
  AtomPair nn;
  nlist.Clear();
  nn.i = &atoms[i];
- int c=0;long z=0;
-//#ifdef _OPENMP
-//#pragma omp parallel for private( c, z )
-//#endif
- for (c=0;c<cells_inside;++c)
+ int * c=0;long z=0;
+ c = &(subcell[cind*cells_inside]);
+#ifdef _OPENMP
+#pragma omp parallel for
+#endif
+ for (int q=0;q<cells_inside;++q)
  {
-  int neighbor_cell = subcell[cind*cells_inside+c];
-  for (z=head[neighbor_cell];z != -1;z=atomlist[z])
-  {
-   if (z == i) continue;
-   if ((full == false) && (z > i)) continue;
-   nn.j = &atoms[z];
-   nn.rij = cell.Displacement(nn.i->Position(), nn.j->Position());
-   nn.r2 = nn.rij.SquareModule();
-   if (nn.r2 < rcut*rcut) nlist.Append(nn);
-  }
+  z = atomlist[*(c++)];
+  if ((z < 0) || (z == i)) continue;
+  if ((z > i) && (full == false)) continue;
+  nn.j = &atoms[z];
+  nn.rij = cell.Displacement(nn.i->Position(), nn.j->Position());
+  nn.r2 = nn.rij.SquareModule();
+  if (nn.r2 < rcut*rcut) nlist.Append(nn);
  }
 }
 
