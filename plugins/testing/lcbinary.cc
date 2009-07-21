@@ -2,12 +2,11 @@
 //
 //
 
-#include "lc3.h"
-#include <omp.h>
+#include "lcbinary.h"
 
 using namespace lpmd;
 
-LinkedCell3::LinkedCell3(std::string args): Plugin("lc3", "1.0")
+LCBinary::LCBinary(std::string args): Plugin("lc3", "1.0")
 { 
  ParamList & params = (*this);
  DefineKeyword("cutoff", "7.0");
@@ -16,6 +15,7 @@ LinkedCell3::LinkedCell3(std::string args): Plugin("lc3", "1.0")
  DefineKeyword("nz", "0");
  DefineKeyword("mode", "noauto");
  // 
+ mode = false;
  ProcessArguments(args);
  cutoff = double(params["cutoff"]);
  nx = int(params["nx"]);
@@ -24,7 +24,6 @@ LinkedCell3::LinkedCell3(std::string args): Plugin("lc3", "1.0")
  if (nx==0 || ny==0 || nz==0) mode=true;
  else if((nx>=1 && ny>=1) && nz>=1) mode=false;
  if (params["mode"]=="auto" || params["mode"]=="AUTO") mode=true;
- else mode=false;
  // 
  //
  //
@@ -33,16 +32,16 @@ LinkedCell3::LinkedCell3(std::string args): Plugin("lc3", "1.0")
  nwin = nfail = 0.0;
 }
 
-LinkedCell3::~LinkedCell3() 
+LCBinary::~LCBinary() 
 { 
  if (nwin+nfail > 0.0) DebugStream() << "-> LC3 Efficiency: " << 100.0*nwin/(nwin+nfail) << "%\n";
  delete [] atomlist;
  delete [] subcell;
 }
 
-void LinkedCell3::Reset() { }
+void LCBinary::Reset() { }
 
-void LinkedCell3::UpdateCell(Configuration & conf) 
+void LCBinary::UpdateCell(Configuration & conf) 
 {
  BasicParticleSet & atoms = conf.Atoms();
  BasicCell & cell = conf.Cell();
@@ -51,7 +50,7 @@ void LinkedCell3::UpdateCell(Configuration & conf)
   double minx = cell[0].Module();
   double miny = cell[1].Module();
   double minz = cell[2].Module();
-  double fnn = cutoff/2.75;
+  double fnn = cutoff/5.0;
   int n = 1;
   while(true)
   {
@@ -175,7 +174,7 @@ void LinkedCell3::UpdateCell(Configuration & conf)
  }
 }
 
-void LinkedCell3::BuildNeighborList(Configuration & conf, long i, NeighborList & nlist, bool full, double rcut)
+void LCBinary::BuildNeighborList(Configuration & conf, long i, NeighborList & nlist, bool full, double rcut)
 { 
  BasicParticleSet & atoms = conf.Atoms();
  BasicCell & cell = conf.Cell();
@@ -211,6 +210,6 @@ void LinkedCell3::BuildNeighborList(Configuration & conf, long i, NeighborList &
 }
 
 // Esto se incluye para que el modulo pueda ser cargado dinamicamente
-Plugin * create(std::string args) { return new LinkedCell3(args); }
+Plugin * create(std::string args) { return new LCBinary(args); }
 void destroy(Plugin * m) { delete m; }
 

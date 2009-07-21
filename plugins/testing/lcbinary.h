@@ -2,8 +2,8 @@
 //
 //
 
-#ifndef __LINKEDCELL3_MODULE_H
-#define __LINKEDCELL3_MODULE_H
+#ifndef __LCBINARY_MODULE_H
+#define __LCBINARY_MODULE_H
 
 #include <lpmd/configuration.h>
 #include <lpmd/cellmanager.h>
@@ -11,11 +11,11 @@
 
 using namespace lpmd;
 
-class LinkedCell3: public lpmd::CellManager, public lpmd::Plugin
+class LCBinary: public lpmd::CellManager, public lpmd::Plugin
 {
  public:
-   LinkedCell3(std::string args);
-   ~LinkedCell3();
+   LCBinary(std::string args);
+   ~LCBinary();
 
    void Reset();
    void UpdateCell(Configuration & conf);
