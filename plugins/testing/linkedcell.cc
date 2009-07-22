@@ -199,20 +199,21 @@ void LinkedCell::BuildNeighborList(Configuration & conf, long i, NeighborList & 
  AtomPair nn;
  nlist.Clear();
  nn.i = &atoms[i];
- int * c=0;long z=0;
- c = &(subcell[cind*cells_inside]);
 #ifdef _OPENMP
 #pragma omp parallel for
 #endif
- for (int q=0;q<cells_inside;++q)
+ for (int c=0;c<cells_inside;++c)
  {
-  z = atomlist[*(c++)];
-  if ((z < 0) || (z == i)) continue;
-  if ((z > i) && (full == false)) continue;
-  nn.j = &atoms[z];
-  nn.rij = cell.Displacement(nn.i->Position(), nn.j->Position());
-  nn.r2 = nn.rij.SquareModule();
-  if (nn.r2 < rcut*rcut) nlist.Append(nn);
+  int neighbor_cell = subcell[cind*cells_inside+c];
+  for (long z=head[neighbor_cell];z != -1;z=atomlist[z])
+  {
+   if (z == i) continue;
+   if ((full == false) && (z > i)) continue;
+   nn.j = &atoms[z];
+   nn.rij = cell.Displacement(nn.i->Position(), nn.j->Position());
+   nn.r2 = nn.rij.SquareModule();
+   if (nn.r2 < rcut*rcut) nlist.Append(nn);
+  }
  }
 }
 
