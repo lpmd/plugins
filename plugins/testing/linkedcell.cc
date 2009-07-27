@@ -203,9 +203,9 @@ void LinkedCell::BuildNeighborList(Configuration & conf, long i, NeighborList & 
  AtomPair nn;
  nlist.Clear();
  nn.i = &atoms[i];
- #ifdef _OPENMP
- #pragma omp parallel for
- #endif
+// #ifdef _OPENMP
+// #pragma omp parallel for
+// #endif
  for (int c=0;c<cells_inside;++c)
  {
   int neighbor_cell = subcell[cind*cells_inside+c];
