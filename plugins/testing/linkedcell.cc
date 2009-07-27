@@ -51,15 +51,15 @@ void LinkedCell::UpdateCell(Configuration & conf)
   double minx = cell[0].Module();
   double miny = cell[1].Module();
   double minz = cell[2].Module();
-  double fnn = double(cutoff/5.0e0); //NOTE : Approximated value. one atom by cell.
+  double fnn = double(cutoff); //NOTE : Approximated value. one atom by cell.
   int n = 1;
   while(true)
   {
    double previo = fabs(minx/n - fnn);
    n++;
-   double actual = fabs(minx/n-fnn);
-   if (actual<1E-3) break;
-   else if (actual>previo) {n--;break;}
+   double actual = fabs(minx/n - fnn);
+   if(actual<1E-1) break;
+   else if ((minx/n) < fnn) {n--;break;}
    else continue;
   }
   if ((n%2)!=0) n--;
@@ -71,8 +71,8 @@ void LinkedCell::UpdateCell(Configuration & conf)
    double previo = fabs(miny/n - fnn);
    n++;
    double actual = fabs(miny/n - fnn);
-   if(actual<1E-3) break;
-   else if (actual>previo) {n--;break;}
+   if(actual<1E-1) break;
+   else if ((miny/n) < fnn) {n--;break;}
    else continue;
   }
   if ((n%2)!=0) n--;
@@ -85,7 +85,7 @@ void LinkedCell::UpdateCell(Configuration & conf)
    n++;
    double actual = fabs(minz/n - fnn);
    if(actual<1E-3) break;
-   else if (actual>previo) {n--;break;}
+   else if ((minz/n) < fnn) {n--;break;}
    else continue;
   }
   if ((n%2)!=0) n--;
@@ -103,23 +103,27 @@ void LinkedCell::UpdateCell(Configuration & conf)
  if (tail != 0) delete [] tail;
  tail = new int[nx*ny*nz];
  //
+ double d = cell[0].Module()/double(nx);
+ if (cell[1].Module()/double(ny) < d) d = cell[1].Module()/double(ny);
+ if (cell[2].Module()/double(nz) < d) d = cell[2].Module()/double(nz);
+ int side = int(ceil((cutoff/d)-0.5));
+ cells_inside = (2*side+1)*(2*side+1)*(2*side+1);
+ if (cells_inside < 27 || side < 1) 
+ {
+  nx+=2;ny+=2;nz+=2;
+  DebugStream() << "-> Extremely small values cells_inside < 27 and side < 1."<<'\n';
+  DebugStream() << "-> Update nx-ny-nz to = " << nx <<"-"<<ny<<"-"<<nz<<'\n';
+  if (subcell != 0) { delete [] subcell; subcell = 0; }
+  if (atomlist !=0 ) { delete [] atomlist; atomlist = 0; }
+  //nwin=nfail=0;
+  if (head != 0) {delete [] head;head = 0;}
+  if (tail != 0) {delete [] tail;tail = 0;}
+  UpdateCell(conf);
+ }
+
  if (subcell == 0)
  {
-  double d = cell[0].Module()/double(nx);
-  if (cell[1].Module()/double(ny) < d) d = cell[1].Module()/double(ny);
-  if (cell[2].Module()/double(nz) < d) d = cell[2].Module()/double(nz);
-  int side = int(ceil((cutoff/d)-0.5));
-  cells_inside = (2*side+1)*(2*side+1)*(2*side+1);
-  if (cells_inside < 27 || d > cutoff) 
-  {
-   nx+=2;ny+=2;nz+=2;
-   DebugStream() << "-> Extremely small values of nx,ny,nz or d>cutoff."<<'\n';
-   DebugStream() << "-> Update nx-ny-nz to = " << nx <<"-"<<ny<<"-"<<nz<<'\n';
-   if (subcell != 0) { delete [] subcell; subcell = 0; }
-   if (atomlist !=0 ) { delete [] atomlist; atomlist = 0; }
-   //nwin=nfail=0;
-   UpdateCell(conf);
-  }
+  
   DebugStream() << "-> Using " << cells_inside << " neighboring subcells\n";
   subcell = new int[(nx*ny*nz)*cells_inside];
   int z[3];
@@ -151,9 +155,9 @@ void LinkedCell::UpdateCell(Configuration & conf)
  //
  for (long q=0;q<nx*ny*nz;++q) head[q] = tail[q] = -1;
  long r = 0;
-#ifdef _OPENMP
-#pragma omp parallel for private ( r )
-#endif
+ #ifdef _OPENMP
+ #pragma omp parallel for private ( r )
+ #endif
  for (r=0;r<atoms.Size();++r)
  {
   const Vector fpos = cell.Fractional(atoms[r].Position());
@@ -161,11 +165,11 @@ void LinkedCell::UpdateCell(Configuration & conf)
   int i = int(floor(nx*fpos[0]));
   int j = int(floor(ny*fpos[1]));
   int k = int(floor(nz*fpos[2]));
-//  if (i < 0) i += nx;
+  //if (i < 0) i += nx;
   if (i > nx-1) i -= nx;
-//  if (j < 0) j += ny;
+  //if (j < 0) j += ny;
   if (j > ny-1) j -= ny;
-//  if (k < 0) k += nz;
+  //if (k < 0) k += nz;
   if (k > nz-1) k -= nz;
   long q = k*(nx*ny)+j*nx+i;
   //
@@ -199,9 +203,9 @@ void LinkedCell::BuildNeighborList(Configuration & conf, long i, NeighborList & 
  AtomPair nn;
  nlist.Clear();
  nn.i = &atoms[i];
-#ifdef _OPENMP
-#pragma omp parallel for
-#endif
+ #ifdef _OPENMP
+ #pragma omp parallel for
+ #endif
  for (int c=0;c<cells_inside;++c)
  {
   int neighbor_cell = subcell[cind*cells_inside+c];
