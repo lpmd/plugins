@@ -18,13 +18,14 @@ AngDist::AngDist(std::string args): Plugin("angdist", "2.0")
 {
  ParamList & param = (*this);
  //
+ DefineKeyword("rcut","1");
  DefineKeyword("atoms");
  DefineKeyword("end");
  DefineKeyword("each");
  DefineKeyword("output");
  DefineKeyword("bins", "200");
  DefineKeyword("average", "false");
- DefineKeyword("curtoff", "0");
+ DefineKeyword("cutoff", "0");
  // 
  ProcessArguments(args);
  nb = int(param["bins"]);
@@ -68,7 +69,7 @@ void AngDist::Show(std::ostream & os) const
  os << "   Atoms       = ";
  for (unsigned int i=0;i<satoms.size();i++) os << satoms[i] << "\t";
  os << '\n';
- os << "   Cutoffs     = " << std::endl;
+ os << "   Cutoffs     : " << std::endl;
  for(unsigned int i=0;i<satoms.size();i++)
  {
   for(unsigned int j=i;j<satoms.size();j++)
