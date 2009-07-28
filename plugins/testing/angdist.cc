@@ -19,7 +19,6 @@ AngDist::AngDist(std::string args): Plugin("angdist", "2.0")
  ParamList & param = (*this);
  //
  DefineKeyword("atoms");
- DefineKeyword("rcut");
  DefineKeyword("end");
  DefineKeyword("each");
  DefineKeyword("output");
