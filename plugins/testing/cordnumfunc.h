@@ -24,7 +24,6 @@ class CordNumFunc: public lpmd::StoredValue<lpmd::Matrix>, public lpmd::InstantP
  private:
   int nb;
   double cut;
-  int na;
   bool do_average;
 };
 

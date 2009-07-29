@@ -68,8 +68,8 @@ void CordNumFunc::Evaluate(lpmd::Configuration & con, Potential & pot)
 {
  lpmd::BasicParticleSet & atoms = con.Atoms();
  lpmd::Array <int> esp = atoms.Elements();
- if (nb <= 0 || na <=0) throw PluginError("cordnumfunc", "Error in calculation.");
- int nsp = na;
+ if (nb <= 0 || atoms.Size() <=0) throw PluginError("cordnumfunc", "Error in calculation.");
+ int nsp = esp.Size();
  unsigned long int N = atoms.Size();
  double **histo;
  double **cnfun;
