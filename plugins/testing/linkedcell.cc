@@ -21,7 +21,9 @@ LinkedCell::LinkedCell(std::string args): Plugin("lc3", "1.0")
  ny = int(params["ny"]);
  nz = int(params["nz"]);
  if (nx==0 || ny==0 || nz==0) mode=true;
- else if((nx>=1 && ny>=1) && nz>=1) mode=false;
+ else if((nx>=4 && ny>=4) && nz>=4) mode=false;
+ else mode=true;
+ //
  if (params["mode"]=="auto" || params["mode"]=="AUTO") mode=true;
  else mode=false;
  // 
@@ -140,9 +142,6 @@ void LinkedCell::UpdateCell(Configuration & conf)
 
  //
  for (long q=0;q<nx*ny*nz;++q) head[q] = tail[q] = -1;
-#ifdef _OPENMP
-#pragma omp parallel for
-#endif
  for (long r=0;r<atoms.Size();++r)
  {
   const Vector fpos = cell.Fractional(atoms[r].Position());
