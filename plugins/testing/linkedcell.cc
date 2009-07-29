@@ -6,25 +6,28 @@
 
 using namespace lpmd;
 
-LinkedCell::LinkedCell(std::string args): Plugin("linkedcell", "3.0")
+LinkedCell::LinkedCell(std::string args): Plugin("lc3", "1.0")
 { 
  ParamList & params = (*this);
  DefineKeyword("cutoff", "7.0");
- DefineKeyword("nx", "7");
- DefineKeyword("ny", "7");
- DefineKeyword("nz", "7");
+ DefineKeyword("nx", "0");
+ DefineKeyword("ny", "0");
+ DefineKeyword("nz", "0");
+ DefineKeyword("mode", "noauto");
  // 
  ProcessArguments(args);
  cutoff = double(params["cutoff"]);
  nx = int(params["nx"]);
  ny = int(params["ny"]);
  nz = int(params["nz"]);
-
+ if (nx==0 || ny==0 || nz==0) mode=true;
+ else if((nx>=1 && ny>=1) && nz>=1) mode=false;
+ if (params["mode"]=="auto" || params["mode"]=="AUTO") mode=true;
+ else mode=false;
  // 
  //
  //
- head = new int[nx*ny*nz];
- tail = new int[nx*ny*nz];
+ head = tail = 0;
  atomlist = 0;
  subcell = 0;
 }
@@ -44,6 +47,61 @@ void LinkedCell::UpdateCell(Configuration & conf)
  BasicParticleSet & atoms = conf.Atoms();
  BasicCell & cell = conf.Cell();
  if (atomlist == 0) atomlist = new long[atoms.Size()];
+ if (mode == true)
+ {
+  double minx = cell[0].Module();
+  double miny = cell[1].Module();
+  double minz = cell[2].Module();
+  double fnn = (cutoff/2.5); //NOTE : Approximated value.
+  int n = 1;
+  while(true)
+  {
+   double previo = fabs(minx/n - fnn);
+   n++;
+   double actual = fabs(minx/n-fnn);
+   if (actual<1E-3) break;
+   else if (actual>previo) {n--;break;}
+   else continue;
+  }
+  if ((n%2)!=0) n--;
+  nx = n;
+  DebugStream() << "-> Using nx = " << nx << " subdivision scheme."<<'\n';
+  n=1;
+  while(true)
+  {
+   double previo = fabs(miny/n - fnn);
+   n++;
+   double actual = fabs(miny/n - fnn);
+   if(actual<1E-3) break;
+   else if (actual>previo) {n--;break;}
+   else continue;
+  }
+  if ((n%2)!=0) n--;
+  ny = n;
+  DebugStream() << "-> Using ny = " << ny << " subidvision scheme."<<'\n';
+  n=1;
+  while(true)
+  {
+   double previo = fabs(minz/n - fnn);
+   n++;
+   double actual = fabs(minz/n - fnn);
+   if(actual<1E-3) break;
+   else if (actual>previo) {n--;break;}
+   else continue;
+  }
+  if ((n%2)!=0) n--;
+  nz = n;
+  DebugStream() << "-> Using nz = " << nz << " subdivision scheme." << '\n';
+  n=1;
+  mode=false;
+ }
+ //
+ //
+ //
+ if (head != 0) delete [] head;
+ head = new int[nx*ny*nz];
+ if (tail != 0) delete [] tail;
+ tail = new int[nx*ny*nz];
  //
  if (subcell == 0)
  {
@@ -82,6 +140,9 @@ void LinkedCell::UpdateCell(Configuration & conf)
 
  //
  for (long q=0;q<nx*ny*nz;++q) head[q] = tail[q] = -1;
+#ifdef _OPENMP
+#pragma omp parallel for
+#endif
  for (long r=0;r<atoms.Size();++r)
  {
   const Vector fpos = cell.Fractional(atoms[r].Position());
@@ -136,7 +197,6 @@ void LinkedCell::BuildNeighborList(Configuration & conf, long i, NeighborList & 
    if ((full == false) && (z > i)) continue;
    nn.j = &atoms[z];
    nn.rij = cell.Displacement(nn.i->Position(), nn.j->Position());
-   //nn.rij = nn.j->Position() - nn.i->Position();
    nn.r2 = nn.rij.SquareModule();
    if (nn.r2 < rcut*rcut) nlist.Append(nn);
   }
