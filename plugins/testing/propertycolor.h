@@ -21,7 +21,7 @@ class PropertyColorModifier: public lpmd::SystemModifier, public lpmd::Plugin
   void Apply(lpmd::Simulation & sim);
 
  private:
-  double vmin, vmax;
+  double vmin, vmax, cutoff;
   std::string property; 
 };
 

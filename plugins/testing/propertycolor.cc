@@ -20,9 +20,10 @@ PropertyColorModifier::PropertyColorModifier(std::string args): Plugin("property
  DefineKeyword("start", "0");
  DefineKeyword("end", "-1");
  DefineKeyword("each", "1");
- DefineKeyword("property");
- DefineKeyword("min");
- DefineKeyword("max");
+ DefineKeyword("property","temperature");
+ DefineKeyword("min","0");
+ DefineKeyword("max","1");
+ DefineKeyword("cutoff","10");
  DefineKeyword("filterby", "none");
  // hasta aqui los valores por omision
  ProcessArguments(args);
@@ -32,6 +33,7 @@ PropertyColorModifier::PropertyColorModifier(std::string args): Plugin("property
  property = params["property"];
  vmin = double(params["min"]);
  vmax = double(params["max"]);
+ cutoff = double(params["cutoff"]);
 }
 
 PropertyColorModifier::~PropertyColorModifier() { }
@@ -59,6 +61,13 @@ void PropertyColorModifier::Apply(Simulation & sim)
   // Esto hasta tener un sistema mas dinamico donde no esten en el codigo todas las posibilidades
   //
   if (property == "temperature") v = (1.0/3.0)*(kin2ev/kboltzmann)*atoms[i].Mass()*atoms[i].Velocity().SquareModule();
+  else if (property == "velocity") v = atoms[i].Velocity().SquareModule();
+  else if (property == "acceleration") v = atoms[i].Acceleration().SquareModule();
+  else if (property == "neighbors")
+  {
+   lpmd::NeighborList & nlist = sim.Neighbors(i,true,cutoff);
+   for(long int k=0;k<nlist.Size();++k) v++;
+  }
   else if (property == "random") v = vmin + (vmax-vmin)*drand48();
   else throw PluginError("propertycolor", "Cannot color atoms by property \""+property+"\"");
   double vnorm = (v-vmin)/(vmax-vmin);
