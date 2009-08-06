@@ -12,8 +12,8 @@ using namespace lpmd;
   void Replicate(OrthogonalCell & unitcell, ParticleSet & unitset, unsigned long nx, unsigned long ny, unsigned long nz);
   void Rotate(OrthogonalCell & unitcell, ParticleSet & unitset, Vector rotate);
   void ReplicateRotate(//
-  double i, double grains, OrthogonalCell unitcell, ParticleSet unitset, Vector & cellcenter, Vector &CellColor,//
-  unsigned long na, unsigned long nb, unsigned long nc, Vector rotate, BasicParticleSet & atoms);
+  double num, double grains, OrthogonalCell unitcell, ParticleSet unitset, Vector & cellcenter, Vector &CellColor,//
+  unsigned long na, unsigned long nb, unsigned long nc, Vector rotate, BasicParticleSet & atoms, BasicCell & celda);
 
 
 VoronoiGenerator::VoronoiGenerator(std::string args): Plugin("voronoi","2.0") 
@@ -111,18 +111,18 @@ void VoronoiGenerator::Generate(lpmd::Configuration & conf) const
  lpmd::Vector *CellColor=new Vector [grains];
 
  std::cout<<"\nRUNNING VORONOI PLUGIN:\n"<<std::endl;
- 
+ std::cout << " -> Cell volume: "<<V<<" cubic angstroms."<<std::endl;
+ std::cout << " -> Creating "<<grains<<" grains. Estimated average grain diameter: "<<pow(V/grains,1.0/3.0)<<" angstroms."<<std::endl;
+ std::cout << " -> Unitary "<< type <<" cell replicated "<<nx<<" times in each axis..."<<std::endl;
+
  // CHOOSE CENTERS AND REPLICATE UNITARY CELLS
  SkewStart(grains, x, y, z, centers);
  for (int i=0; i<grains; ++i)
  {
   Vector rotate=2*M_PI*drand48()*e1+2*M_PI*drand48()*e2+2*M_PI*drand48()*e3;
-  ReplicateRotate(i, grains, basecell, ps, centers[i], CellColor[i], nx, ny, nz, rotate, atoms);
+  ReplicateRotate(i, grains, basecell, ps, centers[i], CellColor[i], nx, ny, nz, rotate, atoms, celda);
  } 
  
- std::cout << " -> Cell volume: "<<V<<" cubic angstroms."<<std::endl;
- std::cout << " -> Creating "<<grains<<" grains. Estimated average grain diameter: "<<pow(V/grains,1.0/3.0)<<" angstroms."<<std::endl;
- std::cout << " -> Unitary "<< type <<" cell replicated "<<nx<<" times in each axis..."<<std::endl;
  std::cout << " -> Replicated unitary cells were rotated and moved into the cell with Skew-Start method..."<<std::endl;
 
  //-------------------- 1ST ELIMINATION -------------------//
@@ -136,11 +136,7 @@ void VoronoiGenerator::Generate(lpmd::Configuration & conf) const
   else if (pos[1]<0 || pos[1]>y) {atoms.Delete(i); kill=true;}
   else if (pos[2]<0 || pos[2]>z) {atoms.Delete(i); kill=true;}
   
-  if (kill)
-  {
-   //for(int j=i; j<atoms.Size();++j)ColorHandler::ColorOfAtom(atoms[j])=ColorHandler::ColorOfAtom(atoms[j+1]);
-   i--;
-  }
+  if (kill) i--;
  }
 
  //-------------------- 2ND ELIMINATION -------------------//
@@ -161,9 +157,8 @@ void VoronoiGenerator::Generate(lpmd::Configuration & conf) const
      if ( Dot(pos,sep/sep.Module())>0.5*sep.Module() && atmclr==CellColor[n])
      {
       atoms.Delete(i);
-      //for(int j=i; j<atoms.Size();++j)ColorHandler::ColorOfAtom(atoms[j])=ColorHandler::ColorOfAtom(atoms[j+1]);
       eliminated=true; i--;
-    }
+     }
     }
     if (eliminated) break;
    }
@@ -181,7 +176,7 @@ void VoronoiGenerator::Generate(lpmd::Configuration & conf) const
    if(dis<rmin)
    {
     atoms.Delete(i);
-    i=0; break;
+    i--; break;
    }
   }
  }
@@ -282,9 +277,9 @@ void Rotate(OrthogonalCell & unitcell, ParticleSet & unitset, Vector rotate)
 
 
 void ReplicateRotate(//
-  double i, double grains, OrthogonalCell unitcell, ParticleSet unitset, Vector & cellcenter, Vector &CellColor,//
+  double num, double grains, OrthogonalCell unitcell, ParticleSet unitset, Vector & cellcenter, Vector &CellColor,//
   unsigned long na, unsigned long nb, unsigned long nc,//
-  Vector rotate, BasicParticleSet & atoms)
+  Vector rotate, BasicParticleSet & atoms, BasicCell & celda)
 {
  ParticleSet us=unitset;
  OrthogonalCell uc=unitcell;
@@ -293,7 +288,7 @@ void ReplicateRotate(//
 
  Vector centro=0.5*(uc[0]+uc[1]+uc[2]);
  unsigned long N = us.Size();
- CellColor = ColorFromScalar(i/grains);
+ CellColor = ColorFromScalar(num/grains);
  for(unsigned long i=0;i<N;++i)
  {
   Vector vct=us[i].Position()+(cellcenter-centro);
@@ -301,6 +296,26 @@ void ReplicateRotate(//
   atoms.Append(Atom(us[i].Z(),vct));
   ColorHandler::ColorOfAtom(atoms[atoms.Size()-1]) = CellColor;
  }
+
+
+
+ //-------------------- 1ST ELIMINATION -------------------//
+ // OUTSIDE ELIMINATION: Eliminate the atoms out of the cell
+ std::cout << " -> Eliminating atoms out of the cell of the grain number "<< num+1<<"..."<<std::endl;
+ double x=celda[0].Module();
+ double y=celda[1].Module();
+ double z=celda[2].Module();
+ for (long i=0;i<atoms.Size();++i)
+ {
+  bool kill=false;
+  Vector pos = atoms[i].Position();
+  if (pos[0]<0 || pos[0]>x) {atoms.Delete(i); kill=true;}
+  else if (pos[1]<0 || pos[1]>y) {atoms.Delete(i); kill=true;}
+  else if (pos[2]<0 || pos[2]>z) {atoms.Delete(i); kill=true;}
+  
+  if (kill) i--;
+ }
+
 
 }
 
