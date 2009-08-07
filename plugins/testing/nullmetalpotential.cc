@@ -35,9 +35,9 @@ double NullMetalPotential::rhoij(const double &r) const { return 0.0; }
 
 double NullMetalPotential::F(const double &rhoi) const { return 0.0; }
 
-Vector NullMetalPotential::PairForce(const Vector &rij) const { return Vector(0.0, 0.0, 0.0); }
+Vector NullMetalPotential::PairForce(const Vector &normrij, const double & mod) const { return Vector(0.0, 0.0, 0.0); }
 
-Vector NullMetalPotential::ManyBodies(const Vector &rij, const double &rhoi, const double &rhoj) const { return Vector(0.0, 0.0, 0.0); }
+Vector NullMetalPotential::ManyBodies(const Vector &normrij, const double &invrhoi, const double &invrhoj, const double & mod) const { return Vector(0.0, 0.0, 0.0); }
 
 double NullMetalPotential::deltarhoi(const double &rhobar) const { return 0.0; }
 

@@ -22,8 +22,8 @@ class FinnisSinclair: public lpmd::MetalPotential , public lpmd::Plugin
   double rhoij(const double &r) const;
   double deltarhoi(const double&) const { return 0.0; }
   double F(const double &rhoi) const;
-  lpmd::Vector PairForce(const lpmd::Vector &rij) const;
-  lpmd::Vector ManyBodies(const lpmd::Vector &rij, const double &rhoi, const double &rhoj) const;
+  lpmd::Vector PairForce(const lpmd::Vector &modrij, const double &mod) const;
+  lpmd::Vector ManyBodies(const lpmd::Vector &modrij, const double &invrhoi, const double &invrhoj, const double & mod) const;
   double deltarhoi(const double & rhobar, const int & N) const;
   double deltaU1(const double & rhobar, const int & N) const;
   double deltaU2(const double & rhobar, const int & N, const double & rhoi) const;

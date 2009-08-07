@@ -67,20 +67,22 @@ double FinnisSinclair::F(const double &rhoi) const
 	return -A*sqrt(rhoi);
 }
 
-Vector FinnisSinclair::PairForce(const Vector &rij) const
+Vector FinnisSinclair::PairForce(const Vector &normrij, const double &r) const
 {
-	double r = rij.Module();
+ //FIXME : Chequear bien el valor retornado!!! improtante.
+//	double r = rij.Module();
 	double t1=2.0e0*(r-c)*(c0+c1*r+c2*r*r);
 	double t2=(r-c)*(r-c)*(c1+2.0e0*c2*r);
-	return (t1+t2)*(rij/r);
+	return (t1+t2)*(normrij/r);
 }
 
-Vector FinnisSinclair::ManyBodies(const Vector &rij, const double &rhoi, const double &rhoj) const
+Vector FinnisSinclair::ManyBodies(const Vector &normrij, const double &invrhoi, const double &invrhoj, const double &r) const
 {
-	double r = rij.Module();
-	double t1=(1.0/rhoi+1.0/rhoj)*A/2.0;
+ //FIXME : Chequear bien el valor retornado!!! importante
+//	double r = rij.Module();
+	double t1=(invrhoi+invrhoj)*A/2.0;
 	double t2=2.0*(r-d)+3.0*B*(r-d)*(r-d)/d;
-	return -t1*t2*rij/r;
+	return -t1*t2*normrij/r;
 }
 
 // No longer-ranged corrections apply beyond cutoffs c and d (neither for deltarhoi, for deltaU1, for deltaU2 nor for virial)

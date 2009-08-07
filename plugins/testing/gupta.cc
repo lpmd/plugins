@@ -63,22 +63,24 @@ double Gupta::rhoij(const double &r) const { return exp(-2*qij*(r-r0)/r0); }
 
 double Gupta::F(const double &rhoi) const { return -B*sqrt(rhoi); }
 
-Vector Gupta::PairForce(const Vector &rij) const
+Vector Gupta::PairForce(const Vector &normrij, const double & rmod) const
 {
- Vector norm = rij;
- double rmod = rij.Module();
- norm.Normalize();
- return -(A*p/r0)*exp(-p*(rmod-r0)/r0)*(norm/rmod);
+ //FIXME : Chequear bien potencial.
+// Vector norm = rij;
+// double rmod = rij.Module();
+// norm.Normalize();
+ return -(A*p/r0)*exp(-p*(rmod-r0)/r0)*(normrij/rmod);
 }
 
-Vector Gupta::ManyBodies(const Vector &rij, const double &rhoi, const double &rhoj) const
+Vector Gupta::ManyBodies(const Vector &normrij, const double &invrhoi, const double &invrhoj, const double &rmod) const
 {
- double tmp;
- double rmod = rij.Module();
- tmp=(B*qij/r0)*((1/rhoi)+(1/rhoj))*exp(-2*qij*(rmod-r0)/r0)*(1.0/rmod);
- Vector ff = rij;
- ff.Normalize();
- return tmp*ff;
+ //FIXME : Chequear bien el potential
+// double tmp;
+// double rmod = rij.Module();
+ double tmp=(B*qij/r0)*(invrhoi+invrhoj)*exp(-2*qij*(rmod-r0)/r0)*(1.0/rmod);
+// Vector ff = rij;
+// ff.Normalize();
+ return tmp*normrij;
 }
 
 double Gupta::deltarhoi(const double &rhobar) const
