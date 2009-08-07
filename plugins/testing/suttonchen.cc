@@ -25,6 +25,8 @@ SuttonChen::SuttonChen(std::string args): Plugin("suttonchen", "2.0")
  m = double(params["m"]);
  c = double(params["c"]);
  rcut = double(params["cutoff"]);
+ an = pow(a,n);
+ am = pow(a,m);
 }
 
 void SuttonChen::ShowHelp() const
@@ -56,28 +58,21 @@ void SuttonChen::ShowHelp() const
  std::cout << " Cu con las constantes seteadas en SC.                                         \n";
 }
 
-double SuttonChen::pairEnergy(const double &r) const { return e*pow((a/r),n); }
+double SuttonChen::pairEnergy(const double &r) const { double ir = 1/r; return e*an*pow(ir,n); }
 
-double SuttonChen::rhoij(const double &r) const { return pow((a/r),m); }
+double SuttonChen::rhoij(const double &r) const { double ir = 1/r; return am*pow(ir,m); }
 
 double SuttonChen::F(const double &rhoi) const { return -c*e*sqrt(rhoi); }
 
-Vector SuttonChen::PairForce(const Vector &rij) const
+Vector SuttonChen::PairForce(const Vector &normrij, const double &irmod) const
 {
- Vector norm = rij;
- double rmod = rij.Module();
- norm.Normalize();
- return -n*e*pow(a/rmod,n)*(norm/rmod);
+ return -n*e*an*pow(irmod,n)*(normrij*irmod);
 }
 
-Vector SuttonChen::ManyBodies(const Vector &rij, const double &rhoi, const double &rhoj) const
+Vector SuttonChen::ManyBodies(const Vector &normrij, const double &invrhoi, const double &invrhoj, const double &irmod) const
 {
- double tmp;
- double rmod = rij.Module();
- tmp=(m/2)*c*e*((1/sqrt(rhoi))+(1/sqrt(rhoj)))*pow(a/rmod,m)*(1.0/rmod);
- Vector ff = rij;
- ff.Normalize();
- return tmp*ff;
+ double tmp=0.5*m*c*e*((sqrt(invrhoi))+(sqrt(invrhoj)))*am*pow(irmod,m+1);
+ return tmp*normrij;
 }
 
 // Esto se inlcuye para que el modulo pueda ser cargado dinamicamente
