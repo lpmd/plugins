@@ -261,7 +261,7 @@ void LPMDFormat::WriteCell(std::ostream & out, Configuration & con) const
    {
     if ((extra[j] == "RGB") || (extra[j] == "rgb"))
     { 
-     lpmd::Vector tmp = ColorHandler::ColorOfAtom(part[i]); 
+     lpmd::Vector tmp = ColorHandler::HaveColor(part[i]) ? ColorHandler::ColorOfAtom(part[i]) : ColorHandler::DefaultColor(part[i]); 
      out << " ";
      FormattedWrite(out,tmp); 
     }
