@@ -15,7 +15,7 @@ using namespace lpmd;
 class TagSelector: public Selector<BasicParticleSet>
 {
  public:
-   TagSelector(std::string n,bool v) {name = n;value =v;}
+   TagSelector(std::string n,std::string v) {name = n;value =v;}
 
    const BasicParticleSet & SelectFrom(const BasicParticleSet & ps) 
    { 
@@ -38,8 +38,7 @@ class TagSelector: public Selector<BasicParticleSet>
    }
 
  private:
-   std::string name;
-   bool value;
+   std::string name, value;
    RefParticleSet innerps;
 };
 
@@ -58,7 +57,7 @@ TagFilter::TagFilter(std::string args): Plugin("tag", "1.0"), selector(0)
  end = int(params["end"]);
  each = int(params["each"]);
  name = params["name"];
- value = bool(params["value"]);
+ value = params["value"];
 }
 
 TagFilter::~TagFilter() { delete selector; }

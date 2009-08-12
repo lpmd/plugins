@@ -20,8 +20,7 @@ class TagFilter: public lpmd::SystemFilter, public lpmd::Plugin
   lpmd::Selector<lpmd::BasicParticleSet> & CreateSelector();
 
  private:
-  std::string name;
-  bool value;
+  std::string name, value;
   lpmd::Selector<lpmd::BasicParticleSet> * selector;
 };
 
