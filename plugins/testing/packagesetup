@@ -502,6 +502,13 @@ directory .
        installpath = lib/lpmd
        pkgconfig += liblpmd-2.0
     end
+
+    module tag.so
+       language = c++
+       sources = tag.cc
+       installpath = lib/lpmd
+       pkgconfig += liblpmd-2.0
+    end
     
     module temperature.so
        language = c++
