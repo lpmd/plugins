@@ -15,7 +15,7 @@ TabulatedPair::TabulatedPair(std::string args): Plugin("fastlj", "2.0")
  //
  DefineKeyword("file");
  DefineKeyword("cutoff");
- DefineKeyword("bins", "500");
+ DefineKeyword("bins","500");
  // hasta aqui los valores por omision
  ProcessArguments(args);
  cutoff = params["cutoff"];
@@ -75,6 +75,7 @@ void TabulatedPair::ReadTable()
  }
  input.clear();input.seekg(0);
  DebugStream() << "-> Readed "<<n<<" lines " << '\n';
+ bins = n;
  etable = new double[bins];
  ftable = new double[bins];
  int i=0;
@@ -86,8 +87,8 @@ void TabulatedPair::ReadTable()
   lpmd::Array<std::string> words = StringSplit(line,' ');
   if(words.Size()==2 && line[0]!='#')
   {
-   etable[i] = atof(words[1].c_str());
-   ftable[i] = atof(words[2].c_str());
+   etable[i] = atof(words[0].c_str());
+   ftable[i] = atof(words[1].c_str());
    i++;
   }
  }
