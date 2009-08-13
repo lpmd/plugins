@@ -65,7 +65,6 @@ void TabulatedPair::ReadTable()
   getline(input,line);
   RemoveUnnecessarySpaces(line);
   lpmd::Array<std::string> words = StringSplit(line,' ');
-  DebugStream() << " -> line = " << line <<" size = " << words.Size() << '\n';
   if(line[0]!='#' && words.Size()==3) n++;
  }
  input.clear();input.seekg(0);
