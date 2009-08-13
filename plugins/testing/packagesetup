@@ -502,6 +502,13 @@ directory .
        installpath = lib/lpmd
        pkgconfig += liblpmd-2.0
     end
+    
+    module tabulatedpair.so
+       language = c++
+       sources = tabulatedpair.cc
+       installpath = lib/lpmd
+       pkgconfig += liblpmd-2.0
+    end
 
     module tag.so
        language = c++
