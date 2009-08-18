@@ -263,6 +263,7 @@ directory .
        sources = lpmd.cc
        installpath = lib/lpmd
        pkgconfig += liblpmd-2.0
+       libraries += -lz
     end
 
     module metropolis.so

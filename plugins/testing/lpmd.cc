@@ -11,6 +11,8 @@
 #include <lpmd/simulation.h>
 #include <lpmd/atom.h>
 #include <lpmd/colorhandler.h>
+#include <stdio.h>
+#include <string.h>
 
 #define ZLP_NONE 0
 #define ZLP_READ 1
@@ -36,8 +38,9 @@ LPMDFormat::LPMDFormat(std::string args): Plugin("lpmd", "2.0")
  type = params["type"];
  readfile = writefile = (*this)["file"];
  std::string q = readfile.substr(readfile.size()-4,4);
- if (q == "lpmd") { type = "lpmd"; }
- else if ( q == ".zlp") { type = "zlp"; }
+ std::cout << " q =" << q <<"."<< '\n';
+ if (strcmp(q.c_str(),"lpmd")==0) { type = "lpmd"; std::cout << " lpmd " << '\n'; }
+ else if (strcmp(q.c_str(),".zlp")==0) { type = "zlp"; std::cout << " Detected zlp filetype" << '\n'; }
  else ShowWarning("lpmd","The file type detected not recognized by extension, asuming lpmd file type!.");
  interval = int(params["each"]);
  level = int(params["level"]);
@@ -130,8 +133,52 @@ void LPMDFormat::ReadHeader(std::istream & is) const
    stream.zfree = Z_NULL;
    stream.opaque = Z_NULL;
    if (inflateInit(&stream) != Z_OK) throw PluginError("zlp", "Decompression failed");
-   (*linecounter) = 1;
+   (*linecounter) = 1;  
+   std::istringstream bufstr(std::istringstream::in);
+   long int ts = 0;                                // total de bytes leidos hasta ahora
+   std::string * istr = new std::string;
+   unsigned char foo;
+   unsigned long int cbufs;
+   is.read((char *)&foo, 1);
+   is.read((char *)&cbufs, int(foo));
+   cbufs = ntohl(cbufs);
+   // std::cerr << "DEBUG This configuration has " << cbufs << " compressed bytes" << '\n';
+   while (1)
+   {
+    long int rem = cbufs - ts;
+    if (rem == 0) break;
+    long int chunk = blocksize;
+    if (chunk > rem) chunk = rem;
+    is.read((char *)inbuf, chunk);
+    ts += is.gcount();
+    //std::cerr << "DEBUG read " << is.gcount() << " bytes from ZLP file" << '\n';
+    stream.avail_in = is.gcount();
+    stream.next_in = (unsigned char *)(inbuf);
+    //std::cerr << "DEBUG decompressing..." << '\n';
+    do
+    {
+     stream.avail_out = blocksize;
+     stream.next_out = (unsigned char *)(outbuf);
+     int f = (is.eof() ? Z_FINISH : Z_SYNC_FLUSH);
+     inflate(&stream, f);                           // no chequea el estado aun 
+     int have = blocksize-stream.avail_out;
+     //std::cerr << "DEBUG read chunk of " << have << " uncompressed bytes" << '\n';
+     for (int q=0;q<have;++q) (*istr) += (char)(outbuf[q]);
+    } while (stream.avail_out == 0);
+   }
+   std::istringstream ibufstr(*istr);
+   //Se leyo el bloque header, que tiene este bloque¿?
+   std::string info = ibufstr.str();
+   (*linecounter)++;
+   if (tmp.substr(0, 4) != "HDR ") throw PluginError("lpmd", "File"+readfile+" doesn't seem to be in LPMD 2.0 fromat (wrong HDR)");
+   Array<std::string> words = StringSplit(info,' ');
+   for (long int i=0;i<words.Size() ; ++i)
+   {
+    hdr.Append(std::string(words[i]));
+   }
+   delete istr;
   }
+  std::cout << "Finished a zlp read compression file" << '\n';
  }
  else if (type == "lpmd")
  {
@@ -194,6 +241,7 @@ void LPMDFormat::ReadHeader(std::istream & is) const
    throw PluginError("lpmd", "The level of the file "+readfile+" are not supporten in this version of lpmd plugin.");
   }
  }
+ std::cout << "Finished ReadHeader process " << '\n';
 }
 
 // 
@@ -204,13 +252,62 @@ bool LPMDFormat::ReadCell(std::istream & is, Configuration & con) const
  BasicCell & cell = con.Cell();
  BasicParticleSet & part = con.Atoms();
  assert(part.Size() == 0);
+
+ std::cout << "Start ReadCell type = "<<type << '\n';
+
+ *lastop = ZLP_READ;
+ z_stream & stream = *((z_stream *)(zstr));
+ std::istringstream bufstr(std::istringstream::in);
+ std::string * istr = new std::string;
+ if(type=="zlp")
+ {
+  long int ts = 0;                                // total de bytes leidos hasta ahora
+  unsigned char foo;
+  unsigned long int cbufs;
+  is.read((char *)&foo, 1);
+  if (is.eof()) return false;
+  is.read((char *)&cbufs, int(foo));
+  cbufs = ntohl(cbufs);
+  std::cerr << "Declaraciones ok entrando al loop. ..." << '\n';
+  while (1)
+  {
+   long int rem = cbufs - ts;
+   if (rem == 0) break;
+   long int chunk = blocksize;
+   if (chunk > rem) chunk = rem;
+   is.read((char *)inbuf, chunk);
+   ts += is.gcount();
+   stream.avail_in = is.gcount();
+   stream.next_in = (unsigned char *)(inbuf);
+   do
+   {
+    stream.avail_out = blocksize;
+    stream.next_out = (unsigned char *)(outbuf);
+    int f = (is.eof() ? Z_FINISH : Z_SYNC_FLUSH);
+    inflate(&stream, f);                           // no chequea el estado aun 
+    int have = blocksize-stream.avail_out;
+    for (int q=0;q<have;++q) (*istr) += (char)(outbuf[q]);
+   } while (stream.avail_out == 0);
+  }
+  std::cerr <<  "Se sale del while" << '\n';
+ }
+ std::istringstream ibufstr(*istr);
+
  std::string tmp;
- getline(is, tmp);                                     // Numero de atomos
+ if (type == "lpmd")
+ {
+  getline(is, tmp);                                     // Numero de atomos
+ }
+ else if (type == "zlp")
+ {
+  getline(ibufstr, tmp);
+ }
  (*linecounter)++;
  Array<std::string> words = StringSplit(tmp, ' '); 
  if (words.Size() == 0) return false;
  long int natoms = atoi(words[0].c_str());
- getline(is, tmp);                                     // Vectores de la celda
+ if (type == "lpmd") getline(is, tmp);                                     // Vectores de la celda
+ else if (type == "zlp") getline(ibufstr, tmp);
  (*linecounter)++;
  words = StringSplit(tmp, ' '); 
  con.SetTag(con, Tag("level"), level);
@@ -235,7 +332,8 @@ bool LPMDFormat::ReadCell(std::istream & is, Configuration & con) const
  long int atomcount = 0;
  for (long int i=0;i<natoms;++i)
  {
-  getline(is, tmp);
+  if (type == "lpmd") getline(is, tmp);
+  else if (type == "zlp") getline(ibufstr, tmp);
   (*linecounter)++;
   words = StringSplit(tmp, ' ');
   if (words.Size() == 0) 
@@ -276,6 +374,8 @@ bool LPMDFormat::ReadCell(std::istream & is, Configuration & con) const
   else throw PluginError("lpmd", "An unidentified line was found in the file \""+readfile+"\", line "+ToString<int>(*linecounter));
   atomcount++;
  }
+ delete istr;
+ std::cerr << "Finish REadCell process" << '\n';
  return true;
 }
 
@@ -283,7 +383,13 @@ void LPMDFormat::WriteHeader(std::ostream & os, SimulationHistory * sh) const
 {
  std::ostringstream header;
  header << "LPMD 2.0" << std::endl;
- header << "HDR ";
+ 
+ *lastop = ZLP_WRITE;
+ z_stream & stream = *((z_stream *)(zstr));
+ std::ostringstream * ostr = new std::ostringstream();
+ std::ostringstream & obufstr = *ostr;
+
+ obufstr << "HDR ";
  if(hdr.Size()<2)
  {
   //hdr not set, using the plugin information.
@@ -308,10 +414,49 @@ void LPMDFormat::WriteHeader(std::ostream & os, SimulationHistory * sh) const
  }
  for (long int i=0 ; i < hdr.Size() ; ++i)
  {
-  header << hdr[i] << " ";
+  obufstr << hdr[i] << " ";
  }
- header << '\n';
- os.write(header.str().c_str(),header.str().size());
+ obufstr << '\n';
+ std::istringstream * istr = new std::istringstream(obufstr.str());
+ delete ostr;
+ std::istringstream & ibufstr = *istr;
+ if(type=="lpmd")
+ {
+  header << obufstr << '\n';
+  os.write(header.str().c_str(),header.str().size());
+ }
+ else if(type=="zlp")
+ {
+  //long int ucsize = ibufstr.str().size();
+  std::string cbuf;
+  while (1)
+  {
+   ibufstr.read((char *)inbuf, blocksize);
+   //std::cerr << "DEBUG writing " << ibufstr.gcount() << " uncompressed bytes to ZLP file" << '\n';
+   if (ibufstr.gcount() == 0) break;
+   stream.avail_in = ibufstr.gcount();
+   stream.next_in = inbuf;
+   do
+   {
+    stream.avail_out = blocksize;
+    stream.next_out = outbuf;
+    if (deflate(&stream, Z_SYNC_FLUSH) == Z_STREAM_ERROR) throw PluginError("zlp", "Compression failed");
+    int have = blocksize-stream.avail_out;
+    for (int q=0;q<have;++q) cbuf += (char)(outbuf[q]);
+    //std::cerr << "DEBUG writing " << have << " compressed bytes to ZLP file" << '\n';
+   } while (stream.avail_out == 0);
+  }
+  //std::cerr << "DEBUG compressed data for this configuration is " << cbuf.size() << " bytes\n";
+  //DebugStream() << "-> ZLP compression: packed " << ucsize << " bytes into " << cbuf.size() << " bytes.\n";
+  unsigned char foo = sizeof(unsigned long int);
+  unsigned long int cbufs = htonl(cbuf.size());
+  os.write((char *)&foo, 1);
+  os.write((char *)&cbufs, int(foo));
+  os.write(cbuf.c_str(), cbuf.size());
+  os.flush();
+ }
+ else throw PluginError("lpmd", "Not defined the correct type file to write header.");
+ delete istr;
 }
 
 void LPMDFormat::WriteCell(std::ostream & out, Configuration & con) const
@@ -319,22 +464,26 @@ void LPMDFormat::WriteCell(std::ostream & out, Configuration & con) const
  BasicParticleSet & part = con.Atoms();
  BasicCell & cell = con.Cell();
 
- //level = int(Parameter(con.GetTag(con, Tag("level"))));
- out << part.Size() << std::endl;
- out << cell[0] << " " << cell[1] << " " << cell[2] << std::endl;
+ *lastop = ZLP_WRITE;
+ z_stream & stream = *((z_stream *)(zstr));
+ std::ostringstream * ostr = new std::ostringstream();
+ std::ostringstream & obufstr = *ostr;
+
+ obufstr << part.Size() << std::endl;
+ obufstr << cell[0] << " " << cell[1] << " " << cell[2] << std::endl;
  for (long int i=0;i<part.Size();i++)
  {
   if (level>=0)
   {
-   out << part[i].Symbol() << " " << cell.Fractional(part[i].Position()) ;
+   obufstr << part[i].Symbol() << " " << cell.Fractional(part[i].Position()) ;
   }
   if (level>=1)
   {
-   out << " "<< part[i].Velocity();
+   obufstr << " "<< part[i].Velocity();
   }
   if (level>=2)
   {
-   out << " "<< part[i].Acceleration();
+   obufstr << " "<< part[i].Acceleration();
   }
   if (extra.Size()>=1)
   {
@@ -343,14 +492,50 @@ void LPMDFormat::WriteCell(std::ostream & out, Configuration & con) const
     if ((extra[j] == "RGB") || (extra[j] == "rgb"))
     { 
      lpmd::Vector tmp = ColorHandler::HaveColor(part[i]) ? ColorHandler::ColorOfAtom(part[i]) : ColorHandler::DefaultColor(part[i]); 
-     out << " ";
-     FormattedWrite(out,tmp); 
+     obufstr << " ";
+     FormattedWrite(obufstr,tmp); 
     }
-    else if ((extra[j] == "TYPE") || (extra[j] == "type")) { out << "          " << "ATOMTYPE"; }
+    else if ((extra[j] == "TYPE") || (extra[j] == "type")) { obufstr << "          " << "ATOMTYPE"; }
    }
   }
-  out << '\n';
+  obufstr << '\n';
  }
+ //Comprime o no segun sea lpmd o zlp.
+ std::istringstream * istr = new std::istringstream(obufstr.str());
+ delete ostr;
+ std::istringstream & ibufstr = *istr;
+
+ if(type=="lpmd")
+ {
+  out << obufstr.str();
+ }
+ else if(type=="zlp")
+ {
+  std::string cbuf;
+  while (1)
+  {
+   ibufstr.read((char *)inbuf, blocksize);
+   if (ibufstr.gcount() == 0) break;
+   stream.avail_in = ibufstr.gcount();
+   stream.next_in = inbuf;
+   do
+   {
+    stream.avail_out = blocksize;
+    stream.next_out = outbuf;
+    if (deflate(&stream, Z_SYNC_FLUSH) == Z_STREAM_ERROR) throw PluginError("zlp", "Compression failed");
+    int have = blocksize-stream.avail_out;
+    for (int q=0;q<have;++q) cbuf += (char)(outbuf[q]);
+   } while (stream.avail_out == 0);
+  }
+  unsigned char foo = sizeof(unsigned long int);
+  unsigned long int cbufs = htonl(cbuf.size());
+  out.write((char *)&foo, 1);
+  out.write((char *)&cbufs, int(foo));
+  out.write(cbuf.c_str(), cbuf.size());
+  out.flush();
+ }
+ else throw PluginError("lpmd", "Not defined the correct type file to write header.");
+ delete istr;
 }
 
 // Esto se incluye para que el modulo pueda ser cargado dinamicamente
