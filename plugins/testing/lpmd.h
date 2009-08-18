@@ -34,6 +34,13 @@ class LPMDFormat: public lpmd::CellFormat, public lpmd::Plugin
    lpmd::Array<std::string> extra;
    bool rcell;
    mutable lpmd::Array<std::string> hdr;
+   std::string type;
+   /////////////////////////////////////////
+   //private variables for zlp file-types///
+   /////////////////////////////////////////
+   void * zstr; // z_stream structure, used with zlib 
+   unsigned char * inbuf, * outbuf;
+   int blocksize, complev, * lastop;
 };
 
 #endif
