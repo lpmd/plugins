@@ -57,12 +57,14 @@ IndexFilter::IndexFilter(std::string args): Plugin("element", "1.0"), selector(0
  DefineKeyword("end", "-1");
  DefineKeyword("each", "1");
  DefineKeyword("index","0-1");
+ DefineKeyword("except", "");
  // hasta aqui los valores por omision
  ProcessArguments(args);
  start = int(params["start"]);
  end = int(params["end"]);
  each = int(params["each"]);
  std::string tmp = params["index"];
+ except = params["except"];
  size_t found = std::string::npos - 1;
  int ct=-1;
  while(found!=std::string::npos)

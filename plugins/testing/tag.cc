@@ -51,6 +51,7 @@ TagFilter::TagFilter(std::string args): Plugin("tag", "1.0"), selector(0)
  DefineKeyword("each", "1");
  DefineKeyword("name","fixedvel");
  DefineKeyword("value","true");
+ DefineKeyword("except", "");
  // hasta aqui los valores por omision
  ProcessArguments(args);
  start = int(params["start"]);
@@ -58,6 +59,7 @@ TagFilter::TagFilter(std::string args): Plugin("tag", "1.0"), selector(0)
  each = int(params["each"]);
  name = params["name"];
  value = params["value"];
+ except = params["except"];
 }
 
 TagFilter::~TagFilter() { delete selector; }

@@ -48,11 +48,13 @@ BoxFilter::BoxFilter(std::string args): Plugin("box", "1.0"), selector(0)
  DefineKeyword("x","0-0");
  DefineKeyword("y","0-0");
  DefineKeyword("z","0-0");
+ DefineKeyword("except", "");
  // hasta aqui los valores por omision
  ProcessArguments(args);
  start = int(params["start"]);
  end = int(params["end"]);
  each = int(params["each"]);
+ except = params["except"];
  lpmd::Array<std::string> sx = StringSplit(params["x"],'-');
  lpmd::Array<std::string> sy = StringSplit(params["y"],'-');
  lpmd::Array<std::string> sz = StringSplit(params["z"],'-');

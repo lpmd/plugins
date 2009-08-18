@@ -46,12 +46,14 @@ ElementFilter::ElementFilter(std::string args): Plugin("element", "1.0"), select
  DefineKeyword("end", "-1");
  DefineKeyword("each", "1");
  DefineKeyword("symbol","e");
+ DefineKeyword("except", "");
  // hasta aqui los valores por omision
  ProcessArguments(args);
  start = int(params["start"]);
  end = int(params["end"]);
  each = int(params["each"]);
  sym = params["symbol"];
+ except = params["except"];
 }
 
 ElementFilter::~ElementFilter() { delete selector; }

@@ -47,6 +47,7 @@ SphereFilter::SphereFilter(std::string args): Plugin("sphere", "1.0"), selector(
  DefineKeyword("each", "1");
  DefineKeyword("radius");
  DefineKeyword("center");
+ DefineKeyword("except", "");
  // hasta aqui los valores por omision
  ProcessArguments(args);
  start = int(params["start"]);
@@ -54,6 +55,7 @@ SphereFilter::SphereFilter(std::string args): Plugin("sphere", "1.0"), selector(
  each = int(params["each"]);
  radius = double(params["radius"]);
  center = Vector(params["center"].c_str());
+ except = params["except"];
 }
 
 SphereFilter::~SphereFilter() { delete selector; }
