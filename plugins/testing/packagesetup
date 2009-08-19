@@ -243,6 +243,13 @@ directory .
        pkgconfig += liblpmd-2.0
     end
 
+    module lennardjonesMod.so
+       language = c++
+       sources = lennardjonesMod.cc
+       installpath = lib/lpmd
+       pkgconfig += liblpmd-2.0
+    end
+
     module linkedcell.so
        language = c++
        sources = linkedcell.cc
