@@ -105,10 +105,12 @@ void LPMDFormat::ReadHeader(std::istream & is) const
   char first[1];
   is.read(first, 1);
   //Support for old 1.0 binary versions.
+  std::cerr << "Leido first = " << first << '\n';
   if(first[0] == 'Z')
   {
    char h[9];
    is.read(h, 9);
+   for(int i=0;i<9;i++) std::cerr << "Leido h["<<i<<"] = " << h[i] << '\n';
    if ((h[1] != 'L') || (h[3] != 'P')) throw PluginError("lpmd", "Wrong header");
    if ((h[0] != '4') || (h[2] != '2')) throw PluginError("lpmd", "Wrong header");
    v0 = h[4];   // major version number
@@ -129,10 +131,12 @@ void LPMDFormat::ReadHeader(std::istream & is) const
   {
    char h[8];
    is.read(h, 8);
+   for(int i=0;i<8;i++) std::cerr << "Leido h["<<i<<"] = " << h[i] << '\n';
    if((h[0] != 'P' || h[1] != 'M') || h[2] !='D') throw PluginError("lpmd", "Wrong Header");
-   v0 = h[4]; // major version number
-   unsigned short int v1 = h[6];
-   DebugStream() << "[lpmd] version number from file is " << v0 << "." << v1 << '\n';
+   //const char * atmp = h[4];
+   //v0 = atoi(atmp); // major version number
+   //unsigned short int v1 = atoi(h[6]);
+   DebugStream() << "[lpmd] version number from file is " << h[4] << "." << h[6] << '\n';
    z_stream & stream = *((z_stream *)(zstr));
    stream.zalloc = Z_NULL;
    stream.zfree = Z_NULL;
@@ -147,7 +151,7 @@ void LPMDFormat::ReadHeader(std::istream & is) const
    is.read((char *)&foo, 1);
    is.read((char *)&cbufs, int(foo));
    cbufs = ntohl(cbufs);
-   // std::cerr << "DEBUG This configuration has " << cbufs << " compressed bytes" << '\n';
+   std::cerr << "DEBUG This configuration has " << cbufs << " compressed bytes" << '\n';
    while (1)
    {
     long int rem = cbufs - ts;
@@ -175,7 +179,7 @@ void LPMDFormat::ReadHeader(std::istream & is) const
    //Se leyo el bloque header, que tiene este bloque¿?
    std::string info = ibufstr.str();
    (*linecounter)++;
-   if (tmp.substr(0, 4) != "HDR ") throw PluginError("lpmd", "File"+readfile+" doesn't seem to be in LPMD 2.0 fromat (wrong HDR)");
+   if (info.substr(0, 4) != "HDR ") throw PluginError("lpmd", "File "+readfile+" doesn't seem to be in LPMD 2.0 format (wrong HDR)");
    Array<std::string> words = StringSplit(info,' ');
    for (long int i=0;i<words.Size() ; ++i)
    {
@@ -444,7 +448,7 @@ bool LPMDFormat::ReadCell(std::istream & is, Configuration & con) const
 void LPMDFormat::WriteHeader(std::ostream & os, SimulationHistory * sh) const
 {
  std::ostringstream header;
- header << "LPMD 2.0" << std::endl;
+ os << "LPMD 2.0" << std::endl;
  
  *lastop = ZLP_WRITE;
  z_stream & stream = *((z_stream *)(zstr));
@@ -487,12 +491,11 @@ void LPMDFormat::WriteHeader(std::ostream & os, SimulationHistory * sh) const
  std::istringstream & ibufstr = *istr;
  if(type=="lpmd")
  {
-  header << obufstr << '\n';
-  os.write(header.str().c_str(),header.str().size());
+  os.write(obufstr.str().c_str(),obufstr.str().size());
  }
  else if(type=="zlp")
  {
-  //long int ucsize = ibufstr.str().size();
+  long int ucsize = ibufstr.str().size();
   std::string cbuf;
   while (1)
   {
@@ -512,7 +515,7 @@ void LPMDFormat::WriteHeader(std::ostream & os, SimulationHistory * sh) const
    } while (stream.avail_out == 0);
   }
   //std::cerr << "DEBUG compressed data for this configuration is " << cbuf.size() << " bytes\n";
-  //DebugStream() << "-> ZLP compression: packed " << ucsize << " bytes into " << cbuf.size() << " bytes.\n";
+  DebugStream() << "-> ZLP compression: packed " << ucsize << " bytes into " << cbuf.size() << " bytes.\n";
   unsigned char foo = sizeof(unsigned long int);
   unsigned long int cbufs = htonl(cbuf.size());
   os.write((char *)&foo, 1);
@@ -536,20 +539,20 @@ void LPMDFormat::WriteCell(std::ostream & out, Configuration & con) const
 
  std::cerr << "DEBUG ReadCell using file " << readfile << '\n';
  obufstr << part.Size() << std::endl;
- obufstr << cell[0] << " " << cell[1] << " " << cell[2] << std::endl;
+ obufstr << std::fixed << cell[0] << " " << cell[1] << " " << cell[2] << std::endl;
  for (long int i=0;i<part.Size();i++)
  {
   if (level>=0)
   {
-   obufstr << part[i].Symbol() << " " << cell.Fractional(part[i].Position()) ;
+   obufstr << std::fixed << part[i].Symbol() << " " << cell.Fractional(part[i].Position()) ;
   }
   if (level>=1)
   {
-   obufstr << " "<< part[i].Velocity();
+   obufstr <<std::fixed << " "<< part[i].Velocity();
   }
   if (level>=2)
   {
-   obufstr << " "<< part[i].Acceleration();
+   obufstr <<std::fixed << " "<< part[i].Acceleration();
   }
   if (extra.Size()>=1)
   {
