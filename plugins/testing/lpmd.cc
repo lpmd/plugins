@@ -44,6 +44,8 @@ LPMDFormat::LPMDFormat(std::string args): Plugin("lpmd", "2.0")
  else ShowWarning("lpmd","The file type detected not recognized by extension, asuming lpmd file type!.");
  interval = int(params["each"]);
  level = int(params["level"]);
+ blocksize = int(params["blocksize"]);
+ complev = int(params["compression"]);
  rcell = params["replacecell"];
  extra = StringSplit((*this)["extra"],',');
  // inicializa la estructura z_stream
@@ -300,7 +302,34 @@ bool LPMDFormat::ReadCell(std::istream & is, Configuration & con) const
  }
  else if (type == "zlp")
  {
+  ibufstr.getline(tmp.c_str(),sizeof(tmp.c_str()),'\n');
+  std::cerr << " Read - Line = " << tmp << '\n';
   getline(ibufstr, tmp);
+  std::cerr << " Read - Line = " << tmp << '\n';
+  getline(ibufstr, tmp);
+  std::cerr << " Read - Line = " << tmp << '\n';
+  getline(ibufstr, tmp);
+  std::cerr << " Read - Line = " << tmp << '\n';
+  getline(ibufstr, tmp);
+  std::cerr << " Read - Line = " << tmp << '\n';
+  getline(ibufstr, tmp);
+  std::cerr << " Read - Line = " << tmp << '\n';
+  getline(ibufstr, tmp);
+  std::cerr << " Read - Line = " << tmp << '\n';
+  getline(ibufstr, tmp);
+  std::cerr << " Read - Line = " << tmp << '\n';
+  getline(ibufstr, tmp);
+  std::cerr << " Read - Line = " << tmp << '\n';
+  getline(ibufstr, tmp);
+  std::cerr << " Read - Line = " << tmp << '\n';
+  getline(ibufstr, tmp);
+  std::cerr << " Read - Line = " << tmp << '\n';
+  getline(ibufstr, tmp);
+  std::cerr << " Read - Line = " << tmp << '\n';
+  getline(ibufstr, tmp);
+  std::cerr << " Read - Line = " << tmp << '\n';
+  getline(ibufstr, tmp);
+  std::cerr << " Read - Line = " << tmp << '\n';
  }
  (*linecounter)++;
  Array<std::string> words = StringSplit(tmp, ' '); 
