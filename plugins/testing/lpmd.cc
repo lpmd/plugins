@@ -57,13 +57,16 @@ LPMDFormat::LPMDFormat(std::string args): Plugin("lpmd", "2.0")
 
 LPMDFormat::~LPMDFormat()
 { 
- if ((*lastop) == ZLP_WRITE) deflate((z_stream *)(zstr), Z_FINISH);
- if ((*lastop) == ZLP_READ) inflateEnd((z_stream *)(zstr));
- if ((*lastop) == ZLP_WRITE) deflateEnd((z_stream *)(zstr));
- delete lastop;
- delete [] inbuf;
- delete [] outbuf;
- delete (z_stream *)(zstr);
+ if (type == "zlp")
+ {
+  if ((*lastop) == ZLP_WRITE) deflate((z_stream *)(zstr), Z_FINISH);
+  if ((*lastop) == ZLP_READ) inflateEnd((z_stream *)(zstr));
+  if ((*lastop) == ZLP_WRITE) deflateEnd((z_stream *)(zstr));
+  delete lastop;
+  delete [] inbuf;
+  delete [] outbuf;
+  delete (z_stream *)(zstr);
+ }
  delete linecounter; 
 }
 
@@ -254,7 +257,8 @@ bool LPMDFormat::ReadCell(std::istream & is, Configuration & con) const
  BasicCell & cell = con.Cell();
  BasicParticleSet & part = con.Atoms();
  assert(part.Size() == 0);
-
+ 
+ std::cerr << "DEBUG ReadCell using file " << readfile << '\n';
  std::cout << "Start ReadCell type = "<<type << '\n';
 
  *lastop = ZLP_READ;
@@ -444,6 +448,9 @@ void LPMDFormat::WriteHeader(std::ostream & os, SimulationHistory * sh) const
  
  *lastop = ZLP_WRITE;
  z_stream & stream = *((z_stream *)(zstr));
+ stream.zalloc = Z_NULL;
+ stream.zfree = Z_NULL;
+ stream.opaque = Z_NULL;
  std::ostringstream * ostr = new std::ostringstream();
  std::ostringstream & obufstr = *ostr;
  if (deflateInit(&stream, complev) != Z_OK) throw PluginError("zlp", "Compression failed");
@@ -527,6 +534,7 @@ void LPMDFormat::WriteCell(std::ostream & out, Configuration & con) const
  std::ostringstream * ostr = new std::ostringstream();
  std::ostringstream & obufstr = *ostr;
 
+ std::cerr << "DEBUG ReadCell using file " << readfile << '\n';
  obufstr << part.Size() << std::endl;
  obufstr << cell[0] << " " << cell[1] << " " << cell[2] << std::endl;
  for (long int i=0;i<part.Size();i++)
@@ -573,6 +581,7 @@ void LPMDFormat::WriteCell(std::ostream & out, Configuration & con) const
   while (1)
   {
    ibufstr.read((char *)inbuf, blocksize);
+   std::cerr << "DEBUG writing " << ibufstr.gcount() << " uncompressed bytes to ZLP file" << '\n';
    if (ibufstr.gcount() == 0) break;
    stream.avail_in = ibufstr.gcount();
    stream.next_in = inbuf;
@@ -594,6 +603,7 @@ void LPMDFormat::WriteCell(std::ostream & out, Configuration & con) const
  }
  else throw PluginError("lpmd", "Not defined the correct type file to write header.");
  delete istr;
+ std::cerr << "DEBUG finishing WriteCell\n";
 }
 
 // Esto se incluye para que el modulo pueda ser cargado dinamicamente
