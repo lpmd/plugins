@@ -41,6 +41,7 @@ class LPMDFormat: public lpmd::CellFormat, public lpmd::Plugin
    void * zstr; // z_stream structure, used with zlib 
    unsigned char * inbuf, * outbuf;
    int blocksize, complev, * lastop;
+   mutable unsigned short int v0;
 };
 
 #endif

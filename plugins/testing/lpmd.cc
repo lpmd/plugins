@@ -108,7 +108,7 @@ void LPMDFormat::ReadHeader(std::istream & is) const
    is.read(h, 9);
    if ((h[1] != 'L') || (h[3] != 'P')) throw PluginError("lpmd", "Wrong header");
    if ((h[0] != '4') || (h[2] != '2')) throw PluginError("lpmd", "Wrong header");
-   unsigned short int v0 = h[4];   // major version number
+   v0 = h[4];   // major version number
    unsigned short int v1 = h[5];   // minor version number
    unsigned short int v2 = h[6];   // revision 
    unsigned short int bf0 = h[7];  // reservado para 8-bit flag
@@ -127,7 +127,7 @@ void LPMDFormat::ReadHeader(std::istream & is) const
    char h[8];
    is.read(h, 8);
    if((h[0] != 'P' || h[1] != 'M') || h[2] !='D') throw PluginError("lpmd", "Wrong Header");
-   unsigned short int v0 = h[4]; // major version number
+   v0 = h[4]; // major version number
    unsigned short int v1 = h[6];
    DebugStream() << "[lpmd] version number from file is " << v0 << "." << v1 << '\n';
    z_stream & stream = *((z_stream *)(zstr));
@@ -294,42 +294,71 @@ bool LPMDFormat::ReadCell(std::istream & is, Configuration & con) const
   std::cerr <<  "Se sale del while" << '\n';
  }
  std::istringstream ibufstr(*istr);
-
  std::string tmp;
+ if ( v0 == 1 )
+ {
+  int lvl;
+  long int natoms;
+  ibufstr >> lvl;
+  ibufstr >> natoms;
+  con.SetTag(con, Tag("level"), lvl);
+  //std::cerr << "DEBUG Number of atoms = " << natoms << '\n';
+  for (int j=0;j<3;++j)
+  {
+   Vector v;
+   double vq[3];
+   for (int i=0;i<3;++i)
+   {
+    ibufstr >> vq[i];
+    v[i] = vq[i];
+   }
+   if ((*this)["replacecell"] == "true") cell[j] = v;
+  }
+  for (long int i=0;i<natoms;++i)
+  {
+   std::string sym;
+   ibufstr >> sym;
+   Vector fpos, vel, acc;
+   double vq[3];
+   for (int q=0;q<3;++q)
+   {
+    ibufstr >> vq[q];
+    fpos[q] = vq[q];
+   }
+   part.Append(Atom(ElemNum(sym)));
+   part[i].Position() = cell.Cartesian(fpos);
+   if (lvl > 0)
+   {
+    for (int q=0;q<3;++q)
+    {
+     ibufstr >> vq[q];
+     vel[q] = vq[q];
+    }
+    part[i].Velocity() = vel;
+   }
+   if (lvl > 1) 
+   {
+    for (int q=0;q<3;++q)
+    {
+     ibufstr >> vq[q];
+     acc[q] = vq[q];
+    }
+    part[i].Acceleration() = acc;
+   }
+  }
+  delete istr;
+  return true;
+ }
+
+
+ //Type for level > 1 in zlp and lpmd
  if (type == "lpmd")
  {
   getline(is, tmp);                                     // Numero de atomos
  }
  else if (type == "zlp")
  {
-  ibufstr.getline(tmp.c_str(),sizeof(tmp.c_str()),'\n');
-  std::cerr << " Read - Line = " << tmp << '\n';
   getline(ibufstr, tmp);
-  std::cerr << " Read - Line = " << tmp << '\n';
-  getline(ibufstr, tmp);
-  std::cerr << " Read - Line = " << tmp << '\n';
-  getline(ibufstr, tmp);
-  std::cerr << " Read - Line = " << tmp << '\n';
-  getline(ibufstr, tmp);
-  std::cerr << " Read - Line = " << tmp << '\n';
-  getline(ibufstr, tmp);
-  std::cerr << " Read - Line = " << tmp << '\n';
-  getline(ibufstr, tmp);
-  std::cerr << " Read - Line = " << tmp << '\n';
-  getline(ibufstr, tmp);
-  std::cerr << " Read - Line = " << tmp << '\n';
-  getline(ibufstr, tmp);
-  std::cerr << " Read - Line = " << tmp << '\n';
-  getline(ibufstr, tmp);
-  std::cerr << " Read - Line = " << tmp << '\n';
-  getline(ibufstr, tmp);
-  std::cerr << " Read - Line = " << tmp << '\n';
-  getline(ibufstr, tmp);
-  std::cerr << " Read - Line = " << tmp << '\n';
-  getline(ibufstr, tmp);
-  std::cerr << " Read - Line = " << tmp << '\n';
-  getline(ibufstr, tmp);
-  std::cerr << " Read - Line = " << tmp << '\n';
  }
  (*linecounter)++;
  Array<std::string> words = StringSplit(tmp, ' '); 
@@ -417,7 +446,7 @@ void LPMDFormat::WriteHeader(std::ostream & os, SimulationHistory * sh) const
  z_stream & stream = *((z_stream *)(zstr));
  std::ostringstream * ostr = new std::ostringstream();
  std::ostringstream & obufstr = *ostr;
-
+ if (deflateInit(&stream, complev) != Z_OK) throw PluginError("zlp", "Compression failed");
  obufstr << "HDR ";
  if(hdr.Size()<2)
  {
