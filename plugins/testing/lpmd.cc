@@ -39,10 +39,8 @@ LPMDFormat::LPMDFormat(std::string args): Plugin("lpmd", "2.0")
  type = params["type"];
  readfile = writefile = (*this)["file"];
  std::string q = readfile.substr(readfile.size()-4,4);
- std::cout << " q =" << q <<"."<< '\n';
- if (strcmp(q.c_str(),"lpmd")==0) { type = "lpmd"; std::cout << " lpmd " << '\n'; }
- else if (strcmp(q.c_str(),".zlp")==0) { type = "zlp"; std::cout << " Detected zlp filetype" << '\n'; }
- else ShowWarning("lpmd","The file type detected not recognized by extension, asuming lpmd file type!.");
+ if (strcmp(q.c_str(),"lpmd")==0) { type = "lpmd"; }
+ else if (strcmp(q.c_str(),".zlp")==0) { type = "zlp"; }
  interval = int(params["each"]);
  level = int(params["level"]);
  blocksize = int(params["blocksize"]);
@@ -214,9 +212,6 @@ bool LPMDFormat::ReadCell(std::istream & is, Configuration & con) const
  BasicParticleSet & part = con.Atoms();
  assert(part.Size() == 0);
  
- std::cerr << "DEBUG ReadCell using file " << readfile << '\n';
- std::cout << "Start ReadCell type = "<<type << '\n';
-
  *lastop = ZLP_READ;
  z_stream & stream = *((z_stream *)(zstr));
  std::istringstream bufstr(std::istringstream::in);
@@ -230,7 +225,6 @@ bool LPMDFormat::ReadCell(std::istream & is, Configuration & con) const
   if (is.eof()) return false;
   is.read((char *)&cbufs, int(foo));
   cbufs = ntohl(cbufs);
-  std::cerr << "Declaraciones ok entrando al loop. ..." << '\n';
   while (1)
   {
    long int rem = cbufs - ts;
@@ -251,7 +245,6 @@ bool LPMDFormat::ReadCell(std::istream & is, Configuration & con) const
     for (int q=0;q<have;++q) (*istr) += (char)(outbuf[q]);
    } while (stream.avail_out == 0);
   }
-  std::cerr <<  "Se sale del while" << '\n';
  }
  std::istringstream ibufstr(*istr);
  std::string tmp;
@@ -262,7 +255,6 @@ bool LPMDFormat::ReadCell(std::istream & is, Configuration & con) const
   ibufstr >> lvl;
   ibufstr >> natoms;
   con.SetTag(con, Tag("level"), lvl);
-  //std::cerr << "DEBUG Number of atoms = " << natoms << '\n';
   for (int j=0;j<3;++j)
   {
    Vector v;
@@ -393,7 +385,6 @@ bool LPMDFormat::ReadCell(std::istream & is, Configuration & con) const
   atomcount++;
  }
  delete istr;
- std::cerr << "Finish REadCell process" << '\n';
  return true;
 }
 
@@ -496,7 +487,6 @@ void LPMDFormat::WriteCell(std::ostream & out, Configuration & con) const
   while (1)
   {
    ibufstr.read((char *)inbuf, blocksize);
-   std::cerr << "DEBUG writing " << ibufstr.gcount() << " uncompressed bytes to ZLP file" << '\n';
    if (ibufstr.gcount() == 0) break;
    stream.avail_in = ibufstr.gcount();
    stream.next_in = inbuf;
@@ -511,7 +501,6 @@ void LPMDFormat::WriteCell(std::ostream & out, Configuration & con) const
   }
   unsigned char foo = sizeof(unsigned long int);
   unsigned long int cbufs = htonl(cbuf.size());
-  std::cerr << "DEBUG writing " << cbuf.size() << " compressed bytes\n";
   out.write((char *)&foo, 1);
   out.write((char *)&cbufs, int(foo));
   out.write(cbuf.c_str(), cbuf.size());
