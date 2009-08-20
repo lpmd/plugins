@@ -21,9 +21,12 @@ class LPMDFormat: public lpmd::CellFormat, public lpmd::Plugin
 
    //Metodos Propios de modulo lpmd
    void ReadHeader(std::istream & is) const;
+   void ReadHeaderZLPOne(std::istream & is) const;
+   void ReadHeaderLPMDOne(std::istream & is) const;
    bool ReadCell(std::istream & is, lpmd::Configuration & con) const;
    void WriteHeader(std::ostream & os, lpmd::SimulationHistory *) const;
    void WriteCell(std::ostream & os, lpmd::Configuration & con) const;
+   void InitDecompression() const;
    
    long int GetInterval() const {return interval;}
 
@@ -34,7 +37,7 @@ class LPMDFormat: public lpmd::CellFormat, public lpmd::Plugin
    lpmd::Array<std::string> extra;
    bool rcell;
    mutable lpmd::Array<std::string> hdr;
-   std::string type;
+   mutable std::string type;
    /////////////////////////////////////////
    //private variables for zlp file-types///
    /////////////////////////////////////////

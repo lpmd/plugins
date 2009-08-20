@@ -22,6 +22,7 @@ using namespace lpmd;
 
 LPMDFormat::LPMDFormat(std::string args): Plugin("lpmd", "2.0")
 {
+ hdr.Clear();
  ParamList & params = (*this);
  //
  linecounter = new long int;
@@ -38,8 +39,10 @@ LPMDFormat::LPMDFormat(std::string args): Plugin("lpmd", "2.0")
  type = params["type"];
  readfile = writefile = (*this)["file"];
  std::string q = readfile.substr(readfile.size()-4,4);
- if (strcmp(q.c_str(),"lpmd")==0) { type = "lpmd"; }
- else if (strcmp(q.c_str(),".zlp")==0) { type = "zlp"; }
+ std::cout << " q =" << q <<"."<< '\n';
+ if (strcmp(q.c_str(),"lpmd")==0) { type = "lpmd"; std::cout << " lpmd " << '\n'; }
+ else if (strcmp(q.c_str(),".zlp")==0) { type = "zlp"; std::cout << " Detected zlp filetype" << '\n'; }
+ else ShowWarning("lpmd","The file type detected not recognized by extension, asuming lpmd file type!.");
  interval = int(params["each"]);
  level = int(params["level"]);
  blocksize = int(params["blocksize"]);
@@ -97,115 +100,109 @@ void LPMDFormat::ShowHelp() const
 
 void LPMDFormat::ReadHeader(std::istream & is) const
 {
- std::string tmp;
- if(type == "zlp")
+ char first[2] = { NULL, NULL };
+ is.read(first, 1);
+ if (first[0] == 'Z')
  {
-  char first[1];
-  is.read(first, 1);
-  if(first[0] == 'Z')
-  {
-   char h[9];
-   is.read(h, 9);
-   if ((h[1] != 'L') || (h[3] != 'P')) throw PluginError("lpmd", "Wrong header");
-   if ((h[0] != '4') || (h[2] != '2')) throw PluginError("lpmd", "Wrong header");
-   v0 = h[4];   // major version number
-   unsigned short int v1 = h[5];   // minor version number
-   unsigned short int v2 = h[6];   // revision 
-   unsigned short int bf0 = h[7];  // reservado para 8-bit flag
-   unsigned short int bf1 = h[8];  // reservado para 8-bit flag
-   DebugStream() << "[lpmd] version number from file is " << v0 << "." << v1 << "." << v2 << '\n';
-   DebugStream() << "[lpmd] format flags are " << bf0 << " and " << bf1 << '\n';
-   z_stream & stream = *((z_stream *)(zstr));
-   stream.zalloc = Z_NULL;
-   stream.zfree = Z_NULL;
-   stream.opaque = Z_NULL;
-   if (inflateInit(&stream) != Z_OK) throw PluginError("zlp", "Decompression failed");
-   (*linecounter) = 1;
-  }
-  else if(first[0] == 'L')
-  {
-   char h[8];
-   is.read(h, 8);
-   if((h[0] != 'P' || h[1] != 'M') || h[2] !='D') throw PluginError("lpmd", "Wrong Header");
-   DebugStream() << "[lpmd] version number from file is " << h[4] << "." << h[6] << '\n';
-   getline(is, tmp);
-   std::string info = tmp ;
-   (*linecounter)++;
-   if (tmp.substr(0, 4) != "HDR ") throw PluginError("lpmd", "File"+readfile+" doesn't seem to be in LPMD 2.0 fromat (wrong HDR)");
-   Array<std::string> words = StringSplit(info,' ');
-   for (long int i=0;i<words.Size() ; ++i)
-   {
-    hdr.Append(std::string(words[i]));
-   }
-   z_stream & stream = *((z_stream *)(zstr));
-   stream.zalloc = Z_NULL;
-   stream.zfree = Z_NULL;
-   stream.opaque = Z_NULL;
-   if (inflateInit(&stream) != Z_OK) throw PluginError("zlp", "Decompression failed");
-   (*linecounter) = 1;
-  }
+  ReadHeaderZLPOne(is);
+  return;
  }
- else if (type == "lpmd")
+ else if (first[0] != 'L') throw PluginError("lpmd", "Wrong header (not an LPMD/ZLP file)");
+ std::string line, header;
+ getline(is, line);
+ line = "L"+line;
+ Array<std::string> lspl = StringSplit(line);
+ // First word must be LPMD
+ if (lspl[0] != "LPMD") throw PluginError("lpmd", "Wrong header (not an LPMD/ZLP file)");
+ // Second word is the version number
+ std::string version = lspl[1];
+ // Third word is the compression flag
+ type = "lpmd";
+ if (lspl.Size() > 2)
  {
-  getline(is, tmp);
-  (*linecounter) = 1;
-  if (tmp.substr(0, 5) != "LPMD ") throw PluginError("lpmd", "File "+readfile+" doesn't seem to be in LPMD X.X format (wrong header)");
-  if (tmp.substr(5, 3) =="1.0")
-  {
-   //assume 1.0 format
-   int where = is.tellg();
-   std::string info;
-   getline(is, info);
-   getline(is, info);
-   getline(is, info);
-   Array<std::string> words = StringSplit(info, ' ');
-   is.seekg(where);
-   if (words.Size()==4)
-   {
-    hdr.Append(std::string("HDR"));
-    hdr.Append(std::string("SYM"));
-    hdr.Append(std::string("X"));hdr.Append(std::string("Y"));hdr.Append(std::string("Z"));
-    level = 0;
-   }
-   else if (words.Size()==7)
-   {
-    hdr.Append(std::string("HDR"));
-    hdr.Append(std::string("SYM"));
-    hdr.Append(std::string("X"));hdr.Append(std::string("Y"));hdr.Append(std::string("Z"));
-    hdr.Append(std::string("VX"));hdr.Append(std::string("VY"));hdr.Append(std::string("VZ"));
-    level = 1;
-   }
-   else if (words.Size()==10)
-   {
-    hdr.Append(std::string("HDR"));
-    hdr.Append(std::string("SYM"));
-    hdr.Append(std::string("X"));hdr.Append(std::string("Y"));hdr.Append(std::string("Z"));
-    hdr.Append(std::string("VX"));hdr.Append(std::string("VY"));hdr.Append(std::string("VZ"));
-    hdr.Append(std::string("FX"));hdr.Append(std::string("FY"));hdr.Append(std::string("FZ"));
-    level = 2;
-   }
-   else
-   {
-    throw PluginError("lpmd", "File "+readfile+" not have a apropiate 1.0 version");
-   }
-  }
-  else if (tmp.substr(5, 3)=="2.0")
-  {
-   getline(is, tmp);
-   std::string info = tmp ;
-   (*linecounter)++;
-   if (tmp.substr(0, 4) != "HDR ") throw PluginError("lpmd", "File"+readfile+" doesn't seem to be in LPMD 2.0 fromat (wrong HDR)");
-   Array<std::string> words = StringSplit(info,' ');
-   for (long int i=0;i<words.Size() ; ++i)
-   {
-    hdr.Append(std::string(words[i]));
-   }
-  }
-  else 
-  {
-   throw PluginError("lpmd", "The level of the file "+readfile+" are not supporten in this version of lpmd plugin.");
-  }
+  if (lspl[2] == "Z") type = "zlp";
+  else if (lspl[2] == "L") type = "lpmd";
+  else throw PluginError("lpmd", "Wrong compression flag (corrupted LPMD/ZLP file?)");
  }
+
+ (*linecounter) = 1;
+
+ if (version == "1.0") ReadHeaderLPMDOne(is);
+ else if (version == "2.0")
+ {
+  // Second line is the header
+  getline(is, header);
+  (*linecounter)++;
+  Array<std::string> words = StringSplit(header);
+  if (words[0] != "HDR") throw PluginError("lpmd", "File "+readfile+" doesn't seem to be in LPMD 2.0 format (wrong HDR)");
+  for (long int i=0;i<words.Size();++i) hdr.Append(std::string(words[i]));
+ }
+ else throw PluginError("lpmd", "Format version "+version+" in file "+readfile+" is not supported.");
+ if (type == "zlp") InitDecompression();
+}
+
+void LPMDFormat::ReadHeaderLPMDOne(std::istream & is) const
+{
+ //assume 1.0 format
+ int where = is.tellg();
+ std::string info;
+ getline(is, info);
+ getline(is, info);
+ getline(is, info);
+ Array<std::string> words = StringSplit(info, ' ');
+ is.seekg(where);
+ if (words.Size()==4)
+ {
+  hdr.Append(std::string("HDR"));
+  hdr.Append(std::string("SYM"));
+  hdr.Append(std::string("X"));hdr.Append(std::string("Y"));hdr.Append(std::string("Z"));
+  level = 0;
+ }
+ else if (words.Size()==7)
+ {
+  hdr.Append(std::string("HDR"));
+  hdr.Append(std::string("SYM"));
+  hdr.Append(std::string("X"));hdr.Append(std::string("Y"));hdr.Append(std::string("Z"));
+  hdr.Append(std::string("VX"));hdr.Append(std::string("VY"));hdr.Append(std::string("VZ"));
+  level = 1;
+ }
+ else if (words.Size()==10)
+ {
+  hdr.Append(std::string("HDR"));
+  hdr.Append(std::string("SYM"));
+  hdr.Append(std::string("X"));hdr.Append(std::string("Y"));hdr.Append(std::string("Z"));
+  hdr.Append(std::string("VX"));hdr.Append(std::string("VY"));hdr.Append(std::string("VZ"));
+  hdr.Append(std::string("FX"));hdr.Append(std::string("FY"));hdr.Append(std::string("FZ"));
+  level = 2;
+ }
+ else throw PluginError("lpmd", "File "+readfile+" not have a apropiate 1.0 version");
+}
+
+void LPMDFormat::ReadHeaderZLPOne(std::istream & is) const
+{
+ char hdr[10];
+ hdr[0] = 'Z';
+ is.read(&hdr[1], 9);
+ if ((hdr[2] != 'L') || (hdr[4] != 'P')) throw PluginError("zlp", "Wrong header");
+ if ((hdr[1] != '4') || (hdr[3] != '2')) throw PluginError("zlp", "Wrong header");
+ unsigned short int v0 = hdr[5];   // major version number
+ unsigned short int v1 = hdr[6];   // minor version number
+ unsigned short int v2 = hdr[7];   // revision 
+ unsigned short int bf0 = hdr[8];  // reservado para 8-bit flag
+ unsigned short int bf1 = hdr[9];  // reservado para 8-bit flag
+ DebugStream() << "[zlp] version number from file is " << v0 << "." << v1 << "." << v2 << '\n';
+ DebugStream() << "[zlp] format flags are " << bf0 << " and " << bf1 << '\n';
+ InitDecompression();
+}
+
+void LPMDFormat::InitDecompression() const
+{
+ *lastop = ZLP_READ;
+ z_stream & stream = *((z_stream *)(zstr));
+ stream.zalloc = Z_NULL;
+ stream.zfree = Z_NULL;
+ stream.opaque = Z_NULL;
+ if (inflateInit(&stream) != Z_OK) throw PluginError("zlp", "Decompression failed");
 }
 
 // 
@@ -217,6 +214,9 @@ bool LPMDFormat::ReadCell(std::istream & is, Configuration & con) const
  BasicParticleSet & part = con.Atoms();
  assert(part.Size() == 0);
  
+ std::cerr << "DEBUG ReadCell using file " << readfile << '\n';
+ std::cout << "Start ReadCell type = "<<type << '\n';
+
  *lastop = ZLP_READ;
  z_stream & stream = *((z_stream *)(zstr));
  std::istringstream bufstr(std::istringstream::in);
@@ -230,6 +230,7 @@ bool LPMDFormat::ReadCell(std::istream & is, Configuration & con) const
   if (is.eof()) return false;
   is.read((char *)&cbufs, int(foo));
   cbufs = ntohl(cbufs);
+  std::cerr << "Declaraciones ok entrando al loop. ..." << '\n';
   while (1)
   {
    long int rem = cbufs - ts;
@@ -250,6 +251,7 @@ bool LPMDFormat::ReadCell(std::istream & is, Configuration & con) const
     for (int q=0;q<have;++q) (*istr) += (char)(outbuf[q]);
    } while (stream.avail_out == 0);
   }
+  std::cerr <<  "Se sale del while" << '\n';
  }
  std::istringstream ibufstr(*istr);
  std::string tmp;
@@ -307,6 +309,8 @@ bool LPMDFormat::ReadCell(std::istream & is, Configuration & con) const
   delete istr;
   return true;
  }
+
+
  //Type for level > 1 in zlp and lpmd
  if (type == "lpmd")
  {
@@ -316,7 +320,6 @@ bool LPMDFormat::ReadCell(std::istream & is, Configuration & con) const
  {
   getline(ibufstr, tmp);
  }
- //std::cerr << "read tmp = " << tmp << '\n';
  (*linecounter)++;
  Array<std::string> words = StringSplit(tmp, ' '); 
  if (words.Size() == 0) return false;
@@ -390,47 +393,52 @@ bool LPMDFormat::ReadCell(std::istream & is, Configuration & con) const
   atomcount++;
  }
  delete istr;
+ std::cerr << "Finish REadCell process" << '\n';
  return true;
 }
 
 void LPMDFormat::WriteHeader(std::ostream & os, SimulationHistory * sh) const
 {
- std::ostringstream header;
- os << "LPMD 2.0" << std::endl; 
+ os << "LPMD 2.0 ";
+ if (type == "zlp")
+ {
+  // Initialize buffers for compression
+  *lastop = ZLP_WRITE;
+  z_stream & stream = *((z_stream *)(zstr));
+  stream.zalloc = Z_NULL;
+  stream.zfree = Z_NULL;
+  stream.opaque = Z_NULL;
+  if (deflateInit(&stream, complev) != Z_OK) throw PluginError("zlp", "Compression failed");
+  os << "Z\n";
+ }
+ else os << "L\n";
  os << "HDR ";
- if(hdr.Size()<2)
+ if (hdr.Size() < 2)
  {
   //hdr not set, using the plugin information.
   hdr.Clear();
   hdr.Append("SYM");
   hdr.Append("X");hdr.Append("Y");hdr.Append("Z");
-  if (level>=1)
+  if (level >= 1)
   {
-   hdr.Append("VX");hdr.Append("VY");hdr.Append("VZ");
+   hdr.Append("VX");
+   hdr.Append("VY");
+   hdr.Append("VZ");
   }
-  if (level>=2)
+  if (level >= 2)
   {
-   hdr.Append("AX");hdr.Append("AY");hdr.Append("AZ");
+   hdr.Append("AX");
+   hdr.Append("AY");
+   hdr.Append("AZ");
   }
-  if (extra.Size()>0)
+  if (extra.Size() > 0)
   {
-   for(long int i=0;i<extra.Size();++i)
-   {
-    hdr.Append(extra[i].c_str());
-   }
+   for(long int i=0;i<extra.Size();++i) hdr.Append(extra[i].c_str());
   }
  }
- for (long int i=0 ; i < hdr.Size() ; ++i)
- {
-  os << hdr[i] << " ";
- }
+ for (long int i=0;i<hdr.Size();++i) os << hdr[i] << " ";
  os << '\n';
-
- z_stream & stream = *((z_stream *)(zstr));
- stream.zalloc = Z_NULL;
- stream.zfree = Z_NULL;
- stream.opaque = Z_NULL;
- if (deflateInit(&stream, complev) != Z_OK) throw PluginError("zlp", "Compression failed");
+ os.flush();
 }
 
 void LPMDFormat::WriteCell(std::ostream & out, Configuration & con) const
@@ -444,20 +452,20 @@ void LPMDFormat::WriteCell(std::ostream & out, Configuration & con) const
  std::ostringstream & obufstr = *ostr;
 
  obufstr << part.Size() << std::endl;
- obufstr << cell[0] << " " << cell[1] << " " << cell[2] << std::endl;
+ obufstr << std::fixed << cell[0] << " " << cell[1] << " " << cell[2] << std::endl;
  for (long int i=0;i<part.Size();i++)
  {
   if (level>=0)
   {
-   obufstr << part[i].Symbol() << " " << cell.Fractional(part[i].Position()) ;
+   obufstr << std::fixed << part[i].Symbol() << " " << cell.Fractional(part[i].Position()) ;
   }
   if (level>=1)
   {
-   obufstr << " "<< part[i].Velocity();
+   obufstr <<std::fixed << " "<< part[i].Velocity();
   }
   if (level>=2)
   {
-   obufstr << " "<< part[i].Acceleration();
+   obufstr <<std::fixed << " "<< part[i].Acceleration();
   }
   if (extra.Size()>=1)
   {
@@ -465,9 +473,9 @@ void LPMDFormat::WriteCell(std::ostream & out, Configuration & con) const
    {
     if ((extra[j] == "RGB") || (extra[j] == "rgb"))
     { 
-     lpmd::Vector tmp = ColorHandler::HaveColor(part[i]) ? ColorHandler::ColorOfAtom(part[i]) : ColorHandler::DefaultColor(part[i]); 
+     lpmd::Vector tmp = (ColorHandler::HaveColor(part[i]) ? ColorHandler::ColorOfAtom(part[i]) : ColorHandler::DefaultColor(part[i])); 
      obufstr << " ";
-     FormattedWrite(obufstr,tmp); 
+     FormattedWrite(obufstr,tmp);
     }
     else if ((extra[j] == "TYPE") || (extra[j] == "type")) { obufstr << "          " << "ATOMTYPE"; }
    }
@@ -476,7 +484,6 @@ void LPMDFormat::WriteCell(std::ostream & out, Configuration & con) const
  }
  //Comprime o no segun sea lpmd o zlp.
  std::istringstream * istr = new std::istringstream(obufstr.str());
- delete ostr;
  std::istringstream & ibufstr = *istr;
 
  if(type=="lpmd")
@@ -489,7 +496,7 @@ void LPMDFormat::WriteCell(std::ostream & out, Configuration & con) const
   while (1)
   {
    ibufstr.read((char *)inbuf, blocksize);
-   //std::cerr << "DEBUG writing " << ibufstr.gcount() << " uncompressed bytes to ZLP file" << '\n';
+   std::cerr << "DEBUG writing " << ibufstr.gcount() << " uncompressed bytes to ZLP file" << '\n';
    if (ibufstr.gcount() == 0) break;
    stream.avail_in = ibufstr.gcount();
    stream.next_in = inbuf;
@@ -504,6 +511,7 @@ void LPMDFormat::WriteCell(std::ostream & out, Configuration & con) const
   }
   unsigned char foo = sizeof(unsigned long int);
   unsigned long int cbufs = htonl(cbuf.size());
+  std::cerr << "DEBUG writing " << cbuf.size() << " compressed bytes\n";
   out.write((char *)&foo, 1);
   out.write((char *)&cbufs, int(foo));
   out.write(cbuf.c_str(), cbuf.size());
@@ -511,6 +519,7 @@ void LPMDFormat::WriteCell(std::ostream & out, Configuration & con) const
  }
  else throw PluginError("lpmd", "Not defined the correct type file to write header.");
  delete istr;
+ delete ostr;
 }
 
 // Esto se incluye para que el modulo pueda ser cargado dinamicamente
