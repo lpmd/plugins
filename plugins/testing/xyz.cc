@@ -143,7 +143,7 @@ bool XYZFormat::ReadCell(std::istream & is, Configuration & sc) const
   {
    for (int i=0;i<natoms;i++)
    {
-    if (cell.IsInside(part[i].Position()))
+    if (!cell.IsInside(part[i].Position()))
     {
      throw PluginError("xyz", "The atom["+ToString<int>(i)+"] was found outside the cell.");
     }
