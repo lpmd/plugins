@@ -185,7 +185,7 @@ void LPMDFormat::ReadHeaderZLPOne(std::istream & is) const
  is.read(&hdr[1], 9);
  if ((hdr[2] != 'L') || (hdr[4] != 'P')) throw PluginError("zlp", "Wrong header");
  if ((hdr[1] != '4') || (hdr[3] != '2')) throw PluginError("zlp", "Wrong header");
- unsigned short int v0 = hdr[5];   // major version number
+ v0 = hdr[5];   // major version number
  unsigned short int v1 = hdr[6];   // minor version number
  unsigned short int v2 = hdr[7];   // revision 
  unsigned short int bf0 = hdr[8];  // reservado para 8-bit flag
