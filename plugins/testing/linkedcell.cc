@@ -6,6 +6,13 @@
 
 using namespace lpmd;
 
+inline int WrapAround(int i, int n)
+{
+ if (i < 0) i += ((-i/n)+1)*n;
+ else if (i > n-1) i -= (i/n)*n;
+ return i;
+}
+
 LinkedCell::LinkedCell(std::string args): Plugin("lc3", "1.0")
 { 
  ParamList & params = (*this);
@@ -125,15 +132,9 @@ void LinkedCell::UpdateCell(Configuration & conf)
       for (int dy=-side;dy<=side;++dy)
        for (int dx=-side;dx<=side;++dx)
        {
-        z[0] = i+dx;
-        z[1] = j+dy;
-        z[2] = k+dz;
-        if (z[0] < 0) z[0] += nx;
-        else if (z[0] > nx-1) z[0] -= nx;
-        if (z[1] < 0) z[1] += ny;
-        else if (z[1] > ny-1) z[1] -= ny;
-        if (z[2] < 0) z[2] += nz;
-        else if (z[2] > nz-1) z[2] -= nz;
+        z[0] = WrapAround(i+dx, nx);
+        z[1] = WrapAround(j+dy, ny);
+        z[2] = WrapAround(k+dz, nz);
         long p = z[2]*(nx*ny)+z[1]*nx+z[0];
         subcell[q*cells_inside+(r++)] = p;
        }
@@ -146,15 +147,9 @@ void LinkedCell::UpdateCell(Configuration & conf)
  {
   const Vector fpos = cell.Fractional(atoms[r].Position());
   //
-  int i = int(floor(nx*fpos[0]));
-  int j = int(floor(ny*fpos[1]));
-  int k = int(floor(nz*fpos[2]));
-  if (i < 0) i += nx;
-  else if (i > nx-1) i -= nx;
-  if (j < 0) j += ny;
-  else if (j > ny-1) j -= ny;
-  if (k < 0) k += nz;
-  else if (k > nz-1) k -= nz;
+  int i = WrapAround(int(floor(nx*fpos[0])), nx);
+  int j = WrapAround(int(floor(ny*fpos[1])), ny);
+  int k = WrapAround(int(floor(nz*fpos[2])), nz);
   long q = k*(nx*ny)+j*nx+i;
   //
   if (head[q] == -1) head[q] = tail[q] = r;
@@ -173,15 +168,9 @@ void LinkedCell::BuildNeighborList(Configuration & conf, long i, NeighborList & 
  BasicCell & cell = conf.Cell();
  const Vector fpos = cell.Fractional(atoms[i].Position());
  //
- int p = int(floor(nx*fpos[0]));
- int q = int(floor(ny*fpos[1]));
- int r = int(floor(nz*fpos[2]));
- if (p < 0) p += nx;
- else if (p > nx-1) p -= nx;
- if (q < 0) q += ny;
- else if (q > ny-1) q -= ny;
- if (r < 0) r += nz;
- else if (r > nz-1) r -= nz;
+ int p = WrapAround(int(floor(nx*fpos[0])), nx);
+ int q = WrapAround(int(floor(ny*fpos[1])), ny);
+ int r = WrapAround(int(floor(nz*fpos[2])), nz);
  long cind = r*(nx*ny)+q*nx+p;
  //
  AtomPair nn;
