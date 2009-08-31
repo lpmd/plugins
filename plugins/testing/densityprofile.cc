@@ -133,13 +133,13 @@ void DensityProfile::Evaluate(lpmd::Configuration & con, lpmd::Potential & pot)
  if (bins == 0) throw lpmd::PluginError("densityprofile", "Error in calculation: Wrong value for \"bins\".");
 
  //Vectores base, celda de simulacion.
- if(range[0][0]==0 && range[0][1]==0) {range[0][0]=0;range[0][1]=(cell[0]).Module();}
- if(range[1][0]==0 && range[1][1]==0) {range[1][0]=0;range[1][1]=(cell[1]).Module();}
- if(range[2][0]==0 && range[2][1]==0) {range[2][0]=0;range[2][1]=(cell[2]).Module();}
+ if(fabs(range[0][0])<1E-5 && fabs(range[0][1])<1E-5) {range[0][0]=0;range[0][1]=(cell[0]).Module();}
+ if(fabs(range[1][0])<1E-5 && fabs(range[1][1])<1E-5) {range[1][0]=0;range[1][1]=(cell[1]).Module();}
+ if(fabs(range[2][0])<1E-5 && fabs(range[2][1])<1E-5) {range[2][0]=0;range[2][1]=(cell[2]).Module();}
 
- if(range[0][0]==range[0][1]) throw lpmd::PluginError("densityprofile", "Error in cell range in axis X.");
- if(range[1][0]==range[1][1]) throw lpmd::PluginError("densityprofile", "Error in cell range in axis Y.");
- if(range[2][0]==range[2][1]) throw lpmd::PluginError("densityprofile", "Error in cell range in axis Z.");
+ if(fabs(range[0][0]-range[0][1])<1E-5) throw lpmd::PluginError("densityprofile", "Error in cell range in axis X.");
+ if(fabs(range[1][0]-range[1][1])<1E-5) throw lpmd::PluginError("densityprofile", "Error in cell range in axis Y.");
+ if(fabs(range[2][0]-range[2][1])<1E-5) throw lpmd::PluginError("densityprofile", "Error in cell range in axis Z.");
 
  lpmd::Vector na = cell[0]; na.Normalize();
  lpmd::Vector nb = cell[1]; nb.Normalize();
@@ -246,8 +246,8 @@ void DensityProfile::Evaluate(lpmd::Configuration & con, lpmd::Potential & pot)
  for(int i=0;i<bins;i++)
  {
   m.Set(0, i, dr*i);
-  m.Set(1, i, counter);
-  for(int j=0;j<(int)(nsp);j++)
+  m.Set(1, i, (double)counter);
+  for(j=0;j<(int)(nsp);j++)
   {
    m.Set(j+2, i, rho[i][j]);
   }

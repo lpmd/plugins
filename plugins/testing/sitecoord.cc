@@ -87,9 +87,9 @@ void SiteCoord::Evaluate(Configuration & con, Potential & pot)
    nneigh++;
    if (indices[nn.j] > i) ubonds++;
   }
-  m.Set(0, i, i);
-  m.Set(1, i, nneigh);
-  m.Set(2, i, ubonds);
+  m.Set(0, i, (double)i);
+  m.Set(1, i, (double)nneigh);
+  m.Set(2, i, (double)ubonds);
  }
 }
 

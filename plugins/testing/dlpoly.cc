@@ -119,8 +119,8 @@ bool DlPolyFormat::ReadCell(std::istream & is, Configuration & con) const
    for (int i=0;i<=fkey;++i)
    {
     getline(is, tmp);
-    std::istringstream vst(tmp);
-    vst >> x >> y >> z;
+    std::istringstream vst2(tmp);
+    vst2 >> x >> y >> z;
     if (i == 0) this_atom.Position() = Vector(x+0.5*cv[0].Module(), y+0.5*cv[1].Module(), z+0.5*cv[2].Module());
     if (i == 1) this_atom.Velocity() = Vector(x, y, z);
     if (i == 2) this_atom.Acceleration() = Vector(x, y, z);
@@ -156,8 +156,8 @@ bool DlPolyFormat::ReadCell(std::istream & is, Configuration & con) const
    for (int i=0;i<=fkey;++i)
    {
     getline(is, tmp);
-    std::istringstream vst(tmp);
-    vst >> x >> y >> z;
+    std::istringstream vst3(tmp);
+    vst3 >> x >> y >> z;
     if (i == 0) this_atom.Position() = Vector(x+0.5*cv[0].Module(), y+0.5*cv[1].Module(), z+0.5*cv[2].Module());
     if (i == 1) this_atom.Velocity() = Vector(x, y, z);
     if (i == 2) this_atom.Acceleration() = Vector(x, y, z);

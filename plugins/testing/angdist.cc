@@ -162,12 +162,12 @@ void AngDist::Evaluate(lpmd::Configuration & con, lpmd::Potential & pot)
   int e3 = ElemNum(loa[2]);
   double rc12 = rcut[loa[0]+"-"+loa[1]];
   double rc23 = rcut[loa[1]+"-"+loa[2]];
-  if(cutoff==0) cutoff = rc12+rc23;
-  for(unsigned long int i=0;i<N;++i)
+  if(fabs(cutoff)<1E-1) cutoff = rc12+rc23;
+  for(unsigned long int j=0;j<N;++j)
   {
-   if (part[i].Z()==e2)
+   if (part[j].Z()==e2)
    {
-    lpmd::NeighborList & nlist = con.Neighbors(i,true,cutoff);
+    lpmd::NeighborList & nlist = con.Neighbors(j,true,cutoff);
     for (long int k=0;k<nlist.Size();++k)
     {
      const lpmd::AtomPair & nn = nlist[k];
@@ -180,8 +180,8 @@ void AngDist::Evaluate(lpmd::Configuration & con, lpmd::Potential & pot)
        {
 	if(mm.j->Z()==e3 && mm.r2 <= rc23*rc23)
 	{
-	 Vector a = cell.Displacement(part[i].Position(), nn.j->Position());
-	 Vector b = cell.Displacement(part[i].Position(), mm.j->Position());
+	 Vector a = cell.Displacement(part[j].Position(), nn.j->Position());
+	 Vector b = cell.Displacement(part[j].Position(), mm.j->Position());
 	 double angle= Angle(a,b);
 	 int ig=(long)floor(nb*(angle/M_PI));
 	 if(nn.j->Z()==mm.j->Z())
@@ -220,7 +220,7 @@ void AngDist::Evaluate(lpmd::Configuration & con, lpmd::Potential & pot)
  for(int i=0;i<nb;i++)
  {
   m.Set(0, i, (double)180*i/nb);
-  for(int j=0;j<(int)(nsp*nsp*nsp);j++)
+  for(j=0;j<(int)(nsp*nsp*nsp);j++)
   {
    m.Set(j+1, i, ang[i][j]);
   }

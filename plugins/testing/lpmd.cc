@@ -334,8 +334,8 @@ bool LPMDFormat::ReadCell(std::istream & is, Configuration & con) const
  {
   if ((*this)["replacecell"] == "true")
   {
-   Cell tmp(atof(words[0].c_str()),atof(words[1].c_str()),atof(words[2].c_str()),atof(words[3].c_str())*M_PI/180,atof(words[4].c_str())*M_PI/180,atof(words[5].c_str())*M_PI/180);
-   for (int q=0;q<3;++q) cell[q] = tmp[q];
+   Cell tmp2(atof(words[0].c_str()),atof(words[1].c_str()),atof(words[2].c_str()),atof(words[3].c_str())*M_PI/180,atof(words[4].c_str())*M_PI/180,atof(words[5].c_str())*M_PI/180);
+   for (int q=0;q<3;++q) cell[q] = tmp2[q];
   }
  }
  else throw PluginError("lpmd", "Error ocurred when reading the base vectors, file \""+readfile+"\", line "+ToString<int>(*linecounter));

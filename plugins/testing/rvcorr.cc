@@ -99,11 +99,11 @@ void RVCorr::Evaluate(Configuration & conf, Potential & pot)
    if(atoms[m].Symbol()==loa[1]) ne2++;
   }
 
-  for(int i=0;i<N;++i)
+  for(int j=0;j<N;++j)
   {
-   if(atoms[i].Symbol()==loa[0])
+   if(atoms[j].Symbol()==loa[0])
    {
-    lpmd::NeighborList & nlist = conf.Neighbors(i,true,rcut);
+    lpmd::NeighborList & nlist = conf.Neighbors(j,true,rcut);
     for(long int k=0; k<nlist.Size();++k)
     {
      const lpmd::AtomPair & nn = nlist[k];
@@ -137,7 +137,7 @@ void RVCorr::Evaluate(Configuration & conf, Potential & pot)
  for(int i=0;i<nb;i++)
  {
   m.Set(0, i, dr*i);
-  for(int j=0;j<(int)(nsp*(nsp+1)/2);j++)
+  for(j=0;j<(int)(nsp*(nsp+1)/2);j++)
   {
    double nu_value = ((fabs(cnt[i][j]) > 1.0E-8) ? (g[i][j]/cnt[i][j]) : 0.0);
    m.Set(j+1, i, nu_value);

@@ -94,11 +94,11 @@ void LocalPressure::Evaluate(Configuration & sim, Potential & pot)
    ind[q] = int(floor(fpos[q]*n[q]));
    if (ind[q] == n[q]) ind[q]--;
   }
-  for (int i=0;i<nlist.Size();++i)
+  for (int j=0;j<nlist.Size();++j)
   {
    try
    {
-    const lpmd::AtomPair & nn = nlist[i];
+    const lpmd::AtomPair & nn = nlist[j];
     int s2 = (nn.j)->Z();
     const PairPotential & ppot = dynamic_cast<const PairPotential &>(p_array.PotentialForElements(s1, s2));
     Vector ff = ppot.pairForce(nn.rij);

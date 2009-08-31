@@ -131,13 +131,13 @@ void TempProfile::Evaluate(Configuration & con, Potential & pot)
  if (bins == 0) throw PluginError("tempprofile", "Error in calculation: Wrong value for \"bins\".");
 
  //Vectores base, celda de simulacion.
- if(range[0][0]==0 && range[0][1]==0) {range[0][0]=0;range[0][1]=cell[0].Module();}
- if(range[1][0]==0 && range[1][1]==0) {range[1][0]=0;range[1][1]=cell[1].Module();}
- if(range[2][0]==0 && range[2][1]==0) {range[2][0]=0;range[2][1]=cell[2].Module();}
+ if(fabs(range[0][0])<1E-5 && fabs(range[0][1])<1E-5) {range[0][0]=0;range[0][1]=cell[0].Module();}
+ if(fabs(range[1][0])<1E-5 && fabs(range[1][1])<1E-5) {range[1][0]=0;range[1][1]=cell[1].Module();}
+ if(fabs(range[2][0])<1E-5 && fabs(range[2][1])<1E-5) {range[2][0]=0;range[2][1]=cell[2].Module();}
 
- if(range[0][0]==range[0][1]) throw PluginError("tempprofile", "Error in cell range in axis X.");
- if(range[1][0]==range[1][1]) throw PluginError("tempprofile", "Error in cell range in axis Y.");
- if(range[2][0]==range[2][1]) throw PluginError("tempprofile", "Error in cell range in axis Z.");
+ if(fabs(range[0][0]-range[0][1])<1E-5) throw PluginError("tempprofile", "Error in cell range in axis X.");
+ if(fabs(range[1][0]-range[1][1])<1E-5) throw PluginError("tempprofile", "Error in cell range in axis Y.");
+ if(fabs(range[2][0]-range[2][1])<1E-5) throw PluginError("tempprofile", "Error in cell range in axis Z.");
 
  Vector na = cell[0]; na.Normalize();
  Vector nb = cell[1]; nb.Normalize();
@@ -181,14 +181,14 @@ void TempProfile::Evaluate(Configuration & con, Potential & pot)
    if(atoms[m].Z()==e) ne++;
   }
   //Comienza la iteracion principal para el calculo.
-  for(long int i=0;i<N;++i)
+  for(long int j=0;j<N;++j)
   {
-   if(atoms[i].Z()==e)
+   if(atoms[j].Z()==e)
    {
     //vemos la ubicacion atomica respecto a nuestra "rejilla".
-    lpmd::Vector position = atoms[i].Position();
-    lpmd::Vector velocity = atoms[i].Velocity();
-    double m = atoms[i].Mass();
+    lpmd::Vector position = atoms[j].Position();
+    lpmd::Vector velocity = atoms[j].Velocity();
+    double m = atoms[j].Mass();
     double x = position[0];
     double y = position[1];
     double z = position[2];
@@ -215,9 +215,9 @@ void TempProfile::Evaluate(Configuration & con, Potential & pot)
   }
   //Reasigna el verdadero valor de tempratura, segun la cantidad de atomos de la especie considerada 
   //en cada bins (nab).
-  for(int i=0;i<bins;i++)
+  for(int j=0;j<bins;j++)
   {
-   temp[i][s] = ((2.0/3.0)*temp[i][s])/(kboltzmann*double(nab[i]));
+   temp[j][s] = ((2.0/3.0)*temp[j][s])/(kboltzmann*double(nab[j]));
   }
   s++;
  }
@@ -225,9 +225,9 @@ void TempProfile::Evaluate(Configuration & con, Potential & pot)
  int j=0;
  for(int i=0;i<elements.Size();++i)
  {
-  for(int i=0;i<bins;i++)
+  for(int k=0;k<bins;k++)
   {
-   tempt[i] += temp[i][j];
+   tempt[k] += temp[k][j];
   }
   j++;
  }
@@ -251,8 +251,8 @@ void TempProfile::Evaluate(Configuration & con, Potential & pot)
  for(int i=0;i<bins;i++)
  {
   m.Set(0, i, dr*i);
-  m.Set(1, i, counter);
-  for(int j=0;j<(int)(nsp);j++)
+  m.Set(1, i, (double)counter);
+  for(j=0;j<(int)(nsp);j++)
   {
    m.Set(j+2, i, temp[i][j]);
   }

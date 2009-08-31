@@ -105,13 +105,13 @@ void CordNumFunc::Evaluate(lpmd::Configuration & con, Potential & pot)
   int e2 = ElemNum(loa[1]); 
   //Cuenta los atomos de la especie 1.
   int ne1=0;
-  for (unsigned long int i=0;i<N;i++) {if (atoms[i].Z()==e1) ne1++;}
+  for (unsigned long int j=0;j<N;j++) {if (atoms[j].Z()==e1) ne1++;}
   //Comienzan las iteraciones.
-  for (unsigned long int i=0;i<N;i++)
+  for (unsigned long int j=0;j<N;j++)
   {
-   if(atoms[i].Z()==e1)
+   if(atoms[j].Z()==e1)
    {
-    lpmd::NeighborList & nlist = con.Neighbors(i,true,rcut);
+    lpmd::NeighborList & nlist = con.Neighbors(j,true,rcut);
     for(long int k=0;k<nlist.Size();++k)
     {
      const lpmd::AtomPair & nn = nlist[k];
@@ -126,11 +126,11 @@ void CordNumFunc::Evaluate(lpmd::Configuration & con, Potential & pot)
     }
    }
   }
-  for(int i=0;i<nb;++i)
+  for(int k=0;k<nb;++k)
   {
-   for(int j=0;j<i;j++)
+   for(int j=0;j<k;j++)
    {
-    cnfun[s][i]+=(histo[s][j]/ne1);
+    cnfun[s][k]+=(histo[s][j]/ne1);
    }
   }
   s++;
@@ -154,7 +154,7 @@ void CordNumFunc::Evaluate(lpmd::Configuration & con, Potential & pot)
  for(int i=0;i<nb;i++)
  {
   m.Set(0, i, k);
-  for(int j=0;j<(int)(nsp*nsp);j++)
+  for(j=0;j<(int)(nsp*nsp);j++)
   {
    m.Set(j+1, i, cnfun[j][i]);
   }

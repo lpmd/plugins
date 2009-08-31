@@ -93,11 +93,11 @@ void AtomTrail::Evaluate(Configuration & conf, Potential & pot)
  else throw PluginError("atomtrail", "Unknown mode, "+mode);
 
  long int cnt = 0;
- for (long int i=0;i<atoms.Size();++i)
+ for (long int a=0;a<atoms.Size();++a)
  {
-  if ((species == "all") || (species == atoms[i].Symbol()))
+  if ((species == "all") || (species == atoms[a].Symbol()))
   {
-   Vector fpos = cell.Fractional(atoms[i].Position());
+   Vector fpos = cell.Fractional(atoms[a].Position());
    if (mode == "2D")
    {
     int i = int(floor((ny-1)*fpos[pl2]));

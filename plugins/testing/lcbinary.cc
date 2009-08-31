@@ -196,7 +196,7 @@ void LCBinary::BuildNeighborList(Configuration & conf, long i, NeighborList & nl
  nn.i = &atoms[i];
  int * c=0;long z=0;
  c = &(subcell[cind*cells_inside]);
- for (int q=0;q<cells_inside;++q)
+ for (int s=0;s<cells_inside;++s)
  {
   z = atomlist[*(c++)];
   if ((z < 0) || (z == i)) continue;

@@ -71,7 +71,7 @@ void RotateModifier::Apply(Configuration & conf)
   for (int j=0;j<3;++j)
   {
    rv[j] = 0.0;
-   for (int i=0;i<3;++i) rv[j] += rotmat[j][i]*pos[i];
+   for (int k=0;k<3;++k) rv[j] += rotmat[j][k]*pos[k];
    pos[j] = rv[j];
   }
   atoms[i].Position() = cell.FittedInside(pos+center);

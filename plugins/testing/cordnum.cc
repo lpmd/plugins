@@ -160,14 +160,14 @@ void CordNum::Evaluate(Configuration & con, Potential & pot)
   double rc12 = rcut[loa[0]+"-"+loa[1]];
   //Cuenta los atomos de la especie 1.
   int ne1=0;
-  for (unsigned long int i=0;i<N;++i) {if(atoms[i].Z()==e1) ne1++;}
+  for (unsigned long int k=0;k<N;++k) {if(atoms[k].Z()==e1) ne1++;}
   //Comienzan las iteraciones.
-  if (cutoff == 0) cutoff = rc12*2;
-  for (unsigned long int i=0;i<N;++i)
+  if (fabs(cutoff)<1e-1) cutoff = rc12*2;
+  for (unsigned long int j=0;j<N;++j)
   {
-   if(atoms[i].Z()==e1)
+   if(atoms[j].Z()==e1)
    {
-    lpmd::NeighborList & nlist = con.Neighbors(i,true,cutoff);
+    lpmd::NeighborList & nlist = con.Neighbors(j,true,cutoff);
     for(long int k=0;k<nlist.Size();++k)
     {
      const lpmd::AtomPair & nn = nlist[k];
@@ -175,25 +175,25 @@ void CordNum::Evaluate(Configuration & con, Potential & pot)
      {
       if(nn.r2<=rc12*rc12)
       {
-       histo[s][i]++;
+       histo[s][j]++;
       }
      }
     }
    }
   }
-  for (unsigned long int i=0;i<N;i++)
+  for (unsigned long int j=0;j<N;j++)
   {
-   if(atoms[i].Z()==e1 && histo[s][i]<nb)
+   if(atoms[j].Z()==e1 && histo[s][j]<nb)
    {
-    cnfun[s][histo[s][i]]++;
+    cnfun[s][histo[s][j]]++;
    }
-   histo[s][i]=0;
+   histo[s][j]=0;
   }
   double distp=0.0e0;
-  for(int i=0;i<nb;i++)
+  for(int j=0;j<nb;j++)
   {
-   distp+=i*cnfun[s][i];
-   cnfun[s][i]=(cnfun[s][i]/ne1);
+   distp+=j*cnfun[s][j];
+   cnfun[s][j]=(cnfun[s][j]/ne1);
   }
   s++;
  }
@@ -214,7 +214,7 @@ void CordNum::Evaluate(Configuration & con, Potential & pot)
  for(int i=0;i<nb;i++)
  {
   m.Set(0, i, i);
-  for(int j=0;j<(int)(nsp*nsp);j++)
+  for(j=0;j<(int)(nsp*nsp);j++)
   {
    m.Set(j+1, i, cnfun[j][i]);
   }

@@ -204,10 +204,10 @@ void CommonNeighborAnalysis::Evaluate(Configuration & conf, Potential & pot)
     std::vector<long int> longest;
     for (unsigned int p=0;p<cna_indices[0];++p)
     {
-     std::vector<long int> tmp, n;
+     std::vector<long int> tmp, nt;
      tmp.push_back(cnm[p]);
-     n = AddSegmentToChain(cnm, bonds, tmp, longest);
-     if (n.size() > longest.size()) longest = n;
+     nt = AddSegmentToChain(cnm, bonds, tmp, longest);
+     if (nt.size() > longest.size()) longest = nt;
     }
     cna_indices[2] = longest.size()-1;
    }
@@ -326,8 +326,8 @@ void CommonNeighborAnalysis::Evaluate(Configuration & conf, Potential & pot)
   {
    const Vector & pos = atoms[q].Position();
    for (int pp=0;pp<3;++pp) m->Set(pp, q, pos[pp]);
-   m->Set(3, q, regcnt[q]);
-   m->Set(4, q, defcnt[q]);
+   m->Set(3, q, (double)regcnt[q]);
+   m->Set(4, q, (double)defcnt[q]);
    m->Set(5, q, 100.0*defcnt[q]/(regcnt[q]+defcnt[q]));
   }
   delete [] regcnt;
