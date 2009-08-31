@@ -98,10 +98,19 @@ double Gupta::deltaU1(const double &rhobar, const int &N) const
 
 double Gupta::deltaU2(const double &rhobar, const int &N, const double &rhoi) const
 {
+ assert(&rhobar != 0);//icc869
+ assert(&N != 0);//icc 869
+ assert(&rhoi !=0);//icc 869
  return 0.0e0;
 }
 
-double Gupta::VirialContribution(const double &r, const double &rhoi, const double &rhoj) const { return 0.0; }
+double Gupta::VirialContribution(const double &r, const double &rhoi, const double &rhoj) const 
+{ 
+ assert(&r != 0); // icc 869
+ assert(&rhoi != 0);//icc 869
+ assert(&rhoj != 0);//icc 869
+ return 0.0; 
+}
 
 double Gupta::VirialCorrection(const double &rhobar, const int &N, const double &rhoi) const
 {

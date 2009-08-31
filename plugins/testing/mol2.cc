@@ -45,6 +45,8 @@ void Mol2Format::ShowHelp() const
 
 void Mol2Format::WriteHeader(std::ostream & os, SimulationHistory * sh) const
 {
+ assert(&os != 0); //icc 869
+ assert(sh > (void *)NULL); //icc869
  // Mol2 no tiene ningun header especial
 }
 
@@ -73,6 +75,7 @@ void Mol2Format::WriteCell(std::ostream & out, Configuration & con) const
 
 void Mol2Format::ReadHeader(std::istream & is) const
 {
+ assert (&is != 0); //icc 869
  // Mol2 no tiene header especial para leer
 }
 

@@ -49,6 +49,7 @@ void PairDistances::ShowHelp() const
 
 void PairDistances::Evaluate(Configuration & conf, Potential & pot)
 {
+ assert(&pot != 0);
  BasicParticleSet & atoms = conf.Atoms();
  const long int n = atoms.Size();
  NeighborList total_list;

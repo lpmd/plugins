@@ -30,9 +30,9 @@ void NullPotential::ShowHelp() const
  std::cout << "      De esta forma activa el potencial nulo entre Ar y Kr.                    \n";
 }
 
-double NullPotential::energy(Configuration & conf) { return 0.0; }
+double NullPotential::energy(Configuration & conf) {assert(&conf != 0); return 0.0; }//icc 869
 
-void NullPotential::UpdateForces(Configuration & conf) { }
+void NullPotential::UpdateForces(Configuration & conf) { assert(&conf != 0); }//icc 869
 
 // Esto se incluye para que el modulo pueda ser cargado dinamicamente
 Plugin * create(std::string args) { return new NullPotential(args); }

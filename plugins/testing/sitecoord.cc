@@ -58,6 +58,7 @@ void SiteCoord::ShowHelp() const
 
 void SiteCoord::Evaluate(Configuration & con, Potential & pot)
 {
+ assert(&pot != 0);
  BasicParticleSet & atoms = con.Atoms();
  const long int natoms = atoms.Size();
  Matrix & m = CurrentValue();

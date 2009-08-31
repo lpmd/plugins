@@ -27,6 +27,7 @@ void NullMixer::ShowHelp() const
 
 Configuration & NullMixer::Apply(Configuration & config1, Configuration & config2)
 {
+ assert(&config2 != 0); //icc 869
  return config1;
 }
 

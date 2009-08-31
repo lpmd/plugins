@@ -66,6 +66,7 @@ void CordNumFunc::ShowHelp() const
 
 void CordNumFunc::Evaluate(lpmd::Configuration & con, Potential & pot)
 {
+ assert(&pot != 0);//icc 869
  lpmd::BasicParticleSet & atoms = con.Atoms();
  lpmd::Array <int> esp = atoms.Elements();
  if (nb <= 0 || atoms.Size() <=0) throw PluginError("cordnumfunc", "Error in calculation.");

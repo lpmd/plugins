@@ -42,7 +42,7 @@ void VelocityVerlet::ShowHelp() const
  std::cout << " simulacion.                                                                   \n";
 }
 
-void VelocityVerlet::Initialize(Simulation & sim, Potential & p) { UseOldConfig(sim); }
+void VelocityVerlet::Initialize(Simulation & sim, Potential & p) { assert(&p != 0); UseOldConfig(sim); }
 
 void VelocityVerlet::AdvancePosition(Simulation & sim, long i)
 {

@@ -57,7 +57,7 @@ void VaspFormat::ShowHelp() const
  std::cout << " en el caso de la salida, es necesaria la opcion each.                         \n";
 }
 
-void VaspFormat::ReadHeader(std::istream & is) const { }
+void VaspFormat::ReadHeader(std::istream & is) const { assert(&is != 0);}//icc 869
 
 // 
 // Lee una configuracion desde un archivo CONFIG 
@@ -147,6 +147,8 @@ bool VaspFormat::ReadCell(std::istream & is, Configuration & con) const
 
 void VaspFormat::WriteHeader(std::ostream & os, SimulationHistory * sh) const
 {
+ assert(&os != 0); //icc 869
+ assert(sh > (void *)NULL); //icc 869
 }
 
 void VaspFormat::WriteCell(std::ostream & out, Configuration & con) const

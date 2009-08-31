@@ -28,9 +28,9 @@ void NullPairPotential::ShowHelp() const
  std::cout << "      De esta forma activa el potencial de pares nulos entre Ar y Kr.          \n";
 }
 
-double NullPairPotential::pairEnergy(const double & r) const { return 0.0; }
+double NullPairPotential::pairEnergy(const double & r) const {assert(&r != 0); return 0.0; }//icc 869
 
-Vector NullPairPotential::pairForce(const Vector & r) const { return Vector(); }
+Vector NullPairPotential::pairForce(const Vector & r) const {assert(&r != 0); return Vector(); }//icc 869
 
 // Esto se incluye para que el modulo pueda ser cargado dinamicamente
 Plugin * create(std::string args) { return new NullPairPotential(args); }

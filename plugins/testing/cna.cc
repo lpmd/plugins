@@ -133,6 +133,7 @@ std::vector<long int> AddSegmentToChain(std::vector<long int> & cnm, std::map<lo
 
 void CommonNeighborAnalysis::Evaluate(Configuration & conf, Potential & pot)
 {
+ assert(&pot != 0);//icc869
  BasicParticleSet & atoms = conf.Atoms();
  BasicCell & cell = conf.Cell();
  const long n = atoms.Size();

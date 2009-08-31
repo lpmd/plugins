@@ -59,6 +59,7 @@ double Foverlap(double r0, double r)
 
 void Overlap::Evaluate(Configuration & conf, Potential & pot)
 {
+ assert(&pot != 0); //icc 869
  BasicParticleSet & atoms = conf.Atoms();
  const long int n = atoms.Size();
  NeighborList * nlistarray = new NeighborList[n];

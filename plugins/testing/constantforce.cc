@@ -42,7 +42,7 @@ void ConstantForcePotential::ShowHelp() const
  std::cout << " atomos de Argon.                                                              \n";
 }
 
-double ConstantForcePotential::energy(Configuration & con) { return 0.0; }
+double ConstantForcePotential::energy(Configuration & con) {assert(&con != 0); return 0.0; }//icc 869
 
 void ConstantForcePotential::UpdateForces(Configuration & con) 
 { 

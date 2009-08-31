@@ -51,7 +51,7 @@ void OsciForcePotential::ShowHelp() const
  std::cout << " atomos de Argon.                                                              \n";
 }
 
-double OsciForcePotential::energy(Configuration & con) { return 0.0; }
+double OsciForcePotential::energy(Configuration & con) {assert(&con != 0); return 0.0; }//icc869
 
 void OsciForcePotential::UpdateForces(Configuration & con) 
 { 

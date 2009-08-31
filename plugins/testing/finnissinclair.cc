@@ -86,9 +86,25 @@ Vector FinnisSinclair::ManyBodies(const Vector &normrij, const double &invrhoi, 
 }
 
 // No longer-ranged corrections apply beyond cutoffs c and d (neither for deltarhoi, for deltaU1, for deltaU2 nor for virial)
-double FinnisSinclair::deltarhoi(const double &rhobar, const int &N) const{	return 0.0;}
-double FinnisSinclair::deltaU1(const double &rhobar, const int &N) const{	return 0.0;}
-double FinnisSinclair::deltaU2(const double &rhobar, const int &N, const double &rhoi) const { return 0.0; }
+double FinnisSinclair::deltarhoi(const double &rhobar, const int &N) const
+{
+ assert(&rhobar != 0);//icc 869
+ assert(&N != 0);//icc 869
+ return 0.0;
+}
+double FinnisSinclair::deltaU1(const double &rhobar, const int &N) const
+{
+ assert(&rhobar != 0);//icc 869
+ assert(&N != 0);//icc 869
+ return 0.0;
+}
+double FinnisSinclair::deltaU2(const double &rhobar, const int &N, const double &rhoi) const 
+{
+ assert(&rhobar != 0);//icc869
+ assert(&N != 0);//icc 869
+ assert(&rhoi != 0);//icc 869 
+ return 0.0; 
+}
 
 // Esto se incluye para que el modulo pueda ser cargado dinámicamente
 Plugin * create(std::string args) {return new FinnisSinclair(args);}

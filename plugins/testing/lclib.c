@@ -121,6 +121,8 @@ unsigned long int LC_NumberOfAtomsInCell(LinkedCell * lc, unsigned int ci)
 
 long int * LC_GetMINeighbors(LinkedCell * lc, unsigned long int n, double rcut, unsigned long int natoms, double * pos, double * box)
 {
+ assert(box > (void *)NULL);
+ assert(&lc != 0); //icc 869
  int i, nn=0;
  int enn = (int)((4.0/3.0)*3.141592653589793*pow(2.0*rcut, 3.0)/(lc->atomvol));
  long int * nlist = (long int *)(malloc(2*enn*sizeof(long int)));
@@ -173,6 +175,7 @@ inline double Distance2(int n, double * dr, double * da, long int * atom, double
 
 inline int ProcessInterAtom(int n, NeighborInfo * nlist, LinkedCell * lc, int * nn, long int * atom, double * dr, double rr2, double rcut)
 {
+ assert(&lc != 0); // icc 869
  if ((n == *atom) && (rr2 < 1.0E-08)) return 0;
  else
  {

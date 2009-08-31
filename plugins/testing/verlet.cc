@@ -42,7 +42,7 @@ void Verlet::ShowHelp() const
  std::cout << " simulacion.                                                                   \n";
 }
 
-void Verlet::Initialize(Simulation & sim, Potential & p) { UseOldConfig(sim); }
+void Verlet::Initialize(Simulation & sim, Potential & p) { assert(&p != 0); UseOldConfig(sim); }
 
 void Verlet::Advance(Simulation & sim, long i)
 {

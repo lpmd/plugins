@@ -60,6 +60,7 @@ void RVCorr::ShowHelp() const
 
 void RVCorr::Evaluate(Configuration & conf, Potential & pot)
 {
+ assert(&pot != 0); //icc 869
  lpmd::BasicParticleSet & atoms = conf.Atoms();
 
  double dr = rcut/ double(nb);

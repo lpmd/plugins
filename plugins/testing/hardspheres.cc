@@ -41,7 +41,7 @@ void HardSpheres::ShowHelp() const
  std::cout << " simulacion.                                                                   \n";
 }
 
-void HardSpheres::Initialize(Simulation & sim, Potential & p) { UseOldConfig(sim); }
+void HardSpheres::Initialize(Simulation & sim, Potential & p) { assert(&p != 0); UseOldConfig(sim); }//icc 869
 
 void HardSpheres::Advance(Simulation & sim, long i)
 {

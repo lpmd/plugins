@@ -53,7 +53,7 @@ void LocalPressure::Evaluate(Configuration & sim, Potential & pot)
 { 
  CombinedPotential * p_array_ptr = 0;
  try { p_array_ptr = dynamic_cast<CombinedPotential *>(&pot); }
- catch (std::exception & e) { throw PluginError("localpressure", "Potentials are not active, cannot compute individual stress tensors"); }
+ catch (std::exception & ) { throw PluginError("localpressure", "Potentials are not active, cannot compute individual stress tensors"); }
  CombinedPotential & p_array = *p_array_ptr;
  lpmd::BasicParticleSet & atoms = sim.Atoms();
  lpmd::BasicCell & cell = sim.Cell();
@@ -105,7 +105,7 @@ void LocalPressure::Evaluate(Configuration & sim, Potential & pot)
     for (int p=0;p<3;++p)
      for (int q=0;q<3;++q) stress[p][q] -= (nn.rij)[p]*ff[q];
    }
-   catch (std::exception &e) { throw PluginError("localpressure", "Cannot calculate local stress with a non-pair potential."); }
+   catch (std::exception &) { throw PluginError("localpressure", "Cannot calculate local stress with a non-pair potential."); }
   }
   int k = ind[0]+n[0]*ind[1]+n[0]*n[1]*ind[2];
   const double pressfactor = double(GlobalSession["pressfactor"]);

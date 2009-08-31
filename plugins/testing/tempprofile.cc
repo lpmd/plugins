@@ -125,6 +125,7 @@ void TempProfile::ShowHelp() const
 
 void TempProfile::Evaluate(Configuration & con, Potential & pot)
 {
+ assert(&pot != 0); // icc 869
  lpmd::BasicParticleSet & atoms = con.Atoms();
  lpmd::BasicCell & cell = con.Cell();
  lpmd::Array<int> elements = atoms.Elements();

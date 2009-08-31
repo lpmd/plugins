@@ -38,6 +38,7 @@ DispVol::~DispVol() { if (m != NULL) delete m; }
 
 void DispVol::Evaluate(lpmd::ConfigurationSet & hist, Potential & pot)
 {
+ assert(&pot != 0);//icc869
  int N = hist.Size();
  int nat = (hist[0].Atoms()).Size();
 

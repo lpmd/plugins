@@ -121,6 +121,7 @@ void CordNum::ShowHelp() const
 
 void CordNum::Evaluate(Configuration & con, Potential & pot)
 {
+ assert(&pot != 0);//icc 869
  lpmd::BasicParticleSet & atoms = con.Atoms();
  lpmd::Array <int> esp = atoms.Elements();
  if (nb <= 0 || na <=0) throw PluginError("cordnum", "Error in coordination number calculation.");

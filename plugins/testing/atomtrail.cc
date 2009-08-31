@@ -65,6 +65,7 @@ void AtomTrail::ShowHelp() const
 
 void AtomTrail::Evaluate(Configuration & conf, Potential & pot)
 {
+ assert(&pot != 0);//icc 869
  BasicParticleSet & atoms = conf.Atoms();
  BasicCell & cell = conf.Cell();
  int pl1 = -1, pl2 = -1;

@@ -201,6 +201,7 @@ bool ZLPFormat::ReadCell(std::istream & is, Configuration & conf) const
 
 void ZLPFormat::WriteHeader(std::ostream & os, SimulationHistory * cells) const
 {
+ assert (&cells != 0); //icc 869
  char hdr[10] = {'Z', '4', 'L', '2', 'P', 1, 0, 0, 0, 0};
  // Z4L2P es la firma que marca el archivo como formato ZLP
  // los tres bytes siguientes son los numeros de version del formato

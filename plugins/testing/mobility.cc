@@ -25,6 +25,7 @@ Mobility::~Mobility() { }
 
 void Mobility::Evaluate(ConfigurationSet & hist, Potential & pot)
 {
+ assert(&pot != 0);//icc 869
  long int N = hist.Size(); // number of configurations, not number of atoms
  DebugStream() << "-> Computing MSD over " << N << " configurations\n";
  long int nat = hist[0].Atoms().Size(); // number of atoms

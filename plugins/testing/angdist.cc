@@ -124,6 +124,7 @@ void AngDist::ShowHelp() const
 
 void AngDist::Evaluate(lpmd::Configuration & con, lpmd::Potential & pot)
 {
+ assert(&pot != 0);//icc 869
  lpmd::BasicParticleSet & part = con.Atoms();
  lpmd::BasicCell & cell = con.Cell();
  if (nb <= 0 ||  na <=0) throw PluginError("angdist", "Error with angular distribution calculation.");

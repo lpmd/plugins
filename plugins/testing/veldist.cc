@@ -51,6 +51,7 @@ void VelDist::ShowHelp() const
 
 void VelDist::Evaluate(Configuration & conf, Potential & pot)
 {
+ assert(&pot != 0);
  //
  // Primero determina los valores extremos
  // 

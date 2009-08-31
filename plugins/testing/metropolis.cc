@@ -48,7 +48,7 @@ void Metropolis::ShowHelp() const
  std::cout << " simulacion.                                                                   \n";
 }
 
-void Metropolis::Initialize(Simulation & sim, Potential & p) { UseOldConfig(sim); }
+void Metropolis::Initialize(Simulation & sim, Potential & p) { assert(&p != 0); UseOldConfig(sim); }//icc 869
 
 void Metropolis::Advance(Simulation & sim, long i)
 {
