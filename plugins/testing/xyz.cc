@@ -157,7 +157,7 @@ bool XYZFormat::ReadCell(std::istream & is, Configuration & sc) const
 void XYZFormat::WriteHeader(std::ostream & os, SimulationHistory * sh) const
 {
  assert(&os != 0); //icc 869
- assert(sh > (void *)NULL);
+ assert(sh >= (void *)NULL); //icc 869
  //assert(&sh != 0); //icc 869
  // El formato XYZ no tiene ningun header especial
 }
