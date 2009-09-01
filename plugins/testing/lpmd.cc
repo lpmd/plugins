@@ -390,7 +390,7 @@ bool LPMDFormat::ReadCell(std::istream & is, Configuration & con) const
 
 void LPMDFormat::WriteHeader(std::ostream & os, SimulationHistory * sh) const
 {
- assert (sh > (void *)NULL); //icc 869
+ assert (sh >= (void *)NULL); //icc 869
  os << "LPMD 2.0 ";
  if (type == "zlp")
  {

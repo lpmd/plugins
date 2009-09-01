@@ -44,7 +44,7 @@ void PDBFormat::ShowHelp() const
 void PDBFormat::WriteHeader(std::ostream & os, SimulationHistory * sh) const
 {
  assert(&os != 0); //icc 869
- assert(sh > (void *)NULL); //icc 869
+ assert(sh >= (void *)NULL); //icc 869
  // PDB no tiene ningun header especial
 }
 

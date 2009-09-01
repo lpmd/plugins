@@ -100,7 +100,7 @@ bool RawBinFormat::ReadCell(std::istream & is, Configuration & con) const
 void RawBinFormat::WriteHeader(std::ostream & os, lpmd::SimulationHistory * sh) const
 {
  assert (&os != 0); //icc 869
- assert (sh >(void *)NULL); //icc 869
+ assert (sh >=(void *)NULL); //icc 869
  // El formato RawBinary no tiene ningun header especial
 }
 

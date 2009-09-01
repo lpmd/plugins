@@ -148,7 +148,7 @@ bool VaspFormat::ReadCell(std::istream & is, Configuration & con) const
 void VaspFormat::WriteHeader(std::ostream & os, SimulationHistory * sh) const
 {
  assert(&os != 0); //icc 869
- assert(sh > (void *)NULL); //icc 869
+ assert(sh >= (void *)NULL); //icc 869
 }
 
 void VaspFormat::WriteCell(std::ostream & out, Configuration & con) const

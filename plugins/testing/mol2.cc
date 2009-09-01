@@ -46,7 +46,7 @@ void Mol2Format::ShowHelp() const
 void Mol2Format::WriteHeader(std::ostream & os, SimulationHistory * sh) const
 {
  assert(&os != 0); //icc 869
- assert(sh > (void *)NULL); //icc869
+ assert(sh >= (void *)NULL); //icc869
  // Mol2 no tiene ningun header especial
 }
 
