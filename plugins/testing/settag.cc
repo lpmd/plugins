@@ -43,6 +43,7 @@ void SetTagModifier::ShowHelp() const
 void SetTagModifier::Apply(Simulation & sim)
 {
  BasicParticleSet & atoms = sim.Atoms();
+ if (tag == "") throw PluginError("settag", "The tag to be set was not specified.");
  DebugStream() << "-> Applying tag " << tag << " with value " << value << " to " << atoms.Size() << " atoms\n";  
  BasicParticleSet & orig_atoms = sim.OriginalAtoms();
  for (long int i=0;i<atoms.Size();++i)
