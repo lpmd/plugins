@@ -560,6 +560,13 @@ directory .
        pkgconfig += liblpmd-2.0
     end
 
+    module varstep.so
+       language = c++
+       sources = varstep.cc
+       installpath = lib/lpmd
+       pkgconfig += liblpmd-2.0
+    end
+
     module vasp.so
        language = c++
        sources = vasp.cc
