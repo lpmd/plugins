@@ -12,19 +12,7 @@ language c++
    flags = -g -O3 -ffast-math -funroll-all-loops -Wall -pedantic 
 end
 
-language c
-   flags = -g -O3 -ffast-math -funroll-all-loops -Wall -pedantic -std=c99
-end
-
 directory .
-
-    staticlibrary lclib
-       language = c
-       sources = lclib.c
-       flags += -fPIC
-       flags += -fPIC
-       openmp = false
-    end
 
     module addvelocity.so
        language = c++
