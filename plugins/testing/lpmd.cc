@@ -22,6 +22,7 @@ using namespace lpmd;
 
 LPMDFormat::LPMDFormat(std::string args): Plugin("lpmd", "2.0")
 {
+ v0 = 0;
  hdr.Clear();
  ParamList & params = (*this);
  //
