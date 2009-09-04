@@ -250,7 +250,6 @@ directory .
        sources = localpressure.cc
        installpath = lib/lpmd
        pkgconfig += liblpmd-2.0
-       libraries += lclib.a
     end
 
     module lpmd.so
