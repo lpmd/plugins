@@ -194,6 +194,7 @@ void LCBinary::BuildNeighborList(Configuration & conf, long i, NeighborList & nl
  AtomPair nn;
  nlist.Clear();
  nn.i = &atoms[i];
+ nn.i_index = i;
  int * c=0;long z=0;
  c = &(subcell[cind*cells_inside]);
  for (int s=0;s<cells_inside;++s)
@@ -204,6 +205,7 @@ void LCBinary::BuildNeighborList(Configuration & conf, long i, NeighborList & nl
   nn.j = &atoms[z];
   nn.rij = cell.Displacement(nn.i->Position(), nn.j->Position());
   nn.r2 = nn.rij.SquareModule();
+  nn.j_index = z ;
   if (nn.r2 < rcut*rcut) { nlist.Append(nn); nwin += 1.0; }
   else { nfail += 1.0; }
  }

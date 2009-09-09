@@ -50,6 +50,7 @@ void MinimumImageCellManager::BuildNeighborList(Configuration & conf, long i, Ne
  nlist.Clear();
  AtomPair nn;
  nn.i = &atoms[i];
+ nn.i_index = i;
  const Vector & ipos = atoms[i].Position(); 
  if (full)
  {
@@ -59,6 +60,7 @@ void MinimumImageCellManager::BuildNeighborList(Configuration & conf, long i, Ne
     nn.j = &(atoms[j]);
     nn.rij = cell.Displacement(ipos, nn.j->Position());
     nn.r2 = nn.rij.SquareModule();
+    nn.j_index = j;
     if (nn.r2 < rcu*rcu) nlist.Append(nn);
    }
  }
@@ -69,6 +71,7 @@ void MinimumImageCellManager::BuildNeighborList(Configuration & conf, long i, Ne
    nn.j = &(atoms[j]);
    nn.rij = cell.Displacement(ipos, nn.j->Position());
    nn.r2 = nn.rij.SquareModule();
+   nn.j_index = j;
    if (nn.r2 < rcu*rcu) nlist.Append(nn);
   }
  }

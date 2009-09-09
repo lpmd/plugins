@@ -13,7 +13,7 @@ inline int WrapAround(int i, int n)
  return i;
 }
 
-LinkedCell::LinkedCell(std::string args): Plugin("lc3", "1.0")
+LinkedCell::LinkedCell(std::string args): Plugin("linkedcell", "1.0")
 { 
  ParamList & params = (*this);
  DefineKeyword("cutoff", "7.0");
@@ -67,7 +67,7 @@ void LinkedCell::UpdateCell(Configuration & conf)
   {
    double previo = fabs(minx/n - fnn);
    n++;
-   double actual = fabs(minx/n-fnn);
+   double actual = fabs(minx/n - fnn);
    if (actual<1E-3) break;
    else if (actual>previo) {n--;break;}
    else continue;
@@ -143,6 +143,9 @@ void LinkedCell::UpdateCell(Configuration & conf)
 
  //
  for (long q=0;q<nx*ny*nz;++q) head[q] = tail[q] = -1;
+#ifdef _OPENMP
+#pragma omp parallel for
+#endif
  for (long r=0;r<atoms.Size();++r)
  {
   const Vector fpos = cell.Fractional(atoms[r].Position());
@@ -176,6 +179,7 @@ void LinkedCell::BuildNeighborList(Configuration & conf, long i, NeighborList & 
  AtomPair nn;
  nlist.Clear();
  nn.i = &atoms[i];
+ nn.i_index = i;
  for (int c=0;c<cells_inside;++c)
  {
   int neighbor_cell = subcell[cind*cells_inside+c];
@@ -186,6 +190,7 @@ void LinkedCell::BuildNeighborList(Configuration & conf, long i, NeighborList & 
    nn.j = &atoms[z];
    nn.rij = cell.Displacement(nn.i->Position(), nn.j->Position());
    nn.r2 = nn.rij.SquareModule();
+   nn.j_index = z;
    if (nn.r2 < rcut*rcut) nlist.Append(nn);
   }
  }
