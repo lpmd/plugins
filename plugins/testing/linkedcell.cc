@@ -143,9 +143,6 @@ void LinkedCell::UpdateCell(Configuration & conf)
 
  //
  for (long q=0;q<nx*ny*nz;++q) head[q] = tail[q] = -1;
-#ifdef _OPENMP
-#pragma omp parallel for
-#endif
  for (long r=0;r<atoms.Size();++r)
  {
   const Vector fpos = cell.Fractional(atoms[r].Position());
