@@ -240,7 +240,7 @@ void DensityProfile::Evaluate(lpmd::Configuration & con, lpmd::Potential & pot)
  j=2;
  for (int i=0;i<elements.Size();++i)
  {
-  m.SetLabel(j, elements[i]+" rho(r)");
+  m.SetLabel(j, ElemSym[elements[i]]+" rho(r)");
   j++;
  }
  // 
