@@ -10,7 +10,7 @@
 
 #include <lpmd/vector.h>
 
-class Ewald: public lpmd::Potential, public lpmd::Module
+class Ewald: public lpmd::Potential, public lpmd::Plugin
 {
  public:
   //Metodos Generales
@@ -19,8 +19,8 @@ class Ewald: public lpmd::Potential, public lpmd::Module
   void ShowHelp() const;
 
   //Metodos Proopios de modulo ewald
-  double energy(lpmd::SimulationCell & sc);
-  void UpdateForces(lpmd::SimulationCell & sc);
+  double energy(lpmd::Configuration & conf);
+  void UpdateForces(lpmd::Configuration & conf);
 
  private:
    int kmax;
@@ -28,11 +28,11 @@ class Ewald: public lpmd::Potential, public lpmd::Module
    double alpha, etol, rcut, kcut;
    std::vector<lpmd::Vector> * kpoints;
    //
-   void BuildKPointMesh(lpmd::SimulationCell & sc);
-   void RealSpace(lpmd::SimulationCell & sc, lpmd::Vector * forces, double & e);
-   void ReciprocalSpace(lpmd::SimulationCell & sc, lpmd::Vector * forces, double & e);
-   void SurfaceDipole(lpmd::SimulationCell & sc, lpmd::Vector * forces, double & e);
-   double EnergyConstantCorrection(lpmd::SimulationCell & sc);
+   void BuildKPointMesh(lpmd::Configuration & conf);
+   void RealSpace(lpmd::Configuration & conf, lpmd::Vector * forces, double & e);
+   void ReciprocalSpace(lpmd::Configuration & conf, lpmd::Vector * forces, double & e);
+   void SurfaceDipole(lpmd::Configuration & conf, lpmd::Vector * forces, double & e);
+   double EnergyConstantCorrection(lpmd::Configuration & conf);
 };
 
 

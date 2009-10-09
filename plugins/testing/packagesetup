@@ -161,6 +161,13 @@ directory .
        pkgconfig += liblpmd-2.0
     end
 
+    module ewald.so
+       language = c++
+       sources = ewald.cc
+       installpath = lib/lpmd
+       pkgconfig += liblpmd-2.0
+    end
+
     module fastlj.so
        language = c++
        sources = fastlj.cc
