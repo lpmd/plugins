@@ -37,7 +37,7 @@ LinkedCell::LinkedCell(std::string args): Plugin("linkedcell", "1.0")
  //
  //
  head = tail = 0;
- atomlist = 0;
+ atomlist = indexc = 0;
  subcell = 0;
 }
 
@@ -47,6 +47,7 @@ LinkedCell::~LinkedCell()
  delete [] tail;
  delete [] atomlist;
  delete [] subcell;
+ delete [] indexc;
 }
 
 void LinkedCell::Reset() { }
@@ -56,6 +57,7 @@ void LinkedCell::UpdateCell(Configuration & conf)
  BasicParticleSet & atoms = conf.Atoms();
  BasicCell & cell = conf.Cell();
  if (atomlist == 0) atomlist = new long[atoms.Size()];
+ if (indexc == 0) indexc = new long[atoms.Size()];
  if (mode == true)
  {
   double minx = cell[0].Module();
@@ -151,6 +153,7 @@ void LinkedCell::UpdateCell(Configuration & conf)
   int j = WrapAround(int(floor(ny*fpos[1])), ny);
   int k = WrapAround(int(floor(nz*fpos[2])), nz);
   long q = k*(nx*ny)+j*nx+i;
+  indexc[r] = q;
   //
   if (head[q] == -1) head[q] = tail[q] = r;
   else 
@@ -166,12 +169,12 @@ void LinkedCell::BuildNeighborList(Configuration & conf, long i, NeighborList & 
 { 
  BasicParticleSet & atoms = conf.Atoms();
  BasicCell & cell = conf.Cell();
- const Vector fpos = cell.Fractional(atoms[i].Position());
+// const Vector fpos = cell.Fractional(atoms[i].Position());
  //
- int p = WrapAround(int(floor(nx*fpos[0])), nx);
- int q = WrapAround(int(floor(ny*fpos[1])), ny);
- int r = WrapAround(int(floor(nz*fpos[2])), nz);
- long cind = r*(nx*ny)+q*nx+p;
+// int p = WrapAround(int(floor(nx*fpos[0])), nx);
+// int q = WrapAround(int(floor(ny*fpos[1])), ny);
+// int r = WrapAround(int(floor(nz*fpos[2])), nz);
+ long cind = indexc[i];//r*(nx*ny)+q*nx+p;
  //
  AtomPair nn;
  nlist.Clear();

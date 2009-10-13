@@ -25,12 +25,13 @@ class Ewald: public lpmd::Potential, public lpmd::Plugin
  private:
    int kmax;
    bool surfdip;
-   double alpha, etol, rcut, kcut;
+   double alpha, rcut, kcut, ecorr;
    std::vector<lpmd::Vector> * kpoints;
+   double * kfac;
    //
    void BuildKPointMesh(lpmd::Configuration & conf);
-   void RealSpace(lpmd::Configuration & conf, lpmd::Vector * forces, double & e);
-   void ReciprocalSpace(lpmd::Configuration & conf, lpmd::Vector * forces, double & e);
+   void RealSpace(lpmd::Configuration & conf, double & e);
+   void ReciprocalSpace(lpmd::Configuration & conf, double & e);
    void SurfaceDipole(lpmd::Configuration & conf, lpmd::Vector * forces, double & e);
    double EnergyConstantCorrection(lpmd::Configuration & conf);
 };

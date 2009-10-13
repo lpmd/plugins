@@ -6,6 +6,7 @@
 
 #include <lpmd/session.h>
 #include <lpmd/configuration.h>
+#include <lpmd/timer.h>
 
 using namespace lpmd;
 
@@ -14,20 +15,18 @@ Ewald::Ewald(std::string args): Plugin("ewald","2.0")
  ParamList & params = (*this);
  DefineKeyword("kmax", "7");
  DefineKeyword("surfacedipole", "false");
- DefineKeyword("alpha");
- DefineKeyword("etol");
+// DefineKeyword("alpha");
+// DefineKeyword("etol");
  ProcessArguments(args); 
- alpha = double(params["alpha"]);
- etol = double(params["etol"]);
- surfdip = bool(params["surfacedipole"]);
+// alpha = double(params["alpha"]);
+// etol = double(params["etol"]);
  kmax = int(params["kmax"]);
- rcut = sqrt(-log(etol))/alpha;
- kcut = 2.0*alpha*sqrt(-log(etol));
- std::cerr << "DEBUG EWALD -> rcut = " << rcut << '\n';
+ surfdip = bool(params["surfacedipole"]);
  kpoints = NULL;
+ kfac = NULL;
 }
 
-Ewald::~Ewald() { delete kpoints; }
+Ewald::~Ewald() { delete kpoints; delete kfac;}
 
 void Ewald::ShowHelp() const
 {
@@ -38,8 +37,6 @@ void Ewald::ShowHelp() const
  std::cout << " Example                                                                       \n";
  std::cout << " Cargando el Modulo :                                                          \n";
  std::cout << " use ewald                                                                     \n";
- std::cout << "     alpha 0.37                                                                \n";
- std::cout << "     etol  0.0001                                                              \n";
  std::cout << " enduse                                                                        \n";
  std::cout << " Llamando al modulo :                                                          \n";
  std::cout << " potential ewald                                                               \n\n";
@@ -48,7 +45,13 @@ void Ewald::ShowHelp() const
 
 void Ewald::BuildKPointMesh(Configuration & conf)
 {
+ if (kfac != NULL) delete [] kfac;
  BasicCell & cell = conf.Cell();
+ BasicParticleSet & atoms = conf.Atoms();
+ alpha = sqrt(M_PI)*powl(5.5*atoms.Size()/(cell.Volume()*cell.Volume()),0.166666667);
+ rcut = sqrt(-log(0.001))/alpha;
+ kcut = 2.0*alpha*sqrt(-log(0.001));
+ std::cerr << "DEBUG EWALD (etol=0.001) -> rcut = " << rcut << '\n';
  //BasicParticleSet & atoms = conf.GetAtoms();
  std::cerr << "DEBUG kcut = " << kcut << '\n';
  Vector R[3], K[3];  // real and reciprocal vectors
@@ -65,100 +68,89 @@ void Ewald::BuildKPointMesh(Configuration & conf)
    {
     Vector k = pp*K[0]+qq*K[1]+rr*K[2];
     if ((fabs(k.Module()) > 1.0E-10) && (k.Module() < kcut)) kpoints->push_back(k);
-   } 
- std::cerr << "DEBUG number of k-points: " << kpoints->size() << '\n';
+   }
+ kfac = new double[kpoints->size()]; 
+ for (unsigned int nk=0 ; nk < kpoints->size() ; ++nk)
+ {
+  Vector & tmp = (*kpoints)[nk];
+  kfac[nk] = 4.0*M_PI*(1.0/tmp.SquareModule())*(1.0/cell.Volume())*exp(-tmp.SquareModule()/(4.0*alpha*alpha));
+ }
+ std::cerr << "DEBUG number of k-points     : " << kpoints->size() << '\n';
+ ecorr = EnergyConstantCorrection(conf); 
+ std::cerr << "DEBUG auto-energy correction : " << ecorr << '\n';
 }
 
-void Ewald::RealSpace(Configuration & conf, Vector * forces, double & e)
+void Ewald::RealSpace(Configuration & conf, double & e)
 {
  BasicParticleSet & atoms = conf.Atoms();
- BasicCell & cell = conf.Cell();
- int nrep = 0;
  double ep, e0;
  Vector ff;
  const double Q2a2EV = GlobalSession["q2a2ev"];
  const double Q2a2FORCE = GlobalSession["q2a2force"];
 
  e0 = 1.1/Q2a2EV;
- while (1)
+ ep = 0.0;
+    
+ for (long int i=0;i<atoms.Size();++i)
  {
-  //
-  ep = 0.0;
-  for (long int i=0;i<atoms.Size();++i) forces[i] = Vector(0.0, 0.0, 0.0);
-  for (int pp=-nrep;pp<nrep;++pp)
-   for (int qq=-nrep;qq<nrep;++qq)
-    for (int rr=-nrep;rr<nrep;++rr)
-    {
-     Vector n = pp*cell[0]+qq*cell[1]+rr*cell[2];
-     for (long int i=0;i<atoms.Size()-1;++i)
-     {
-      const double qi = atoms[i].Charge();
-      for (long int j=i+1;j<atoms.Size();++j)
-      {
-       if ((((pp == qq) && (qq == rr)) && (rr == 0)) && (i == j)) continue; // FIXME nunca se cumple, con la suma como esta def.
-       else
-       {
-        const double qj = atoms[j].Charge();
-        Vector rij = atoms[j].Position()-atoms[i].Position();
-        double rmod2 = (rij+n).SquareModule();
-        if (rmod2 < rcut*rcut)
-        {
-	 double rmod = sqrt(rmod2);
-         ep += qi*qj*erfc(alpha*rmod)/rmod;
-         ff = (rij+n)*(1.0/rmod);
-         ff = ff*qi*qj*(erfc(alpha*rmod)/rmod + 2.0*(alpha/sqrt(M_PI))*exp(-alpha*alpha*rmod*rmod));
-         ff = ff*(-1.0/rmod);
-         forces[i] = forces[i] + ff*(1.0/atoms[i].Mass());
-         forces[j] = forces[j] - ff*(1.0/atoms[j].Mass());
-        }
-       }
-      }
-     }
-    }
-  if (fabs(ep - e0) < etol/Q2a2EV) break;
-  e0 = ep; 
-  nrep++;
+  NeighborList nlist;
+  conf.GetCellManager().BuildNeighborList(conf, i, nlist, false, rcut);
+  for (long int j=0;j<nlist.Size();++j)
+  {
+   AtomPair & nn = nlist[j];
+   if (nn.r2 < rcut*rcut)
+   {
+    const double qi = atoms[i].Charge();
+    const double qj = nn.j->Charge();
+    double rmod = sqrt(nn.r2);
+    ep += qi*qj*erfc(alpha*rmod)/rmod;
+    ff = (nn.rij)*(1.0/rmod);
+    ff = ff*qi*qj*(erfc(alpha*rmod)/rmod + 2.0*(alpha/sqrt(M_PI))*exp(-alpha*alpha*rmod*rmod));
+    ff = ff*(-1.0/rmod);
+    atoms[i].Acceleration() += ff*(Q2a2FORCE/atoms[i].Mass());
+    nn.j->Acceleration() -= ff*(Q2a2FORCE/nn.j->Mass());
+   }
+  }
  }
- for (long int i=0;i<atoms.Size();++i) atoms[i].Acceleration() =  atoms[i].Acceleration()+forces[i]*Q2a2FORCE;
+ e0 = ep;
  e = ep*Q2a2EV;
 }
 
-void Ewald::ReciprocalSpace(Configuration & conf, Vector * forces, double & e)
+void Ewald::ReciprocalSpace(Configuration & conf, double & e)
 {
  BasicParticleSet & atoms = conf.Atoms();
- BasicCell & cell = conf.Cell();
+ //BasicCell & cell = conf.Cell();
  const double Q2a2EV = GlobalSession["q2a2ev"];
  const double Q2a2FORCE = GlobalSession["q2a2force"];
  double ep = 0.0;
- for (long int i=0;i<atoms.Size();++i) forces[i] = Vector(0.0, 0.0, 0.0);
  if (kpoints == NULL) BuildKPointMesh(conf);
  for (unsigned int nk=0;nk<kpoints->size();++nk)
  {
   const Vector & k = (*kpoints)[nk];
-  double kfac = 4.0*M_PI*(1.0/k.SquareModule())*(1.0/cell.Volume())*exp(-k.SquareModule()/(4.0*alpha*alpha));
   double sumqcos = 0.0, sumqsin = 0.0;
+  double *dkr = new double[atoms.Size()];
   for (long int i=0;i<atoms.Size();++i)
   {
-   double dkr = Dot(k, atoms[i].Position());
+   dkr[i] = Dot(k, atoms[i].Position());
    double qi = atoms[i].Charge();
-   sumqcos += qi*cos(dkr);
-   sumqsin += qi*sin(dkr);
-  }  
+   sumqcos += qi*cos(dkr[i]);
+   sumqsin += qi*sin(dkr[i]);
+  }
   for (long int i=0;i<atoms.Size();++i)
   {
    const double qi = atoms[i].Charge();
-   const Vector ri = atoms[i].Position();
-   forces[i] = forces[i] + k*2.0*qi*kfac*(sin(Dot(k, ri))*sumqcos-cos(Dot(k, ri))*sumqsin);
+   atoms[i].Acceleration() = atoms[i].Acceleration() + (k*2.0*qi*kfac[nk]*(sin(dkr[i])*sumqcos-cos(dkr[i])*sumqsin))*Q2a2FORCE/atoms[i].Mass();
   }
-  ep += kfac*(pow(sumqcos, 2.0)+pow(sumqsin, 2.0));
+  ep += kfac[nk]*(sumqcos*sumqcos+sumqsin*sumqsin);
+  delete [] dkr;
  }
- for (long int i=0;i<atoms.Size();++i)
-  atoms[i].Acceleration() = atoms[i].Acceleration()+forces[i]*(Q2a2FORCE/atoms[i].Mass()); 
  e = ep*Q2a2EV;
 }
 
 void Ewald::SurfaceDipole(Configuration & conf, Vector * forces, double & e)
 {
+ Timer t;
+ t.Start();
  BasicParticleSet & atoms = conf.Atoms();
  BasicCell & cell = conf.Cell();
  const double Q2a2EV = GlobalSession["q2a2ev"];
@@ -180,6 +172,9 @@ void Ewald::SurfaceDipole(Configuration & conf, Vector * forces, double & e)
  for (long int i=0;i<atoms.Size();++i)
   atoms[i].Acceleration() = atoms[i].Acceleration()+forces[i]*Q2a2FORCE; 
  e = 4.0*M_PI*v.SquareModule()/(6.0*cell.Volume())*Q2a2EV;
+ t.Stop();
+ std::cout << "Time dipole" << '\n';
+ t.ShowElapsedTimes();
 }
 
 double Ewald::EnergyConstantCorrection(Configuration & conf)
@@ -205,12 +200,11 @@ double Ewald::energy(Configuration & conf)
 void Ewald::UpdateForces(Configuration & conf) 
 { 
  BasicParticleSet & atoms = conf.Atoms();
- double ereal=0.0, erecip=0.0, edip=0.0, ecorr=0.0;
+ double ereal=0.0, erecip=0.0, edip=0.0;
  Vector * forces = new Vector[atoms.Size()];
- RealSpace(conf, forces, ereal);
- ReciprocalSpace(conf, forces, erecip); 
- if (surfdip) SurfaceDipole(conf, forces, edip);
- ecorr = EnergyConstantCorrection(conf); 
+ RealSpace(conf, ereal);
+ ReciprocalSpace(conf, erecip); 
+ if (surfdip) {SurfaceDipole(conf, forces, edip);}
  /*
  std::cerr << "DEBUG Energy real part = " << ereal << '\n';
  std::cerr << "DEBUG Energy recip part = " << erecip << '\n';

@@ -28,7 +28,7 @@ class LinkedCell: public lpmd::CellManager, public lpmd::Plugin
     int nx, ny, nz;
     int * head, * tail, * subcell;
     long cells_inside;
-    long * atomlist;
+    long * atomlist, *indexc;
     bool mode;
 };
 
