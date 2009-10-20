@@ -20,7 +20,6 @@ TempProfile::TempProfile(std::string args): Plugin("tempprofile", "2.0")
  DefineKeyword("start", "0");
  DefineKeyword("end", "-1");
  DefineKeyword("each", "1");
- DefineKeyword("rcut");
  DefineKeyword("output");
  DefineKeyword("bins", "200");
  DefineKeyword("average", "false");
@@ -207,7 +206,8 @@ void TempProfile::Evaluate(Configuration & con, Potential & pot)
        else if(axis==2) pp = z;
        else ShowWarning("plugin tempprofile", "Bad calculation of tempprofile, check your 'axis' option.");
        int ir = (long) floor(pp/dr);
-       temp[ir][s] += (1/2)*m*velocity.SquareModule()*kin2ev; //Solo son los aportes a la energia cinetica.
+       assert(ir >= 0 && ir < bins);
+       temp[ir][s] += 0.5*m*velocity.SquareModule()*kin2ev; //Solo son los aportes a la energia cinetica.
        nab[ir]++;
       }
      }
