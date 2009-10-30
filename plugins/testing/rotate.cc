@@ -57,6 +57,19 @@ void RotateModifier::ShowHelp() const
  std::cout << " prepare rotate x=1.0 y=0.0 z=0.0 angle=45.0                                   \n";
 }
 
+void RotateVector(double * vect, double * axis, float ang)
+{
+ double u=axis[0],v=axis[1],w=axis[2];
+ double x=vect[0],y=vect[1],z=vect[2];
+ double norm2=u*u+v*v+w*w;
+
+ double rv[3];
+ rv[0] = u*(u*x+v*y+w*z)+(x*(v*v+w*w)-u*(v*y+w*z))*cos(ang)+sqrt(u*u+v*v+w*w)*(-w*y+v*z)*sin(ang);
+ rv[1] = v*(u*x+v*y+w*z)+(y*(u*u+w*w)-v*(u*x+w*z))*cos(ang)+sqrt(u*u+v*v+w*w)*(w*x-u*z)*sin(ang);
+ rv[2] = w*(u*x+v*y+w*z)+(z*(u*u+v*v)-w*(u*x+v*y))*cos(ang)+sqrt(u*u+v*v+w*w)*(-v*x+u*y)*sin(ang);
+ for (int q=0; q<3; ++q) vect[q]=rv[q]/norm2;
+}
+
 void RotateModifier::Apply(Configuration & conf)
 {
  BasicParticleSet & atoms = conf.Atoms();
@@ -67,13 +80,20 @@ void RotateModifier::Apply(Configuration & conf)
   // translate so that the center of the cell is (0, 0, 0)
   Vector pos = atoms[i].Position() - center; 
   // rotate
-  double rv[3];
+  double rv[3], ax[3];
+  /*
+  // FIXME: Algo pasa con la matriz de rotacion original, rotmat!! la norma no se conserva
   for (int j=0;j<3;++j)
   {
    rv[j] = 0.0;
    for (int k=0;k<3;++k) rv[j] += rotmat[j][k]*pos[k];
    pos[j] = rv[j];
   }
+  */
+  for (int q=0;q<3;++q) { rv[q] = pos[q]; ax[q] = axis[q]; }
+  // La funcion RotateVector de FG en lpvisual 'does its job'
+  RotateVector(rv, ax, angle);
+  for (int q=0;q<3;++q) pos[q] = rv[q];
   atoms[i].Position() = cell.FittedInside(pos+center);
  }
 }
