@@ -27,7 +27,7 @@ class LinkedCell: public lpmd::CellManager, public lpmd::Plugin
     double cutoff;
     int nx, ny, nz;
     int * head, * tail, * subcell;
-    long cells_inside;
+    long cells_inside, last_atoms_size;
     long * atomlist, *indexc;
     bool mode;
 };

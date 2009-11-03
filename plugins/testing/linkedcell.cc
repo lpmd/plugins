@@ -39,6 +39,7 @@ LinkedCell::LinkedCell(std::string args): Plugin("linkedcell", "1.0")
  head = tail = 0;
  atomlist = indexc = 0;
  subcell = 0;
+ last_atoms_size = -1;
 }
 
 LinkedCell::~LinkedCell() 
@@ -56,8 +57,22 @@ void LinkedCell::UpdateCell(Configuration & conf)
 {
  BasicParticleSet & atoms = conf.Atoms();
  BasicCell & cell = conf.Cell();
- if (atomlist == 0) atomlist = new long[atoms.Size()];
- if (indexc == 0) indexc = new long[atoms.Size()];
+ if (atoms.Size() != last_atoms_size) 
+ {
+  if (indexc != 0) delete [] indexc;
+  if (atomlist != 0) delete [] atomlist;
+  indexc = 0;
+  atomlist = 0;
+ }
+ if (atomlist == 0) 
+ {
+  atomlist = new long[atoms.Size()];
+ }
+ if (indexc == 0) 
+ {
+  indexc = new long[atoms.Size()];
+ }
+ last_atoms_size = atoms.Size();
  if (mode == true)
  {
   double minx = cell[0].Module();
