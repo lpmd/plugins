@@ -92,6 +92,7 @@ void SiteCoord::Evaluate(Configuration & con, Potential & pot)
   m.Set(1, i, (double)nneigh);
   m.Set(2, i, (double)ubonds);
  }
+ delete [] neighbormatrix;
 }
 
 // Esto se incluye para que el modulo pueda ser cargado dinamicamente
