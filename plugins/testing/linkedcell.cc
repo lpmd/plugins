@@ -202,7 +202,7 @@ void LinkedCell::BuildNeighborList(Configuration & conf, long i, NeighborList & 
  //
  AtomPair nn;
  nlist.Clear();
- if(full_list[i].Size()!=0)
+ if (full_list[i].Size() == 0)
  {
   nn.i = &atoms[i];
   nn.i_index = i;
