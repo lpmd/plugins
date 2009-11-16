@@ -30,6 +30,7 @@ class LinkedCell: public lpmd::CellManager, public lpmd::Plugin
     long cells_inside, last_atoms_size;
     long * atomlist, *indexc;
     bool mode;
+    NeighborList * full_list;
 };
 
 #endif

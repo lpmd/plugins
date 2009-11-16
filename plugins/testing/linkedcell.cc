@@ -39,6 +39,7 @@ LinkedCell::LinkedCell(std::string args): Plugin("linkedcell", "1.0")
  head = tail = 0;
  atomlist = indexc = 0;
  subcell = 0;
+ full_list = 0;
  last_atoms_size = -1;
 }
 
@@ -49,6 +50,7 @@ LinkedCell::~LinkedCell()
  delete [] atomlist;
  delete [] subcell;
  delete [] indexc;
+ delete [] full_list;
 }
 
 void LinkedCell::Reset() { }
@@ -61,8 +63,10 @@ void LinkedCell::UpdateCell(Configuration & conf)
  {
   if (indexc != 0) delete [] indexc;
   if (atomlist != 0) delete [] atomlist;
+  if (full_list != 0) delete [] full_list;
   indexc = 0;
   atomlist = 0;
+  full_list = 0;
  }
  if (atomlist == 0) 
  {
@@ -71,6 +75,11 @@ void LinkedCell::UpdateCell(Configuration & conf)
  if (indexc == 0) 
  {
   indexc = new long[atoms.Size()];
+ }
+ if (full_list == 0)
+ {
+  full_list = new NeighborList[atoms.Size()];
+  for (int i = 0 ; i < atoms.Size() ; ++i) full_list[i].Clear();
  }
  last_atoms_size = atoms.Size();
  if (mode == true)
@@ -193,22 +202,26 @@ void LinkedCell::BuildNeighborList(Configuration & conf, long i, NeighborList & 
  //
  AtomPair nn;
  nlist.Clear();
- nn.i = &atoms[i];
- nn.i_index = i;
- for (int c=0;c<cells_inside;++c)
+ if(full_list[i].Size()!=0)
  {
-  int neighbor_cell = subcell[cind*cells_inside+c];
-  for (long z=head[neighbor_cell];z != -1;z=atomlist[z])
+  nn.i = &atoms[i];
+  nn.i_index = i;
+  for (int c=0;c<cells_inside;++c)
   {
-   if (z == i) continue;
-   if ((full == false) && (z > i)) continue;
-   nn.j = &atoms[z];
-   nn.rij = cell.Displacement(nn.i->Position(), nn.j->Position());
-   nn.r2 = nn.rij.SquareModule();
-   nn.j_index = z;
-   if (nn.r2 < rcut*rcut) nlist.Append(nn);
+   int neighbor_cell = subcell[cind*cells_inside+c];
+   for (long z=head[neighbor_cell];z != -1;z=atomlist[z])
+   {
+    if (z == i) continue;
+    if ((full == false) && (z > i)) continue;
+    nn.j = &atoms[z];
+    nn.rij = cell.Displacement(nn.i->Position(), nn.j->Position());
+    nn.r2 = nn.rij.SquareModule();
+    nn.j_index = z;
+    if (nn.r2 < rcut*rcut) nlist.Append(nn);
+   }
   }
  }
+ else nlist=full_list[i];
 }
 
 // Esto se incluye para que el modulo pueda ser cargado dinamicamente
