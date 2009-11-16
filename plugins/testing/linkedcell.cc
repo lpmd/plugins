@@ -217,7 +217,7 @@ void LinkedCell::BuildNeighborList(Configuration & conf, long i, NeighborList & 
     nn.rij = cell.Displacement(nn.i->Position(), nn.j->Position());
     nn.r2 = nn.rij.SquareModule();
     nn.j_index = z;
-    if (nn.r2 < rcut*rcut) nlist.Append(nn);
+    if (nn.r2 < rcut*rcut) {nlist.Append(nn);full_list[i].Append(nn);}
    }
   }
  }
