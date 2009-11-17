@@ -84,13 +84,14 @@ void Ewald::RealSpace(Configuration & conf, double & e)
 {
  BasicParticleSet & atoms = conf.Atoms();
  double ep, e0;
- Vector ff;
  const double Q2a2EV = GlobalSession["q2a2ev"];
  const double Q2a2FORCE = GlobalSession["q2a2force"];
 
  e0 = 1.1/Q2a2EV;
  ep = 0.0;
-    
+#ifdef _OPENMP
+#pragma omp parallel for reduction ( +: ep )
+#endif 
  for (long int i=0;i<atoms.Size();++i)
  {
   NeighborList nlist;
@@ -103,6 +104,7 @@ void Ewald::RealSpace(Configuration & conf, double & e)
     const double qi = atoms[i].Charge();
     const double qj = nn.j->Charge();
     double rmod = sqrt(nn.r2);
+    Vector ff;
     ep += qi*qj*erfc(alpha*rmod)/rmod;
     ff = (nn.rij)*(1.0/rmod);
     ff = ff*qi*qj*(erfc(alpha*rmod)/rmod + 2.0*(alpha/sqrt(M_PI))*exp(-alpha*alpha*rmod*rmod));
@@ -124,6 +126,9 @@ void Ewald::ReciprocalSpace(Configuration & conf, double & e)
  const double Q2a2FORCE = GlobalSession["q2a2force"];
  double ep = 0.0;
  if (kpoints == NULL) BuildKPointMesh(conf);
+#ifdef _OPENMP
+#pragma omp parallel for
+#endif
  for (unsigned int nk=0;nk<kpoints->size();++nk)
  {
   const Vector & k = (*kpoints)[nk];
