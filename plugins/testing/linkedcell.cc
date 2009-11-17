@@ -171,6 +171,7 @@ void LinkedCell::UpdateCell(Configuration & conf)
  for (long q=0;q<nx*ny*nz;++q) head[q] = tail[q] = -1;
  for (long r=0;r<atoms.Size();++r)
  {
+  full_list[r].Clear();
   const Vector fpos = cell.Fractional(atoms[r].Position());
   //
   int i = WrapAround(int(floor(nx*fpos[0])), nx);
@@ -191,6 +192,7 @@ void LinkedCell::UpdateCell(Configuration & conf)
 
 void LinkedCell::BuildNeighborList(Configuration & conf, long i, NeighborList & nlist, bool full, double rcut)
 { 
+// std::cerr << "Llamado  a BuildNeighb " << '\n';
  BasicParticleSet & atoms = conf.Atoms();
  BasicCell & cell = conf.Cell();
 // const Vector fpos = cell.Fractional(atoms[i].Position());
@@ -202,6 +204,9 @@ void LinkedCell::BuildNeighborList(Configuration & conf, long i, NeighborList & 
  //
  AtomPair nn;
  nlist.Clear();
+
+ if (full_list != 0) assert("que pasa con full_list");
+
  if (full_list[i].Size() == 0)
  {
   nn.i = &atoms[i];
@@ -217,11 +222,11 @@ void LinkedCell::BuildNeighborList(Configuration & conf, long i, NeighborList & 
     nn.rij = cell.Displacement(nn.i->Position(), nn.j->Position());
     nn.r2 = nn.rij.SquareModule();
     nn.j_index = z;
-    if (nn.r2 < rcut*rcut) {nlist.Append(nn);full_list[i].Append(nn);}
+    if (nn.r2 < rcut*rcut) {full_list[i].Append(nn);}
    }
   }
  }
- else nlist=full_list[i];
+ nlist=full_list[i];
 }
 
 // Esto se incluye para que el modulo pueda ser cargado dinamicamente
