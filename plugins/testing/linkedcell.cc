@@ -39,7 +39,8 @@ LinkedCell::LinkedCell(std::string args): Plugin("linkedcell", "1.0")
  head = tail = 0;
  atomlist = indexc = 0;
  subcell = 0;
- full_list = 0;
+ full_list_half = 0;
+ full_list_full = 0;
  last_atoms_size = -1;
 }
 
@@ -50,7 +51,8 @@ LinkedCell::~LinkedCell()
  delete [] atomlist;
  delete [] subcell;
  delete [] indexc;
- delete [] full_list;
+ delete [] full_list_half;
+ delete [] full_list_full;
 }
 
 void LinkedCell::Reset() { }
@@ -63,10 +65,12 @@ void LinkedCell::UpdateCell(Configuration & conf)
  {
   if (indexc != 0) delete [] indexc;
   if (atomlist != 0) delete [] atomlist;
-  if (full_list != 0) delete [] full_list;
+  if (full_list_half != 0) delete [] full_list_half;
+  if (full_list_full != 0) delete [] full_list_full;
   indexc = 0;
   atomlist = 0;
-  full_list = 0;
+  full_list_half = 0;
+  full_list_full = 0;
  }
  if (atomlist == 0) 
  {
@@ -76,10 +80,15 @@ void LinkedCell::UpdateCell(Configuration & conf)
  {
   indexc = new long[atoms.Size()];
  }
- if (full_list == 0)
+ if (full_list_half == 0)
  {
-  full_list = new NeighborList[atoms.Size()];
-  for (int i = 0 ; i < atoms.Size() ; ++i) full_list[i].Clear();
+  full_list_half = new NeighborList[atoms.Size()];
+  for (int i = 0 ; i < atoms.Size() ; ++i) full_list_half[i].Clear();
+ }
+ if (full_list_full == 0)
+ {
+  full_list_full = new NeighborList[atoms.Size()];
+  for (int i=0 ; i < atoms.Size() ; ++i) full_list_full[i].Clear();
  }
  last_atoms_size = atoms.Size();
  if (mode == true)
@@ -171,7 +180,8 @@ void LinkedCell::UpdateCell(Configuration & conf)
  for (long q=0;q<nx*ny*nz;++q) head[q] = tail[q] = -1;
  for (long r=0;r<atoms.Size();++r)
  {
-  full_list[r].Clear();
+  full_list_half[r].Clear();
+  full_list_full[r].Clear();
   const Vector fpos = cell.Fractional(atoms[r].Position());
   //
   int i = WrapAround(int(floor(nx*fpos[0])), nx);
@@ -205,9 +215,7 @@ void LinkedCell::BuildNeighborList(Configuration & conf, long i, NeighborList & 
  AtomPair nn;
  nlist.Clear();
 
- if (full_list != 0) assert("que pasa con full_list");
-
- if (full_list[i].Size() == 0)
+ if (full_list_half[i].Size() == 0 && full == false)
  {
   nn.i = &atoms[i];
   nn.i_index = i;
@@ -222,11 +230,32 @@ void LinkedCell::BuildNeighborList(Configuration & conf, long i, NeighborList & 
     nn.rij = cell.Displacement(nn.i->Position(), nn.j->Position());
     nn.r2 = nn.rij.SquareModule();
     nn.j_index = z;
-    if (nn.r2 < rcut*rcut) {full_list[i].Append(nn);}
+    if (nn.r2 < rcut*rcut) {full_list_half[i].Append(nn);}
    }
   }
  }
- nlist=full_list[i];
+ if (full_list_full[i].Size() == 0 && full == true)
+ {
+  nn.i = &atoms[i];
+  nn.i_index = i;
+  for (int c=0;c<cells_inside;++c)
+  {
+   int neighbor_cell = subcell[cind*cells_inside+c];
+   for (long z=head[neighbor_cell];z != -1;z=atomlist[z])
+   {
+    if (z == i) continue;
+    if ((full == false) && (z > i)) continue;
+    nn.j = &atoms[z];
+    nn.rij = cell.Displacement(nn.i->Position(), nn.j->Position());
+    nn.r2 = nn.rij.SquareModule();
+    nn.j_index = z;
+    if (nn.r2 < rcut*rcut) {full_list_full[i].Append(nn);}
+   }
+  }
+ }
+
+ if (full == true) nlist = full_list_full[i];
+ else nlist = full_list_half[i];
 }
 
 // Esto se incluye para que el modulo pueda ser cargado dinamicamente
