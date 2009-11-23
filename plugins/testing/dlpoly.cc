@@ -10,6 +10,7 @@
 #include <iomanip>
 #include <lpmd/simulationhistory.h>
 #include <lpmd/particleset.h>
+#include <cstdio>
 
 using namespace lpmd;
 
