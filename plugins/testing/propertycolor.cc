@@ -73,7 +73,7 @@ void PropertyColorModifier::Apply(Simulation & sim)
   double vnorm = (v-vmin)/(vmax-vmin);
   if (vnorm < 0.0) vnorm = 0.0;
   if (vnorm > 1.0) vnorm = 1.0;
-  const Color c = lpmd::ColorFromScalar(1.0-vnorm);
+  const Color c = lpmd::ColorFromScalar(vnorm);
   const BasicAtom & at = atoms[i]; 
   ColorHandler::ColorOfAtom(at) = c;
  }
