@@ -1,0 +1,80 @@
+//
+//
+//
+
+#include "angularmomentum.h"
+
+#include <lpmd/matrix.h>
+#include <lpmd/util.h>
+#include <lpmd/session.h>
+#include <lpmd/configuration.h>
+
+#include <sstream>
+
+using namespace lpmd;
+
+AngularMomentum::AngularMomentum(std::string args): Plugin("angularmomentum", "1.0")
+{
+ ParamList & params = (*this);
+ //
+ DefineKeyword("start", "0");
+ DefineKeyword("end", "-1");
+ DefineKeyword("each", "1");
+ DefineKeyword("output");
+ DefineKeyword("center");
+ ProcessArguments(args);
+ start = int(params["start"]);
+ end = int(params["end"]);
+ each = int(params["each"]);
+ OutputFile() = params["output"];
+ center = Vector((*this)["center"].c_str());
+}
+
+AngularMomentum::~AngularMomentum() { }
+
+void AngularMomentum::ShowHelp() const
+{
+ std::cout << " General Info      >>                                                          \n";
+ std::cout << "   Calcula el momentum angular del sistema respecto a un centro.               \n";
+ std::cout << " General Options   >>                                                          \n";
+ std::cout << '\n';
+ std::cout << " Example                                                                       \n";
+ std::cout << " Cargando el Modulo :                                                          \n";
+ std::cout << " use angularmomentum                                                           \n";
+ std::cout << "     center <5.0,5.0,5.0>                                                      \n";
+ std::cout << "     output angmom.dat                                                         \n";
+ std::cout << " enduse                                                                        \n";
+ std::cout << " Llamando al Modulo :                                                          \n";  
+ std::cout << " property angularmomentum start=1 each=10 end=100                              \n\n";
+}
+
+void AngularMomentum::Evaluate(Configuration & conf, Potential & pot)
+{
+ assert(&pot != 0);
+ const double kin2ev = double(GlobalSession["kin2ev"]);
+ const double evfs2h = 0.24179895;          // eV*fs to Planck's h 
+ BasicParticleSet & atoms = conf.Atoms();
+ long int n = atoms.Size();
+ Vector lsum(0.0, 0.0, 0.0);
+ for (long int i=0;i<n;++i)
+ {
+  const Vector & v = atoms[i].Velocity();
+  const Vector & r = atoms[i].Position();
+  double m = atoms[i].Mass();
+  lsum = lsum + m*Cross(r-center, v);
+ }
+ Matrix & m = CurrentValue() = Matrix(4, 1);
+ 
+ // Asigna los labels al objeto Matrix para cada columna
+ m.SetLabel(0, "Lx");
+ m.SetLabel(1, "Ly");
+ m.SetLabel(2, "Lz");
+ m.SetLabel(3, "|L|");
+ for (int q=0;q<3;++q) m.Set(q, 0, kin2ev*evfs2h*lsum[q]); // L in units of Planck's h
+ m.Set(3, 0, sqrt(lsum[0]*lsum[0]+lsum[1]*lsum[1]+lsum[2]*lsum[2])*kin2ev*evfs2h);
+}
+
+// Esto se incluye para que el modulo pueda ser cargado dinamicamente
+Plugin * create(std::string args) { return new AngularMomentum(args); }
+void destroy(Plugin * m) { delete m; }
+

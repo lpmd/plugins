@@ -28,6 +28,13 @@ directory .
        pkgconfig += liblpmd-2.0
     end
 
+    module angularmomentum.so
+       language = c++
+       sources = angularmomentum.cc
+       installpath = lib/lpmd
+       pkgconfig += liblpmd-2.0
+    end
+
     module atomtrail.so
        language = c++
        sources = atomtrail.cc
