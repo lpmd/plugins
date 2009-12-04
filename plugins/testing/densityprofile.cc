@@ -203,9 +203,9 @@ void DensityProfile::Evaluate(lpmd::Configuration & con, lpmd::Potential & pot)
        //Entonces esta dentro de nuestros "ranges"
        //ahora la ubicamos segun nuestro eje preferencial 'axis'.
        double pp=0.0e0;
-       if(axis==0) pp = x;
-       else if(axis==1) pp = y;
-       else if(axis==2) pp = z;
+       if (axis==0) pp = (x-range[0][0]);
+       else if(axis==1) pp = (y-range[1][0]);
+       else if(axis==2) pp = (z-range[2][0]);
        else lpmd::ShowWarning("plugin densityprofile", "Bad calculation of densityprofile, check your 'axis' option.");
        int ir = (long) floor(pp/dr);
        rho[ir][s] += m/dvol;
