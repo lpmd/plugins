@@ -130,7 +130,7 @@ bool VaspFormat::ReadCell(std::istream & is, Configuration & con) const
     }
     else if (tipo=="Direct")
     {
-     vtmp = (vtmp[0]*cv[0],vtmp[1]*cv[1],vtmp[2]*cv[2]);
+     vtmp = cell.Cartesian(vtmp); // Antes era: vtmp = vtmp[0]*cv[0]+vtmp[1]*cv[1]+vtmp[2]*cv[2];
      this_atom.Position() = vtmp;
     }
     else
