@@ -393,6 +393,13 @@ directory .
        pkgconfig += liblpmd-2.0
     end
 
+    module pairenergy.so
+       language = c++
+       sources = pairenergy.cc
+       installpath = lib/lpmd
+       pkgconfig += liblpmd-2.0
+    end
+
     module pdb.so
        language = c++
        sources = pdb.cc
