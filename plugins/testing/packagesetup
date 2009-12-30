@@ -35,6 +35,13 @@ directory .
        pkgconfig += liblpmd-2.0
     end
 
+    module atomenergy.so
+       language = c++
+       sources = atomenergy.cc
+       installpath = lib/lpmd
+       pkgconfig += liblpmd-2.0
+    end
+
     module atomtrail.so
        language = c++
        sources = atomtrail.cc
@@ -389,13 +396,6 @@ directory .
     module pairdistances.so
        language = c++
        sources = pairdistances.cc
-       installpath = lib/lpmd
-       pkgconfig += liblpmd-2.0
-    end
-
-    module pairenergy.so
-       language = c++
-       sources = pairenergy.cc
        installpath = lib/lpmd
        pkgconfig += liblpmd-2.0
     end

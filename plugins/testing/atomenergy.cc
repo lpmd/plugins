@@ -2,7 +2,7 @@
 //
 //
 
-#include "pairenergy.h"
+#include "atomenergy.h"
 
 #include <lpmd/matrix.h>
 #include <lpmd/util.h>
@@ -16,7 +16,7 @@
 
 using namespace lpmd;
 
-PairEnergy::PairEnergy(std::string args): Plugin("pairenergy", "1.0")
+AtomEnergy::AtomEnergy(std::string args): Plugin("atomenergy", "1.0")
 {
  ParamList & params = (*this);
  //
@@ -31,24 +31,23 @@ PairEnergy::PairEnergy(std::string args): Plugin("pairenergy", "1.0")
  OutputFile() = params["output"];
 }
 
-void PairEnergy::ShowHelp() const
+void AtomEnergy::ShowHelp() const
 {
  std::cout << " General Info      >>                                                          \n";
- std::cout << "      Modulo utilizado para calcular la energia potencial por atomo, para el caso\n"; 
- std::cout << "      de un potencial de pares (por ej. Lennard-Jones).                        \n";
+ std::cout << "      Modulo utilizado para calcular la energia potencial por atomo.           \n"; 
  std::cout << " General Options   >>                                                          \n";
  std::cout << "      output        : Fichero en el que se graba la salida                     \n";
  std::cout << '\n';
  std::cout << " Example                                                                       \n";
  std::cout << " Cargando el Modulo :                                                          \n";
- std::cout << " use pairenergy                                                                \n";
+ std::cout << " use atomenergy                                                                \n";
  std::cout << "     output energ.dat                                                          \n";
  std::cout << " enduse                                                                        \n";
  std::cout << " Llamando al Modulo :                                                          \n";  
- std::cout << " property pairenergy start=1 each=10 end=100                                   \n\n";
+ std::cout << " property atomenergy start=1 each=10 end=100                                   \n\n";
 }
 
-void PairEnergy::Evaluate(Configuration & conf, Potential & pot)
+void AtomEnergy::Evaluate(Configuration & conf, Potential & pot)
 {
  assert(&pot != 0);
  BasicParticleSet & atoms = conf.Atoms();
@@ -74,6 +73,6 @@ void PairEnergy::Evaluate(Configuration & conf, Potential & pot)
 }
 
 // Esto se incluye para que el modulo pueda ser cargado dinamicamente
-Plugin * create(std::string args) { return new PairEnergy(args); }
+Plugin * create(std::string args) { return new AtomEnergy(args); }
 void destroy(Plugin * m) { delete m; }
 
