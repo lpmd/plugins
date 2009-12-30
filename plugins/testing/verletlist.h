@@ -8,32 +8,29 @@
 #include <lpmd/cellmanager.h>
 #include <lpmd/plugin.h>
 
-class VerletListCellManager: public lpmd::CellManager, public lpmd::Module
+using namespace lpmd;
+
+class VerletListCellManager: public CellManager, public Plugin
 {
  public:
 
    VerletListCellManager(std::string args);
    ~VerletListCellManager();
 
-   void Show(std::ostream & os) const;
-
    void Reset();
-   void UpdateCell(SimulationCell & sc);
+   void UpdateCell(Configuration & conf);
+   void UpdateVerletList(Configuration & conf);
+   void BuildNeighborList(Configuration & conf, long i, NeighborList & nlist, bool full, double);
    double Cutoff() const;
-   void BuildNeighborList(SimulationCell & sc, long i, std::vector<Neighbor> & nlist, bool full, double a) {}
-   void BuildList(SimulationCell & sc, bool full, double rcut);
-//   void BuildNeighborList(SimulationCell & sc, long i, bool full, double);
-   void PrintTimes() {}
 
  private:
-   double cutoff;
-   std::vector<lpmd::Vector> oldposition;
-   std::list<lpmd::Neighbor> *neigh;
-   bool evaluate;
-   long calls;
+   double rcut, extcut;
+   long step_count, each, old_size, maxneighbors;
+   double * head;
+   long * nv;
+   double ** vlist; 
 };
 
 
 #endif
-
 

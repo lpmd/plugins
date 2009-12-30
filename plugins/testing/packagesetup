@@ -603,6 +603,13 @@ directory .
        pkgconfig += liblpmd-2.0
     end
 
+    module verletlist.so
+       language = c++
+       sources = verletlist.cc
+       installpath = lib/lpmd
+       pkgconfig += liblpmd-2.0
+    end
+
     module voronoi.so
        language = c++
        sources = voronoi.cc
@@ -624,13 +631,6 @@ directory .
        pkgconfig += liblpmd-2.0
        libraries += -lz
     end
-
-#
-# Plugins en standby 
-#
-#ewald_la_SOURCES = ewald.h ewald.cc
-#verletlist_la_SOURCES = verletlist.h verletlist.cc
-#metropolis_la_SOURCES = metropolis.h metropolis.cc
 
 end
 
