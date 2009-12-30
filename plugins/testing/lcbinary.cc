@@ -6,7 +6,7 @@
 
 using namespace lpmd;
 
-LCBinary::LCBinary(std::string args): Plugin("lc3", "1.0")
+LCBinary::LCBinary(std::string args): Plugin("lcbinary", "1.0")
 { 
  ParamList & params = (*this);
  DefineKeyword("cutoff", "7.0");
@@ -34,7 +34,7 @@ LCBinary::LCBinary(std::string args): Plugin("lc3", "1.0")
 
 LCBinary::~LCBinary() 
 { 
- if (nwin+nfail > 0.0) DebugStream() << "-> LC3 Efficiency: " << 100.0*nwin/(nwin+nfail) << "%\n";
+ if (nwin+nfail > 0.0) DebugStream() << "-> lcbinary efficiency: " << 100.0*nwin/(nwin+nfail) << "%\n";
  delete [] atomlist;
  delete [] subcell;
 }
