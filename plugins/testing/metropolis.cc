@@ -13,7 +13,7 @@
 
 using namespace lpmd;
 
-Metropolis::Metropolis(std::string args): Plugin("metropoli", "2.0")
+Metropolis::Metropolis(std::string args): Plugin("metropolis", "1.0")
 {
  DefineKeyword("start", "1");
  DefineKeyword("temp","0.0");
@@ -56,38 +56,21 @@ void Metropolis::Advance(Simulation & sim, long i)
  lpmd::BasicParticleSet & atoms = sim.Atoms();
  lpmd::CombinedPotential & pots = sim.Potentials();
  lpmd::BasicCell & cell = sim.Cell();
- double penergy = 0.0e0;
+ double penergy = pots.AtomEnergy(sim, i);
  double min = sim.MinimumPairDistance();
- for(int j=0;j<pots.Size();++j)
- {
-  penergy += pots[j].energy(sim);
- }
  Vector oldpos = atoms[i].Position();
  Vector random = RandomVector(min*percent/100);
  Vector newpos = cell.FittedInside(atoms[i].Position() + random);
  atoms[i].Position() = newpos;
- pots.UpdateForces(sim);
- double npe = 0.0e0;
- for(int j=0;j<pots.Size();++j)
- {
-  npe += pots[j].energy(sim);
- }
- if ((npe)<(penergy))
- {
-  atoms[i].Position() = newpos;
- }
+ sim.GetCellManager().UpdateAtom(sim, i);
+ double npe = pots.AtomEnergy(sim, i);
+ if (npe < penergy) atoms[i].Position() = newpos;
  double r = exp(-(npe-penergy)/(kboltzmann*Temp));
- if (drand48() < r)
- {
-  atoms[i].Position() = newpos;
- }
- else
- {
-  atoms[i].Position() = oldpos;
- }
-// pots.UpdateForces(sim);
+ if (drand48() < r) atoms[i].Position() = newpos;
+ else atoms[i].Position() = oldpos;
 }
 
 // Esto se incluye para que el modulo pueda ser cargado dinamicamente
 Plugin * create(std::string args) { return new Metropolis(args); }
 void destroy(Plugin * m) { delete m; }
+
