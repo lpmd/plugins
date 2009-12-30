@@ -53,6 +53,8 @@ void OsciForcePotential::ShowHelp() const
 
 double OsciForcePotential::energy(Configuration & con) {assert(&con != 0); return 0.0; }//icc869
 
+double OsciForcePotential::AtomEnergy(lpmd::Configuration & con, long i) { return 0.0; }
+
 void OsciForcePotential::UpdateForces(Configuration & con) 
 { 
  lpmd::BasicParticleSet & atoms = con.Atoms();

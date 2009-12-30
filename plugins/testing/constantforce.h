@@ -18,6 +18,7 @@ class ConstantForcePotential: public lpmd::Potential, public lpmd::Plugin
   void ShowHelp() const;
 
   double energy(lpmd::Configuration & con);
+  double AtomEnergy(lpmd::Configuration & con, long i);
   void UpdateForces(lpmd::Configuration & con);
 
  private:

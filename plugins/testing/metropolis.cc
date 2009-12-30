@@ -85,7 +85,7 @@ void Metropolis::Advance(Simulation & sim, long i)
  {
   atoms[i].Position() = oldpos;
  }
- pots.UpdateForces(sim);
+// pots.UpdateForces(sim);
 }
 
 // Esto se incluye para que el modulo pueda ser cargado dinamicamente

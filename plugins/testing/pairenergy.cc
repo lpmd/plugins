@@ -54,41 +54,8 @@ void PairEnergy::Evaluate(Configuration & conf, Potential & pot)
  BasicParticleSet & atoms = conf.Atoms();
  const long int n = atoms.Size();
  double * pair_energy = new double[n];
- for (long i=0;i<n;++i) pair_energy[i] = 0.0;
- const CombinedPotential & comb = dynamic_cast<CombinedPotential &>(pot);
- double rcut = 0.0;
- for (int q=0;q<comb.Size();++q)
-     if (comb[q].GetCutoff() > rcut) rcut = comb[q].GetCutoff();
- try
- {
-  // Construct an "index table" so we don't have to depend on Atom::Index()
-  std::map<BasicAtom *, long int> indices;
-  for (long int i=0;i<n;++i) indices[&atoms[i]] = i;
-
-  for (long int i=0;i<n;++i)
-  {
-   const NeighborList & nlist = conf.Neighbors(i, false, rcut);
-   for (long int k=0;k<nlist.Size();++k) 
-   {
-    const AtomPair & nn = nlist[k];
-    int s1 = atoms[i].Z();
-    int s2 = nn.j->Z();
-    const PairPotential & ppot = dynamic_cast<const PairPotential &>(comb.PotentialForElements(s1, s2));
-    const double rcut = ppot.GetCutoff();
-    if (nn.r2 >= rcut*rcut) continue;
-    else
-    {
-     const double pe = ppot.pairEnergy(sqrt(nn.r2));
-     pair_energy[i] += (0.5*pe);
-     pair_energy[indices[nn.j]] += (0.5*pe);
-    }
-   }
-  }
- }
- catch (std::exception & e)
- {
-  throw PluginError("pairenergy", "This plugin only makes sense with pair potentials.\n");
- }
+ CombinedPotential & comb = dynamic_cast<CombinedPotential &>(pot);
+ for (long i=0;i<n;++i) pair_energy[i] = comb.AtomEnergy(conf, i);
  //
  // Output 
  //

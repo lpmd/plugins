@@ -21,6 +21,7 @@ class NullPotential: public lpmd::Potential, public lpmd::Plugin
 
   //Metodos Proopios de modulo nullpotential
   double energy(Configuration & conf);
+  double AtomEnergy(Configuration & conf, long i);
   void UpdateForces(Configuration & conf);
 };
 

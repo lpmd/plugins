@@ -32,6 +32,8 @@ void NullPotential::ShowHelp() const
 
 double NullPotential::energy(Configuration & conf) {assert(&conf != 0); return 0.0; }//icc 869
 
+double NullPotential::AtomEnergy(Configuration & conf, long i) { return 0.0; }
+
 void NullPotential::UpdateForces(Configuration & conf) { assert(&conf != 0); }//icc 869
 
 // Esto se incluye para que el modulo pueda ser cargado dinamicamente

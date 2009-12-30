@@ -20,6 +20,7 @@ class Ewald: public lpmd::Potential, public lpmd::Plugin
 
   //Metodos Proopios de modulo ewald
   double energy(lpmd::Configuration & conf);
+  double AtomEnergy(lpmd::Configuration & conf, long i);
   void UpdateForces(lpmd::Configuration & conf);
 
  private:

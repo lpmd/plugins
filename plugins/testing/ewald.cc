@@ -51,9 +51,6 @@ void Ewald::BuildKPointMesh(Configuration & conf)
  alpha = sqrt(M_PI)*powl(5.5*atoms.Size()/(cell.Volume()*cell.Volume()),0.166666667);
  rcut = sqrt(-log(0.001))/alpha;
  kcut = 2.0*alpha*sqrt(-log(0.001));
- std::cerr << "DEBUG EWALD (etol=0.001) -> rcut = " << rcut << '\n';
- //BasicParticleSet & atoms = conf.GetAtoms();
- std::cerr << "DEBUG kcut = " << kcut << '\n';
  Vector R[3], K[3];  // real and reciprocal vectors
  for (int q=0;q<3;++q) R[q] = cell[q];
  K[0] = (2*M_PI/(Dot(R[0],Cross(R[1],R[2]))))*Cross(R[1],R[2]);
@@ -61,7 +58,6 @@ void Ewald::BuildKPointMesh(Configuration & conf)
  K[2] = (2*M_PI/(Dot(R[2],Cross(R[0],R[1]))))*Cross(R[0],R[1]);
  kpoints = new std::vector<Vector>;
  int nrep = kmax;
- std::cerr << "DEBUG using nrep = " << nrep << '\n';
  for (int pp=0;pp<=nrep;++pp)
   for (int qq=(pp == 0 ? 0 : -nrep);qq<=nrep;++qq)
    for (int rr=(pp == 0 && qq == 0 ? 1 : -nrep);rr<=nrep;++rr)
@@ -75,9 +71,7 @@ void Ewald::BuildKPointMesh(Configuration & conf)
   Vector & tmp = (*kpoints)[nk];
   kfac[nk] = 4.0*M_PI*(1.0/tmp.SquareModule())*(1.0/cell.Volume())*exp(-tmp.SquareModule()/(4.0*alpha*alpha));
  }
- std::cerr << "DEBUG number of k-points     : " << kpoints->size() << '\n';
  ecorr = EnergyConstantCorrection(conf); 
- std::cerr << "DEBUG auto-energy correction : " << ecorr << '\n';
 }
 
 void Ewald::RealSpace(Configuration & conf, double & e)
@@ -154,8 +148,6 @@ void Ewald::ReciprocalSpace(Configuration & conf, double & e)
 
 void Ewald::SurfaceDipole(Configuration & conf, Vector * forces, double & e)
 {
- Timer t;
- t.Start();
  BasicParticleSet & atoms = conf.Atoms();
  BasicCell & cell = conf.Cell();
  const double Q2a2EV = GlobalSession["q2a2ev"];
@@ -177,9 +169,6 @@ void Ewald::SurfaceDipole(Configuration & conf, Vector * forces, double & e)
  for (long int i=0;i<atoms.Size();++i)
   atoms[i].Acceleration() = atoms[i].Acceleration()+forces[i]*Q2a2FORCE; 
  e = 4.0*M_PI*v.SquareModule()/(6.0*cell.Volume())*Q2a2EV;
- t.Stop();
- std::cout << "Time dipole" << '\n';
- t.ShowElapsedTimes();
 }
 
 double Ewald::EnergyConstantCorrection(Configuration & conf)
@@ -202,6 +191,12 @@ double Ewald::energy(Configuration & conf)
  throw PluginError("ewald", "This shouldn\'t happen");
 }
 
+double AtomEnergy(lpmd::Configuration & conf, long i)
+{
+ ShowWarning("ewald", "Potential::AtomEnergy not defined (yet) for ewald");
+ return 0.0;
+}
+
 void Ewald::UpdateForces(Configuration & conf) 
 { 
  BasicParticleSet & atoms = conf.Atoms();
@@ -210,12 +205,6 @@ void Ewald::UpdateForces(Configuration & conf)
  RealSpace(conf, ereal);
  ReciprocalSpace(conf, erecip); 
  if (surfdip) {SurfaceDipole(conf, forces, edip);}
- /*
- std::cerr << "DEBUG Energy real part = " << ereal << '\n';
- std::cerr << "DEBUG Energy recip part = " << erecip << '\n';
- std::cerr << "DEBUG Energy surf dipole = " << edip << '\n';
- std::cerr << "DEBUG Energy const correct = " << ecorr << '\n';
- */
  double e = ereal+erecip+edip+ecorr;
  conf.SetTag(conf, Tag("pe"), e);
  delete [] forces;

@@ -44,6 +44,8 @@ void ConstantForcePotential::ShowHelp() const
 
 double ConstantForcePotential::energy(Configuration & con) {assert(&con != 0); return 0.0; }//icc 869
 
+double ConstantForcePotential::AtomEnergy(lpmd::Configuration & con, long i) { return 0.0; }
+
 void ConstantForcePotential::UpdateForces(Configuration & con) 
 { 
  lpmd::BasicParticleSet & atoms = con.Atoms();
