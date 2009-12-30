@@ -19,6 +19,7 @@ class LinkedCell: public lpmd::CellManager, public lpmd::Plugin
 
    void Reset();
    void UpdateCell(Configuration & conf);
+   void UpdateAtom(Configuration & conf, long i);
    double Cutoff() const { return cutoff; }
 
    void BuildNeighborList(Configuration & conf, long i, NeighborList & nlist, bool full, double rcut);

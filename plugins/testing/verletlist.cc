@@ -63,16 +63,34 @@ void VerletListCellManager::UpdateVerletList(Configuration & conf)
     if (rij.SquareModule() < extcut*extcut)
     {
      if ((nv[j] == maxneighbors-1) || (nv[i] == maxneighbors-1)) 
-     {
-      std::cerr << "DEBUG " << nv[i] << "  " << nv[j] << '\n';
       throw PluginError("verletlist", "maxneighbors is too small!");
-     }
      // Add i to verlet list of j
      vlist[j][nv[j]++] = i;
      // Add j to verlet list of i
      vlist[i][nv[i]++] = j;
     }
    }
+}
+
+void VerletListCellManager::UpdateAtom(Configuration & conf, long i)
+{
+ nv[i] = 0;
+ BasicParticleSet & atoms = conf.Atoms();
+ BasicCell & cell = conf.Cell();
+ const long int n = atoms.Size();
+ for (long j=0;j<n;++j)
+ {
+  if (j != i)
+  {
+   const Vector rij = cell.Displacement(atoms[i].Position(), atoms[j].Position());
+   if (rij.SquareModule() < extcut*extcut)
+   {
+    if (nv[i] == maxneighbors-1) throw PluginError("verletlist", "maxneighbors is too small!");
+    // Add j to verlet list of i
+    vlist[i][nv[i]++] = j;
+   }
+  }
+ }
 }
 
 void VerletListCellManager::UpdateCell(Configuration & conf) 

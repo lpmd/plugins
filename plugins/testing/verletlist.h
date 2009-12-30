@@ -19,6 +19,7 @@ class VerletListCellManager: public CellManager, public Plugin
 
    void Reset();
    void UpdateCell(Configuration & conf);
+   void UpdateAtom(Configuration & conf, long i);
    void UpdateVerletList(Configuration & conf);
    void BuildNeighborList(Configuration & conf, long i, NeighborList & nlist, bool full, double);
    double Cutoff() const;

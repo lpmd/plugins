@@ -39,6 +39,11 @@ void MinimumImageCellManager::UpdateCell(Configuration & conf)
  }
 }
 
+void MinimumImageCellManager::UpdateAtom(Configuration & conf, long i)
+{
+ UpdateCell(conf);
+}
+
 double MinimumImageCellManager::Cutoff() const { return rcut; }
 
 void MinimumImageCellManager::BuildNeighborList(Configuration & conf, long i, NeighborList & nlist, bool full, double rcu)

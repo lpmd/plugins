@@ -200,6 +200,29 @@ void LinkedCell::UpdateCell(Configuration & conf)
  }
 }
 
+void LinkedCell::UpdateAtom(Configuration & conf, long r)
+{
+ BasicParticleSet & atoms = conf.Atoms();
+ BasicCell & cell = conf.Cell();
+ full_list_half[r].Clear();
+ full_list_full[r].Clear();
+ const Vector fpos = cell.Fractional(atoms[r].Position());
+ //
+ int i = WrapAround(int(floor(nx*fpos[0])), nx);
+ int j = WrapAround(int(floor(ny*fpos[1])), ny);
+ int k = WrapAround(int(floor(nz*fpos[2])), nz);
+ long q = k*(nx*ny)+j*nx+i;
+ indexc[r] = q;
+ //
+ if (head[q] == -1) head[q] = tail[q] = r;
+ else 
+ {
+  atomlist[tail[q]] = r;
+  tail[q] = r;   
+ }
+ atomlist[r] = -1;
+}
+
 void LinkedCell::BuildNeighborList(Configuration & conf, long i, NeighborList & nlist, bool full, double rcut)
 { 
 // std::cerr << "Llamado  a BuildNeighb " << '\n';

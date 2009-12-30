@@ -174,6 +174,27 @@ void LCBinary::UpdateCell(Configuration & conf)
  }
 }
 
+void LCBinary::UpdateAtom(Configuration & conf, long r)
+{
+ BasicParticleSet & atoms = conf.Atoms();
+ BasicCell & cell = conf.Cell();
+ const Vector fpos = cell.Fractional(atoms[r].Position());
+ //
+ int i = int(floor(nx*fpos[0]));
+ int j = int(floor(ny*fpos[1]));
+ int k = int(floor(nz*fpos[2]));
+ //if (i < 0) i += nx;
+ if (i > nx-1) i -= nx;
+ //if (j < 0) j += ny;
+ if (j > ny-1) j -= ny;
+ //if (k < 0) k += nz;
+ if (k > nz-1) k -= nz;
+ //
+ long q = k*(nx*ny)+j*nx+i;
+ //assert(atomlist[q] == -1);
+ atomlist[q] = r;
+}
+
 void LCBinary::BuildNeighborList(Configuration & conf, long i, NeighborList & nlist, bool full, double rcut)
 { 
  BasicParticleSet & atoms = conf.Atoms();
