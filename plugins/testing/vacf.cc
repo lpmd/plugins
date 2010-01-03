@@ -10,7 +10,7 @@ using namespace lpmd;
 Vacf::Vacf(std::string args): Plugin("vacf", "2.0")
 {
  ParamList & param = (*this);
- AssignParameter("dt","0");
+ DefineKeyword("dt","1");
  //
  ProcessArguments(args);
  dt = param["dt"];
