@@ -49,7 +49,7 @@ class IndexSelector: public Selector<BasicParticleSet>
    RefParticleSet innerps;
 };
 
-IndexFilter::IndexFilter(std::string args): Plugin("element", "1.0"), selector(0)
+IndexFilter::IndexFilter(std::string args): Plugin("index", "1.0"), selector(0)
 {
  ParamList & params = (*this);
  //
