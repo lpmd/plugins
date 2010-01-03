@@ -4,7 +4,7 @@
 
 name = lpmd-plugins
 fullname = 'LPMD plugins'
-version = 0.6.0
+version = 0.6.1
 author = 'GNM <gnm@gnm.cl>'
 prefix = /usr/local
 
