@@ -124,7 +124,8 @@ void MSD::Evaluate(ConfigurationSet & hist, Potential & pot)
  for(int i=0;i<(int)(N-1)/2;++i)
  {
   m.Set(0, i, i);
-  for(int j=0;j<nsp;j=j)
+  int j = 0;
+  for(int e1=0;e1<nsp;e1++)
   {
    m.Set(j+1, i, msd[i][j]/double(nat*(N-1)/2));
    if (jmode)
