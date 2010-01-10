@@ -52,12 +52,15 @@ void MSD::Evaluate(ConfigurationSet & hist, Potential & pot)
  BasicCell & cell = scratch.Cell();
  for (long int i=0;i<nat;++i) noperiodic[0][i] = scratch_atoms[i].Position();
  for (int t=1;t<N;++t)
+ {
+  DebugStream() << "-> MSD: Undoing periodicity, configuration " << t << '\n';
   for (long int i=0;i<nat;++i)
   {
    const Vector & v0 = scratch_atoms[0].Position() = hist[t-1].Atoms()[i].Position();
    const Vector & v1 = scratch_atoms[1].Position() = hist[t].Atoms()[i].Position();
    noperiodic[t][i] = noperiodic[t-1][i] + cell.Displacement(v0, v1);
   }
+ }
 
  //
  //
@@ -73,6 +76,7 @@ void MSD::Evaluate(ConfigurationSet & hist, Potential & pot)
   }
   for (int t0=0;t0<(int)(N-1)/2;t0++) // loop sobre todos los origenes
   {
+   DebugStream() << "-> MSD: Processing time origin " << t0 << " of " << (int)(N-1)/2 << '\n';
    for (int t=0;t<(int)(N-1)/2;t++) // loop sobre la separacion en tiempo
    {
     for (long int i=0;i<nat;i++)  // loop sobre todos los atomos
