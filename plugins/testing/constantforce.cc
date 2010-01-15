@@ -50,11 +50,15 @@ void ConstantForcePotential::UpdateForces(Configuration & con)
 { 
  lpmd::BasicParticleSet & atoms = con.Atoms();
  const double forcefactor = double(GlobalSession["forcefactor"]);
+ long count = 0;
  for (long int i=0;i<atoms.Size();++i)
  {
+  if ((atoms.Have(atoms[i], Tag("noconstantforce"))) && (atoms.GetTag(atoms[i], Tag("noconstantforce")) == "true")) continue;
   double mi = atoms[i].Mass();
   atoms[i].Acceleration() = atoms[i].Acceleration() + force*(forcefactor/mi);
+  count++;
  }
+ DebugStream() << "-> Applied constant force to " << count << " atoms" << '\n';
 }
 
 // Esto se incluye para que el modulo pueda ser cargado dinamicamente
