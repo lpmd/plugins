@@ -208,7 +208,10 @@ void DensityProfile::Evaluate(lpmd::Configuration & con, lpmd::Potential & pot)
        else if(axis==2) pp = (z-range[2][0]);
        else lpmd::ShowWarning("plugin densityprofile", "Bad calculation of densityprofile, check your 'axis' option.");
        int ir = (long) floor(pp/dr);
-       rho[ir][s] += m/dvol;
+       if ((ir >= 0) && (ir < bins))
+       {
+        rho[ir][s] += m/dvol;
+       }
       }
      }
     }

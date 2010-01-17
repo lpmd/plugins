@@ -206,9 +206,11 @@ void TempProfile::Evaluate(Configuration & con, Potential & pot)
        else if(axis==2) pp = (z-range[2][0]);
        else ShowWarning("plugin tempprofile", "Bad calculation of tempprofile, check your 'axis' option.");
        int ir = (long) floor(pp/dr);
-       assert(ir >= 0 && ir < bins);
-       temp[ir][s] += 0.5*m*velocity.SquareModule()*kin2ev; //Solo son los aportes a la energia cinetica.
-       nab[ir]++;
+       if ((ir >= 0) && (ir < bins))
+       {
+        temp[ir][s] += 0.5*m*velocity.SquareModule()*kin2ev; //Solo son los aportes a la energia cinetica.
+        nab[ir]++;
+       }
       }
      }
     }
