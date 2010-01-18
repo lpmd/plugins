@@ -55,11 +55,11 @@ void SkewStartGenerator::Generate(Configuration & config) const
  dx = h / double(n);
  dy = k / double(n);
  dz = l / double(n);
+ bool create_atoms = (atoms.Size() == 0);
  for (long i=0;i<n;++i)
  {
-//  sc.Create(new Atom(spc));
-//  sc.SetFracPosition(i, Vector(dx*double(i), dy*double(i), dz*double(i)));
-  atoms[i].Position() = cell.Cartesian(Vector(dx*double(i), dy*double(i), dz*double(i)));
+  if (create_atoms) atoms.Append(Atom(spc));
+  atoms[i].Position() = cell.FittedInside(cell.Cartesian(Vector(dx*double(i), dy*double(i), dz*double(i))));
  }
 }
 
