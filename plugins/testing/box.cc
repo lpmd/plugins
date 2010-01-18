@@ -12,6 +12,8 @@
 
 using namespace lpmd;
 
+#define DELTA (1.0E+12)
+
 class BoxSelector: public Selector<BasicParticleSet>
 {
  public:
@@ -55,13 +57,44 @@ BoxFilter::BoxFilter(std::string args): Plugin("box", "1.0"), selector(0)
  end = int(params["end"]);
  each = int(params["each"]);
  except = params["except"];
- lpmd::Array<std::string> sx = StringSplit(params["x"],'-');
- lpmd::Array<std::string> sy = StringSplit(params["y"],'-');
- lpmd::Array<std::string> sz = StringSplit(params["z"],'-');
- if (sx.Size()!=2 || sx.Size()!=2 || sx.Size()!=2) throw PluginError("box", "Bad, settings in parameters");
- x[0] = atof(sx[0].c_str());x[1] = atof(sx[1].c_str());
- y[0] = atof(sy[0].c_str());y[1] = atof(sy[1].c_str());
- z[0] = atof(sz[0].c_str());z[1] = atof(sz[1].c_str());
+ if (params["x"] == "all")
+ {
+  x[0] = -DELTA;
+  x[1] = +DELTA;
+ }
+ else
+ {
+  lpmd::Array<std::string> sx = StringSplit(params["x"],'-');
+  if (sx.Size() != 2) throw PluginError("box", "Invalid x range");
+  x[0] = atof(sx[0].c_str());
+  x[1] = atof(sx[1].c_str());
+ }
+
+ if (params["y"] == "all")
+ {
+  y[0] = -DELTA;
+  y[1] = +DELTA;
+ }
+ else
+ {
+  lpmd::Array<std::string> sy = StringSplit(params["y"],'-');
+  if (sy.Size() != 2) throw PluginError("box", "Invalid y range");
+  y[0] = atof(sy[0].c_str());
+  y[1] = atof(sy[1].c_str());
+ }
+
+ if (params["z"] == "all")
+ {
+  z[0] = -DELTA;
+  z[1] = +DELTA;
+ } 
+ else
+ {
+  lpmd::Array<std::string> sz = StringSplit(params["z"],'-');
+  if (sz.Size() != 2) throw PluginError("box", "Invalid z range");
+  z[0] = atof(sz[0].c_str());
+  z[1] = atof(sz[1].c_str());
+ }
 }
 
 BoxFilter::~BoxFilter() { delete selector; }
@@ -78,6 +111,18 @@ void BoxFilter::ShowHelp() const
 Selector<BasicParticleSet> & BoxFilter::CreateSelector()
 {
  Box box_region(x[0], x[1], y[0], y[1], z[0], z[1]);
+ ParamList & params = (*this);
+ DebugStream() << "-> Selecting range: ";
+ DebugStream() << "X=";
+ if (params["x"] != "all") DebugStream() << "[ " << x[0] << ", " << x[1] << " ] ";
+ else DebugStream() << "all "; 
+ DebugStream() << "Y=";
+ if (params["y"] != "all") DebugStream() << "[ " << y[0] << ", " << y[1] << " ] ";
+ else DebugStream() << "all "; 
+ DebugStream() << "Z=";
+ if (params["z"] != "all") DebugStream() << "[ " << z[0] << ", " << z[1] << " ] ";
+ else DebugStream() << "all "; 
+ DebugStream() << "\n";
  if (selector != 0) delete selector;
  selector = new BoxSelector(box_region);
  return *selector;
