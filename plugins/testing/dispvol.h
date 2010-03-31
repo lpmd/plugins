@@ -25,7 +25,9 @@ class DispVol: public lpmd::StoredValue<lpmd::Matrix>, public lpmd::TemporalProp
 
  private:
   lpmd::Matrix * m;
-  long int delta_t;
+  long int delta_t, nbins;
+  double maxlength;
+  std::string mode;
 };
 
 #endif
