@@ -14,10 +14,31 @@ MSD::MSD(std::string args): Plugin("msd", "2.0")
 
  DefineKeyword("rcutmin");
  DefineKeyword("rcutmax");
+ DefineKeyword("zerocm", "false");
  ProcessArguments(args);
  //
  rcutmin = double(params["rcutmin"]);
  rcutmax = double(params["rcutmax"]);
+ zerocm = bool(params["zerocm"] == "true");
+}
+
+void MSD::ZeroCM(Configuration & conf)
+{
+ Vector cm(0.0, 0.0, 0.0);
+ BasicCell & cell = conf.Cell();
+ BasicParticleSet & atoms = conf.Atoms();
+ const Vector boxcenter = cell.Cartesian(Vector(0.5, 0.5, 0.5));
+ double m = 0.0;
+ for (long i=0;i<atoms.Size();++i)
+ {
+  cm += (atoms[i].Mass()*atoms[i].Position());
+  m += atoms[i].Mass();
+ }
+ cm = cm * (1.0/m);
+ for (long i=0;i<atoms.Size();++i)
+ {
+  atoms[i].Position() = cell.FittedInside(atoms[i].Position() - cm + boxcenter);
+ }
 }
 
 void MSD::Evaluate(ConfigurationSet & hist, Potential & pot)
@@ -45,6 +66,7 @@ void MSD::Evaluate(ConfigurationSet & hist, Potential & pot)
  //
  // Undo periodicity 
  //
+ if (zerocm) ZeroCM(hist[0]);
  StoredConfiguration scratch(hist[0]);
  Vector ** noperiodic = new Vector*[N];
  for (int t=0;t<N;++t) noperiodic[t] = new Vector[nat];
@@ -53,6 +75,7 @@ void MSD::Evaluate(ConfigurationSet & hist, Potential & pot)
  for (long int i=0;i<nat;++i) noperiodic[0][i] = scratch_atoms[i].Position();
  for (int t=1;t<N;++t)
  {
+  if (zerocm) ZeroCM(hist[t]);
   DebugStream() << "-> MSD: Undoing periodicity, configuration " << t << '\n';
   for (long int i=0;i<nat;++i)
   {
