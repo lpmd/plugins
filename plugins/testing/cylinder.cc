@@ -58,6 +58,7 @@ CylinderFilter::CylinderFilter(std::string args): Plugin("cylinder", "1.0"), sel
  except = params["except"];
  //if (params["endpoint"] == "null") throw PluginError("cylinder", "Invalid end point");
  //if (params["rmax"] == "0") throw PluginError("rmax", "Invalid maxim radius");
+ origin = Vector(params["origin"].c_str());
  S = Vector(params["endpoint"].c_str()) - Vector(params["origin"].c_str());
  rmax = double(params["rmax"]);
  rmin = double(params["rmin"]);
@@ -76,7 +77,7 @@ void CylinderFilter::ShowHelp() const
 
 Selector<BasicParticleSet> & CylinderFilter::CreateSelector()
 {
- Cylinder cyl_region(S, rmax, rmin);
+ Cylinder cyl_region(S, origin, rmax, rmin);
  ParamList & params = (*this);
  DebugStream() << "-> Selecting cylinder: "<< '\n';
  DebugStream() << "origin   = " << params["origin"] << '\n';

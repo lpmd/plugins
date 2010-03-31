@@ -20,7 +20,7 @@ class CylinderFilter: public lpmd::SystemFilter, public lpmd::Plugin
   lpmd::Selector<lpmd::BasicParticleSet> & CreateSelector();
 
   private:
-  lpmd::Vector S;
+   lpmd::Vector S, origin;
    double rmax,rmin;
    lpmd::Selector<lpmd::BasicParticleSet> * selector;
 };
