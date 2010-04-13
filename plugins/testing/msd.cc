@@ -25,6 +25,7 @@ MSD::MSD(std::string args): Plugin("msd", "2.0")
 void MSD::ZeroCM(Configuration & conf)
 {
  Vector cm(0.0, 0.0, 0.0);
+ Vector newcm(0.0, 0.0, 0.0);
  BasicCell & cell = conf.Cell();
  BasicParticleSet & atoms = conf.Atoms();
  const Vector boxcenter = cell.Cartesian(Vector(0.5, 0.5, 0.5));
@@ -37,8 +38,11 @@ void MSD::ZeroCM(Configuration & conf)
  cm = cm * (1.0/m);
  for (long i=0;i<atoms.Size();++i)
  {
-  atoms[i].Position() = cell.FittedInside(atoms[i].Position() - cm + boxcenter);
+  atoms[i].Position() = atoms[i].Position() - cm + boxcenter;
+  newcm += (atoms[i].Mass()*atoms[i].Position());
  }
+ newcm = newcm * (1.0/m);
+ assert ((newcm-boxcenter).Module() < 1.0E-06);
 }
 
 void MSD::Evaluate(ConfigurationSet & hist, Potential & pot)

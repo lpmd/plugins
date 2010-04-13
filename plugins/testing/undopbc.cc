@@ -11,7 +11,7 @@
 
 using namespace lpmd;
 
-UndoPBCModifier::UndoPBCModifier(std::string args): Plugin("cellscaling", "2.0"), oldpositions(0)
+UndoPBCModifier::UndoPBCModifier(std::string args): Plugin("undopbc", "2.0"), oldpositions(0)
 {
  ParamList & params = (*this);
  //

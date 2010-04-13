@@ -421,6 +421,13 @@ directory .
        pkgconfig += liblpmd-2.0
     end
 
+    module pinatom.so
+       language = c++
+       sources = pinatom.cc
+       installpath = lib/lpmd
+       pkgconfig += liblpmd-2.0
+    end
+
     module propertycolor.so
        language = c++
        sources = propertycolor.cc
@@ -508,6 +515,13 @@ directory .
     module skewstart.so
        language = c++
        sources = skewstart.cc
+       installpath = lib/lpmd
+       pkgconfig += liblpmd-2.0
+    end
+
+    module simplebond.so
+       language = c++
+       sources = simplebond.cc
        installpath = lib/lpmd
        pkgconfig += liblpmd-2.0
     end
