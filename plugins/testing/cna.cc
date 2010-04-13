@@ -310,8 +310,8 @@ void CommonNeighborAnalysis::Evaluate(Configuration & conf, Potential & pot)
   {
    at = atoms[q];
    regcnt[q] = defcnt[q] = 0;
-   if ((atoms.Have(at, Tag("filterout")) && (atoms.GetTag(at, Tag("filterout"))
-       == filterout)) || (filterout=="all")) nfil++;
+   if ((atoms.Have(at, Tag(filterout)) && (atoms.GetTag(at, Tag(filterout))
+       == "true")) || (filterout=="all")) nfil++;
   }
   for (unsigned long int q=0;q<npairs;++q)
   {
@@ -336,8 +336,8 @@ void CommonNeighborAnalysis::Evaluate(Configuration & conf, Potential & pot)
   for (long int q=0;q<atoms.Size();++q)
   {
    at = atoms[q];
-   if ((atoms.Have(at, Tag("filterout")) && (atoms.GetTag(at, Tag("filterout"))
-      == filterout)) || (filterout == "all"))
+   if ((atoms.Have(at, Tag(filterout)) && (atoms.GetTag(at, Tag(filterout))
+      == "true")) || (filterout == "all"))
    {
     const Vector & pos = atoms[q].Position();
     for (int pp=0;pp<3;++pp) m->Set(pp, q, pos[pp]);
