@@ -36,6 +36,7 @@ CommonNeighborAnalysis::CommonNeighborAnalysis(std::string args): Plugin("cna", 
  DefineKeyword("end", "-1");
  DefineKeyword("each", "1");
  DefineKeyword("output");
+ DefineKeyword("filterout", "all");
  //
  ProcessArguments(args);
  std::string m = params["mode"];
@@ -67,6 +68,7 @@ CommonNeighborAnalysis::CommonNeighborAnalysis(std::string args): Plugin("cna", 
  end = int(params["end"]);
  each = int(params["each"]);
  OutputFile() = params["output"];
+ filterout = params["filterout"];
 }
 
 CommonNeighborAnalysis::~CommonNeighborAnalysis() { }
@@ -302,7 +304,15 @@ void CommonNeighborAnalysis::Evaluate(Configuration & conf, Potential & pot)
   // Defects mode
   unsigned long int * regcnt = new unsigned long int[atoms.Size()];
   unsigned long int * defcnt = new unsigned long int[atoms.Size()];
-  for (long int q=0;q<atoms.Size();++q) regcnt[q] = defcnt[q] = 0;
+  int nfil = 0;
+  lpmd::Atom at;
+  for (long int q=0;q<atoms.Size();++q) 
+  {
+   at = atoms[q];
+   regcnt[q] = defcnt[q] = 0;
+   if ((atoms.Have(at, Tag("filterout")) && (atoms.GetTag(at, Tag("filterout"))
+       == filterout)) || (filterout=="all")) nfil++;
+  }
   for (unsigned long int q=0;q<npairs;++q)
   {
    if (refmap.count(IndexTrio(data[q].j, data[q].k, data[q].l)) > 0) 
@@ -316,7 +326,7 @@ void CommonNeighborAnalysis::Evaluate(Configuration & conf, Potential & pot)
     defcnt[data[q].atj]++;
    }
   }
-  *m = Matrix(6, atoms.Size());
+  *m = Matrix(6, nfil);
   m->SetLabel(0, "x");
   m->SetLabel(1, "y");
   m->SetLabel(2, "z");
@@ -325,11 +335,16 @@ void CommonNeighborAnalysis::Evaluate(Configuration & conf, Potential & pot)
   m->SetLabel(5, "%defect");
   for (long int q=0;q<atoms.Size();++q)
   {
-   const Vector & pos = atoms[q].Position();
-   for (int pp=0;pp<3;++pp) m->Set(pp, q, pos[pp]);
-   m->Set(3, q, (double)regcnt[q]);
-   m->Set(4, q, (double)defcnt[q]);
-   m->Set(5, q, 100.0*defcnt[q]/(regcnt[q]+defcnt[q]));
+   at = atoms[q];
+   if ((atoms.Have(at, Tag("filterout")) && (atoms.GetTag(at, Tag("filterout"))
+      == filterout)) || (filterout == "all"))
+   {
+    const Vector & pos = atoms[q].Position();
+    for (int pp=0;pp<3;++pp) m->Set(pp, q, pos[pp]);
+    m->Set(3, q, (double)regcnt[q]);
+    m->Set(4, q, (double)defcnt[q]);
+    m->Set(5, q, 100.0*defcnt[q]/(regcnt[q]+defcnt[q]));
+   }
   }
   delete [] regcnt;
   delete [] defcnt;

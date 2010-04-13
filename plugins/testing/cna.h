@@ -10,6 +10,7 @@
 #include <lpmd/property.h>
 #include <lpmd/configuration.h>
 #include <lpmd/plugin.h>
+#include <lpmd/atom.h>
 
 #include <map>
 
@@ -45,6 +46,7 @@ class CommonNeighborAnalysis: public lpmd::StoredValue<lpmd::Matrix>, public lpm
     int mode, spc1, spc2;
     double rcut;
     std::map<IndexTrio, int> refmap;
+    std::string filterout;
 };
 
 #endif
