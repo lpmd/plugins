@@ -333,6 +333,7 @@ void CommonNeighborAnalysis::Evaluate(Configuration & conf, Potential & pot)
   m->SetLabel(3, "reference");
   m->SetLabel(4, "defects");
   m->SetLabel(5, "%defect");
+  nfil = 0;
   for (long int q=0;q<atoms.Size();++q)
   {
    at = atoms[q];
@@ -340,10 +341,11 @@ void CommonNeighborAnalysis::Evaluate(Configuration & conf, Potential & pot)
       == "true")) || (filterout == "all"))
    {
     const Vector & pos = atoms[q].Position();
-    for (int pp=0;pp<3;++pp) m->Set(pp, q, pos[pp]);
-    m->Set(3, q, (double)regcnt[q]);
-    m->Set(4, q, (double)defcnt[q]);
-    m->Set(5, q, 100.0*defcnt[q]/(regcnt[q]+defcnt[q]));
+    for (int pp=0;pp<3;++pp) m->Set(pp, nfil, pos[pp]);
+    m->Set(3, nfil, (double)regcnt[q]);
+    m->Set(4, nfil, (double)defcnt[q]);
+    m->Set(5, nfil, 100.0*defcnt[q]/(regcnt[q]+defcnt[q]));
+    nfil++;
    }
   }
   delete [] regcnt;
