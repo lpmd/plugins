@@ -188,7 +188,7 @@ void LinkedCell::UpdateCell(Configuration & conf)
   int j = WrapAround(int(floor(ny*fpos[1])), ny);
   int k = WrapAround(int(floor(nz*fpos[2])), nz);
   long q = k*(nx*ny)+j*nx+i;
-  indexc[r] = q;
+  indexc[r] = ( ((q >= 0) && (q < nx*ny*nz)) ? q : -1 );
   //
   if (head[q] == -1) head[q] = tail[q] = r;
   else 
@@ -212,7 +212,7 @@ void LinkedCell::UpdateAtom(Configuration & conf, long r)
  int j = WrapAround(int(floor(ny*fpos[1])), ny);
  int k = WrapAround(int(floor(nz*fpos[2])), nz);
  long q = k*(nx*ny)+j*nx+i;
- indexc[r] = q;
+ indexc[r] = ( ((q >= 0) && (q < nx*ny*nz)) ? q : -1 );
  //
  if (head[q] == -1) head[q] = tail[q] = r;
  else 
@@ -233,10 +233,16 @@ void LinkedCell::BuildNeighborList(Configuration & conf, long i, NeighborList & 
 // int p = WrapAround(int(floor(nx*fpos[0])), nx);
 // int q = WrapAround(int(floor(ny*fpos[1])), ny);
 // int r = WrapAround(int(floor(nz*fpos[2])), nz);
- long cind = indexc[i];//r*(nx*ny)+q*nx+p;
+ nlist.Clear();
+ long cind = indexc[i];
+ if (cind < 0) 
+ { 
+  // atom was marked as outside the box
+  ShowWarning("linkedcell", "Atom with i="+ToString(i)+" detected far outside the simulation box\n");
+  return;
+ }
  //
  AtomPair nn;
- nlist.Clear();
 
  if (full_list_half[i].Size() == 0 && full == false)
  {
