@@ -21,6 +21,7 @@ LinkedCell::LinkedCell(std::string args): Plugin("linkedcell", "1.0")
  DefineKeyword("ny", "0");
  DefineKeyword("nz", "0");
  DefineKeyword("mode", "noauto");
+ DefineKeyword("warn-outside", "true");
  // 
  ProcessArguments(args);
  cutoff = double(params["cutoff"]);
@@ -33,6 +34,7 @@ LinkedCell::LinkedCell(std::string args): Plugin("linkedcell", "1.0")
  //
  if (params["mode"]=="auto" || params["mode"]=="AUTO") mode=true;
  else mode=false;
+ warn_outside = (params["warn-outside"] == "true");
  // 
  //
  //
@@ -189,12 +191,15 @@ void LinkedCell::UpdateCell(Configuration & conf)
   int k = WrapAround(int(floor(nz*fpos[2])), nz);
   long q = k*(nx*ny)+j*nx+i;
   indexc[r] = ( ((q >= 0) && (q < nx*ny*nz)) ? q : -1 );
-  //
-  if (head[q] == -1) head[q] = tail[q] = r;
-  else 
+  q = indexc[r];
+  if (q >= 0)
   {
-   atomlist[tail[q]] = r;
-   tail[q] = r;   
+   if (head[q] == -1) head[q] = tail[q] = r;
+   else 
+   {
+    atomlist[tail[q]] = r;
+    tail[q] = r;   
+   }
   }
   atomlist[r] = -1;
  }
@@ -213,12 +218,15 @@ void LinkedCell::UpdateAtom(Configuration & conf, long r)
  int k = WrapAround(int(floor(nz*fpos[2])), nz);
  long q = k*(nx*ny)+j*nx+i;
  indexc[r] = ( ((q >= 0) && (q < nx*ny*nz)) ? q : -1 );
- //
- if (head[q] == -1) head[q] = tail[q] = r;
- else 
+ q = indexc[r];
+ if (q >= 0)
  {
-  atomlist[tail[q]] = r;
-  tail[q] = r;   
+  if (head[q] == -1) head[q] = tail[q] = r;
+  else 
+  {
+   atomlist[tail[q]] = r;
+   tail[q] = r;   
+  }
  }
  atomlist[r] = -1;
 }
@@ -235,10 +243,11 @@ void LinkedCell::BuildNeighborList(Configuration & conf, long i, NeighborList & 
 // int r = WrapAround(int(floor(nz*fpos[2])), nz);
  nlist.Clear();
  long cind = indexc[i];
- if (cind < 0) 
+ if (cind < 0)
  { 
   // atom was marked as outside the box
-  ShowWarning("linkedcell", "Atom with i="+ToString(i)+" detected far outside the simulation box\n");
+  if (warn_outside)
+     ShowWarning("linkedcell", "Atom with i="+ToString(i)+" detected far outside the simulation box\n");
   return;
  }
  //
