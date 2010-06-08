@@ -295,6 +295,13 @@ directory .
        libraries += -lz
     end
 
+    module mcy.so
+       language = c++
+       sources = mcy.cc
+       installpath = lib/lpmd
+       pkgconfig += liblpmd-2.0
+    end
+
     module metropolis.so
        language = c++
        sources = metropolis.cc
