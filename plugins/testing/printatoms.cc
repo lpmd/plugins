@@ -36,11 +36,10 @@ void PrintAtomsVisualizer::ShowHelp() const
  std::cout << " Example                                                                       \n";
  std::cout << " Cargando el Modulo :                                                          \n";
  std::cout << " use printatoms                                                                \n";
- std::cout << "     from 10                                                                   \n";
- std::cout << "     to 20                                                                     \n";
+ std::cout << "     print x,y,z,vx,vy,vz                                                      \n";
  std::cout << " enduse                                                                        \n";
  std::cout << " Llamando al modulo :                                                          \n";
- std::cout << " visualize printatoms start=1 end=1000 each=50                               \n\n";
+ std::cout << " visualize printatoms start=1 end=1000 each=50 over index index=10-10        \n\n";
 }
 
 void PrintAtomsVisualizer::Apply(const Simulation & sim) 
