@@ -22,7 +22,7 @@ Harmonic::Harmonic(std::string args): Plugin("harmonic", "2.0")
 void Harmonic::ShowHelp() const
 {
  std::cout << " General Info      >>                                                          \n";
- std::cout << "      El modulo implementa el potencial Harmonico para la interaccion de       \n";
+ std::cout << "      El modulo implementa el potencial Armonico para la interaccion de       \n";
  std::cout << " de pares.                                                                     \n";
  std::cout << "      Se utiliza pairpotential de la API para llevar a cabo el calculo.        \n";
  std::cout << " General Options   >>                                                          \n";

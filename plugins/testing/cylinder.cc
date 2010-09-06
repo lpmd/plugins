@@ -71,7 +71,7 @@ void CylinderFilter::ShowHelp() const
  std::cout << " General Info      >>                                                          \n";
  std::cout << " General Options   >>                                                          \n";
  std::cout << " Example                                                                       \n";
- std::cout << " filter cylinder origin=<5,5,5> end=<6,6,6> rmax=10 rmin=0                     \n";
+ std::cout << " filter cylinder origin=<5,5,5> endpoint=<6,6,6> rmax=10 rmin=0                     \n";
  std::cout << '\n';
 }
 
