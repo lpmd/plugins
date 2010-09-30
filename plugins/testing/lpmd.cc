@@ -67,7 +67,7 @@ LPMDFormat::~LPMDFormat()
   delete [] outbuf;
   delete (z_stream *)(zstr);
  }
- delete linecounter; 
+ delete [] linecounter; 
 }
 
 void LPMDFormat::ShowHelp() const

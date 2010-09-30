@@ -470,6 +470,13 @@ directory .
        pkgconfig += liblpmd-2.0
     end
 
+    module random.so
+       language = c++
+       sources = random.cc
+       installpath = lib/lpmd
+       pkgconfig += liblpmd-2.0
+    end
+
     module replicate.so
        language = c++
        sources = replicate.cc
