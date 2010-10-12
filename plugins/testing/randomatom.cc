@@ -59,9 +59,11 @@ void RandomAtomModifier::Apply(Simulation & conf)
    int rnd = int(drand48()*atoms.Size());
    if (rnd!=0) random.AppendUnique(rnd);
   }
+  DebugStream() << "-> Replacing " << random.Size() << " atoms\n";
   for (int i=0;i<random.Size();++i)
   {
-   atoms[random[i]].Symbol() = symbol;
+   atoms[random[i]].Z() = ElemNum(symbol);
+   assert (atoms[random[i]].Symbol() == symbol);
   }
  }
  else if(type=="delete")
@@ -77,6 +79,7 @@ void RandomAtomModifier::Apply(Simulation & conf)
    int rnd = int(drand48()*atoms.Size());
    if (rnd!=0) random.AppendUnique(rnd);
   }
+  DebugStream() << "-> Deleting " << random.Size() << " atoms\n";
   //first delete atoms.
   for (int i=0;i<random.Size();++i)
   {
