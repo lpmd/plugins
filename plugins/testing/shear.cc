@@ -15,9 +15,9 @@ using namespace lpmd;
 ShearModifier::ShearModifier(std::string args): Plugin("shear", "2.0")
 {
  ParamList & param = (*this);
- AssignParameter("axis", "X");
- AssignParameter("normal", "Y");
- AssignParameter("strain", "0.01");
+ DefineKeyword("axis", "X");
+ DefineKeyword("normal", "Y");
+ DefineKeyword("strain", "0.01");
  // 
  ProcessArguments(args);
  if ((param["axis"] == "x") || (param["axis"] == "X")) shear_axis = 0;
