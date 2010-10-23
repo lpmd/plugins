@@ -21,8 +21,9 @@ XYZFormat::XYZFormat(std::string args): Plugin("xyz", "2.0")
  DefineKeyword("coords", "positive");
  DefineKeyword("inside", "false");
  DefineKeyword("external", "consider");
- AssignParameter("external", "consider");
- AssignParameter("replacecell", "false");
+ DefineKeyword("zerocm", "false");
+ DefineKeyword("external", "consider");
+ DefineKeyword("replacecell", "false");
  // hasta aqui los valores por omision
  ProcessArguments(args);
  readfile = writefile = params["file"];
@@ -32,6 +33,7 @@ XYZFormat::XYZFormat(std::string args): Plugin("xyz", "2.0")
  inside = params["inside"];
  external = params["external"];
  rcell = params["replacecell"];
+ zerocm = params["zerocm"];
 }
 
 XYZFormat::~XYZFormat() { delete linecounter; }
@@ -127,6 +129,18 @@ bool XYZFormat::ReadCell(std::istream & is, Configuration & sc) const
    sc.SetTag(sc, Tag("level"), 2);
   }
   else throw PluginError("xyz", "An unidentified line was found in the file \""+readfile+"\", line "+ToString<int>(*linecounter));
+ }
+ if (zerocm == "true")
+ {
+  Vector cm(0.0, 0.0, 0.0);
+  const Vector geocenter = cell.Cartesian(Vector(0.5, 0.5, 0.5));
+  double totalmass = 0.0;
+  for (long i=0;i<natoms;++i) 
+  {
+   cm += (part[i].Mass()*part[i].Position());
+   totalmass += part[i].Mass();
+  }
+  for (long i=0;i<natoms;++i) part[i].Position() += (geocenter-(cm/totalmass));
  }
  if (coords == "centered") UnCenter(part,cell);
  if (external != "ignore")

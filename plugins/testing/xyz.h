@@ -29,9 +29,8 @@ class XYZFormat: public lpmd::CellFormat, public lpmd::Plugin
   long int interval;
   long int level;
   bool rcell;
-  std::string coords;
-  std::string inside;
-  std::string external;
+  std::string coords, inside;
+  std::string external, zerocm;
 };
 
 #endif
