@@ -58,7 +58,9 @@ void ConstantForcePotential::UpdateForces(Configuration & con)
   atoms[i].Acceleration() = atoms[i].Acceleration() + force*(forcefactor/mi);
   count++;
  }
- DebugStream() << "-> Applied constant force to " << count << " atoms" << '\n';
+ DebugStream() << "-> Applied constant force <";
+ DebugStream() << force[0] << ", " << force[1] << ", " << force[2];
+ DebugStream() << "> to " << count << " atoms" << '\n';
 }
 
 // Esto se incluye para que el modulo pueda ser cargado dinamicamente
