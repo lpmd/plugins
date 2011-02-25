@@ -54,12 +54,14 @@ void FinnisSinclair::ShowHelp() const
 
 double FinnisSinclair::pairEnergy(const double &r) const
 {
-	return (r-c)*(r-c)*(c0+c1*r+c2*r*r);
+	if(r<c) return (r-c)*(r-c)*(c0+c1*r+c2*r*r);
+    else return 0.0e0;
 }
 
 double FinnisSinclair::rhoij(const double &r) const
 {
-	return (r-d)*(r-d)*(1.0e0+B*(r-d)/d);
+	if(r<d) return ((r-d)*(r-d))*(1.0e0+B*(r-d)/d);
+    else return 0.0e0;
 }
 
 double FinnisSinclair::F(const double &rhoi) const
@@ -71,18 +73,26 @@ Vector FinnisSinclair::PairForce(const Vector &normrij, const double &r) const
 {
  //FIXME : Chequear bien el valor retornado!!! improtante.
 //	double r = rij.Module();
-	double t1=2.0e0*(r-c)*(c0+c1*r+c2*r*r);
-	double t2=(r-c)*(r-c)*(c1+2.0e0*c2*r);
-	return (t1+t2)*(normrij/r);
+    if(r<c)
+    {
+	 double t1=2.0e0*(r-c)*(c0+c1*r+c2*r*r);
+	 double t2=(r-c)*(r-c)*(c1+2.0e0*c2*r);
+	 return (t1+t2)*normrij;
+    }
+    else return Vector(0.0,0.0,0.0);
 }
 
-Vector FinnisSinclair::ManyBodies(const Vector &normrij, const double &invrhoi, const double &invrhoj, const double &r) const
+Vector FinnisSinclair::ManyBodies(const Vector &normrij, const double &rhoi, const double &rhoj, const double &r) const
 {
  //FIXME : Chequear bien el valor retornado!!! importante
 //	double r = rij.Module();
-	double t1=(invrhoi+invrhoj)*A/2.0;
-	double t2=2.0*(r-d)+3.0*B*(r-d)*(r-d)/d;
-	return -t1*t2*normrij/r;
+    if(r<d)
+    {
+	double t1=((1.0e0/sqrt(rhoi))+(1.0e0/sqrt(rhoj)))*A/2.0e0;
+	double t2=2.0e0*(r-d)+3.0e0*B*(r-d)*(r-d)/d;
+	return -t1*t2*normrij;
+    }
+    else return Vector(0.0e0,0.0e0,0.0e0);
 }
 
 // No longer-ranged corrections apply beyond cutoffs c and d (neither for deltarhoi, for deltaU1, for deltaU2 nor for virial)
