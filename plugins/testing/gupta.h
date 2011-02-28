@@ -25,8 +25,6 @@ class Gupta: public lpmd::MetalPotential , public lpmd::Plugin
   lpmd::Vector ManyBodies(const lpmd::Vector &normrij, const double &invrhoi, const double &invrhoj, const double &mod) const;
   double deltarhoi(const double & rhobar) const;
   double deltaU1(const double & rhobar, const int & N) const;
-  double deltaU2(const double & rhobar, const int & N, const double & rhoi) const;
-  double VirialContribution(const double &r, const double &rhoi, const double &rhoj) const;
   double VirialCorrection(const double &rhobar, const int &N, const double &rhoi) const;
 
  private:

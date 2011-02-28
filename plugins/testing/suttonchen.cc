@@ -1,14 +1,14 @@
-//
-//
-//
+//Sutton-Chen PseudoPotential plugin.
+//Sutton, A. P., and Chen, J., 1990, Philos. Mag. Lett., 61, 139. 3, 30
+//Rafii-Tabar, H., and Sutton, A. P., 1991, Philos. Mag. Lett., 63, 217. 3, 30, 36, 37
+//Todd, B. D., and Lynden-Bell, R. M., 1993, Surf. Science, 281, 191. 3, 30
 
 #include "suttonchen.h"
-
 #include <iostream>
 
 using namespace lpmd;
 
-SuttonChen::SuttonChen(std::string args): Plugin("suttonchen", "2.0")
+SuttonChen::SuttonChen(std::string args): Plugin("suttonchen", "2.1")
 {
  ParamList & params = (*this);
  //
@@ -32,30 +32,28 @@ SuttonChen::SuttonChen(std::string args): Plugin("suttonchen", "2.0")
 void SuttonChen::ShowHelp() const
 {
  std::cout << " General Info      >>                                                          \n";
- std::cout << "      El modulo implementa el potencial de SuttonChen para interaccion de      \n";
- std::cout << " atomo metalicos.                                                              \n";
- std::cout << "      Se utiliza la metalpotential de la API para llevar a cabo el calculo.    \n";
+ std::cout << "      The plugin incorporate the SuttonChen potencial, used frequently         \n";
+ std::cout << " for metallic atomic interaction. Based in embedded atom model.                \n\n";
+ std::cout << " V(r) = e*(a/r)^n ; F(rho) = -c*e*sqrt(rhoi) ; rho(r) = (a/r)^m                \n\n";
  std::cout << " General Options   >>                                                          \n";
- std::cout << "      e             : Especifica el valor de epsilon para el potencial.        \n";
- std::cout << "      a             : Especifica el valor para la constante a del potencial.   \n";
- std::cout << "      n             : Especifica el valor para la constante n del potencial.   \n";
- std::cout << "      m             : Especifica el valor para la constante m del potencial.   \n";
- std::cout << "      c             : Especifica el valor para la constante c del potencial.   \n";
- std::cout << "      cutoff        : Radio de corte para el potencial.                        \n";
+ std::cout << "      e             : The value of epsilon in the potential.                   \n";
+ std::cout << "      a             : the value of the A constant in the potencial.            \n";
+ std::cout << "      n             : Value of n in the potential.                             \n";
+ std::cout << "      m             : Value of m in the potential.                             \n";
+ std::cout << "      c             : Value of the c constant of the potential.                \n";
+ std::cout << "      cutoff        : Cutoff of the interatomic potential.                     \n";
  std::cout << '\n';
- std::cout << " Example                                                                       \n";
- std::cout << " Cargando el Modulo :                                                          \n";
- std::cout << " use suttonchen as SC                                                          \n";
+ std::cout << " Example          >>                                                           \n";
+ std::cout << " #Loading the plugin :                                                         \n";
+ std::cout << " use suttonchen as sc                                                          \n";
  std::cout << "     e 3.4                                                                     \n";
  std::cout << "     a 2.0                                                                     \n";
  std::cout << "     n 2.9                                                                     \n";
  std::cout << "     m 0.05                                                                    \n";
  std::cout << "     cutoff 1.90                                                               \n";
  std::cout << " enduse                                                                        \n";
- std::cout << " Llamando al modulo                                                            \n";
- std::cout << " potential SC Cu Cu                                                          \n\n";
- std::cout << "      De esta forma seteamos el potencial de suttonchen entre los atomos de    \n";
- std::cout << " Cu con las constantes seteadas en SC.                                         \n";
+ std::cout << " #Using the loaded plugin :                                                    \n";
+ std::cout << " potential sc Cu Cu                                                          \n\n";
 }
 
 double SuttonChen::pairEnergy(const double &r) const { double ir = 1/r; return e*an*pow(ir,n); }

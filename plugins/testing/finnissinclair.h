@@ -26,7 +26,6 @@ class FinnisSinclair: public lpmd::MetalPotential , public lpmd::Plugin
   lpmd::Vector ManyBodies(const lpmd::Vector &modrij, const double &invrhoi, const double &invrhoj, const double & mod) const;
   double deltarhoi(const double & rhobar, const int & N) const;
   double deltaU1(const double & rhobar, const int & N) const;
-  double deltaU2(const double & rhobar, const int & N, const double & rhoi) const;
 
  private:
   double c0,c1,c2,A,B,c,d;	// Parameters "c" and "d" are cutoffs
