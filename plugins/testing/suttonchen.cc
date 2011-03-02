@@ -27,6 +27,7 @@ SuttonChen::SuttonChen(std::string args): Plugin("suttonchen", "2.1")
  rcut = double(params["cutoff"]);
  an = pow(a,n);
  am = pow(a,m);
+ SetCutoff(rcut);
 }
 
 void SuttonChen::ShowHelp() const
@@ -34,26 +35,28 @@ void SuttonChen::ShowHelp() const
  std::cout << " General Info      >>                                                          \n";
  std::cout << "      The plugin incorporate the SuttonChen potencial, used frequently         \n";
  std::cout << " for metallic atomic interaction. Based in embedded atom model.                \n\n";
- std::cout << " V(r) = e*(a/r)^n ; F(rho) = -c*e*sqrt(rhoi) ; rho(r) = (a/r)^m                \n\n";
+ std::cout << " V(r) = e*(a/r)^n ; F(rho) = -c*e*sqrt(rho) ; rho(r) = (a/r)^m                 \n\n";
  std::cout << " General Options   >>                                                          \n";
- std::cout << "      e             : The value of epsilon in the potential.                   \n";
- std::cout << "      a             : the value of the A constant in the potencial.            \n";
- std::cout << "      n             : Value of n in the potential.                             \n";
- std::cout << "      m             : Value of m in the potential.                             \n";
- std::cout << "      c             : Value of the c constant of the potential.                \n";
- std::cout << "      cutoff        : Cutoff of the interatomic potential.                     \n";
+ std::cout << "      e             : The value of epsilon in the potential. [eV]              \n";
+ std::cout << "      a             : The value of the a constant in the potencial. [A]        \n";
+ std::cout << "      n             : Value of n in the potential.  [integer]                  \n";
+ std::cout << "      m             : Value of m in the potential.  [integer]                  \n";
+ std::cout << "      c             : Value of the c constant of the potential. [real]         \n";
+ std::cout << "      cutoff        : Cutoff of the interatomic potential. [A]                 \n";
  std::cout << '\n';
  std::cout << " Example          >>                                                           \n";
  std::cout << " #Loading the plugin :                                                         \n";
  std::cout << " use suttonchen as sc                                                          \n";
- std::cout << "     e 3.4                                                                     \n";
- std::cout << "     a 2.0                                                                     \n";
- std::cout << "     n 2.9                                                                     \n";
- std::cout << "     m 0.05                                                                    \n";
- std::cout << "     cutoff 1.90                                                               \n";
+ std::cout << "     e 0.015713                                                                \n";
+ std::cout << "     a 3.610000                                                                \n";
+ std::cout << "     n 9.0                                                                     \n";
+ std::cout << "     m 6.0                                                                     \n";
+ std::cout << "     c 39.75500                                                                \n";
+ std::cout << "     cutoff 6.0                                                                \n";
  std::cout << " enduse                                                                        \n";
  std::cout << " #Using the loaded plugin :                                                    \n";
- std::cout << " potential sc Cu Cu                                                          \n\n";
+ std::cout << " potential sc Cu Cu                                                            \n";
+ std::cout << " #Values from : Philosophical Mag. Lett. 1991, Vol 63, No 4, 217-224         \n\n";
 }
 
 double SuttonChen::pairEnergy(const double &r) const { double ir = 1/r; return e*an*pow(ir,n); }
