@@ -9,7 +9,9 @@ author = 'GNM <gnm@gnm.cl>'
 prefix = /usr/local
 
 language c++
-   flags = -g -O3 -ffast-math -funroll-all-loops -Wall -pedantic 
+   compiler = icpc
+   flags = -Wall -O3 -axSSE4.1 -openmp -parallel -diag-disable remark -finline-functions -I. -DNDEBUG  -fPIC -lpthread -lguide
+   linker = icpc
 end
 
 directory .
@@ -199,6 +201,13 @@ directory .
     module finnissinclair.so
        language = c++
        sources = finnissinclair.cc
+       installpath = lib/lpmd
+       pkgconfig += liblpmd-2.0
+    end
+    
+    module finnissinclair-ext.so
+       language = c++
+       sources = finnissinclair-ext.cc
        installpath = lib/lpmd
        pkgconfig += liblpmd-2.0
     end
