@@ -39,6 +39,16 @@ void MonitorVisualizer::ShowHelp() const
 {
  std::cout << " General Info      >>                                                          \n";
  std::cout << " General Options   >>                                                          \n";
+ std::cout << "                     Availables properties :                                   \n";
+ std::cout << "                                           step,temperature,volume,pressure,   \n";
+ std::cout << "                                           volume-per-atom,cell-a,cell-b,cell-c\n";
+ std::cout << "                                           particle-density,density,momentum   \n";
+ std::cout << "                                           px,py,pz,potential-energy,          \n";
+ std::cout << "                                           kinetic-energy,total-energy,        \n";
+ std::cout << "                                           virial-pressure,kinetic-pressure    \n";
+ std::cout << "                                           sxx,sxy,sxz,etc.                    \n";
+ std::cout << "                     For a detailed information about units, refeer to the     \n";
+ std::cout << "                     manual of lpmd in General Proerties section.              \n";
  std::cout << '\n';
  std::cout << " Example                                                                       \n";
  std::cout << " monitor step,temperature start=1 end=1000 each=50                           \n\n";

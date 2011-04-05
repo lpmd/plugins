@@ -26,6 +26,7 @@ class NullMetalPotential: public lpmd::MetalPotential , public lpmd::Plugin
   double deltaU1(const double & rhobar, const int & N) const;
   double deltaU2(const double & rhobar, const int & N, const double & rhoi) const;
   double VirialCorrection(const double &rhobar, const int &N, const double &rhoi) const;
+  lpmd::Vector UpdateCorrections(const double &rho, const int &N, const double &sinv) const;
 };
 
 #endif

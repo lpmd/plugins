@@ -23,6 +23,7 @@ class FinnisSinclair: public lpmd::MetalPotential , public lpmd::Plugin
   double F(const double &rhoi) const;
   lpmd::Vector PairForce(const lpmd::Vector &modrij, const double &mod) const;
   lpmd::Vector ManyBodies(const lpmd::Vector &modrij, const double &invrhoi, const double &invrhoj, const double & mod) const;
+  lpmd::Vector UpdateCorrections(const double &rho, const int &N, const double &sinv) const;
 
  private:
   double c0,c1,c2,A,B,c,d;	// Parameters "c" and "d" are cutoffs

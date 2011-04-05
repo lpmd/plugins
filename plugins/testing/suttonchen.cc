@@ -18,6 +18,7 @@ SuttonChen::SuttonChen(std::string args): Plugin("suttonchen", "2.1")
  DefineKeyword("m");
  DefineKeyword("c");
  DefineKeyword("cutoff");
+ DefineKeyword("corrections","false");
  ProcessArguments(args); 
  e = double(params["e"]);
  a = double(params["a"]);
@@ -25,6 +26,7 @@ SuttonChen::SuttonChen(std::string args): Plugin("suttonchen", "2.1")
  m = double(params["m"]);
  c = double(params["c"]);
  rcut = double(params["cutoff"]);
+ corrections = bool(params["corrections"]);
  an = pow(a,n);
  am = pow(a,m);
  SetCutoff(rcut);
@@ -43,6 +45,8 @@ void SuttonChen::ShowHelp() const
  std::cout << "      m             : Value of m in the potential.  [integer]                  \n";
  std::cout << "      c             : Value of the c constant of the potential. [real]         \n";
  std::cout << "      cutoff        : Cutoff of the interatomic potential. [A]                 \n";
+ std::cout << "      corrections   : Include(true) or not(false/default) corrections to the   \n";
+ std::cout << "                      metallic potential (recommend for homogeneous systems).  \n";
  std::cout << '\n';
  std::cout << " Example          >>                                                           \n";
  std::cout << " #Loading the plugin :                                                         \n";
@@ -76,6 +80,33 @@ Vector SuttonChen::ManyBodies(const Vector &normrij, const double &rhoi, const d
  double ir = 1.0e0/rmod;
  double tmp=0.5*m*c*e*((1/sqrt(rhoi))+1/(sqrt(rhoj)))*am*pow(ir,m+1);
  return tmp*normrij;
+}
+
+Vector SuttonChen::UpdateCorrections(const double &rho, const int &N, const double &sinv) const
+{
+ double drho=0.0e0,du=0.0e0,dvir=0.0e0;
+ double fac=-c*e*0.5e0*sinv;
+ drho = (4*M_PI*rho*rcut/(m-1))*pow((a/(rcut)),m);
+ int pot=n-3;
+ double aor = a/rcut;
+ du = (2*M_PI*N*rho*e/(n-3))*a*a*a*pow(aor,pot);
+ std::cerr << "rho = " << rho << '\n';
+ std::cerr << "N   = " << N   << '\n';
+ std::cerr << "e   = " << e   << '\n';
+ std::cerr << "a   = " << a   << '\n';
+ std::cerr << "n   = " << n   << '\n';
+ std::cerr << "aor = " << aor << '\n';
+ std::cerr << "rcut= " << rcut<< '\n';
+ std::cerr << "pot = " << pot << '\n';
+ std::cerr << "pow = " << pow(aor,pot) << '\n';
+ double v1 = -2.0e0*M_PI*rho*N*e*n*a*a*a*pow(aor,pot)/(n-3);
+ pot = m-3;
+ std::cerr << "pot = " << pot << '\n';
+ double v2 = -4.0e0*M_PI*fac*rho*m*a*a*a*pow(aor,pot)/(m-3);
+ std::cerr << " V1 = " << v1 << '\n';
+ std::cerr << " V2 = " << v2 << '\n';
+ dvir=v1+v2;
+ return Vector(drho,du,dvir);
 }
 
 // Esto se inlcuye para que el modulo pueda ser cargado dinamicamente

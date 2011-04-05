@@ -76,6 +76,11 @@ double NullMetalPotential::VirialCorrection(const double &rhobar, const int &N, 
  return 0.0; 
 }
 
+Vector NullMetalPotential::UpdateCorrections(const double &rho, const int &N, const double &sinv) const
+{
+ return lpmd::Vector(0,0,0);
+}
+
 // Esto se incluye para que el modulo pueda ser cargado dinamicamente
 Plugin * create(std::string args) {return new NullMetalPotential(args);}
 void destroy(Plugin * m) { delete m; }

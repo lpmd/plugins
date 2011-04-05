@@ -74,6 +74,11 @@ Vector Gupta::ManyBodies(const Vector &normrij, const double &rhoi, const double
  return tmp*normrij;
 }
 
+Vector Gupta::UpdateCorrections(const double &rho, const int &N, const double &sinv) const
+{
+ return lpmd::Vector(0,0,0);
+}
+
 // Esto se inlcuye para que el modulo pueda ser cargado dinamicamente
 Plugin * create(std::string args) {return new Gupta(args);}
 void destroy(Plugin * m) { delete m; }

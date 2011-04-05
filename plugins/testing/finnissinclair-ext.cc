@@ -109,6 +109,11 @@ Vector FinnisSinclairExt::ManyBodies(const Vector &normrij, const double &rhoi, 
     else return Vector(0.0e0,0.0e0,0.0e0);
 }
 
+Vector FinnisSinclairExt::UpdateCorrections(const double &rho, const int &N, const double &sinv) const
+{
+ return lpmd::Vector(0,0,0);
+}
+
 // Esto se incluye para que el modulo pueda ser cargado dinámicamente
 Plugin * create(std::string args) {return new FinnisSinclairExt(args);}
 void destroy(Plugin * m) { delete m; }
