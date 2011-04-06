@@ -15,14 +15,14 @@ Gupta::Gupta(std::string args): Plugin("gupta", "2.1")
  DefineKeyword("r0");
  DefineKeyword("p");
  DefineKeyword("B");
- DefineKeyword("qij");
+ DefineKeyword("q");
  DefineKeyword("cutoff");
  ProcessArguments(args); 
  A = params["A"];
  r0 = params["r0"];
  p = params["p"];
  B = params["B"];
- q = params["qij"];
+ q = params["q"];
  rcut = params["cutoff"];
  SetCutoff(rcut);
 }
@@ -50,7 +50,7 @@ void Gupta::ShowHelp() const
  std::cout << "     p  10.229                                                                 \n";
  std::cout << "     B  1.7900                                                                 \n";
  std::cout << "     q  4.0360                                                                 \n";
- std::cout << "     cutoff 4.1                                                                \n";
+ std::cout << "     cutoff 15.0                                                               \n";
  std::cout << " enduse                                                                        \n";
  std::cout << " #Using the loaded plugin                                                      \n";
  std::cout << " potential Gup Au Au                                                           \n";
@@ -59,7 +59,7 @@ void Gupta::ShowHelp() const
 
 double Gupta::pairEnergy(const double &r) const { return A*exp(-p*(r-r0)/r0); }
 
-double Gupta::rhoij(const double &r) const { return exp(-2*q*(r-r0)/r0); }
+double Gupta::rhoij(const double &r) const { return exp(-2.0e0*q*(r-r0)/r0); }
 
 double Gupta::F(const double &rhoi) const { return -B*sqrt(rhoi); }
 
@@ -70,7 +70,7 @@ Vector Gupta::PairForce(const Vector &normrij, const double & rmod) const
 
 Vector Gupta::ManyBodies(const Vector &normrij, const double &rhoi, const double &rhoj, const double &rmod) const
 {
- double tmp=(B*q/r0)*((1.0e0/sqrt(rhoi))+(1.0e0/sqrt(rhoj)))*exp(-2*q*(rmod-r0)/r0);
+ double tmp=(B*q/r0)*((1.0e0/sqrt(rhoi))+(1.0e0/sqrt(rhoj)))*exp(-2.0e0*q*(rmod-r0)/r0);
  return tmp*normrij;
 }
 

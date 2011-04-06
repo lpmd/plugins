@@ -10,6 +10,15 @@ using namespace lpmd;
 FinnisSinclairExt::FinnisSinclairExt(std::string args): Plugin("finnissinclair-ext", "2.1")
 {
  ParamList & params = (*this);
+ DefineKeyword("c0");
+ DefineKeyword("c1");
+ DefineKeyword("c2");
+ DefineKeyword("c3");
+ DefineKeyword("c4");
+ DefineKeyword("A");
+ DefineKeyword("B");
+ DefineKeyword("c");
+ DefineKeyword("d");
  ProcessArguments(args); 
  c0 = params["c0"];
  c1 = params["c1"];
@@ -102,7 +111,7 @@ Vector FinnisSinclairExt::ManyBodies(const Vector &normrij, const double &rhoi, 
     if(r<=d)
     {
      double rd=r-d;
-	 double t1=A*0.5e0*((1/sqrt(rhoi))+(1/sqrt(rhoj)));
+	 double t1=A*0.5e0*((1.0e0/sqrt(rhoi))+(1.0e0/sqrt(rhoj)));
 	 double t2=2.0e0*rd + 4.0e0*B*B*rd*rd*rd;
 	 return -t1*t2*normrij;
     }

@@ -10,6 +10,13 @@ using namespace lpmd;
 FinnisSinclair::FinnisSinclair(std::string args): Plugin("finnissinclair", "2.1")
 {
  ParamList & params = (*this);
+ DefineKeyword("c0");
+ DefineKeyword("c1");
+ DefineKeyword("c2");
+ DefineKeyword("A");
+ DefineKeyword("B");
+ DefineKeyword("c");
+ DefineKeyword("d");
  ProcessArguments(args); 
  c0 = params["c0"];
  c1 = params["c1"];
