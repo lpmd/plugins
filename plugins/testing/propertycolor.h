@@ -22,7 +22,9 @@ class PropertyColorModifier: public lpmd::SystemModifier, public lpmd::Plugin
 
  private:
   double vmin, vmax, cutoff;
+  int column, extheader;
   std::string property; 
+  std::ifstream * extfile;
 };
 
 #endif

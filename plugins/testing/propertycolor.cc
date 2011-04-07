@@ -10,6 +10,7 @@
 #include <lpmd/session.h>
 
 #include <iostream>
+#include <fstream>
 
 using namespace lpmd;
 
@@ -24,6 +25,9 @@ PropertyColorModifier::PropertyColorModifier(std::string args): Plugin("property
  DefineKeyword("min","0");
  DefineKeyword("max","1");
  DefineKeyword("cutoff","10");
+ DefineKeyword("extfile");
+ DefineKeyword("extcolumn", "2");
+ DefineKeyword("extheader", "1");
  DefineKeyword("filterby", "none");
  // hasta aqui los valores por omision
  ProcessArguments(args);
@@ -34,9 +38,19 @@ PropertyColorModifier::PropertyColorModifier(std::string args): Plugin("property
  vmin = double(params["min"]);
  vmax = double(params["max"]);
  cutoff = double(params["cutoff"]);
+ if (property == "external")
+ {
+  extfile = new std::ifstream(params["extfile"].c_str());
+  column = int(params["extcolumn"]);
+  extheader = int(params["extheader"]);
+ }
+ else extfile = NULL;
 }
 
-PropertyColorModifier::~PropertyColorModifier() { }
+PropertyColorModifier::~PropertyColorModifier() 
+{ 
+ if (extfile != NULL) delete extfile;
+}
 
 void PropertyColorModifier::ShowHelp() const
 {
@@ -52,7 +66,11 @@ void PropertyColorModifier::Apply(Simulation & sim)
  const double kboltzmann = double(GlobalSession["kboltzmann"]);
  BasicParticleSet & atoms = sim.Atoms();
  DebugStream() << "-> Applying color according to " << property << '\n';
-
+ // Manage header line(s) for external mode
+ std::string line;
+ if (property == "external")
+    for (int k=0;k<extheader;k++) getline(*extfile, line);
+ //
  for (long int i=0;i<atoms.Size();++i)
  {
   double v = 0.0;
@@ -69,6 +87,10 @@ void PropertyColorModifier::Apply(Simulation & sim)
    for(long int k=0;k<nlist.Size();++k) v++;
   }
   else if (property == "random") v = vmin + (vmax-vmin)*drand48();
+  else if (property == "external")
+  {
+   for (int c=0;c<column;++c) (*extfile) >> v;
+  }
   else throw PluginError("propertycolor", "Cannot color atoms by property \""+property+"\"");
   double vnorm = (v-vmin)/(vmax-vmin);
   if (vnorm < 0.0) vnorm = 0.0;
