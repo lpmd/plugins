@@ -20,6 +20,7 @@ class DlPolyFormat: public lpmd::CellFormat, public lpmd::Plugin
   //Metodos propios de modulo dlpoly
   void ReadHeader(std::istream & is) const;
   bool ReadCell(std::istream & is, lpmd::Configuration & con) const;
+  bool SkipCell(std::istream & is) const;
   void WriteHeader(std::ostream & os, lpmd::SimulationHistory *sh) const;
   void WriteCell(std::ostream & os, lpmd::Configuration & con) const;
   long int GetInterval() const { return interval; }

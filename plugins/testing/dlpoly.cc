@@ -173,6 +173,48 @@ bool DlPolyFormat::ReadCell(std::istream & is, Configuration & con) const
  return true;
 }
 
+bool DlPolyFormat::SkipCell(std::istream & is) const
+{
+ int fkey, pbk;
+ std::string tmp;
+ if (ftype == "CONFIG")
+ {
+  getline(is, tmp);
+  if (is.eof()) return false; // no hay mas configuraciones que leer
+  getline(is, tmp);
+  std::istringstream ost(tmp);
+  ost >> fkey >> pbk;
+  for (int i=0;i<3;++i) getline(is, tmp);
+  long cc = 0;
+  while (1)
+  {
+   cc++;
+   getline(is, tmp);
+   if (is.eof()) break;
+   for (int i=0;i<=fkey;++i) getline(is, tmp);
+  }
+ }
+ else if (ftype=="HISTORY")
+ {
+  getline(is, tmp);
+  if (is.eof()) return false; // no hay mas configuraciones que leer
+  std::istringstream tst(tmp);
+  std::string ttmp;
+  int megatm;
+  tst >> ttmp >> ttmp ;
+  tst >> megatm ;
+  tst >> fkey >> pbk;
+  for(int j=0;j<3;++j) getline(is, tmp);
+  for(int k=0;k<megatm;++k)
+  {
+   getline(is,tmp);
+   for (int i=0;i<=fkey;++i) getline(is, tmp);
+  }
+ }
+ else throw PluginError("dlpoly", "The fkey="+ftype+" is not a valid fkey value.");
+ return true;
+}
+
 void DlPolyFormat::WriteHeader(std::ostream & os, lpmd::SimulationHistory  *sh) const
 {
  // El formato CONFIG de DLPOLY no tiene ningun header especial

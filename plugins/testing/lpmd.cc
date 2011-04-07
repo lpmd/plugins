@@ -389,6 +389,91 @@ bool LPMDFormat::ReadCell(std::istream & is, Configuration & con) const
  return true;
 }
 
+bool LPMDFormat::SkipCell(std::istream & is) const
+{
+ *lastop = ZLP_READ;
+ z_stream & stream = *((z_stream *)(zstr));
+ std::istringstream bufstr(std::istringstream::in);
+ std::string * istr = new std::string;
+ if (type=="zlp")
+ {
+  long int ts = 0;                                // total de bytes leidos hasta ahora
+  unsigned char foo;
+  unsigned long int cbufs;
+  is.read((char *)&foo, 1);
+  if (is.eof()) return false;
+  is.read((char *)&cbufs, int(foo));
+  cbufs = ntohl(cbufs);
+  while (1)
+  {
+   long int rem = cbufs - ts;
+   if (rem == 0) break;
+   long int chunk = blocksize;
+   if (chunk > rem) chunk = rem;
+   is.read((char *)inbuf, chunk);
+   ts += is.gcount();
+   stream.avail_in = is.gcount();
+   stream.next_in = (unsigned char *)(inbuf);
+   do
+   {
+    stream.avail_out = blocksize;
+    stream.next_out = (unsigned char *)(outbuf);
+    int f = (is.eof() ? Z_FINISH : Z_SYNC_FLUSH);
+    inflate(&stream, f);                           // no chequea el estado aun 
+    int have = blocksize-stream.avail_out;
+    for (int q=0;q<have;++q) (*istr) += (char)(outbuf[q]);
+   } while (stream.avail_out == 0);
+  }
+ }
+ std::istringstream ibufstr(*istr);
+ if ( v0 == 1 )
+ {
+  int lvl;
+  long int natoms;
+  ibufstr >> lvl;
+  ibufstr >> natoms;
+  for (int j=0;j<3;++j)
+  {
+   double vq[3];
+   for (int i=0;i<3;++i) ibufstr >> vq[i];
+  }
+  for (long int i=0;i<natoms;++i)
+  {
+   std::string sym;
+   ibufstr >> sym;
+   double vq[3];
+   for (int q=0;q<3;++q) ibufstr >> vq[q];
+   if (lvl > 0)
+   {
+    for (int q=0;q<3;++q) ibufstr >> vq[q];
+   }
+   if (lvl > 1) 
+   {
+    for (int q=0;q<3;++q) ibufstr >> vq[q];
+   }
+  }
+  delete istr;
+  return true;
+ }
+
+ //Type for level > 1 in zlp and lpmd
+ std::string tmp;
+ if (type == "lpmd") getline(is, tmp);
+ else if (type == "zlp") getline(ibufstr, tmp);
+ Array<std::string> words = StringSplit(tmp, ' '); 
+ if (words.Size() == 0) return false;
+ long int natoms = atoi(words[0].c_str());
+ if (type == "lpmd") getline(is, tmp);                                     // Vectores de la celda
+ else if (type == "zlp") getline(ibufstr, tmp);
+ for (long int i=0;i<natoms;++i)
+ {
+  if (type == "lpmd") getline(is, tmp);
+  else if (type == "zlp") getline(ibufstr, tmp);
+ }
+ delete istr;
+ return true;
+}
+
 void LPMDFormat::WriteHeader(std::ostream & os, SimulationHistory * sh) const
 {
  assert (sh >= (void *)NULL); //icc 869

@@ -24,6 +24,7 @@ class LPMDFormat: public lpmd::CellFormat, public lpmd::Plugin
    void ReadHeaderZLPOne(std::istream & is) const;
    void ReadHeaderLPMDOne(std::istream & is) const;
    bool ReadCell(std::istream & is, lpmd::Configuration & con) const;
+   bool SkipCell(std::istream & is) const;
    void WriteHeader(std::ostream & os, lpmd::SimulationHistory *) const;
    void WriteCell(std::ostream & os, lpmd::Configuration & con) const;
    void InitDecompression() const;

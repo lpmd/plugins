@@ -168,6 +168,28 @@ bool XYZFormat::ReadCell(std::istream & is, Configuration & sc) const
  return true;
 }
 
+
+bool XYZFormat::SkipCell(std::istream & is) const
+{
+ std::string tmp;
+ getline(is, tmp);              // This reads the "number of atoms" line
+ char * buffer = new char[100];
+ char * bfold = buffer;
+ buffer[0] = 'X';
+ char ** endptr = &buffer;
+ long natoms = strtol(tmp.c_str(), endptr, 10);
+ if ((buffer[0] == '\0') && (natoms > 0)) { }
+ else 
+ {
+  delete [] bfold;
+  return false;
+ }
+ delete [] bfold; // hay que hacer delete sobre el antiguo valor, no sobre el nuevo ya que strtol lo cambia
+ getline(is, tmp);
+ for (long i=0;i<natoms;++i) getline(is, tmp);
+ return true;
+}
+
 void XYZFormat::WriteHeader(std::ostream & os, SimulationHistory * sh) const
 {
  assert(&os != 0); //icc 869
