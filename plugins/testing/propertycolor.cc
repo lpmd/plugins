@@ -89,7 +89,9 @@ void PropertyColorModifier::Apply(Simulation & sim)
   else if (property == "random") v = vmin + (vmax-vmin)*drand48();
   else if (property == "external")
   {
-   for (int c=0;c<column;++c) (*extfile) >> v;
+   getline(*extfile, line);
+   Array<std::string> lspl = StringSplit(line);
+   v = strtod(lspl[column-1].c_str(), 0);
   }
   else throw PluginError("propertycolor", "Cannot color atoms by property \""+property+"\"");
   double vnorm = (v-vmin)/(vmax-vmin);
