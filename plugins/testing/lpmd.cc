@@ -49,10 +49,20 @@ LPMDFormat::LPMDFormat(std::string args): Plugin("lpmd", "2.0")
  rcell = params["replacecell"];
  extra = StringSplit((*this)["extra"],',');
  // inicializa la estructura z_stream
- zstr = (void *)(new z_stream);
- lastop = new int(ZLP_NONE);
- inbuf = new unsigned char[blocksize];
- outbuf = new unsigned char[blocksize];
+ if(type=="zlp")
+ {
+  zstr = (void *)(new z_stream);
+  lastop = new int(ZLP_NONE);
+  inbuf = new unsigned char[blocksize];
+  outbuf = new unsigned char[blocksize];
+ }
+ else
+ {
+  zstr = NULL;
+  lastop = NULL;
+  inbuf = NULL;
+  outbuf = NULL;
+ }
 }
 
 LPMDFormat::~LPMDFormat()
@@ -213,12 +223,12 @@ bool LPMDFormat::ReadCell(std::istream & is, Configuration & con) const
  BasicParticleSet & part = con.Atoms();
  assert(part.Size() == 0);
  
- *lastop = ZLP_READ;
- z_stream & stream = *((z_stream *)(zstr));
  std::istringstream bufstr(std::istringstream::in);
  std::string * istr = new std::string;
  if(type=="zlp")
  {
+  *lastop = ZLP_READ;
+  z_stream & stream = *((z_stream *)(zstr));
   long int ts = 0;                                // total de bytes leidos hasta ahora
   unsigned char foo;
   unsigned long int cbufs;
@@ -524,7 +534,7 @@ void LPMDFormat::WriteCell(std::ostream & out, Configuration & con) const
  BasicParticleSet & part = con.Atoms();
  BasicCell & cell = con.Cell();
 
- *lastop = ZLP_WRITE;
+ if(type=="zlp"){*lastop = ZLP_WRITE;}
  z_stream & stream = *((z_stream *)(zstr));
  std::ostringstream * ostr = new std::ostringstream();
  std::ostringstream & obufstr = *ostr;
