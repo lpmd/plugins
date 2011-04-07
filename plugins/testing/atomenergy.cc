@@ -34,16 +34,16 @@ AtomEnergy::AtomEnergy(std::string args): Plugin("atomenergy", "1.0")
 void AtomEnergy::ShowHelp() const
 {
  std::cout << " General Info      >>                                                          \n";
- std::cout << "      Modulo utilizado para calcular la energia potencial por atomo.           \n"; 
+ std::cout << "      Plugin designed to evaluate the potential energy by atom.                \n"; 
  std::cout << " General Options   >>                                                          \n";
- std::cout << "      output        : Fichero en el que se graba la salida                     \n";
+ std::cout << "      output        : Output File                                              \n";
  std::cout << '\n';
- std::cout << " Example                                                                       \n";
- std::cout << " Cargando el Modulo :                                                          \n";
+ std::cout << " Example           >>                                                          \n";
+ std::cout << " #Load the Plugin   :                                                          \n";
  std::cout << " use atomenergy                                                                \n";
  std::cout << "     output energ.dat                                                          \n";
  std::cout << " enduse                                                                        \n";
- std::cout << " Llamando al Modulo :                                                          \n";  
+ std::cout << " #Apply the Plugin :                                                           \n";  
  std::cout << " property atomenergy start=1 each=10 end=100                                   \n\n";
 }
 

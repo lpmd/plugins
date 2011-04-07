@@ -30,16 +30,18 @@ ExtraVelModifier::~ExtraVelModifier() { }
 void ExtraVelModifier::ShowHelp() const
 {
  std::cout << " General Info      >>                                                          \n";
- std::cout << "      El modulo es utilizado para ...                                          \n";
+ std::cout << "      The plugin is used to add a specific velocity to a set of atoms that     \n";
+ std::cout << "      have the tag extravel setting in true.                                   \n";
  std::cout << '\n';
  std::cout << " Example                                                                       \n";
- std::cout << " Cargando el Modulo :                                                          \n";
- std::cout << " use extravel                                                                  \n";
+ std::cout << " Loading the plugin :                                                          \n";
+ std::cout << " use addvelocity                                                               \n";
  std::cout << "     velocity <0.002,0.001,0.005>                                              \n";
  std::cout << " enduse                                                                        \n";
- std::cout << " Llamando al modulo                                                            \n";
+ std::cout << " Apply the plugin :                                                            \n";
  std::cout << " apply extravel start=0 each=10 end=100                                      \n\n";
- std::cout << "      De esta forma aplicamos extravel entre 0 y 100 cada 10 steps.            \n";
+ std::cout << "      With this we apply a extra-velocity between steps 0 and 100 each 10,     \n";
+ std::cout << "      to all atoms that have the tag extravel in true.                         \n";
 }
 
 void ExtraVelModifier::Apply(Simulation & sim)

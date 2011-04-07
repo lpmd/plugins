@@ -35,16 +35,18 @@ AngularMomentum::~AngularMomentum() { }
 void AngularMomentum::ShowHelp() const
 {
  std::cout << " General Info      >>                                                          \n";
- std::cout << "   Calcula el momentum angular del sistema respecto a un centro.               \n";
+ std::cout << "   Evaluate the angular momentum of a system respecto to a center point.       \n";
  std::cout << " General Options   >>                                                          \n";
+ std::cout << "     center : Vector that specify the center.                                  \n";
+ std::cout << "     output : Output File.                                                     \n";
  std::cout << '\n';
- std::cout << " Example                                                                       \n";
- std::cout << " Cargando el Modulo :                                                          \n";
+ std::cout << " Example           >>                                                          \n";
+ std::cout << " #Loading the Plugin :                                                         \n";
  std::cout << " use angularmomentum                                                           \n";
  std::cout << "     center <5.0,5.0,5.0>                                                      \n";
  std::cout << "     output angmom.dat                                                         \n";
  std::cout << " enduse                                                                        \n";
- std::cout << " Llamando al Modulo :                                                          \n";  
+ std::cout << " #Apply the plugin :                                                           \n";  
  std::cout << " property angularmomentum start=1 each=10 end=100                              \n\n";
 }
 

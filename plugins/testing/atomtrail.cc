@@ -47,20 +47,29 @@ AtomTrail::~AtomTrail() { }
 
 void AtomTrail::ShowHelp() const
 {
- std::cout << " Example :                                                                     \n";
- std::cout << " use atomtrail                                                                 \n";
+ std::cout << " General Info      >>                                                          \n";
+ std::cout << "      The plugin determine the atom-trail of the atoms in the simulation       \n";
+ std::cout << " the atom-trail could be stored in 2D and 3D format.                         \n\n";
+ std::cout << " General Options   >>                                                          \n";
+ std::cout << "      e             : The value of epsilon in the potential. [eV]              \n";
+ std::cout << "      a             : The value of the a constant in the potencial. [A]        \n";
+ std::cout << "      n             : Value of n in the potential.  [integer]                  \n";
+ std::cout << "      m             : Value of m in the potential.  [integer]                  \n";
+ std::cout << "      c             : Value of the c constant of the potential. [real]         \n";
+ std::cout << "      cutoff        : Cutoff of the interatomic potential. [A]                 \n";
+ std::cout << "      corrections   : Include(true) or not(false/default) corrections to the   \n";
+ std::cout << "                      metallic potential (recommend for homogeneous systems).  \n";
+ std::cout << '\n';
+ std::cout << " Example          >>                                                           \n";
+ std::cout << " #Loading the plugin :                                                         \n";
+ std::cout << " use atomtrail as at                                                      \n";
  std::cout << "     output trail2d.dat                                                        \n";
  std::cout << "     nx 100                                                                    \n";
  std::cout << "     ny 100                                                                    \n";
  std::cout << "     plane XY                                                                  \n";
- std::cout << " enduse                                                                      \n\n";
- std::cout << " use atomtrail                                                                 \n";
- std::cout << "     output trail3d.dat                                                        \n";
- std::cout << "     mode 3D                                                                   \n";
- std::cout << "     nx 100                                                                    \n";
- std::cout << "     ny 100                                                                    \n";
- std::cout << "     nz 100                                                                    \n";
  std::cout << " enduse                                                                        \n";
+ std::cout << " #Using the loaded plugin :                                                    \n";
+ std::cout << " property at start=0 end=-1 each=1                                             \n";
 }
 
 void AtomTrail::Evaluate(Configuration & conf, Potential & pot)
@@ -78,14 +87,14 @@ void AtomTrail::Evaluate(Configuration & conf, Potential & pot)
  }
 
  double * trail = 0;
- if (mode == "2D") 
+ if (mode == "2D")
  { 
   trail = new double[nx*ny]; 
   for (int i=0;i<ny;++i)
     for (int j=0;j<nx;++j) trail[i*nx+j] = 0.0;
  }
  else if (mode == "3D") 
- { 
+ {
   trail = new double[nx*ny*nz]; 
   for (int i=0;i<nz;++i)
     for (int j=0;j<ny;++j)

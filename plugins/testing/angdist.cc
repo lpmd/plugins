@@ -89,24 +89,22 @@ void AngDist::Show(std::ostream & os) const
 void AngDist::ShowHelp() const
 {
  std::cout << " General Info      >>                                                          \n";
- std::cout << "      El modulo es utilizado para calcular la distribucion angular de una celda\n";
- std::cout << " de simulacion, utilizando los radios de corte entregados por el usuario.      \n";
- std::cout << "      Se calcula la distribucion angular entre los vecinos de las subceldas    \n";
- std::cout << " generadas con el metodo linkedcell de la API liblpmd.                         \n";
+ std::cout << "      The plugins is used to evaluate the angular distribution function of a   \n";
+ std::cout << " simulation cell, using the cutoff as a input parameter.                       \n";
  std::cout << " General Options   >>                                                          \n";
- std::cout << "      bins          : Determina el numero de intervalos en los que se divide la\n";
- std::cout << "                      malla entre 0 y 180 grados.                              \n";
- std::cout << "      atoms         : Especifica el Numero de especies atomicas y sus simbolos \n";
- std::cout << "                      para el calculo de la distribucion angular               \n";
- std::cout << "      rcut          : Se especifican dos especies atomicas seguidas por su     \n";
- std::cout << "                      radio de corte.                                          \n";
- std::cout << "      output        : Archivo de salida para la informacion de la distribucion.\n";
- std::cout << "      average       : True/False Para promediar o no las distribuciones.       \n";
- std::cout << "      cutoff        : Radio de corte general para calculo de angulos.          \n";
- std::cout << "                      Si no se especifica toma la suma de los radios de corte. \n";
+ std::cout << "      bins          : Set the number of subdivisions of the grid between 0 and \n";
+ std::cout << "                      180 degrees.                                             \n";
+ std::cout << "      atoms         : Set the number of atomic species and the symbol of theses\n";
+ std::cout << "                      in order to calculate the angular distribution.          \n";
+ std::cout << "      rcut          : Set two atomic species followed by the cutoff distance   \n";
+ std::cout << "                      between them.                                            \n";
+ std::cout << "      output        : Output File.                                             \n";
+ std::cout << "      average       : True/False Average or not the different distributions.   \n";
+ std::cout << "      cutoff        : General cutoff for the angular calculations.             \n";
+ std::cout << "                      If is not set, is equal to the sum of all cutoffs.       \n";
  std::cout << '\n';
- std::cout << " Example                                                                       \n";
- std::cout << " Cargando el Modulo :                                                          \n";
+ std::cout << " Example          >>                                                           \n";
+ std::cout << " #Loading the plugin :                                                          \n";
  std::cout << " use angdist                                                                   \n";
  std::cout << "     bins 200                                                                  \n";
  std::cout << "     atoms 2 Ge O                                                              \n";
@@ -116,10 +114,10 @@ void AngDist::ShowHelp() const
  std::cout << "     output angdist.dat                                                        \n";
  std::cout << "     average false                                                             \n";
  std::cout << " enduse                                                                        \n";
- std::cout << " Llamando al modulo :                                                          \n";
+ std::cout << " #Apply the plugin :                                                           \n";
  std::cout << " property angdist start=0 each=1 end=100                                     \n\n";
- std::cout << "      De esta forma calculamos la distribucion angular de nuestra celda cada un\n";
- std::cout << " paso entre los pasos 0 y 100 de la simulacion de lpmd.                        \n";
+ std::cout << "      With this we evaluate the angular distribution function of the cell each \n";
+ std::cout << " one step between the step 0 and 100.                                          \n";
 }
 
 void AngDist::Evaluate(lpmd::Configuration & con, lpmd::Potential & pot)
