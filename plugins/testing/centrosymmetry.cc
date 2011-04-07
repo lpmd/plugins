@@ -93,7 +93,7 @@ void CentroSymmetry::Evaluate(Configuration & con, Potential & pot)
    processed[first_nonp] = true;
    Vector f = nlist[first_nonp].rij, fop;
    int match = -1;
-   double dmin = 1.01; // any number > 1
+   double dmin = Dot(nlist[0].rij, f);
    for (long int it=0;it<nlist.Size();++it)
    {
     if (it == first_nonp) continue;
@@ -101,7 +101,7 @@ void CentroSymmetry::Evaluate(Configuration & con, Potential & pot)
     if (d < dmin) { dmin = d; match = it; fop = nlist[it].rij; }
    }
    if (match == -1) csp += f.SquareModule();
-   else csp += fop.SquareModule();
+   else csp += (fop+f).SquareModule();
    processed[match] = true; 
   }
   m.Set(0, i, (double)i);
