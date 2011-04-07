@@ -401,7 +401,7 @@ bool LPMDFormat::ReadCell(std::istream & is, Configuration & con) const
 
 bool LPMDFormat::SkipCell(std::istream & is) const
 {
- *lastop = ZLP_READ;
+ if (type=="zlp") *lastop = ZLP_READ;
  z_stream & stream = *((z_stream *)(zstr));
  std::istringstream bufstr(std::istringstream::in);
  std::string * istr = new std::string;
