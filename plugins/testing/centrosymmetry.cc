@@ -16,6 +16,7 @@ CentroSymmetry::CentroSymmetry(std::string args): Plugin("centrosymmetry", "1.0"
  ParamList & params=(*this);
  //
  DefineKeyword("rcut");
+ DefineKeyword("a", "1.0");
  DefineKeyword("start", "0");
  DefineKeyword("end", "-1");
  DefineKeyword("each", "1");
@@ -24,6 +25,7 @@ CentroSymmetry::CentroSymmetry(std::string args): Plugin("centrosymmetry", "1.0"
  // hasta aqui los valores por omision
  ProcessArguments(args);
  rcut = params["rcut"];
+ a = double(params["a"]);
  start = int(params["start"]);
  end = int(params["end"]);
  each = int(params["each"]);
@@ -36,24 +38,24 @@ CentroSymmetry::~CentroSymmetry() { }
 void CentroSymmetry::ShowHelp() const
 {
  std::cout << " General Info      >>                                                          \n";
- std::cout << "      Modulo utilizado para calcular el numero de coordinacion para atomos     \n";
- std::cout << "      individuales.                                                            \n";
+ std::cout << "      Modulo utilizado para calcular el parametro de centrosimetria (CSP) para atomos\n";
+ std::cout << "      individuales. Ver Kelchner et al, Phys. Rev. B 58, 11085 (1998).\n"; 
  std::cout << " General Options   >>                                                          \n";
- std::cout << "      rcut          : Especifica el radio maximo para el calculo del numero de coordinacion\n";
+ std::cout << "      rcut          : Especifica el radio maximo para el calculo del CSP       \n";
+ std::cout << "      a             : (opcional) Especifica la constante de red para normalizar\n";
  std::cout << "      output        : Fichero en el que se graba la salida.                    \n";
  std::cout << "      average       : Setea si calculo o no el promedio de cada calculo.       \n";
  std::cout << '\n';
  std::cout << " Example                                                                       \n";
  std::cout << " Cargando el Modulo :                                                          \n";
- std::cout << " use sitecoord                                                                 \n";
- std::cout << "     output sitecoord.dat                                                      \n";
- std::cout << "     rcut 4.0                                                                 \n";
- std::cout << "     average true                                                              \n";
+ std::cout << " use centrosymmetry                                                            \n";
+ std::cout << "     output csp.dat                                                            \n";
+ std::cout << "     rcut 4.0                                                                  \n";
+ std::cout << "     a 5.26                                                                    \n";
  std::cout << " enduse                                                                        \n";
  std::cout << " Llamando al Modulo :                                                          \n";  
- std::cout << " property sitecoord start=1 each=10 end=100                                    \n\n";
- std::cout << "      De esta forma calculamos el numero de coordinacion por sitio entre 1 y   \n";
- std::cout << "      100 cada 10 pasos.                                                       \n";
+ std::cout << " property centrosymmetry start=1 each=10 end=100                               \n\n";
+ std::cout << "      De esta forma calculamos el CSP por sitio entre 1 y 100 cada 10 pasos.   \n";
 }
 
 void CentroSymmetry::Evaluate(Configuration & con, Potential & pot)
@@ -62,7 +64,7 @@ void CentroSymmetry::Evaluate(Configuration & con, Potential & pot)
  BasicParticleSet & atoms = con.Atoms();
  const long int natoms = atoms.Size();
  Matrix & m = CurrentValue();
- m = Matrix(3, natoms);
+ m = Matrix(2, natoms);
  m.SetLabel(0, "Atom");
  m.SetLabel(1, "CentroSymmetry");
 
@@ -105,7 +107,7 @@ void CentroSymmetry::Evaluate(Configuration & con, Potential & pot)
    processed[match] = true; 
   }
   m.Set(0, i, (double)i);
-  m.Set(1, i, csp);
+  m.Set(1, i, csp/(a*a));
  }
  delete [] neighbormatrix;
 }

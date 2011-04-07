@@ -19,7 +19,7 @@ class CentroSymmetry: public lpmd::StoredValue<lpmd::Matrix>, public lpmd::Insta
   void Evaluate(lpmd::Configuration & conf, lpmd::Potential & pot);
 
  private:
-    double rcut;
+    double rcut, a;
     bool do_average;
 };
 
