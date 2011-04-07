@@ -104,6 +104,13 @@ directory .
        installpath = lib/lpmd
        pkgconfig += liblpmd-2.0
     end
+    
+    module centrosymmetry.so
+       language = c++
+       sources = centrosymmetry.cc
+       installpath = lib/lpmd
+       pkgconfig += liblpmd-2.0
+    end
 
     module cna.so
        language = c++
