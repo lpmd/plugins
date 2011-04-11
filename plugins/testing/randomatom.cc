@@ -13,10 +13,10 @@ using namespace lpmd;
 RandomAtomModifier::RandomAtomModifier(std::string args): Plugin("randomatom", "1.0")
 {
  ParamList & params = (*this);
- AssignParameter("type", "delete");
- AssignParameter("value", "10");
- AssignParameter("symbol", "e");
- AssignParameter("density", "fixed");
+ DefineKeyword("type", "delete");
+ DefineKeyword("value", "10");
+ DefineKeyword("symbol", "e");
+ DefineKeyword("density", "fixed");
  // 
  ProcessArguments(args);
  type = params["type"];
