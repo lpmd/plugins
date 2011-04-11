@@ -25,7 +25,7 @@ PropertyColorModifier::PropertyColorModifier(std::string args): Plugin("property
  DefineKeyword("min","0");
  DefineKeyword("max","1");
  DefineKeyword("cutoff","10");
- DefineKeyword("extfile");
+ DefineKeyword("extfile","");
  DefineKeyword("extcolumn", "2");
  DefineKeyword("extheader", "1");
  DefineKeyword("filterby", "none");
