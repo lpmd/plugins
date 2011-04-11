@@ -24,6 +24,7 @@ AtomEnergy::AtomEnergy(std::string args): Plugin("atomenergy", "1.0")
  DefineKeyword("end", "-1");
  DefineKeyword("each", "1");
  DefineKeyword("output");
+ DefineKeyword("debug", "none");
  ProcessArguments(args);
  start = int(params["start"]);
  end = int(params["end"]);

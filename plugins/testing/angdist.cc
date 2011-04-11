@@ -26,6 +26,7 @@ AngDist::AngDist(std::string args): Plugin("angdist", "2.0")
  DefineKeyword("bins", "200");
  DefineKeyword("average", "false");
  DefineKeyword("cutoff", "0");
+ DefineKeyword("debug", "none");
  // 
  ProcessArguments(args);
  nb = int(param["bins"]);

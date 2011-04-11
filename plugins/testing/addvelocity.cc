@@ -18,6 +18,7 @@ ExtraVelModifier::ExtraVelModifier(std::string args): Plugin("extravel", "1.0")
  DefineKeyword("end", "-1");
  DefineKeyword("each", "1");
  DefineKeyword("velocity", "<0.0,0.0,0.0>");
+ DefineKeyword("debug","none");
  ProcessArguments(args); 
  start = int((*this)["start"]);
  end = int((*this)["end"]);

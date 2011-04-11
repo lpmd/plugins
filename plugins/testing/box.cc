@@ -51,6 +51,7 @@ BoxFilter::BoxFilter(std::string args): Plugin("box", "1.0"), selector(0)
  DefineKeyword("y","0-0");
  DefineKeyword("z","0-0");
  DefineKeyword("except", "");
+ DefineKeyword("debug","none");
  // hasta aqui los valores por omision
  ProcessArguments(args);
  start = int(params["start"]);

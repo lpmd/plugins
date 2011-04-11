@@ -21,6 +21,7 @@ AverageVisualizer::AverageVisualizer(std::string args): Plugin("average", "1.0")
  DefineKeyword("properties", "step");
  DefineKeyword("output", "-");
  DefineKeyword("interval", "100");
+ DefineKeyword("debug", "none");
  ProcessArguments(args);
  start = int(params["start"]);
  end = int(params["end"]);

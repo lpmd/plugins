@@ -22,6 +22,7 @@ AngularMomentum::AngularMomentum(std::string args): Plugin("angularmomentum", "1
  DefineKeyword("each", "1");
  DefineKeyword("output");
  DefineKeyword("center");
+ DefineKeyword("debug", "none");
  ProcessArguments(args);
  start = int(params["start"]);
  end = int(params["end"]);
