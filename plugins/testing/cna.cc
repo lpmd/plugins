@@ -91,6 +91,9 @@ void CommonNeighborAnalysis::ShowHelp() const
  std::cout << "      El radio de corte (rcut) recomendado es el primer minimo de la g(r)      \n\n";
  std::cout << " General Options   >>                                                          \n";
  std::cout << "      rcut          : Especifica el radio maximo para el conteo de pares       \n";
+ std::cout << "      reference     : Especifica una estructura de referencia (fcc/bcc/hcp)    \n";
+ std::cout << "                      para comparar y tratar de determinar que tipo de         \n";
+ std::cout << "                      estructura es la que esta siendo analizada.              \n";
  std::cout << "      mode          : Especifica el modo de salida (full/statistics/defects)   \n";
  std::cout << "      output        : Fichero en el que se graba la salida                     \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
