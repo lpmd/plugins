@@ -35,26 +35,32 @@ VaspFormat::~VaspFormat() { }
 
 void VaspFormat::ShowHelp() const
 {
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+ std::cout << " Module Name        = vasp                                                     \n";
+ std::cout << " Problems Report to = gnm@gnm.cl                                               \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
- std::cout << "      El modulo es utilizado para la lectura/escritura de archivos en formato  \n";
- std::cout << " POSCAR de VASP, este es un formato con posiciones atomicas.                   \n";
+ std::cout << "      This module is used to read/write VASP's atomic configurations files     \n";
+ std::cout << "      (POSCAR files).                                                          \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Options   >>                                                          \n";
- std::cout << "      module        : En la opcion input, es necesario especificar el formato  \n";
- std::cout << "                      en este caso vasp.                                       \n";
- std::cout << "      file          : Especifica el archivo que posee el formato POSCAR.       \n";
- std::cout << "      level         : Se especifica el nivel del formato del archivo, estos son\n";
- std::cout << "                      0/1/2 <-> pos/pos-vel/pos-vel-ace.                       \n";
- std::cout << "      species       : Lista las especies (en orden) del fichero POSCAR.        \n";
- std::cout << "                      utilizado en input.                                      \n";
- std::cout << "      type          : Tipo de red Directa/Cartesian para POSCAR.               \n";
- std::cout << "                      utilizado en output.                                     \n";
- std::cout << '\n';
+ std::cout << "      file          : Input/output file that contains the atomic configurations\n";
+ std::cout << "                      in POSCAR format.                                        \n";
+ std::cout << "      species       : Atomic species list (in order) of the POSCAR file.       \n";
+ std::cout << "      each          : Determines how often (each how many time-steps) the      \n";
+ std::cout << "                      input/output file must be read/written.                  \n";
+ std::cout << "      level         : Determines the file format level (0/1/2).                \n";
+ std::cout << "                      0/1/2 <-> pos/pos-vel/pos-vel-acel.                      \n";
+ std::cout << "      type          : Lattice type (Direct / Cartesian) of the POSCAR file.    \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " Example                                                                       \n";
- std::cout << " Llamando al modulo :                                                          \n";
- std::cout << " input module=vasp file=POSCAR level=0                                         \n";
- std::cout << " output module=vasp file=POSCAR.output level=1 each=5                          \n\n";
- std::cout << "      De esta forma podemos leer o escribir archivos en formato POSCAR, en el  \n";
- std::cout << " en el caso de la salida, es necesaria la opcion each.                         \n";
+ std::cout << " Calling the module in a control file :                                        \n";
+ std::cout << " input module=vasp file=POSCAR species=Si level=0                              \n";
+ std::cout << " output module=vasp file=POSCAR.output species=Si level=1 each=5             \n\n";
+ std::cout << "      In this way we can read and write atomic configurations in LPMD's        \n";
+ std::cout << "      formats. The file extension (.output) is irrelevant, what matters        \n";
+ std::cout << "      is the module loaded (module=vasp).                                      \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
 }
 
 void VaspFormat::ReadHeader(std::istream & is) const { assert(&is != 0);}//icc 869

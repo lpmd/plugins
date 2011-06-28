@@ -11,7 +11,7 @@
 
 using namespace lpmd;
 
-ExtraVelModifier::ExtraVelModifier(std::string args): Plugin("extravel", "1.0")
+AddVelocityModifier::AddVelocityModifier(std::string args): Plugin("addvelocity", "1.0")
 { 
  //
  DefineKeyword("start", "0");
@@ -26,41 +26,52 @@ ExtraVelModifier::ExtraVelModifier(std::string args): Plugin("extravel", "1.0")
  velocity = Vector((*this)["velocity"].c_str());
 }
 
-ExtraVelModifier::~ExtraVelModifier() { }
+AddVelocityModifier::~AddVelocityModifier() { }
 
-void ExtraVelModifier::ShowHelp() const
+void AddVelocityModifier::ShowHelp() const
 {
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+ std::cout << " Module Name        = addvelocity                                              \n";
+ std::cout << " Problems Report to = gnm@gnm.cl                                               \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
  std::cout << "      The plugin is used to add a specific velocity to a set of atoms that     \n";
- std::cout << "      have the tag extravel setting in true.                                   \n";
- std::cout << '\n';
+ std::cout << "      have the tag addvelocity setting in true.                                \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+ std::cout << " General Options   >>                                                          \n";
+ std::cout << "      start         : Determines in which step the plugin begins to be applied.\n";
+ std::cout << "      end           : Determines in which step the plugin ceases to be applied.\n";
+ std::cout << "      each          : Determines how often (each how many time-steps) the      \n";
+ std::cout << "                      input/output file must be read/written.                  \n";
+ std::cout << "      velocity      : Velocity vector that's going to be added to each atom.   \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " Example                                                                       \n";
- std::cout << " Loading the plugin :                                                          \n";
+ std::cout << " Calling the module in a control file :                                        \n";
  std::cout << " use addvelocity                                                               \n";
  std::cout << "     velocity <0.002,0.001,0.005>                                              \n";
  std::cout << " enduse                                                                        \n";
- std::cout << " Apply the plugin :                                                            \n";
- std::cout << " apply extravel start=0 each=10 end=100                                      \n\n";
- std::cout << "      With this we apply a extra-velocity between steps 0 and 100 each 10,     \n";
- std::cout << "      to all atoms that have the tag extravel in true.                         \n";
+ std::cout << " Applying the plugin :                                                         \n";
+ std::cout << " apply addvelocity start=0 each=10 end=100                                   \n\n";
+ std::cout << "      With this we apply an extra-velocity between steps 0 and 100 each 10.    \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
 }
 
-void ExtraVelModifier::Apply(Simulation & sim)
+void AddVelocityModifier::Apply(Simulation & sim)
 {
  lpmd::BasicParticleSet & atoms = sim.Atoms();
- DebugStream() << "-> Applying extravel with velocity ";
+ DebugStream() << "-> Applying addvelocity with velocity ";
  FormattedWrite(DebugStream(), velocity);
  DebugStream() << '\n';
- if (!atoms.HaveAny(Tag("extravel"))) return;
+ if (!atoms.HaveAny(Tag("addvelocity"))) return;
  for (int i=0;i<atoms.Size();++i)
  {
   Atom at = atoms[i];
-  if (atoms.Have(atoms[i], Tag("extravel")) && (bool(Parameter(atoms.GetTag(atoms[i], Tag("extravel")))))) 
+  if (atoms.Have(atoms[i], Tag("addvelocity")) && (bool(Parameter(atoms.GetTag(atoms[i], Tag("addvelocity")))))) 
      atoms[i].Velocity() += velocity;
  }
 }
 
 // Esto se incluye para que el modulo pueda ser cargado dinamicamente
-Plugin * create(std::string args) { return new ExtraVelModifier(args); }
+Plugin * create(std::string args) { return new AddVelocityModifier(args); }
 void destroy(Plugin * m) { delete m; }
 

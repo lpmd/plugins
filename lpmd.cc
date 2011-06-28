@@ -82,29 +82,45 @@ LPMDFormat::~LPMDFormat()
 
 void LPMDFormat::ShowHelp() const
 {
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+ std::cout << " Module Name        = lpmd                                                     \n";
+ std::cout << " Problems Report to = gnm@gnm.cl                                               \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
- std::cout << "      El modulo es utilizado para la lectura/escritura de archivos en formato  \n";
- std::cout << " lpmd o zlp, estos son formatos con posiciones escaladas y propio de lpmd.     \n";
+ std::cout << "      This module is used to read/write LPMD's atomic configurations files     \n";
+ std::cout << "      (lpmd or zlp). This is the LPMD's own format, with scaled positions      \n";
+ std::cout << "      (between 0 and 1).                                                       \n";  
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Options   >>                                                          \n";
- std::cout << "      file          : Especifica el archivo que posee el formato lpmd.         \n";
- std::cout << "      level         : Se especifica el nivel del formato de lpmd, estos son    \n";
- std::cout << "                      0/1/2 <-> pos/pos-vel/pos-vel-ace.                       \n";
- std::cout << "      extra         : Informacion extra en el fichero, valores soportados son  \n";
- std::cout << "                      RGB,C,TYPE.                                              \n";
- std::cout << "      type          : lpmd/zlp , setea en el modo en que se grabará el fichero \n";
- std::cout << "                      puede ser modo texto (lpmd, por defecto) o modo binario  \n";
- std::cout << "                      (zlp), para la lectura la detección es automática.       \n";
- std::cout << "      blocksize     : Nivel del bloque de compresion en caso de que se esté    \n";
- std::cout << "                      almacenando un archivo binario de tipo zlp(1024 default).\n";
- std::cout << '\n';
+ std::cout << "      file          : Input/output file that contains the atomic configurations\n";
+ std::cout << "                      in LPMD format.                                          \n";
+ std::cout << "      each          : Determines how often (each how many time-steps) the      \n";
+ std::cout << "                      input/output file must be read/written.                  \n";
+ std::cout << "      level         : Determines the file format level (0/1/2).                \n";
+ std::cout << "                      0/1/2 <-> pos/pos-vel/pos-vel-acel.                      \n";
+ std::cout << "      extra         : Extra information about the file (RGB/C/TYPE):           \n";
+ std::cout << "                      RGB (red, green, blue): The atoms in the file (will) have\n";
+ std::cout << "                       colors in the format <R,G,B> in the input/output file,  \n";
+ std::cout << "                       with R, G and B between 0 and 1.                        \n";
+ std::cout << "                      C: The color of the atoms is represented by a real number\n";
+ std::cout << "                       between 0 and 1 in the input/ouput file.                \n";
+ std::cout << "      type          : File type (lpmd / zlp):                                  \n";
+ std::cout << "                      lpmd: normal mode.                                       \n";
+ std::cout << "                      zlp: binary (compressed) mode.                           \n";
+ std::cout << "      blocksize     : Compression block size (in bytes) for zlp files.         \n";
+ std::cout << "      compression   : Compression level for zlp files (from 0 to 9, being 9 the\n";
+ std::cout << "                      maximum compression level; but the slowest).             \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " Example                                                                       \n";
- std::cout << " Llamando al modulo :                                                          \n";
+ std::cout << " Calling the module in a control file :                                        \n";
  std::cout << " input module=lpmd file=inputfile.lpmd level=0                                 \n";
  std::cout << " input module=lpmd file=inputfile.zlp level=1                                  \n";
  std::cout << " output module=lpmd file=output.zlp level=1 type=zlp each=5                    \n";
  std::cout << " output module=lpmd file=outputfile.lpmd level=1 each=5                      \n\n";
- std::cout << "      De esta forma podemos leer o escribir archivos en formato lpmd o en      \n";
- std::cout << " zlp.                                                                          \n";
+ std::cout << "      In this way we can read and write atomic configurations in LPMD's        \n";
+ std::cout << "      formats. The file extension (.lpmd or .zlp) is irrelevant, what matters  \n";
+ std::cout << "      is the module loaded (module=lpmd).                                      \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
 }
 
 void LPMDFormat::ReadHeader(std::istream & is) const

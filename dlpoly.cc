@@ -41,26 +41,35 @@ void DlPolyFormat::ShowHelp() const
 {
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " Module Name        = dlpoly                                                   \n";
- std::cout << " Module Version     = 1.0                                                      \n";
- std::cout << " Support API lpmd   = 1.0.0                                                    \n";
  std::cout << " Problems Report to = gnm@gnm.cl                                               \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
- std::cout << "      El modulo es utilizado para la lectura/escritura de archivos en formato  \n";
- std::cout << " CONFIG de DLPOLY, este es un formato con posiciones absolutas.                \n";
+ std::cout << "      This module is used to read/write DL_POLY's atomic configurations files. \n";
+ std::cout << "      (HISTORY or CONFIG files).                                               \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Options   >>                                                          \n";
- std::cout << "      file          : Especifica el archivo que posee el formato dlpoly.       \n";
- std::cout << "      level         : Se especifica el nivel del formato del archivo, estos son\n";
- std::cout << "                      0/1/2 <-> pos/pos-vel/pos-vel-ace.                       \n";
- std::cout << "      periodicity   : Flag periodic boundary key del formato CONFIG            \n";
- std::cout << "      ftype         : File type, puede ser CONFIG o HISTORY.                   \n";
+ std::cout << "      file          : Input/output file that contains the atomic configurarions\n";
+ std::cout << "                      in DLPOLY format.                                        \n";
+ std::cout << "      each          : Determines how often (each how many time-steps) the      \n";
+ std::cout << "                      input/output file must be read/written.                  \n";
+ std::cout << "      level         : Determines the file format level (0/1/2):                \n";
+ std::cout << "                      0/1/2 <-> pos/pos-vel/pos-vel-acel.                      \n";
+ std::cout << "      periodicity   : Periodic boundary key of the CONFIG file (0/1/2/3/6):    \n";
+ std::cout << "                      0/1/2/3/6 <-> no periodic boundaries / cubic boundary    \n";
+ std::cout << "                      conditions / orthorhombic boundary conditions /          \n";
+ std::cout << "                      parallelepiped boundary conditions / x-y parallelogram   \n";
+ std::cout << "                      boundary conditions with no periodicity in z-direction.  \n";
+ std::cout << "      ftype         : File type (CONFIG / HISTORY).                            \n";
+ std::cout << "      replacecell   : Replace the dimensions of the cell by those found in the \n";
+ std::cout << "                      CONFIG or HISTORY file (true / false).                   \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " Example                                                                       \n";
- std::cout << " Llamando al modulo :                                                          \n";
+ std::cout << " Calling the module in a control file :                                        \n\n";
  std::cout << " input module=dlpoly file=CONFIG level=0                                       \n";
  std::cout << " output module=dlpoly file=CONFIG.output level=1 periodicity=2 each=5          \n\n";
- std::cout << "      De esta forma podemos leer o escribir archivos en formato DLPOLY, en el  \n";
- std::cout << " en el caso de la salida, es necesaria la opcion each.                         \n";
+ std::cout << "      In this way we can read and write atomic configurations in DL_POLY's     \n";
+ std::cout << "      format. The file extension (.output) is irrelevant, what matters         \n";
+ std::cout << "      is the module loaded (module=dlpoly).                                    \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
 }
 
