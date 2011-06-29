@@ -34,18 +34,24 @@ AtomEnergy::AtomEnergy(std::string args): Plugin("atomenergy", "1.0")
 
 void AtomEnergy::ShowHelp() const
 {
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+ std::cout << " Module Name        = atomenergy                                               \n";
+ std::cout << " Problems Report to = admin@lpmd.cl                                            \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n"; 
  std::cout << " General Info      >>                                                          \n";
  std::cout << "      Plugin designed to evaluate the potential energy by atom.                \n"; 
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n"; 
  std::cout << " General Options   >>                                                          \n";
  std::cout << "      output        : Output File                                              \n";
- std::cout << '\n';
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n"; 
  std::cout << " Example           >>                                                          \n";
  std::cout << " #Load the Plugin   :                                                          \n";
  std::cout << " use atomenergy                                                                \n";
  std::cout << "     output energ.dat                                                          \n";
  std::cout << " enduse                                                                        \n";
  std::cout << " #Apply the Plugin :                                                           \n";  
- std::cout << " property atomenergy start=1 each=10 end=100                                   \n\n";
+ std::cout << " property atomenergy start=1 each=10 end=100                                   \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n"; 
 }
 
 void AtomEnergy::Evaluate(Configuration & conf, Potential & pot)

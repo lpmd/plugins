@@ -51,7 +51,7 @@ void AddVelocityModifier::ShowHelp() const
  std::cout << "     velocity <0.002,0.001,0.005>                                              \n";
  std::cout << " enduse                                                                        \n";
  std::cout << " Applying the plugin :                                                         \n";
- std::cout << " apply addvelocity start=0 each=10 end=100                                   \n\n";
+ std::cout << " apply addvelocity start=0 each=10 end=100                                     \n";
  std::cout << "      With this we apply an extra-velocity between steps 0 and 100 each 10.    \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
 }

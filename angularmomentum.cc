@@ -35,12 +35,17 @@ AngularMomentum::~AngularMomentum() { }
 
 void AngularMomentum::ShowHelp() const
 {
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+ std::cout << " Module Name        = angularmomentum                                          \n";
+ std::cout << " Problems Report to = gnm@gnm.cl                                               \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n"; 
  std::cout << " General Info      >>                                                          \n";
  std::cout << "   Evaluate the angular momentum of a system respecto to a center point.       \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n"; 
  std::cout << " General Options   >>                                                          \n";
  std::cout << "     center : Vector that specify the center.                                  \n";
  std::cout << "     output : Output File.                                                     \n";
- std::cout << '\n';
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n"; 
  std::cout << " Example           >>                                                          \n";
  std::cout << " #Loading the Plugin :                                                         \n";
  std::cout << " use angularmomentum                                                           \n";
@@ -48,7 +53,8 @@ void AngularMomentum::ShowHelp() const
  std::cout << "     output angmom.dat                                                         \n";
  std::cout << " enduse                                                                        \n";
  std::cout << " #Apply the plugin :                                                           \n";  
- std::cout << " property angularmomentum start=1 each=10 end=100                              \n\n";
+ std::cout << " property angularmomentum start=1 each=10 end=100                              \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n"; 
 }
 
 void AngularMomentum::Evaluate(Configuration & conf, Potential & pot)

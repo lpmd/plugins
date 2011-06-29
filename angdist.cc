@@ -66,32 +66,40 @@ void AngDist::SetParameter(std::string name)
 void AngDist::Show(std::ostream & os) const
 {
  Module::Show(os);
- os << "   Atom Number = " << na << '\n';
- os << "   Atoms       = ";
- for (unsigned int i=0;i<satoms.size();i++) os << satoms[i] << "\t";
- os << '\n';
- os << "   Cutoffs     : " << std::endl;
- for(unsigned int i=0;i<satoms.size();i++)
+ if(na > 0)
  {
-  for(unsigned int j=i;j<satoms.size();j++)
+  os << "   Atom Number = " << na << '\n';
+  os << "   Atoms       = ";
+  for (unsigned int i=0;i<satoms.size();i++) os << satoms[i] << "\t";
+  os << '\n';
+  os << "   Cutoffs     : " << std::endl;
+  for(unsigned int i=0;i<satoms.size();i++)
   {
-   std::string spec1=satoms[i];
-   std::string spec2=satoms[j];
-   std::string tmp = spec1+"-"+spec2;
-   // Truco para acceder a rcut[tmp] desde un metodo const 
-   const std::map<std::string, double>::const_iterator & p = rcut.find(tmp);
-   double cut = (*p).second;
-   // fin del truco
-   os << "\t" << spec1 << "-" << spec2 << " = " << cut << std::endl;
+   for(unsigned int j=i;j<satoms.size();j++)
+   {
+    std::string spec1=satoms[i];
+    std::string spec2=satoms[j];
+    std::string tmp = spec1+"-"+spec2;
+    // Truco para acceder a rcut[tmp] desde un metodo const 
+    const std::map<std::string, double>::const_iterator & p = rcut.find(tmp);
+    double cut = (*p).second;
+    // fin del truco
+    os << "\t" << spec1 << "-" << spec2 << " = " << cut << std::endl;
+   }
   }
  }
 }
 
 void AngDist::ShowHelp() const
 {
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+ std::cout << " Module Name        = angdist                                                  \n";
+ std::cout << " Problems Report to = gnm@gnm.cl                                               \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n"; 
  std::cout << " General Info      >>                                                          \n";
  std::cout << "      The plugins is used to evaluate the angular distribution function of a   \n";
  std::cout << " simulation cell, using the cutoff as a input parameter.                       \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n"; 
  std::cout << " General Options   >>                                                          \n";
  std::cout << "      bins          : Set the number of subdivisions of the grid between 0 and \n";
  std::cout << "                      180 degrees.                                             \n";
@@ -103,9 +111,9 @@ void AngDist::ShowHelp() const
  std::cout << "      average       : True/False Average or not the different distributions.   \n";
  std::cout << "      cutoff        : General cutoff for the angular calculations.             \n";
  std::cout << "                      If is not set, is equal to the sum of all cutoffs.       \n";
- std::cout << '\n';
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n"; 
  std::cout << " Example          >>                                                           \n";
- std::cout << " #Loading the plugin :                                                          \n";
+ std::cout << " #Loading the plugin :                                                         \n";
  std::cout << " use angdist                                                                   \n";
  std::cout << "     bins 200                                                                  \n";
  std::cout << "     atoms 2 Ge O                                                              \n";
@@ -116,9 +124,10 @@ void AngDist::ShowHelp() const
  std::cout << "     average false                                                             \n";
  std::cout << " enduse                                                                        \n";
  std::cout << " #Apply the plugin :                                                           \n";
- std::cout << " property angdist start=0 each=1 end=100                                     \n\n";
+ std::cout << " property angdist start=0 each=1 end=100                                       \n";
  std::cout << "      With this we evaluate the angular distribution function of the cell each \n";
  std::cout << " one step between the step 0 and 100.                                          \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n"; 
 }
 
 void AngDist::Evaluate(lpmd::Configuration & con, lpmd::Potential & pot)

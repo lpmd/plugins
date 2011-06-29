@@ -48,9 +48,14 @@ AtomTrail::~AtomTrail() { }
 
 void AtomTrail::ShowHelp() const
 {
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+ std::cout << " Module Name        = atomtrail                                                \n";
+ std::cout << " Problems Report to = admin@lpmd.cl                                            \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n"; 
  std::cout << " General Info      >>                                                          \n";
  std::cout << "      The plugin determine the atom-trail of the atoms in the simulation       \n";
- std::cout << " the atom-trail could be stored in 2D and 3D format.                         \n\n";
+ std::cout << " the atom-trail could be stored in 2D and 3D format.                           \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n"; 
  std::cout << " General Options   >>                                                          \n";
  std::cout << "      e             : The value of epsilon in the potential. [eV]              \n";
  std::cout << "      a             : The value of the a constant in the potencial. [A]        \n";
@@ -60,10 +65,10 @@ void AtomTrail::ShowHelp() const
  std::cout << "      cutoff        : Cutoff of the interatomic potential. [A]                 \n";
  std::cout << "      corrections   : Include(true) or not(false/default) corrections to the   \n";
  std::cout << "                      metallic potential (recommend for homogeneous systems).  \n";
- std::cout << '\n';
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n"; 
  std::cout << " Example          >>                                                           \n";
  std::cout << " #Loading the plugin :                                                         \n";
- std::cout << " use atomtrail as at                                                      \n";
+ std::cout << " use atomtrail as at                                                           \n";
  std::cout << "     output trail2d.dat                                                        \n";
  std::cout << "     nx 100                                                                    \n";
  std::cout << "     ny 100                                                                    \n";
@@ -71,6 +76,7 @@ void AtomTrail::ShowHelp() const
  std::cout << " enduse                                                                        \n";
  std::cout << " #Using the loaded plugin :                                                    \n";
  std::cout << " property at start=0 end=-1 each=1                                             \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n"; 
 }
 
 void AtomTrail::Evaluate(Configuration & conf, Potential & pot)
