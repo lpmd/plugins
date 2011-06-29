@@ -39,26 +39,33 @@ BerendsenModifier::~BerendsenModifier() { }
 
 void BerendsenModifier::ShowHelp() const
 {
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+ std::cout << " Module Name        = berendsen                                                \n";
+ std::cout << " Problems Report to = admin@lpmd.cl                                            \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
- std::cout << "      El modulo es utilizado para escalar la temperatura del sistema utilizando\n";
- std::cout << " el termostato de berendsen.                                                   \n";
- std::cout << "      Este metodo es mas utilizado que el de rescalamiento de velocidades ya   \n";
- std::cout << " que presenta un decenso menos brusco de la temperatura del sistema.           \n";
+ std::cout << "      The plugin is used to rescale the system temperature using the berendsen \n";
+ std::cout << " thermostat.                                                                   \n";
+ std::cout << "      This is one of the most used method in velocity rescaling process because\n";
+ std::cout << " the change in the system temperature is less sharp.                           \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Options   >>                                                          \n";
- std::cout << "      from          : Temperatura inicial para el escalamiento.                \n";
- std::cout << "      to            : Temperatura final para el sistema.                       \n";
- std::cout << "      tau           : Intervalo del termostato.                                \n";
- std::cout << '\n';
+ std::cout << "      from          : Initial temperature for the scaling process.             \n";
+ std::cout << "      to            : Final temperature for the scaling process.               \n";
+ std::cout << "      tau           : Thermostat interval.                                     \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " Example                                                                       \n";
- std::cout << " Cargando el Modulo :                                                          \n";
+ std::cout << " #Loading the plugin :                                                         \n";
  std::cout << " use berendsen                                                                 \n";
  std::cout << "     tau  400.0                                                                \n";
  std::cout << "     from 84.0                                                                 \n";
  std::cout << "     to   10.0                                                                 \n";
  std::cout << " enduse                                                                        \n";
- std::cout << " Llamando al modulo                                                            \n";
- std::cout << " apply berendsen start=0 each=10 end=100                                     \n\n";
- std::cout << "      De esta forma aplicamos el termostato entre 0 y 100 cada 10 steps.       \n";
+ std::cout << " #Applying the plugin :                                                        \n";
+ std::cout << " apply berendsen start=0 each=10 end=100                                       \n";
+ std::cout << "      With this, we will apply the plugin between the 0 and 100 timesteps      \n";
+ std::cout << " each 10 timesteps.                                                            \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
 }
 
 void BerendsenModifier::Apply(lpmd::Simulation & sim)
