@@ -21,7 +21,7 @@ class LennardJonesMod: public lpmd::PairPotential, public lpmd::Plugin
   lpmd::Vector pairForce(const lpmd::Vector & r) const;
 
  private:
-  double sigma, epsilon, cohesive, cutoff;
+  double sigma, epsilon, m, n, cohesive, cutoff;
 };
 
 

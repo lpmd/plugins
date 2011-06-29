@@ -14,11 +14,15 @@ LennardJonesMod::LennardJonesMod(std::string args): Plugin("lennardjonesMod", "2
  //
  DefineKeyword("sigma");
  DefineKeyword("epsilon");
- DefineKeyword("cohesive");
+ DefineKeyword("m", "12");
+ DefineKeyword("n", "6"); 
+ DefineKeyword("cohesive", "1");
  DefineKeyword("cutoff");
  ProcessArguments(args);
  sigma = params["sigma"];
  epsilon = params["epsilon"];
+ m = params["m"];
+ n = params["n"];
  cohesive = params["cohesive"];
  cutoff = params["cutoff"];
  SetCutoff(cutoff);
@@ -26,44 +30,54 @@ LennardJonesMod::LennardJonesMod(std::string args): Plugin("lennardjonesMod", "2
 
 void LennardJonesMod::ShowHelp() const
 {
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+ std::cout << " Module Name        = lennardjonesMod                                          \n";
+ std::cout << " Problems Report to = gnm@gnm.cl                                               \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
- std::cout << "      El modulo implementa el potencial de LenardJones para interaccion de     \n";
- std::cout << " pares.                                                                        \n";
- std::cout << "      Se utiliza la pairpotential de la API para llevar a cabo el calculo.     \n";
+ std::cout << "      The module implements a modified Lenard-Jones potential for pairs        \n";
+ std::cout << "      interaction, with the form                                               \n";
+ std::cout << "            V(r)=4*epsilon( (sigma/r)^m - (sigma/r)^n )                        \n"; 
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Options   >>                                                          \n";
- std::cout << "      sigma         : Especifica el valor de sigma para el potencial.          \n";
- std::cout << "      epsilon       : Especifica el valor para epsilon del potencial.          \n";
- std::cout << "      cohesive      : Cohesive parameter.                                      \n";
- std::cout << "      cutoff        : Radio de corte para el potencial.                        \n";
- std::cout << '\n';
+ std::cout << "      sigma         : Determines de value of sigma for the potential.          \n";
+ std::cout << "      epsilon       : Determines de value of  epsilon for the potential.       \n";
+ std::cout << "      m             : Determines de value of the first exponent.               \n";
+ std::cout << "      n             : EDetermines de value of the second exponent.             \n";
+ std::cout << "      cohesive      : Cohesion parameter.                                      \n";
+ std::cout << "      cutoff        : Cutoff for the potential.                                \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " Example                                                                       \n";
- std::cout << " Cargando el Modulo :                                                          \n";
+ std::cout << " Calling the module in a control file :                                        \n";
  std::cout << " use lennardjonesMod as ljm                                                    \n";
  std::cout << "     sigma 3.4                                                                 \n";
  std::cout << "     epsilon 2.0                                                               \n";
  std::cout << "     cohesive 0.2                                                              \n";
+ std::cout << "     m 4                                                                       \n";
+ std::cout << "     n 2                                                                       \n";
  std::cout << "     cutoff 1.90                                                               \n";
  std::cout << " enduse                                                                        \n";
  std::cout << " Llamando al modulo                                                            \n";
  std::cout << " potential ljm Ar Ar                                                         \n\n";
- std::cout << "      De esta forma seteamos el potencial de lennardjones entre los atomos de  \n";
- std::cout << " Ar con las constantes seteadas en LJ1.                                        \n";
+ std::cout << "      In this way we set the lennardjonesMod potential between two atoms of    \n";
+ std::cout << "      Ar with little cohesion (cohesive=0 is a purely repulsive potential).    \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
 }
 
 double LennardJonesMod::pairEnergy(const double & r) const
 {
  double rtmp=sigma/r;
- double r6 = rtmp*rtmp*rtmp*rtmp*rtmp*rtmp;
- double r12 = r6*r6;
- return 4.0e0*epsilon*(r12 - cohesive*r6); 
+ double rn = pow(rtmp,n);
+ double rm = pow(rtmp,m);
+ return 4.0e0*epsilon*(rm - cohesive*rn); 
 }
 
 Vector LennardJonesMod::pairForce(const Vector & r) const
 {
  double rr2 = r.SquareModule();
- double r6 = pow(sigma*sigma / rr2, 3.0e0);
- double r12 = r6*r6;
- double ff = -48.0e0*(epsilon/rr2)*(r12 - cohesive*0.50e0*r6);
+ double rn = pow(sigma*sigma / rr2, n/2.0);
+ double rm = pow(sigma*sigma / rr2, m/2.0);
+ double ff = -4.0e0*(epsilon/rr2)*(m*rm - cohesive*n*rn);
  Vector fv = r*ff;
  return fv;
 }
