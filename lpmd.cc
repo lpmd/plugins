@@ -96,7 +96,7 @@ void LPMDFormat::ShowHelp() const
  std::cout << "                      in LPMD format.                                          \n";
  std::cout << "      each          : Determines how often (each how many time-steps) the      \n";
  std::cout << "                      input/output file must be read/written.                  \n";
- std::cout << "      level         : Determines the file format level (0/1/2).                \n";
+ std::cout << "      level         : Determines the file format level (0/1/2):                \n";
  std::cout << "                      0/1/2 <-> pos/pos-vel/pos-vel-acel.                      \n";
  std::cout << "      extra         : Extra information about the file (RGB/C/TYPE):           \n";
  std::cout << "                      RGB (red, green, blue): The atoms in the file (will) have\n";

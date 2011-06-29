@@ -51,29 +51,40 @@ void CellScalingModifier::Show(std::ostream & os) const
 
 void CellScalingModifier::ShowHelp() const
 {
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+ std::cout << " Module Name        = cellscaling                                              \n";
+ std::cout << " Problems Report to = gnm@gnm.cl                                               \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
- std::cout << "      El modulo es utilizado para escalar el tamano de la celda, puede         \n";
- std::cout << " utilizarse para escalar un eje de la celda, o realizar un esacalado           \n";
- std::cout << " hidroestatico. los valores son entregados en forma porcentual.                \n";
+ std::cout << "      This module is used to scale the size of the cell. It can be used to     \n";
+ std::cout << "      increase/decrease the size of just one cell axis, or two of them, or     \n";
+ std::cout << "      all of them (hydrostatic compression/expansion).                         \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Options   >>                                                          \n";
- std::cout << "      percent       : Indica el porcentaje en el que se escalara la celda,     \n";
- std::cout << "                      puede ser positivo(expandir) o negativo(comprimir).      \n";
- std::cout << "      axis          : Indica en que eje se va a comprimir la celda, en caso de \n";
- std::cout << "                      no indicarse se realiza compresion hidrostatica.         \n";
- std::cout << "      constant      : true/false, la variacion porcentual es modificada segun  \n";
- std::cout << "                      acomulativamente (constant=false) o no (constant=true).  \n";
+ std::cout << "      start         : Determines in which step the plugin begins to be applied.\n";
+ std::cout << "      end           : Determines in which step the plugin ceases to be applied.\n";
+ std::cout << "      each          : Determines how often (each how many time-steps) the      \n";
+ std::cout << "                      plugin must be applied.                                  \n";
+ std::cout << "      percent       : Determines the percent in which the cell axis will be    \n";
+ std::cout << "                      scaled. It can be positive (expansion) or negative       \n";
+ std::cout << "                      (compression).                                           \n";
+ std::cout << "      axis          : Determines what axis (or axes) will be scaled.           \n";
+ std::cout << "      constant      : Determines if the percentual scaling is cumulative or    \n";
+ std::cout << "                      not (true / false):                                      \n";
+ std::cout << "                      true/false <-> non cumulative.                                    \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " Example                                                                       \n";
- std::cout << " Cargando el Modulo :                                                          \n";
+ std::cout << " Calling the module in a control file :                                        \n";
  std::cout << " use cellscaling                                                               \n";
  std::cout << "     percent 20                                                                \n";
  std::cout << "     axis X                                                                    \n";
  std::cout << "     constant true                                                             \n";
  std::cout << " enduse                                                                        \n";
- std::cout << " Llamando al modulo :                                                          \n";
+ std::cout << " Applying the plugin :                                                         \n";
  std::cout << " apply cellscaling start=0 each=300 end=1000                                 \n\n";
- std::cout << "      De esta forma escalamos la celda de simulacion en un 20% cada 300 pasos  \n";
- std::cout << " en el eje X, terminando el escalado enel paso 1000.                           \n";
+ std::cout << "      With this we scale the X axis of the simulation cell in 20% of the       \n";
+ std::cout << "      original size each 300 steps, ending in the step 1000..                  \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
 }
 
 void CellScalingModifier::Apply(Simulation & sim)

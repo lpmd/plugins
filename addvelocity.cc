@@ -42,7 +42,7 @@ void AddVelocityModifier::ShowHelp() const
  std::cout << "      start         : Determines in which step the plugin begins to be applied.\n";
  std::cout << "      end           : Determines in which step the plugin ceases to be applied.\n";
  std::cout << "      each          : Determines how often (each how many time-steps) the      \n";
- std::cout << "                      input/output file must be read/written.                  \n";
+ std::cout << "                      plugin must be applied.                                  \n";
  std::cout << "      velocity      : Velocity vector that's going to be added to each atom.   \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " Example                                                                       \n";
