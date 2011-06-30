@@ -26,33 +26,35 @@ Buckingham::Buckingham(std::string args): Plugin("buckingham", "2.0")
 
 void Buckingham::ShowHelp() const
 {
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+ std::cout << " Module Name        = buckingham                                               \n";
+ std::cout << " Problems Report to = admin@lpmd.cl                                            \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
- std::cout << "      El modulo implementa el potencial de buckingham SIN PARTE COULOMBIANA,   \n";
- std::cout << " para interaccion de pares.                                                    \n";
- std::cout << "      Se utiliza la pairpotential de la API para llevar a cabo el calculo.     \n";
- std::cout << "      Si se desea incluir la parte coulombiana, se podra hacer sumando otro    \n";
- std::cout << " potencial a la interaccion de las especies, en este caso ewald, que aun no    \n";
- std::cout << " esta disponible en version estable para lpmd.                                 \n";
+ std::cout << "      This plugin incorparate the buckingham potential, this plugin do not     \n";
+ std::cout << " incorporate the coulombian part. In or der to add the coulombian part, take a \n";
+ std::cout << " look to the ewald plugin.                                                     \n";
+ std::cout << " V(r) = B1*exp(-r/rho) - B2/(r^6)                                              \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Options   >>                                                          \n";
- std::cout << "      Ro            : Especifica el valor de rho para el potencial.            \n";
- std::cout << "      B1            : Especifica el valor para la constante B1 del potencial.  \n";
- std::cout << "      B2            : Especifica el valor para la constante B2 del potencial.  \n";
- std::cout << "      cutoff        : Radio de corte para el potencial.                        \n";
- std::cout << '\n';
+ std::cout << "      Ro            : Set the rho value for the potential.                     \n";
+ std::cout << "      B1            : Set the B1 value for the potential.                      \n";
+ std::cout << "      B2            : Set the B2 value for the potential.                      \n";
+ std::cout << "      cutoff        : Cutoff radius set for the potential.                     \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " Example                                                                       \n";
- std::cout << " Cargando el Modulo :                                                          \n";
+ std::cout << " #Loading the plugin :                                                         \n";
  std::cout << " use buckingham as BK1                                                         \n";
  std::cout << "     Ro 1.0                                                                    \n";
  std::cout << "     B1 2.0                                                                    \n";
  std::cout << "     B2 1.0                                                                    \n";
  std::cout << "     cutoff 1.90                                                               \n";
  std::cout << " enduse                                                                        \n";
- std::cout << " Llamando al modulo                                                            \n";
- std::cout << " potential BK1 Ge O                                                          \n\n";
- std::cout << "      De esta forma seteamos el potencial de buckingham entre los atomos de Ge \n";
- std::cout << " y O con las constantes usadas en BK1.                                         \n";
- std::cout << "      Note la ventaja de definir mas de un tipo de potencial para un par de    \n";
- std::cout << " especies atomicas.                                                            \n";
+ std::cout << " #Applying the plugin :                                                        \n";
+ std::cout << " potential BK1 Ge O                                                            \n";
+ std::cout << "      In this procedure, we are seted the interatomic potential between the Ge \n";
+ std::cout << " and the O atoms used in the BK1 defined potential.                            \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
 }
 
 double Buckingham::pairEnergy(const double & r) const
