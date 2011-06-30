@@ -98,20 +98,26 @@ void DensityProfile::Show(std::ostream & os) const
 
 void DensityProfile::ShowHelp() const
 {
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+ std::cout << " Module Name        = densityprofile                                           \n";
+ std::cout << " Problems Report to = admin@lpmd.cl                                            \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
- std::cout << "      Modulo utilizado para calcular el perfil de la densidad de la celda de   \n";
- std::cout << " simulacion, actualmente solo unidimensionalmente.                             \n";
+ std::cout << "      Plugin used to evaluate a density profile of the simulation cell, this   \n";
+ std::cout << " is a one dimensional analysis, you can choose only one access.                \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Options   >>                                                          \n";
- std::cout << "      axis           : Especifica el eje en el que se realizara el calulo.      \n";
- std::cout << "      bins          : Especifica el numero de divisiones para el eje.          \n";
- std::cout << "      range         : Especifica el rango para calculo de densidad.            \n";
- std::cout << "      output        : Fichero en el que se graba la densidad.                  \n";
- std::cout << "      average       : Setea si calcula o no el promedio de cada evaluacion.    \n";
- std::cout << '\n';
+ std::cout << "      axis          : Set the axis for the evluation. (X,Y or Z)               \n";
+ std::cout << "      bins          : Set the number of subdivitions in the axis.              \n";
+ std::cout << "      range         : Set the range for the evaluation of all the axis (X,Y,Z) \n";
+ std::cout << "      output        : Set the name of the output file for the density profile. \n";
+ std::cout << "      average       : Specify if you want a average over all the time step or  \n";
+ std::cout << "                      onne different ouput for each (stored in the same file). \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " Example                                                                       \n";
- std::cout << " Cargando el Modulo :                                                          \n";
+ std::cout << " #Loading plugin :                                                             \n";
  std::cout << " use densityprofile                                                            \n";
- std::cout << "     axis X                                                                     \n";
+ std::cout << "     axis X                                                                    \n";
  std::cout << "     bins 200                                                                  \n";
  std::cout << "     range Y 10 20                                                             \n";
  std::cout << "     range Z all                                                               \n";
@@ -119,10 +125,9 @@ void DensityProfile::ShowHelp() const
  std::cout << "     output filedensity.out                                                    \n";
  std::cout << "     average true                                                              \n";
  std::cout << " enduse                                                                        \n";
- std::cout << " Llamando al Modulo :                                                          \n";  
- std::cout << " property densityprofile start=1 each=10 end=100                             \n\n";
- std::cout << "      De esta forma calculamos la funcion de distribucion radial de pares en   \n";
- std::cout << " la simulacion entre 1 y 100 cada 10 pasos.                                    \n";
+ std::cout << " #Aplying plugin :                                                             \n";  
+ std::cout << " property densityprofile start=1 each=10 end=100                               \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
 }
 
 void DensityProfile::Evaluate(lpmd::Configuration & con, lpmd::Potential & pot)

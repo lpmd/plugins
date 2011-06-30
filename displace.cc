@@ -29,14 +29,22 @@ DisplaceModifier::~DisplaceModifier() { }
 
 void DisplaceModifier::ShowHelp() const
 {
- std::cout << " General Info      >>                                                          \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+ std::cout << " Module Name        = displace                                                 \n";
+ std::cout << " Problems Report to = admin@lpmd.cl                                            \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+ std::cout << " General Info      >> This plugin displace the atomic position of a simulation \n";
+ std::cout << "                      cell or a set of atoms with specific tag.                \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Options   >>                                                          \n";
- std::cout << "      x             : Coord. X del vector de desplazamiento                    \n";
- std::cout << "      y             : Coord. Y del vector de desplazamiento                    \n";
- std::cout << "      z             : Coord. Z del vector de desplazamiento                    \n";
+ std::cout << "      x             : X coordinate of the vector displacement.                 \n";
+ std::cout << "      y             : Y coordinate of the vector displacement.                 \n";
+ std::cout << "      z             : Z coordinate of the vector displacement.                 \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " Example                                                                       \n";
- std::cout << " Cargando el Modulo :                                                          \n";
+ std::cout << " #Loading the module, in a prepare section :                                   \n";
  std::cout << " prepare displace x=1.0 y=0.0 z=0.0                                            \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
 }
 
 void DisplaceModifier::Apply(lpmd::Simulation & sim)

@@ -21,6 +21,8 @@ class DispVol: public lpmd::StoredValue<lpmd::Matrix>, public lpmd::TemporalProp
   DispVol(std::string args);
   ~DispVol();
 
+  void ShowHelp() const;
+
   void Evaluate(lpmd::ConfigurationSet & hist, lpmd::Potential & pot);
 
  private:

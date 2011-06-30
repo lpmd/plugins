@@ -42,6 +42,33 @@ DispVol::DispVol(std::string args): Plugin("dispvol", "2.0")
 
 DispVol::~DispVol() { if (m != NULL) delete m; }
 
+void DispVol::ShowHelp() const
+{
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+ std::cout << " Module Name        = dispvol                                                  \n";
+ std::cout << " Problems Report to = admin@lpmd.cl                                            \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+ std::cout << " General Info      >> This plugin ...                                          \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+ std::cout << " General Options   >>                                                          \n";
+ std::cout << "      mode          : Set the mode for the volume-displacement evaluation. The \n";
+ std::cout << "                      allowed values are: volume, vector and vectorhistogram.  \n"; 
+ std::cout << "      bins          : Set the number of bins for the histogram case.           \n";
+ std::cout << "      maxlenght     : The maximum leght of ...                                 \n";
+ std::cout << "      output        : File to save the outputdata.                             \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+ std::cout << " Example                                                                       \n";
+ std::cout << " #Loading the plugin:                                                          \n";
+ std::cout << " use dispvol                                                                   \n";
+ std::cout << "  mode  volume                                                                 \n";
+ std::cout << "  output out.dat                                                               \n";
+ std::cout << " enduse                                                                        \n";
+ std::cout << " #Evaluating the plugin                                                        \n";
+ std::cout << " property dispvol start=0 end=-1 each=5                                        \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+}
+
+
 void DispVol::Evaluate(lpmd::ConfigurationSet & hist, Potential & pot)
 {
  assert(&pot != 0);//icc869
