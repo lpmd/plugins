@@ -30,17 +30,29 @@ Ewald::~Ewald() { delete kpoints; delete kfac;}
 
 void Ewald::ShowHelp() const
 {
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+ std::cout << " Module Name        = ewald                                                    \n";
+ std::cout << " Problems Report to = admin@lpmd.cl                                            \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
- std::cout << "      El modulo activa el potencial electrostatico calculado usando suma de    \n";
- std::cout << "      Ewald.                                                                   \n";
+ std::cout << "      This plugin activate the electrostatic potential between the atomic      \n";
+ std::cout << "      species using the ewald method.                                          \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Options   >>                                                          \n";
+ std::cout << "      This module do not need options, is activated when you apply the plugin. \n";
+ std::cout << "      However, is important set the atomic charges in the control file.        \n";
+ std::cout << "      Example : charge 1.9 O #The units are in eV.                             \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " Example                                                                       \n";
- std::cout << " Cargando el Modulo :                                                          \n";
+ std::cout << " #Loading the plugin :                                                         \n";
  std::cout << " use ewald                                                                     \n";
  std::cout << " enduse                                                                        \n";
- std::cout << " Llamando al modulo :                                                          \n";
- std::cout << " potential ewald                                                               \n\n";
- std::cout << "      De esta forma activa el potencial de ewald entre todas las especies      \n";
+ std::cout << " #Applying the plugin :                                                        \n";
+ std::cout << " potential ewald                                                               \n";
+ std::cout << "      In thiw way you have been activated the ewald potential between all      \n";
+ std::cout << "      atomic species, note htat you can set the charg to 0 when yo don want    \n";
+ std::cout << "      disable a specific interaction.                                          \n"; 
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
 }
 
 void Ewald::BuildKPointMesh(Configuration & conf)

@@ -100,10 +100,24 @@ ExternalFilter::~ExternalFilter()
 
 void ExternalFilter::ShowHelp() const
 {
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+ std::cout << " Module Name        = external                                                 \n";
+ std::cout << " Problems Report to = admin@lpmd.cl                                            \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
+ std::cout << "      This plugin is used to filter atoms by some external property stored in  \n";
+ std::cout << "      a file.                                                                  \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Options   >>                                                          \n";
+ std::cout << "      extfile       : Specify the file where the properties are stored.        \n";
+ std::cout << "      extcolumn     : Choose the column that have the data to check for filter.\n";
+ std::cout << "      extheader     :                                                          \n";
+ std::cout << "      min           : Minimum value to filter for the property.                \n";
+ std::cout << "      max           : Maximum value to filter for the property.                \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " Example                                                                       \n";
  std::cout << " filter external extfile=datos.dat extcolumn=3 extheader=1 min=2.0 max=3.0     \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << '\n';
 }
 

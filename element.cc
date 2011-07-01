@@ -60,11 +60,19 @@ ElementFilter::~ElementFilter() { delete selector; }
 
 void ElementFilter::ShowHelp() const
 {
- std::cout << " General Info      >>                                                          \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+ std::cout << " Module Name        = element                                                  \n";
+ std::cout << " Problems Report to = admin@lpmd.cl                                            \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+ std::cout << " General Info      >> This plugin is used to filter atoms in the simulation by \n";
+ std::cout << "                      the element symbol.                                      \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Options   >>                                                          \n";
+ std::cout << "      element       : Set the element of the symbol to filter.                 \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " Example                                                                       \n";
  std::cout << " filter element symbol=Ar                                                      \n";
- std::cout << '\n';
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
 }
 
 Selector<BasicParticleSet> & ElementFilter::CreateSelector()
