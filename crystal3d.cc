@@ -31,21 +31,34 @@ CrystalGenerator::~CrystalGenerator() { }
 
 void CrystalGenerator::ShowHelp() const
 {
- std::cout << " General Info      >>                                                              \n";
- std::cout << "      El modulo es utilizado para crear celdas del tipo BCC (base-centered cubic), \n";
- std::cout << "      FCC (face-centered cubic), HCP (Hexagonal close-packed) y SC (simple cubic). \n";
- std::cout << " General Options   >>                                                              \n";
- std::cout << "      symbol        : Especifica la especie atomica, utilizando su simbolo.        \n";
- std::cout << "      type          : Especifica el tipo de celda unitaria (fcc, bcc, hcp, sc).    \n";
- std::cout << "      nx            : Repeticiones en la direccion X.                              \n";
- std::cout << "      ny            : Repeticiones en la direccion Y.                              \n";
- std::cout << "      nz            : Repeticiones en la direccion Z.                              \n";
- std::cout << '\n';
- std::cout << " Example                                                                           \n";
- std::cout << " Utilizando el Modulo :                                                            \n";
- std::cout << " input crystal3d symbol=Ar type=fcc nx=3 ny=3 nz=3                                 \n";
- std::cout << " input crystal3d Ar fcc 3 3 3                                                      \n\n";
- std::cout << "      De esta forma creamos una celda de entrada de tipo FCC en la simulacion.     \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+ std::cout << " Module Name        = crystal3d                                                \n";
+ std::cout << " Problems Report to = gnm@gnm.cl                                               \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+ std::cout << " General Info      >>                                                          \n";
+ std::cout << "      This module is used to generate three-dimensional lattices. The available\n";
+ std::cout << "      lattices are BCC (base-centered cubic), FCC (face-centered cubic), HCP   \n";
+ std::cout << "      (Hexagonal close-packed) and SC (simple cubic).                          \n";
+ std::cout << "      The total number of atoms in the cell corresponds to nx*ny*nx*NB, (see   \n";
+ std::cout << "      below) where NB is the number of atoms in the unit cell. NB=2 for BCC    \n";
+ std::cout << "      and HCP lattices, NB=1 for SC lattice and NB=4 for the FCC lattice.      \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n"; 
+ std::cout << " General Options   >>                                                          \n";
+ std::cout << "      symbol        : Symbol of the atomic species.                            \n";
+ std::cout << "      type          : Sets the type of unit cell (fcc/bcc/hcp/sc).             \n";
+ std::cout << "      nx            : Sets the number of replications of the unit cell in the  \n";
+ std::cout << "                      X  direction.                                            \n";
+ std::cout << "      ny            : Sets the number of replications of the unit cell in the  \n";
+ std::cout << "                      Y  direction.                                            \n";
+ std::cout << "      nz            : Sets the number of replications of the unit cell in the  \n";
+ std::cout << "                      Z  direction.                                            \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+ std::cout << " Example                                                                       \n";
+ std::cout << " #Loading the plugin :                                                         \n";
+ std::cout << " input crystal3d symbol=Ar type=fcc nx=3 ny=3 nz=3                           \n\n";
+ std::cout << "      The plugin is used to generate a three-dimensional fcc lattice of argon  \n";
+ std::cout << "      atoms. The total number of atoms generated this case is 3x3x3x4=108.     \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
 }
 
 void CrystalGenerator::Generate(Configuration & conf) const

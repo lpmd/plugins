@@ -68,11 +68,34 @@ CylinderFilter::~CylinderFilter() { delete selector; }
 
 void CylinderFilter::ShowHelp() const
 {
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+ std::cout << " Module Name        = cylinder                                                 \n";
+ std::cout << " Problems Report to = gnm@gnm.cl                                               \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
+ std::cout << "      This module is used to cut or select a cylindrical region of the         \n";
+ std::cout << "      simulation cell. Use 'filter' to eliminate atoms in or out of a given    \n";
+ std::cout << "      cylindrical region, or use 'over' to apply certain plugin to the         \n";
+ std::cout << "      cylindrical region.                                                      \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Options   >>                                                          \n";
+ std::cout << "      rmin          : Sets the inner radius of the cylinder.                   \n";
+ std::cout << "      rmax          : Sets the outer radius of the cylinder.                   \n";
+ std::cout << "      origin        : Sets the position (vector) of the center of the base of  \n";
+ std::cout << "                      the cylinder.                                            \n";
+ std::cout << "      endpoint      : Sets the position (vector) of the center of the top of   \n";
+ std::cout << "                      the cylinder.                                            \n";
+ std::cout << "      except        : Tag of the atoms to which the plugin will not be applied \n";
+ std::cout << "                      (see use of 'tag' and 'settag' plugins).                 \n";
+ std::cout << "      start         : Determines in which step the plugin begins to be applied.\n";
+ std::cout << "      end           : Determines in which step the plugin ceases to be applied.\n";
+ std::cout << "      each          : Determines how often (each how many time-steps) the      \n";
+ std::cout << "                      plugin must be applied.                                  \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " Example                                                                       \n";
- std::cout << " filter cylinder origin=<5,5,5> endpoint=<6,6,6> rmax=10 rmin=0                     \n";
- std::cout << '\n';
+ std::cout << " #Loading the plugin :                                                         \n";
+ std::cout << " filter cylinder origin=<5,5,5> endpoint=<6,6,6> rmax=10 rmin=0 except=my-atoms\n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
 }
 
 Selector<BasicParticleSet> & CylinderFilter::CreateSelector()

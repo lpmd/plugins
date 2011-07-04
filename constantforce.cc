@@ -24,22 +24,36 @@ ConstantForcePotential::~ConstantForcePotential() { }
 
 void ConstantForcePotential::ShowHelp() const
 {
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+ std::cout << " Module Name        = constantforce                                            \n";
+ std::cout << " Problems Report to = gnm@gnm.cl                                               \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
- std::cout << "      El modulo setea una fuerza constante, es utilizado para trabajo con un   \n";
- std::cout << " set de particulas que se quieran configurar con cierta fuerza.                \n";
+ std::cout << "      This module is used to apply an external constant force over a set of    \n";
+ std::cout << "      atoms. This force F is added to the force that each atoms feels, i.e.,   \n";
+ std::cout << "      the atom's acceleration is augmented (or diminished) by an extra term    \n";
+ std::cout << "      F/m, where m is the mass of the atom. This force must be entered in      \n";
+ std::cout << "      electrovols over angstrom (eV/A).                                      \n\n";
+ std::cout << "      Note: For a given force F, the atoms won't accelarate at the same rate   \n";
+ std::cout << "            if they have different masses. Moreover, the force gives an extra  \n";
+ std::cout << "            energy to the system, then the energy will not be conserved.       \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Options   >>                                                          \n";
- std::cout << "      forcevector   : Seguido por 3 numeros reales que indican un vector para  \n";
- std::cout << "                      la fuerza.                                               \n";
- std::cout << '\n';
+ std::cout << "      forcevector   : Additional force (in eV/angstrom) to be applied over     \n";
+ std::cout << "                      each atom.                                               \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " Example                                                                       \n";
- std::cout << " Cargando el Modulo :                                                          \n";
+ std::cout << " #Loading the plugin :                                                         \n";
  std::cout << " use constantforce as gravity                                                  \n";
- std::cout << "     force <0.0,0.0,-9.8>                                                      \n";
+ std::cout << "     force <0.0,0.0,-4.06E-16>                                                 \n";
  std::cout << " enduse                                                                        \n";
- std::cout << " Llamando al modulo :                                                          \n";
+ std::cout << " #Applying the plugin :                                                        \n";
  std::cout << " potential gravity Ar Ar                                                     \n\n";
- std::cout << "      De esta forma aplicamos una fuerza constante a la interaccion de los     \n";
- std::cout << " atomos de Argon.                                                              \n";
+ std::cout << "      The plugin is used to apply a constant force of -4.06x10^16 eV/angstrom  \n";
+ std::cout << "      in the z direction over argon atoms. This force corresponds to the       \n";
+ std::cout << "      acceleration of gravity g=9.8 m/s^2 multiplied by the mass of 1 argon    \n";
+ std::cout << "      atom (39.948 amu) which, as you can see, is negligible.                  \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
 }
 
 double ConstantForcePotential::energy(Configuration & con) {assert(&con != 0); return 0.0; }//icc 869

@@ -33,19 +33,27 @@ Crystal2DGenerator::~Crystal2DGenerator() { }
 
 void Crystal2DGenerator::ShowHelp() const
 {
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+ std::cout << " Module Name        = crystal2d                                                \n";
+ std::cout << " Problems Report to = gnm@gnm.cl                                               \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
- std::cout << "      El modulo es utilizado para crear celdas bidimensionales.                \n";
+ std::cout << "      This module is used to generate two-dimensional lattices.                \n";
+ std::cout << "      The total number of atoms in the cell corresponds to nx*ny (see below).  \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Options   >>                                                          \n";
- std::cout << "      a             : Largo del vector a                                       \n";
- std::cout << "      b             : Largo del vector b                                       \n";
- std::cout << "      gamma         : Angulo entre los vectores, en grados                     \n";
- std::cout << "      symbol        : Especifica la especie atomica, utilizando su simbolo.    \n";
- std::cout << "      nx            : Repeticiones en la direccion X.                          \n";
- std::cout << "      ny            : Repeticiones en la direccion Y.                          \n";
+ std::cout << "      a             : Sets the length of the first basis vector: (a,0,0).      \n";
+ std::cout << "      b             : Sets the length of the second vector.                    \n";
+ std::cout << "      gamma         : Sets the angle (in degrees) between a and b.             \n";
+ std::cout << "      symbol        : Symbol of the atomic species.                            \n";
+ std::cout << "      nx            : Sets the number of replications in the X direction.      \n";
+ std::cout << "      ny            : Sets the number of replications in the Y direction.      \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " Example                                                                       \n";
- std::cout << " Utilizando el Modulo :                                                        \n";
- std::cout << " input crystal2d a=1.0 b=1.0 gamma=90.0 symbol=Ar nx=2 ny=2                    \n";
- std::cout << " De esta forma creamos una red cuadrada en la simulacion.                      \n";
+ std::cout << " #Loading the plugin :                                                         \n";
+ std::cout << " input crystal2d a=1.0 b=1.0 gamma=45.0 symbol=Ar nx=2 ny=2                  \n\n";
+ std::cout << "      The plugin is used to generate a two-dimensional lattice of argon atoms. \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
 }
 
 void Crystal2DGenerator::Generate(Configuration & conf) const

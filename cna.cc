@@ -75,37 +75,56 @@ CommonNeighborAnalysis::~CommonNeighborAnalysis() { }
 
 void CommonNeighborAnalysis::ShowHelp() const
 {
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+ std::cout << " Module Name        = cna                                                      \n";
+ std::cout << " Problems Report to = gnm@gnm.cl                                               \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
- std::cout << "      Modulo utilizado para realizar Common Neighbor Analysis (CNA) a un       \n";
- std::cout << "      conjunto de configuraciones atomicas. Este metodo permite una determina- \n";
- std::cout << "      cion del tipo de estructura (FCC, BCC, HCP, etc) mas precisa que el uso  \n";
- std::cout << "      de la distribucion de pares g(r). Cada par de primeros vecinos es rotula-\n";
- std::cout << "      do segun 3 indices (j, k, l), donde:                                     \n";
- std::cout << "         j: numero de vecinos comunes a ambos atomos del par                   \n";
- std::cout << "         k: numero de enlaces que se pueden formar entre los j vecinos         \n";
- std::cout << "         l: longitud de la cadena continua mas larga formada por los k enlaces \n\n";
- std::cout << "      Como reconocer una estructura:                                           \n";
- std::cout << "      FCC perfecta: 100% pares de tipo 4-2-1                                   \n";
- std::cout << "      HCP perfecta: 50% pares tipo 4-2-1 y 50% pares tipo 4-2-2                \n";
- std::cout << "      BCC perfecta: 42.857% (3/7) de pares 4-4-4 y 57.143% (4/7) de pares 6-6-6\n\n";
- std::cout << "      El radio de corte (rcut) recomendado es el primer minimo de la g(r)      \n\n";
+ std::cout << "      This module is used to perform Common Neighbor Analysis (CNA) to a set of\n";
+ std::cout << "      atomic configurations. This method provides a way to determine the kind  \n";
+ std::cout << "      of structure (FCC, BCC, HCP, etc) of a sample, and it more precise than  \n";
+ std::cout << "      the pairs distribution function, g(r). Each pair of first neighbors is   \n";
+ std::cout << "      labeled with three indices (j, k, l), where:                             \n";
+ std::cout << "         j: is the number of neighbors common to both atoms                    \n";
+ std::cout << "         k: is the number of bonds that can be formed between the j neighbors  \n";
+ std::cout << "         l: is the length of the longest continuous chain formed by the k bonds\n\n";
+ std::cout << "      How to recognize an structure?                                           \n";
+ std::cout << "      Perfect FCC: 100% of the pairs are 4-2-1 type.                           \n";
+ std::cout << "      Perfect HCP: 50% of the pairs are 4-2-1 type, and the other 50% are 4-2-2\n";
+ std::cout << "      Perfect BCC: 42.857% (3/7) of the pairs are 4-4-4 type and the remaining \n";
+ std::cout << "                   57.143% (4/7) of the pairs are 6-6-6 type.                  \n\n";
+ std::cout << "      The recommended cutoff radius (rcut) is the first minimum of the g(r).   \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Options   >>                                                          \n";
- std::cout << "      rcut          : Especifica el radio maximo para el conteo de pares       \n";
- std::cout << "      reference     : Especifica una estructura de referencia (fcc/bcc/hcp)    \n";
- std::cout << "                      para comparar y tratar de determinar que tipo de         \n";
- std::cout << "                      estructura es la que esta siendo analizada.              \n";
- std::cout << "      mode          : Especifica el modo de salida (full/statistics/defects)   \n";
- std::cout << "      output        : Fichero en el que se graba la salida                     \n";
+ std::cout << "      rcut          : Sets the maximum cutoff radius for the pairs counting.   \n";
+ std::cout << "      reference     : Sets an specific reference structure (fcc/bcc/hcp)       \n";
+ std::cout << "                      to compare and try to determine what kind of structure   \n";
+ std::cout << "                      is being analyzed.                                       \n";
+ std::cout << "      mode          : Sets the output mode (full/statistics/defects).          \n";
+ std::cout << "      species       : Sets the species to be analyzed (.....).                 \n";
+ std::cout << "      filterby      :                                                          \n";
+ std::cout << "      output        : Output file.                                             \n";
+ std::cout << "      filterout     :                                                          \n";
+ std::cout << "      start         : Determines in which step the plugin begins to be applied.\n";
+ std::cout << "      end           : Determines in which step the plugin ceases to be applied.\n";
+ std::cout << "      each          : Determines how often (each how many time-steps) the      \n";
+ std::cout << "                      plugin must be applied.                                  \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " Example                                                                       \n";
- std::cout << " Cargando el Modulo :                                                          \n";
+ std::cout << " #Loading the plugin :                                                         \n";
  std::cout << " use cna                                                                       \n";
  std::cout << "     output cna.dat                                                            \n";
  std::cout << "     mode statistics                                                           \n";
  std::cout << "     rcut 2.0                                                                  \n";
+ std::cout << "     reference bcc                                                             \n";
+ std::cout << "     species all                                                               \n";
  std::cout << " enduse                                                                        \n";
- std::cout << " Llamando al Modulo :                                                          \n";  
+ std::cout << " #Applying the plugin :                                                        \n";
  std::cout << " property cna start=1 each=10 end=100                                          \n\n";
+ std::cout << "      The plugin is used perform the CNA each 10 steps, between the first 100  \n";
+ std::cout << "      steps, using a cutoff of rcut=2.0 angstroms in mode statistics. The data \n";
+ std::cout << "      is written in the file cna.dat.                                          \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
 }
 
 std::vector<long int> AddSegmentToChain(std::vector<long int> & cnm, std::map<long int, std::vector<long int> > & bonds, std::vector<long int> & chain, std::vector<long int> & longest)

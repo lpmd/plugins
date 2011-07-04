@@ -37,25 +37,38 @@ CentroSymmetry::~CentroSymmetry() { }
 
 void CentroSymmetry::ShowHelp() const
 {
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+ std::cout << " Module Name        = centrosymmetry                                           \n";
+ std::cout << " Problems Report to = gnm@gnm.cl                                               \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
- std::cout << "      Modulo utilizado para calcular el parametro de centrosimetria (CSP) para atomos\n";
- std::cout << "      individuales. Ver Kelchner et al, Phys. Rev. B 58, 11085 (1998).\n"; 
+ std::cout << "      This module is used to calculate the centrosymmetry parameter (CSP) for  \n";
+ std::cout << "      individual atoms. See Kelchner et al, Phys. Rev. B 58, 11085 (1998).     \n"; 
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Options   >>                                                          \n";
- std::cout << "      rcut          : Especifica el radio maximo para el calculo del CSP       \n";
- std::cout << "      a             : (opcional) Especifica la constante de red para normalizar\n";
- std::cout << "      output        : Fichero en el que se graba la salida.                    \n";
- std::cout << "      average       : Setea si calculo o no el promedio de cada calculo.       \n";
- std::cout << '\n';
- std::cout << " Example                                                                       \n";
- std::cout << " Cargando el Modulo :                                                          \n";
+ std::cout << "      rcut          : Sets the maximum cutoff radius for the CSP calculation.  \n";
+ std::cout << "      a             : Sets the lattice constant to normalize data to this constant.\n";
+ std::cout << "      output        : Output file.                                             \n";
+ std::cout << "      average       : Sets if the the property must be averaged over all       \n";
+ std::cout << "                      configurations (true / false)                            \n";
+ std::cout << "      start         : Determines in which step the plugin begins to be applied.\n";
+ std::cout << "      end           : Determines in which step the plugin ceases to be applied.\n";
+ std::cout << "      each          : Determines how often (each how many time-steps) the      \n";
+ std::cout << "                      plugin must be applied.                                  \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+ std::cout << " Example           >>                                                          \n";
+ std::cout << " #Loading the plugin :                                                         \n";
  std::cout << " use centrosymmetry                                                            \n";
  std::cout << "     output csp.dat                                                            \n";
  std::cout << "     rcut 4.0                                                                  \n";
  std::cout << "     a 5.26                                                                    \n";
  std::cout << " enduse                                                                        \n";
- std::cout << " Llamando al Modulo :                                                          \n";  
+ std::cout << " #Applying the plugin :                                                        \n";
  std::cout << " property centrosymmetry start=1 each=10 end=100                               \n\n";
- std::cout << "      De esta forma calculamos el CSP por sitio entre 1 y 100 cada 10 pasos.   \n";
+ std::cout << "      The plugin is used to calculate the CSP per site between the steps 1 and \n";
+ std::cout << "      100, each 10 steps, with a cutoff of 4 angstroms and a lattice parametrer\n";
+ std::cout << "      of a=5.26 angstrom. The data is written in the file csp.dat.             \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n"; 
 }
 
 void CentroSymmetry::Evaluate(Configuration & con, Potential & pot)
