@@ -33,17 +33,20 @@ void DisplaceModifier::ShowHelp() const
  std::cout << " Module Name        = displace                                                 \n";
  std::cout << " Problems Report to = admin@lpmd.cl                                            \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
- std::cout << " General Info      >> This plugin displace the atomic position of a simulation \n";
- std::cout << "                      cell or a set of atoms with specific tag.                \n";
+ std::cout << " General Info      >>                                                          \n";
+ std::cout << "      This module is used to displace (move) a group of atoms. A constant      \n";
+ std::cout << "      displacement vector is added to the position of each atom.               \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Options   >>                                                          \n";
- std::cout << "      x             : X coordinate of the vector displacement.                 \n";
- std::cout << "      y             : Y coordinate of the vector displacement.                 \n";
- std::cout << "      z             : Z coordinate of the vector displacement.                 \n";
+ std::cout << "      x             : X coordinate of the displacement vector.                 \n";
+ std::cout << "      y             : Y coordinate of the displacement vector.                 \n";
+ std::cout << "      z             : Z coordinate of the displacement vector.                 \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " Example                                                                       \n";
- std::cout << " #Loading the module, in a prepare section :                                   \n";
- std::cout << " prepare displace x=1.0 y=0.0 z=0.0                                            \n";
+ std::cout << " #Loading plugin :                                                             \n";
+ std::cout << " prepare displace x=1.0 y=0.0 z=0.0                                          \n\n";
+ std::cout << "      The plugin is used to displace all the atoms in <1,0,0> of its original  \n";
+ std::cout << "      position.                                                                \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
 }
 
