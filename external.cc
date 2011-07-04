@@ -110,15 +110,18 @@ void ExternalFilter::ShowHelp() const
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Options   >>                                                          \n";
  std::cout << "      extfile       : Specify the file where the properties are stored.        \n";
- std::cout << "      extcolumn     : Choose the column that have the data to check for filter.\n";
+ std::cout << "      extcolumn     : Choose the column that has the data to check for filter. \n";
  std::cout << "      extheader     :                                                          \n";
- std::cout << "      min           : Minimum value to filter for the property.                \n";
- std::cout << "      max           : Maximum value to filter for the property.                \n";
+ std::cout << "      min           : Minimum value of the property.                           \n";
+ std::cout << "      max           : Maximum value of the property.                           \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " Example                                                                       \n";
- std::cout << " filter external extfile=datos.dat extcolumn=3 extheader=1 min=2.0 max=3.0     \n";
+ std::cout << " filter external extfile=datos.dat extcolumn=3 extheader=1 min=2.0 max=3.0   \n\n";
+ std::cout << "      The plugin is used to eliminate (filter) all the atoms that has a value  \n";
+ std::cout << "      of the property, indicated by the third column of datos.dat, between the \n";
+ std::cout << "      values 2.0 and 3.0. The external file datos.dat has a comment in the     \n";
+ std::cout << "      first line, indicated by keyword extheader=1.                            \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
- std::cout << '\n';
 }
 
 Selector<BasicParticleSet> & ExternalFilter::CreateSelector()

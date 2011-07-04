@@ -35,23 +35,24 @@ void Ewald::ShowHelp() const
  std::cout << " Problems Report to = admin@lpmd.cl                                            \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
- std::cout << "      This plugin activate the electrostatic potential between the atomic      \n";
+ std::cout << "      This plugin activates the electrostatic potential between the atomic     \n";
  std::cout << "      species using the ewald method.                                          \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Options   >>                                                          \n";
- std::cout << "      This module do not need options, is activated when you apply the plugin. \n";
- std::cout << "      However, is important set the atomic charges in the control file.        \n";
- std::cout << "      Example : charge 1.9 O #The units are in eV.                             \n";
+ std::cout << "      This module does not need options, it is activated when the user applies \n";
+ std::cout << "      the plugin. However, it is important to set the atomic charges in the    \n";
+ std::cout << "      control file, for example, 'charge 1.9 O #The units are in eV.' sets a   \n";
+ std::cout << "      charge of 1.9 eV to the oxigen (O) atoms.                                \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " Example                                                                       \n";
  std::cout << " #Loading the plugin :                                                         \n";
  std::cout << " use ewald                                                                     \n";
  std::cout << " enduse                                                                        \n";
  std::cout << " #Applying the plugin :                                                        \n";
- std::cout << " potential ewald                                                               \n";
- std::cout << "      In thiw way you have been activated the ewald potential between all      \n";
- std::cout << "      atomic species, note htat you can set the charg to 0 when yo don want    \n";
- std::cout << "      disable a specific interaction.                                          \n"; 
+ std::cout << " potential ewald                                                             \n\n";
+ std::cout << "      This instruction activates the ewald potential between all atomic        \n";
+ std::cout << "      species. Note: you can set the charge to 0 when you don't want to disable\n";
+ std::cout << "      a specific interaction.                                                  \n"; 
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
 }
 

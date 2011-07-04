@@ -64,14 +64,21 @@ void ElementFilter::ShowHelp() const
  std::cout << " Module Name        = element                                                  \n";
  std::cout << " Problems Report to = admin@lpmd.cl                                            \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
- std::cout << " General Info      >> This plugin is used to filter atoms in the simulation by \n";
- std::cout << "                      the element symbol.                                      \n";
+ std::cout << " General Info      >>                                                          \n";
+ std::cout << "      This module is used to select atoms by their atomic symbol. It can be    \n";
+ std::cout << "      called with the 'filter' or 'over' keyword.                              \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Options   >>                                                          \n";
- std::cout << "      element       : Set the element of the symbol to filter.                 \n";
+ std::cout << "      element       : Sets the symbol of the element.         .                \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " Example                                                                       \n";
+ std::cout << " #Applying plugin :                                                            \n";
  std::cout << " filter element symbol=Ar                                                      \n";
+ std::cout << " apply myplugin over element symbol=Kr                                       \n\n";
+ std::cout << "      The plugin is used to eliminate (filter) all the argon (Ar) atoms of the \n";
+ std::cout << "      configuration in the first case, and to apply the 'myplugin' plugin      \n";
+ std::cout << "      to all krypton (Kr) atoms in the second case ('myplugin' must be loaded  \n";
+ std::cout << "      previously).                                                             \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
 }
 

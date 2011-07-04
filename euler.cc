@@ -35,12 +35,12 @@ void Euler::ShowHelp() const
  std::cout << " Problems Report to = admin@lpmd.cl                                            \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
- std::cout << "      The plugin is used to integrate the movement equation using the euler    \n";
- std::cout << " method. This method is not very used in MD simulation but we keep because is  \n";
- std::cout << " very isntructive for programmers.                                             \n";
+ std::cout << "      The plugin is used to integrate the equation of movement using the Euler \n";
+ std::cout << "      method. This method is not recommended for MD simulation, but it is      \n";
+ std::cout << "      available for comparisons (instructive for programmers).                 \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Options   >>                                                          \n";
- std::cout << "      dt            : Set the step time in femto-seconds for the integrator.   \n" ;
+ std::cout << "      dt            : Set the time-step for the integrator (in femto-seconds). \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " Example                                                                       \n";
  std::cout << " #Loading the plugin :                                                         \n";
@@ -48,10 +48,10 @@ void Euler::ShowHelp() const
  std::cout << "     dt 10.0                                                                   \n";
  std::cout << " enduse                                                                        \n";
  std::cout << " #Applying the plugin :                                                        \n";
- std::cout << " integrator euler start=1000                                                   \n";
- std::cout << "      The plugin can be called at the begin (without start option) or during   \n";
- std::cout << " the simulation at any other time step, with this you can change the           \n";
- std::cout << " integration plugin during the simulation.                                     \n";
+ std::cout << " integrator euler start=1000                                                 \n\n";
+ std::cout << "      The plugin can be called during or at the begining of the simulation     \n";
+ std::cout << "      with the start option. This enables the user to change the integration   \n";
+ std::cout << "      method during the simulation.                                            \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
 }
 
