@@ -34,29 +34,34 @@ FastLJ::~FastLJ()
 
 void FastLJ::ShowHelp() const
 {
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+ std::cout << " Module Name        = fastlj                                                   \n";
+ std::cout << " Problems Report to = admin@lpmd.cl                                            \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
- std::cout << "      El modulo implementa el potencial de Lennard Jones para interaccion de   \n";
- std::cout << " de pares.                                                                     \n";
- std::cout << "      Se utiliza la pairpotential de la API para llevar a cabo el calculo,     \n";
- std::cout << " ademas de generar una tabla con los valores para rapido acceso al potencial.  \n";
+ std::cout << "      The plugin is used to implement the fast Lennard-Jones potential for the \n";
+ std::cout << "      atoms pairs interaction. The potential uses a table of values to have a  \n";
+ std::cout << "      quick access to the potential.                                           \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Options   >>                                                          \n";
- std::cout << "      sigma         : Especifica el valor de sigma para el potencial.          \n";
- std::cout << "      epsilon       : Especifica el valor para epsilon del potencial.          \n";
- std::cout << "      cutoff        : Radio de corte para el potencial interatomico.           \n";
- std::cout << "      bins          : Numero de celdas para tabla de potencial.                \n";
- std::cout << '\n';
+ std::cout << "      sigma         : Sets the value of the constant sigma in the potential.   \n";
+ std::cout << "      epsilon       : Sets the value of the constant epsilon in the potential. \n";
+ std::cout << "      cutoff        : Sets the cutoff radius for the potential.                \n";
+ std::cout << "      bins          : Sets the number of cells for the table.                  \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " Example                                                                       \n";
- std::cout << " Cargando el Modulo :                                                          \n";
- std::cout << " use fastlj as FLJARAR                                                         \n";
+ std::cout << " #Loading plugin :                                                             \n";
+ std::cout << " use fastlj                                                                    \n";
  std::cout << "     sigma 3.4                                                                 \n";
  std::cout << "     epsilon 0.5                                                               \n";
  std::cout << "     bins 500                                                                  \n";
  std::cout << "     cutoff 1.90                                                               \n";
  std::cout << " enduse                                                                        \n";
- std::cout << " Llamando al modulo                                                            \n";
- std::cout << " potential FLJARAR Ar Ar                                                     \n\n";
- std::cout << "      De esta forma seteamos el potencial de Lennard Jones entre los atomos    \n";
- std::cout << " de Ar con las constantes usadas en FLJARAR.                                   \n";
+ std::cout << " #Applying the plugin :                                                        \n";
+ std::cout << " potential fastlj Ar Ar                                                      \n\n";
+ std::cout << "      The plugin implements a the Lennard-Jones potential between argon (Ar)   \n";
+ std::cout << "      atoms using a table of values of 500 cells.                              \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
 }
 
 void FastLJ::Tabulate()

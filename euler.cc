@@ -35,7 +35,7 @@ void Euler::ShowHelp() const
  std::cout << " Problems Report to = admin@lpmd.cl                                            \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
- std::cout << "      The plugin is used to integrate the equation of movement using the Euler \n";
+ std::cout << "      The plugin is used to integrate the equations of movement using the Euler\n";
  std::cout << "      method. This method is not recommended for MD simulation, but it is      \n";
  std::cout << "      available for comparisons (instructive for programmers).                 \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";

@@ -45,9 +45,8 @@ void BerendsenModifier::ShowHelp() const
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
  std::cout << "      The plugin is used to rescale the system temperature using the berendsen \n";
- std::cout << " thermostat.                                                                   \n";
- std::cout << "      This is one of the most used method in velocity rescaling process because\n";
- std::cout << " the change in the system temperature is less sharp.                           \n";
+ std::cout << "      thermostat. This is one of the most used methods in velocity rescaling   \n";
+ std::cout << "      process because the change in the system temperature is less sharp.      \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Options   >>                                                          \n";
  std::cout << "      from          : Initial temperature for the scaling process.             \n";
@@ -64,7 +63,7 @@ void BerendsenModifier::ShowHelp() const
  std::cout << " #Applying the plugin :                                                        \n";
  std::cout << " apply berendsen start=0 each=10 end=100                                       \n";
  std::cout << "      With this, we will apply the plugin between the 0 and 100 timesteps      \n";
- std::cout << " each 10 timesteps.                                                            \n";
+ std::cout << "      each 10 timesteps.                                                       \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
 }
 

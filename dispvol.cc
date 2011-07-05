@@ -56,7 +56,7 @@ void DispVol::ShowHelp() const
  std::cout << "                      (volume / vector / vectorhistogram).                     \n"; 
  std::cout << "      bins          : Sets the number of subdivisions of the interval for the  \n";
  std::cout << "                      mode vectorhistogram.                                    \n";
- std::cout << "      maxlenght     : The maximum leght of ...                                 \n";
+ std::cout << "      maxlength     : The maximum length of ...                                 \n";
  std::cout << "      output        : Output file.                                             \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " Example                                                                       \n";
