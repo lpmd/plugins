@@ -32,7 +32,7 @@ void AddVelocityModifier::ShowHelp() const
 {
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " Module Name        = addvelocity                                              \n";
- std::cout << " Problems Report to = gnm@gnm.cl                                               \n";
+ std::cout << " Problems Report to = admin@lpmd.cl                                            \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
  std::cout << "      The plugin is used to add a specific velocity to a set of atoms that     \n";

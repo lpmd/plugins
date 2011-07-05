@@ -39,7 +39,7 @@ void CordNumFunc::ShowHelp() const
 {
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " Module Name        = cordnumfunc                                              \n";
- std::cout << " Problems Report to = gnm@gnm.cl                                               \n";
+ std::cout << " Problems Report to = admin@lpmd.cl                                            \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
  std::cout << "      This module is used to calculate the coordination number (CN) of an      \n";

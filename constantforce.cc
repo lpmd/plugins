@@ -26,7 +26,7 @@ void ConstantForcePotential::ShowHelp() const
 {
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " Module Name        = constantforce                                            \n";
- std::cout << " Problems Report to = gnm@gnm.cl                                               \n";
+ std::cout << " Problems Report to = admin@lpmd.cl                                            \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
  std::cout << "      This module is used to apply an external constant force over a set of    \n";

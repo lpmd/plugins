@@ -32,7 +32,7 @@ void LennardJonesMod::ShowHelp() const
 {
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " Module Name        = lennardjonesMod                                          \n";
- std::cout << " Problems Report to = gnm@gnm.cl                                               \n";
+ std::cout << " Problems Report to = admin@lpmd.cl                                            \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
  std::cout << "      The module implements a modified Lenard-Jones potential for pairs        \n";

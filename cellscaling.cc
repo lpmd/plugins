@@ -53,7 +53,7 @@ void CellScalingModifier::ShowHelp() const
 {
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " Module Name        = cellscaling                                              \n";
- std::cout << " Problems Report to = gnm@gnm.cl                                               \n";
+ std::cout << " Problems Report to = admin@lpmd.cl                                            \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
  std::cout << "      This module is used to scale the size of the cell. It can be used to     \n";
