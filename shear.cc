@@ -12,7 +12,7 @@
 
 using namespace lpmd;
 
-ShearModifier::ShearModifier(std::string args): Plugin("shear", "2.0")
+ShearModifier::ShearModifier(std::string args): Plugin("shear", "2.1")
 {
  ParamList & param = (*this);
  DefineKeyword("axis", "X");
@@ -39,14 +39,22 @@ ShearModifier::~ShearModifier() { }
 
 void ShearModifier::ShowHelp() const
 {
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+ std::cout << " Module Name        = shear                                                    \n";
+ std::cout << " Problems Report to = admin@lpmd.cl                                            \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
+ std::cout << "      This plugin is used to apply a shear over the simulation cell.           \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Options   >>                                                          \n";
- std::cout << "      axis          : Eje en que se produce el cizalle                         \n";
- std::cout << "      normal        : Eje perpendicular al eje de cizalle                      \n";
- std::cout << "      strain        : Desplazamiento maximo a aplicar es strain*L(normal)      \n";
- std::cout << " Example                                                                       \n";
- std::cout << " Cargando el Modulo :                                                          \n";
+ std::cout << "      axis          : Axis where the shear is applied.                         \n";
+ std::cout << "      normal        : Orthogonal axis to the shear.                            \n";
+ std::cout << "      strain        : Maximum displacement to be applied \'strain*L\'(normal)  \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+ std::cout << " Example           >>                                                          \n";
+ std::cout << " #Loading the plugin :                                                         \n";
  std::cout << " prepare shear axis=X normal=Y strain=0.01                                     \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
 }
 
 void ShearModifier::Apply(Simulation & sim)

@@ -35,25 +35,32 @@ SiteCoord::~SiteCoord() { }
 
 void SiteCoord::ShowHelp() const
 {
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+ std::cout << " Module Name        = sitecoord                                                \n";
+ std::cout << " Problems Report to = admin@lpmd.cl                                            \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
- std::cout << "      Modulo utilizado para calcular el numero de coordinacion para atomos     \n";
- std::cout << "      individuales.                                                            \n";
+ std::cout << "      This plugin is used to evaluate the coordination number by site in a     \n";
+ std::cout << "      simulation cell.                                                         \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Options   >>                                                          \n";
- std::cout << "      rcut          : Especifica el radio maximo para el calculo del numero de coordinacion\n";
- std::cout << "      output        : Fichero en el que se graba la salida.                    \n";
- std::cout << "      average       : Setea si calculo o no el promedio de cada calculo.       \n";
- std::cout << '\n';
+ std::cout << "      rcut          : Set the maximum cutoff for the evaluation.               \n";
+ std::cout << "      output        : output filename.                                         \n";
+ std::cout << "      average       : True or False in case that realize an average over the   \n";
+ std::cout << "                      configurations.                                          \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " Example                                                                       \n";
- std::cout << " Cargando el Modulo :                                                          \n";
+ std::cout << " #Loading the plugin :                                                         \n";
  std::cout << " use sitecoord                                                                 \n";
  std::cout << "     output sitecoord.dat                                                      \n";
- std::cout << "     rcut 4.0                                                                 \n";
+ std::cout << "     rcut 4.0                                                                  \n";
  std::cout << "     average true                                                              \n";
  std::cout << " enduse                                                                        \n";
- std::cout << " Llamando al Modulo :                                                          \n";  
- std::cout << " property sitecoord start=1 each=10 end=100                                    \n\n";
- std::cout << "      De esta forma calculamos el numero de coordinacion por sitio entre 1 y   \n";
- std::cout << "      100 cada 10 pasos.                                                       \n";
+ std::cout << " #Applying the plugin :                                                        \n";  
+ std::cout << " property sitecoord start=1 each=10 end=100                                    \n";
+ std::cout << "      With this we calculate the coordination number by site between 1 and 100 \n";
+ std::cout << "      each 10 timestep.                                                        \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
 }
 
 void SiteCoord::Evaluate(Configuration & con, Potential & pot)

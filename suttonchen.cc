@@ -34,10 +34,15 @@ SuttonChen::SuttonChen(std::string args): Plugin("suttonchen", "2.1")
 
 void SuttonChen::ShowHelp() const
 {
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+ std::cout << " Module Name        = suttonchen                                               \n";
+ std::cout << " Problems Report to = admin@lpmd.cl                                            \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
  std::cout << "      The plugin incorporate the SuttonChen potencial, used frequently         \n";
- std::cout << " for metallic atomic interaction. Based in embedded atom model.                \n\n";
- std::cout << " V(r) = e*(a/r)^n ; F(rho) = -c*e*sqrt(rho) ; rho(r) = (a/r)^m                 \n\n";
+ std::cout << " for metallic atomic interaction. Based in embedded atom model.                \n";
+ std::cout << " V(r) = e*(a/r)^n ; F(rho) = -c*e*sqrt(rho) ; rho(r) = (a/r)^m                 \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Options   >>                                                          \n";
  std::cout << "      e             : The value of epsilon in the potential. [eV]              \n";
  std::cout << "      a             : The value of the a constant in the potencial. [A]        \n";
@@ -47,7 +52,7 @@ void SuttonChen::ShowHelp() const
  std::cout << "      cutoff        : Cutoff of the interatomic potential. [A]                 \n";
  std::cout << "      corrections   : Include(true) or not(false/default) corrections to the   \n";
  std::cout << "                      metallic potential (recommend for homogeneous systems).  \n";
- std::cout << '\n';
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " Example          >>                                                           \n";
  std::cout << " #Loading the plugin :                                                         \n";
  std::cout << " use suttonchen as sc                                                          \n";
@@ -60,7 +65,8 @@ void SuttonChen::ShowHelp() const
  std::cout << " enduse                                                                        \n";
  std::cout << " #Using the loaded plugin :                                                    \n";
  std::cout << " potential sc Cu Cu                                                            \n";
- std::cout << " #Values from : Philosophical Mag. Lett. 1991, Vol 63, No 4, 217-224         \n\n";
+ std::cout << " #Values from : Philosophical Mag. Lett. 1991, Vol 63, No 4, 217-224           \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
 }
 
 double SuttonChen::pairEnergy(const double &r) const { double ir = 1/r; return e*an*pow(ir,n); }

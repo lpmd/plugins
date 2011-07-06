@@ -25,18 +25,24 @@ SkewStartGenerator::~SkewStartGenerator() { }
 
 void SkewStartGenerator::ShowHelp() const
 {
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+ std::cout << " Module Name        = skewstart                                                \n";
+ std::cout << " Problems Report to = admin@lpmd.cl                                            \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
- std::cout << "      El modulo es utilizado para generar una celda inicial con el metodo      \n";
- std::cout << " skewstart disenado por Keith Refson para moldy.                               \n";
+ std::cout << "      The plugin is used to generate a initial simulation cell using the       \n";
+ std::cout << " skewstart method development by Keith Refson for the moldy software.          \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Options   >>                                                          \n";
- std::cout << "      atoms         : Especifica el numero de atomos para la celda a generar   \n";
- std::cout << "      symbol        : Especifica el simbolo atomico de la especie a generar.   \n";
- std::cout << '\n';
+ std::cout << "      atoms         : Set the number of atoms in the simulation cell.          \n";
+ std::cout << "      symbol        : Set the atomic symbol for the simulation cell. (only one)\n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " Example                                                                       \n";
- std::cout << " Llamando al modulo :                                                          \n";
+ std::cout << " #Using the plugin :                                                           \n";
  std::cout << " input module=skewstart atoms=108 symbol=Ar                                    \n";
- std::cout << "      De esta forma podemos generar una celda inicial con el metodo skewstart  \n";
- std::cout << " de 108 atomos de Ar.                                                          \n";
+ std::cout << "      With this we generate a simulation cell using  the skewstart method, of  \n";
+ std::cout << " 108 Argon atoms.                                                              \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
 }
 
 //
