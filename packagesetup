@@ -701,13 +701,5 @@ directory .
        pkgconfig += liblpmd-2.0
     end
 
-    module zlp.so
-       language = c++
-       sources = zlp.cc
-       installpath = lib/lpmd
-       pkgconfig += liblpmd-2.0
-       libraries += -lz
-    end
-
 end
 
