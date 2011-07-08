@@ -23,7 +23,6 @@ CordNum::CordNum(std::string args): Plugin("cordnum", "2.0")
  DefineKeyword("rcut");
  DefineKeyword("maxn");
  DefineKeyword("output");
- DefineKeyword("average", "false");
  DefineKeyword("cutoff","0");
  ProcessArguments(args);
  nb = int(params["maxn"]);
@@ -31,7 +30,6 @@ CordNum::CordNum(std::string args): Plugin("cordnum", "2.0")
  end = int(params["end"]);
  each = int(params["each"]);
  OutputFile() = params["output"];
- do_average = bool(params["average"]);
  cutoff = double(params["cutoff"]);
 }
 

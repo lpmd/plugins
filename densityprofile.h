@@ -28,7 +28,6 @@ class DensityProfile: public lpmd::StoredValue<lpmd::Matrix>, public lpmd::Insta
     int bins;
     int axis;
     double range[3][2];
-    bool do_average;
     long int counter;
 };
 

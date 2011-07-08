@@ -21,7 +21,6 @@ class SiteCoord: public lpmd::StoredValue<lpmd::Matrix>, public lpmd::InstantPro
 
  private:
     double rcut;
-    bool do_average;
 };
 
 #endif

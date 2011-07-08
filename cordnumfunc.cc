@@ -22,7 +22,6 @@ CordNumFunc::CordNumFunc(std::string args): Plugin("cordnumfunc", "2.0")
  DefineKeyword("rcut","10");
  DefineKeyword("output","cordnumfunc-output.dat");
  DefineKeyword("bins", "200");
- DefineKeyword("average", "false");
  ProcessArguments(args);
  cut = double(params["rcut"]);
  nb = int(params["bins"]);
@@ -30,7 +29,6 @@ CordNumFunc::CordNumFunc(std::string args): Plugin("cordnumfunc", "2.0")
  end = int(params["end"]);
  each = int(params["each"]);
  OutputFile() = params["output"];
- do_average = bool(params["average"]);
 }
 
 CordNumFunc::~CordNumFunc() { }

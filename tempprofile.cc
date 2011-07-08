@@ -22,7 +22,6 @@ TempProfile::TempProfile(std::string args): Plugin("tempprofile", "2.0")
  DefineKeyword("each", "1");
  DefineKeyword("output");
  DefineKeyword("bins", "200");
- DefineKeyword("average", "false");
  range[0][0]=0.0e0;range[0][1]=0.0e0;
  range[1][0]=0.0e0;range[1][1]=0.0e0;
  range[2][0]=0.0e0;range[2][1]=0.0e0;
@@ -32,7 +31,6 @@ TempProfile::TempProfile(std::string args): Plugin("tempprofile", "2.0")
  end = int(param["end"]);
  each = int(param["each"]);
  OutputFile() = param["output"];
- do_average = bool(param["average"]);
 }
 
 TempProfile::~TempProfile()

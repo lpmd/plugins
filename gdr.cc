@@ -20,7 +20,6 @@ Gdr::Gdr(std::string args): Plugin("gdr", "2.0")
  DefineKeyword("end", "-1");
  DefineKeyword("each", "1");
  DefineKeyword("output");
- DefineKeyword("average", "false");
  DefineKeyword("bins", "200");
  // hasta aqui los valores por omision
  ProcessArguments(args);
@@ -30,7 +29,6 @@ Gdr::Gdr(std::string args): Plugin("gdr", "2.0")
  end = int(params["end"]);
  each = int(params["each"]);
  OutputFile() = params["output"];
- do_average = bool(params["average"]);
 }
 
 Gdr::~Gdr() { }

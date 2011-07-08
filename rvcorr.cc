@@ -22,7 +22,6 @@ RVCorr::RVCorr(std::string args): Plugin("rvcorr", "1.0")
  DefineKeyword("end", "-1");
  DefineKeyword("each", "1");
  DefineKeyword("output");
- DefineKeyword("average", "false");
  // hasta aqui los valores por omision
  ProcessArguments(args);
  rcut = double(params["rcut"]);
@@ -31,7 +30,6 @@ RVCorr::RVCorr(std::string args): Plugin("rvcorr", "1.0")
  end = int(params["end"]);
  each = int(params["each"]);
  OutputFile() = params["output"];
- do_average = bool(params["average"]);
 }
 
 RVCorr::~RVCorr() { }

@@ -23,7 +23,6 @@ DensityProfile::DensityProfile(std::string args): Plugin("densityprofile", "2.0"
  DefineKeyword("rcut");
  DefineKeyword("output");
  DefineKeyword("bins", "200");
- DefineKeyword("average", "false");
  DefineKeyword("counter", "0");
  range[0][0]=0.0e0;range[0][1]=0.0e0;
  range[1][0]=0.0e0;range[1][1]=0.0e0;
@@ -34,7 +33,6 @@ DensityProfile::DensityProfile(std::string args): Plugin("densityprofile", "2.0"
  end = int(params["end"]);
  each = int(params["each"]);
  OutputFile() = params["output"];
- do_average = bool(params["average"]);
  counter = int(params["counter"]);
 }
 

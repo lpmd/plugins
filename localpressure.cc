@@ -24,7 +24,6 @@ LocalPressure::LocalPressure(std::string args): Plugin("localpressure", "2.0")
  AssignParameter("nx", "10");
  AssignParameter("ny", "10");
  AssignParameter("nz", "10");
- AssignParameter("average", "false");
  ProcessArguments(args);
  n[0] = int(param["nx"]);
  n[1] = int(param["ny"]);
@@ -34,7 +33,6 @@ LocalPressure::LocalPressure(std::string args): Plugin("localpressure", "2.0")
  end = int(param["end"]);
  each = int(param["each"]);
  OutputFile() = param["output"];
- do_average = bool(param["average"]);
 }
 
 LocalPressure::~LocalPressure() { }

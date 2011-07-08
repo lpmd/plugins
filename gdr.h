@@ -24,7 +24,6 @@ class Gdr: public lpmd::StoredValue<lpmd::Matrix>, public lpmd::InstantProperty,
  private:
     double rcut;
     int nb;
-    bool do_average;
 };
 
 #endif

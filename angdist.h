@@ -32,9 +32,8 @@ class AngDist: public lpmd::StoredValue<lpmd::Matrix>, public lpmd::InstantPrope
     int nb;
     std::map<std::string, double> rcut;
     int na;
-    bool do_average;
     std::vector<std::string> satoms; //simbolos de los atomos.
-    double cutoff;
+    double trcut;
 };
 
 #endif

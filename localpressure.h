@@ -25,7 +25,6 @@ class LocalPressure: public lpmd::StoredValue<lpmd::Matrix>, public lpmd::Instan
  private:
     int n[3];
     double rcut;
-    bool do_average;
 };
 
 #endif

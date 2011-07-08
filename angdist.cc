@@ -16,16 +16,16 @@ using namespace lpmd;
 
 AngDist::AngDist(std::string args): Plugin("angdist", "2.0")
 {
+ trcut = 0.0;
  ParamList & param = (*this);
  //
  DefineKeyword("rcut","1");
  DefineKeyword("atoms");
+ DefineKeyword("start");
  DefineKeyword("end");
  DefineKeyword("each");
  DefineKeyword("output");
  DefineKeyword("bins", "200");
- DefineKeyword("average", "false");
- DefineKeyword("cutoff", "0");
  DefineKeyword("debug", "none");
  // 
  ProcessArguments(args);
@@ -34,8 +34,6 @@ AngDist::AngDist(std::string args): Plugin("angdist", "2.0")
  end = int(param["end"]);
  each = int(param["each"]);
  OutputFile() = param["output"];
- do_average = bool(param["average"]);
- cutoff = double(param["cutoff"]);
 }
 
 AngDist::~AngDist()
@@ -56,9 +54,10 @@ void AngDist::SetParameter(std::string name)
   std::string atom1 = GetNextWord();
   std::string atom2 = GetNextWord();
   std::string tmp = GetNextWord();
-  double cutoff = atof(tmp.c_str());
-  rcut[atom1+"-"+atom2] = cutoff;
-  rcut[atom2+"-"+atom1] = cutoff;
+  double cf = atof(tmp.c_str());
+  rcut[atom1+"-"+atom2] = cf;
+  rcut[atom2+"-"+atom1] = cf;
+  trcut += cf;
  }
  else Module::SetParameter(name);
 }
@@ -109,8 +108,6 @@ void AngDist::ShowHelp() const
  std::cout << "                      between them.                                            \n";
  std::cout << "      output        : Output File.                                             \n";
  std::cout << "      average       : True/False Average or not the different distributions.   \n";
- std::cout << "      cutoff        : General cutoff for the angular calculations.             \n";
- std::cout << "                      If is not set, is equal to the sum of all cutoffs.       \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n"; 
  std::cout << " Example          >>                                                           \n";
  std::cout << " #Loading the plugin :                                                         \n";
@@ -171,12 +168,12 @@ void AngDist::Evaluate(lpmd::Configuration & con, lpmd::Potential & pot)
   int e3 = ElemNum(loa[2]);
   double rc12 = rcut[loa[0]+"-"+loa[1]];
   double rc23 = rcut[loa[1]+"-"+loa[2]];
-  if(fabs(cutoff)<1E-1) cutoff = rc12+rc23;
+  if(fabs(trcut)<1E-1) trcut = rc12+rc23;
   for(unsigned long int j=0;j<N;++j)
   {
    if (part[j].Z()==e2)
    {
-    lpmd::NeighborList & nlist = con.Neighbors(j,true,cutoff);
+    lpmd::NeighborList & nlist = con.Neighbors(j,true,trcut);
     for (long int k=0;k<nlist.Size();++k)
     {
      const lpmd::AtomPair & nn = nlist[k];

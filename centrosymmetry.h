@@ -20,7 +20,6 @@ class CentroSymmetry: public lpmd::StoredValue<lpmd::Matrix>, public lpmd::Insta
 
  private:
     double rcut, a;
-    bool do_average;
 };
 
 #endif

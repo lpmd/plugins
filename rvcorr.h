@@ -23,7 +23,6 @@ class RVCorr: public lpmd::StoredValue<lpmd::Matrix>, public lpmd::InstantProper
  private:
     double rcut;
     int nb;
-    bool do_average;
 };
 
 #endif

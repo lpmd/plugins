@@ -21,7 +21,6 @@ CentroSymmetry::CentroSymmetry(std::string args): Plugin("centrosymmetry", "1.0"
  DefineKeyword("end", "-1");
  DefineKeyword("each", "1");
  DefineKeyword("output");
- DefineKeyword("average", "false");
  // hasta aqui los valores por omision
  ProcessArguments(args);
  rcut = params["rcut"];
@@ -30,7 +29,6 @@ CentroSymmetry::CentroSymmetry(std::string args): Plugin("centrosymmetry", "1.0"
  end = int(params["end"]);
  each = int(params["each"]);
  OutputFile() = params["output"];
- do_average = bool(params["average"]);
 }
 
 CentroSymmetry::~CentroSymmetry() { }
