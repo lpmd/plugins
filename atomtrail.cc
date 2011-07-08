@@ -29,6 +29,9 @@ AtomTrail::AtomTrail(std::string args): Plugin("atomtrail", "1.0")
  DefineKeyword("plane", "XY");
  DefineKeyword("species", "all");
  DefineKeyword("debug", "none");
+ DefineKeyword("start", "0");
+ DefineKeyword("end", "-1");
+ DefineKeyword("each", "1");
  
  ProcessArguments(args);
 

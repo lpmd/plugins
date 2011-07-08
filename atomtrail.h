@@ -20,12 +20,11 @@ class AtomTrail: public lpmd::StoredValue<lpmd::Matrix>, public lpmd::InstantPro
   AtomTrail(std::string args);
   ~AtomTrail();
   void ShowHelp() const;
-
   void Evaluate(lpmd::Configuration & config, lpmd::Potential & pot);
 
  private:
-    int nx, ny, nz;
-    std::string plane, species, mode;
+  int nx, ny, nz;
+  std::string plane, species, mode;
 };
 
 #endif
