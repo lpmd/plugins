@@ -30,7 +30,7 @@ class CordNum: public lpmd::StoredValue<lpmd::Matrix>, public lpmd::InstantPrope
   std::map<std::string, double> rcut;
   int na;
   std::vector<std::string> satoms; //atomic symbols.
-  double cutoff;
+  double trcut;
 };
 
 #endif

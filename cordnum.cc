@@ -14,6 +14,7 @@ using namespace lpmd;
 
 CordNum::CordNum(std::string args): Plugin("cordnum", "2.0")
 {
+ trcut = 0.0;
  ParamList & params = (*this);
  //
  DefineKeyword("atoms");
@@ -23,14 +24,12 @@ CordNum::CordNum(std::string args): Plugin("cordnum", "2.0")
  DefineKeyword("rcut");
  DefineKeyword("maxn");
  DefineKeyword("output");
- DefineKeyword("cutoff","0");
  ProcessArguments(args);
  nb = int(params["maxn"]);
  start = int(params["start"]);
  end = int(params["end"]);
  each = int(params["each"]);
  OutputFile() = params["output"];
- cutoff = double(params["cutoff"]);
 }
 
 CordNum::~CordNum()
@@ -51,9 +50,10 @@ void CordNum::SetParameter(std::string name)
   std::string atom1 = GetNextWord();
   std::string atom2 = GetNextWord();
   std::string tmp = GetNextWord();
-  double cutoff = atof(tmp.c_str());
-  rcut[atom1+"-"+atom2] = cutoff;
-  rcut[atom2+"-"+atom1] = cutoff;
+  double cf = atof(tmp.c_str());
+  rcut[atom1+"-"+atom2] = cf;
+  rcut[atom2+"-"+atom1] = cf;
+  trcut += cf;
  }
  else Module::SetParameter(name);
 }
@@ -61,24 +61,27 @@ void CordNum::SetParameter(std::string name)
 void CordNum::Show(std::ostream & os) const
 {
  Module::Show(os);
- std::cout << "   Atoms N     = " << na << '\n';
- std::cout << "   Atoms       = ";
- for(unsigned int i=0;i<satoms.size();i++) std::cout << satoms[i] << "\t";
- std::cout << std::endl;
- std::cout << "   Max neigh   = " << nb << '\n';
- std::cout << "   Cutoffs     = " << '\n';
- for(unsigned int i=0;i<satoms.size();i++)
+ if(na > 0)
  {
-  for(unsigned int j=i;j<satoms.size();j++)
+  std::cout << "   Atoms N     = " << na << '\n';
+  std::cout << "   Atoms       = ";
+  for(unsigned int i=0;i<satoms.size();i++) std::cout << satoms[i] << "\t";
+  std::cout << std::endl;
+  std::cout << "   Max neigh   = " << nb << '\n';
+  std::cout << "   Cutoffs     = " << '\n';
+  for(unsigned int i=0;i<satoms.size();i++)
   {
-   std::string spec1=satoms[i];
-   std::string spec2=satoms[j];
-   std::string tmp = spec1+"-"+spec2;
-   // Truco para acceder a rcut[tmp] desde un metodo const 
-   const std::map<std::string, double>::const_iterator & p = rcut.find(tmp);
-   double cut = (*p).second;
-   // fin del truco
-   std::cout <<"\t"<< spec1 << "-" << spec2 << " = " << cut << std::endl;
+   for(unsigned int j=i;j<satoms.size();j++)
+   {
+    std::string spec1=satoms[i];
+    std::string spec2=satoms[j];
+    std::string tmp = spec1+"-"+spec2;
+    // Truco para acceder a rcut[tmp] desde un metodo const 
+    const std::map<std::string, double>::const_iterator & p = rcut.find(tmp);
+    double cut = (*p).second;
+    // fin del truco
+    std::cout <<"\t"<< spec1 << "-" << spec2 << " = " << cut << std::endl;
+   }
   }
  }
 }
@@ -172,12 +175,12 @@ void CordNum::Evaluate(Configuration & con, Potential & pot)
   int ne1=0;
   for (unsigned long int k=0;k<N;++k) {if(atoms[k].Z()==e1) ne1++;}
   //Comienzan las iteraciones.
-  if (fabs(cutoff)<1e-1) cutoff = rc12*2;
+  if (fabs(trcut)<1e-1) trcut = rc12*2;
   for (unsigned long int j=0;j<N;++j)
   {
    if(atoms[j].Z()==e1)
    {
-    lpmd::NeighborList & nlist = con.Neighbors(j,true,cutoff);
+    lpmd::NeighborList & nlist = con.Neighbors(j,true,trcut);
     for(long int k=0;k<nlist.Size();++k)
     {
      const lpmd::AtomPair & nn = nlist[k];
