@@ -10,7 +10,7 @@
 
 using namespace lpmd;
 
-VelocityVerlet::VelocityVerlet(std::string args): Plugin("velocityverlet", "2.0")
+VelocityVerlet::VelocityVerlet(std::string args): Plugin("velocityverlet", "2.1")
 {
  DefineKeyword("dt", "1.0");
  DefineKeyword("start", "1");
@@ -24,22 +24,28 @@ VelocityVerlet::~VelocityVerlet() { }
 
 void VelocityVerlet::ShowHelp() const
 {
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+ std::cout << " Module Name        = velocityverlet                                           \n";
+ std::cout << " Problems Report to = admin@lpmd.cl                                            \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
- std::cout << "      El modulo es utilizado para integrar utilizando el metodo velocityverlet.\n";
+ std::cout << "      The plugin is used to itnegrate the movement equation using the velocity-\n";
+ std::cout < "  verlet method.                                                                \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Options   >>                                                          \n";
- std::cout << "      dt            : Especifica el tiempo en femto-segundos para el           \n" ;
- std::cout << "                      integrador.                                              \n";
- std::cout << '\n';
- std::cout << " Example                                                                       \n";
- std::cout << " Cargando el Modulo :                                                          \n";
+ std::cout << "      dt            : Set the integration time in femto-seconds.               \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+ std::cout << " Example           >>                                                          \n";
+ std::cout << " #Loading the plugin :                                                         \n";
  std::cout << " use velocityverlet                                                            \n";
  std::cout << "     dt 10.0                                                                   \n";
  std::cout << " enduse                                                                        \n";
- std::cout << " Llamando al modulo :                                                          \n";
- std::cout << " integrator velocityverlet start=1000                                        \n\n";
- std::cout << "      El integrador puede ser llamado desde el principio (sin usar start) o en \n";
- std::cout << " otro instante de tiempo, para poder modificar el integrador durante la        \n";
- std::cout << " simulacion.                                                                   \n";
+ std::cout << " #Applying the plugin :                                                        \n";
+ std::cout << " integrator velocityverlet start=1000                                          \n";
+ std::cout << "      The plugin can be called at the begin (without start option) or during   \n";
+ std::cout << " the simulation at any other time step, with this you can change the           \n";
+ std::cout << " integration plugin during the simulation.                                     \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
 }
 
 void VelocityVerlet::Initialize(Simulation & sim, Potential & p) { assert(&p != 0); UseOldConfig(sim); }

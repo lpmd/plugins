@@ -11,7 +11,7 @@
 
 using namespace lpmd;
 
-VaspFormat::VaspFormat(std::string args): Plugin("vasp", "2.0")
+VaspFormat::VaspFormat(std::string args): Plugin("vasp", "2.1")
 {
  ParamList & params = (*this);
  //

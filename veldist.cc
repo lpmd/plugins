@@ -12,7 +12,7 @@
 
 using namespace lpmd;
 
-VelDist::VelDist(std::string args): Plugin("veldist", "2.0")
+VelDist::VelDist(std::string args): Plugin("veldist", "2.1")
 {
  ParamList & params = (*this);
  //
@@ -33,20 +33,27 @@ VelDist::~VelDist() { }
 
 void VelDist::ShowHelp() const
 {
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+ std::cout << " Module Name        = veldist                                                  \n";
+ std::cout << " Problems Report to = admin@lpmd.cl                                            \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
- std::cout << "   Calcula el histograma de velocidades, tanto por magnitud como por componentes.\n";
+ std::cout << "   This plugin is used to evaluate a velocities histogram, can be evaluated    \n";
+ std::cout << " in both velocities as components.                                             \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Options   >>                                                          \n";
- std::cout << "      bins          : Especifica el numero de intervalos (bins) del histograma \n";
- std::cout << "      output        : Fichero en el que se graba la salida                     \n";
- std::cout << '\n';
- std::cout << " Example                                                                       \n";
- std::cout << " Cargando el Modulo :                                                          \n";
+ std::cout << "      bins          : Set the number of bins fo the histogram.                 \n";
+ std::cout << "      output        : Set the output file name.                                \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+ std::cout << " Example           >>                                                          \n";
+ std::cout << " #Loading the plugin :                                                         \n";
  std::cout << " use veldist                                                                   \n";
  std::cout << "     output veldist.dat                                                        \n";
  std::cout << "     bins 500                                                                  \n";
  std::cout << " enduse                                                                        \n";
- std::cout << " Llamando al Modulo :                                                          \n";  
- std::cout << " property veldist start=1 each=10 end=100                                      \n\n";
+ std::cout << " #Applying the plugin :                                                        \n";  
+ std::cout << " property veldist start=1 each=10 end=100                                      \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
 }
 
 void VelDist::Evaluate(Configuration & conf, Potential & pot)
