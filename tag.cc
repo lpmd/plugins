@@ -66,11 +66,22 @@ TagFilter::~TagFilter() { delete selector; }
 
 void TagFilter::ShowHelp() const
 {
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+ std::cout << " Module Name        = tag                                                      \n";
+ std::cout << " Problems Report to = admin@lpmd.cl                                            \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
+ std::cout << "      This plugin is used to identify atoms with an specific Tag.              \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Options   >>                                                          \n";
- std::cout << " Example                                                                       \n";
- std::cout << " filter tag name=fixedpos value=true                                          \n";
- std::cout << '\n';
+ std::cout << "      name          : The name of the tag that you want to compare.            \n";
+ std::cout << "      value         : Tag assignation status True/False.                       \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+ std::cout << " Example           >>                                                          \n";
+ std::cout << " apply color over tag name=floor value=true                                    \n";
+ std::cout << "      In this case we set a 'color' (or anything) to the atoms with the tag    \n";
+ std::cout << "      floor in a true status.                                                  \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
 }
 
 Selector<BasicParticleSet> & TagFilter::CreateSelector()

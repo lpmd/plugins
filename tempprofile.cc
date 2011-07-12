@@ -93,20 +93,25 @@ void TempProfile::Show(std::ostream & os) const
 
 void TempProfile::ShowHelp() const
 {
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+ std::cout << " Module Name        = tempprofile                                              \n";
+ std::cout << " Problems Report to = admin@lpmd.cl                                            \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
- std::cout << "      Modulo utilizado para calcular el perfil de temperaturas de la celda de  \n";
- std::cout << " simulacion, actualmente solo unidimensionalmente en el tiempo.                \n";
+ std::cout << "      This plugin is used to evaluate a temperature profile of the simulation  \n";
+ std::cout << " cell, nowadays only one-dimensional.                                          \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Options   >>                                                          \n";
- std::cout << "      axis          : Especifica el eje en el que se realizara el calulo.      \n";
- std::cout << "      bins          : Especifica el numero de divisiones para el eje.          \n";
- std::cout << "      range         : Especifica el rango para calculo de densidad.            \n";
- std::cout << "      output        : Fichero en el que se graba la densidad.                  \n";
- std::cout << "      average       : Setea si calcula o no el promedio de cada evaluacion.    \n";
- std::cout << '\n';
- std::cout << " Example                                                                       \n";
- std::cout << " Cargando el Modulo :                                                          \n";
- std::cout << " use tempprofile                                                            \n";
- std::cout << "     axis X                                                                     \n";
+ std::cout << "      axis          : Set the axis where the evaluation will be realized.      \n";
+ std::cout << "      bins          : Set the number of bins for the required axis.            \n";
+ std::cout << "      range         : Set the range for the evaluation in each axis.           \n";
+ std::cout << "      output        : Output file with the temperature.                        \n";
+ std::cout << "      average       : Evaluate an average over the configurations or not.      \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+ std::cout << " Example           >>                                                          \n";
+ std::cout << " #Loading the plugin :                                                         \n";
+ std::cout << " use tempprofile                                                               \n";
+ std::cout << "     axis X                                                                    \n";
  std::cout << "     bins 200                                                                  \n";
  std::cout << "     range Y 10 20                                                             \n";
  std::cout << "     range Z all                                                               \n";
@@ -114,10 +119,10 @@ void TempProfile::ShowHelp() const
  std::cout << "     output filetemperature.out                                                \n";
  std::cout << "     average true                                                              \n";
  std::cout << " enduse                                                                        \n";
- std::cout << " Llamando al Modulo :                                                          \n";  
- std::cout << " property tempprofile start=1 each=10 end=100                                \n\n";
- std::cout << "      De esta forma calculamos la funcion de distribucion radial de pares en   \n";
- std::cout << " la simulacion entre 1 y 100 cada 10 pasos.                                    \n";
+ std::cout << " #Applying the plugin :                                                        \n";  
+ std::cout << " property tempprofile start=1 each=10 end=100                                  \n";
+ std::cout << "      With this we will have a temperature profile of the sample.              \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
 }
 
 void TempProfile::Evaluate(Configuration & con, Potential & pot)

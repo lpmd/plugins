@@ -9,17 +9,17 @@
 
 using namespace lpmd;
 
-TabulatedPair::TabulatedPair(std::string args): Plugin("fastlj", "2.0")
+TabulatedPair::TabulatedPair(std::string args): Plugin("tabulatedpair", "2.1")
 { 
  ParamList & params = (*this);
  //
- DefineKeyword("file");
+ DefineKeyword("file","");
  // hasta aqui los valores por omision
  ProcessArguments(args);
  cutoff = 0.0e0;
  bins = 0;
  file = params["file"];
- ReadTable();
+ if(file!="") ReadTable();
 }
 
 TabulatedPair::~TabulatedPair() 
@@ -30,21 +30,26 @@ TabulatedPair::~TabulatedPair()
 
 void TabulatedPair::ShowHelp() const
 {
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+ std::cout << " Module Name        = tabulatedpair                                            \n";
+ std::cout << " Problems Report to = admin@lpmd.cl                                            \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
- std::cout << "      El modulo lee un potencial tabulado de pares a partir de un fichero      \n";
- std::cout << " de datos.                                                                     \n";
+ std::cout << "      This plugin read a tabulated pair potential from a data file.            \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Options   >>                                                          \n";
- std::cout << "      file           : Especifica el nombre del archivo.                       \n";
- std::cout << '\n';
- std::cout << " Example                                                                       \n";
- std::cout << " Cargando el Modulo :                                                          \n";
+ std::cout << "      file           : Specify the filename with the potential.                \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+ std::cout << " Example           >>                                                          \n";
+ std::cout << " #Loading the plugin :                                                         \n";
  std::cout << " use tabulatedpair as TABLJ                                                    \n";
  std::cout << "     file lennardjones.dat                                                     \n";
  std::cout << " enduse                                                                        \n";
- std::cout << " Llamando al modulo                                                            \n";
- std::cout << " potential TABLJ Ar Ar                                                       \n\n";
- std::cout << "      De esta forma seteamos el potencial de Lennard Jones tabulado entre los  \n";
- std::cout << " atomos de Ar.                                                                 \n";
+ std::cout << " #Applying the plugin :                                                        \n";
+ std::cout << " potential TABLJ Ar Ar                                                         \n";
+ std::cout << "      In this way we set the tabulated lennard-jones pair potential between the\n";
+ std::cout << " Ar atoms.                                                                     \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
 }
 
 void TabulatedPair::ReadTable()

@@ -33,22 +33,28 @@ TempScalingModifier::~TempScalingModifier() { }
 
 void TempScalingModifier::ShowHelp() const
 {
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+ std::cout << " Module Name        = tempscaling                                              \n";
+ std::cout << " Problems Report to = admin@lpmd.cl                                            \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
- std::cout << "      El modulo es utilizado para escalar la temperatura del sistema utilizando\n";
- std::cout << " rescalamiento de velocidades.                                                 \n";
+ std::cout << "      this plugin is used to scale the temperature of the system using the     \n";
+ std::cout << " velocity rescaling on the atoms of the cell.                                  \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Options   >>                                                          \n";
- std::cout << "      from          : Temperatura inicial para el escalamiento.                \n";
- std::cout << "      to            : Temperatura final para el sistema.                       \n";
- std::cout << '\n';
- std::cout << " Example                                                                       \n";
- std::cout << " Cargando el Modulo :                                                          \n";
+ std::cout << "      from          : Initial temperature.                                     \n";
+ std::cout << "      to            : Final required temperature.                              \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+ std::cout << " Example           >>                                                          \n";
+ std::cout << " #Loading the plugin :                                                         \n";
  std::cout << " use tempscaling                                                               \n";
  std::cout << "     from 84.0                                                                 \n";
  std::cout << "     to   10.0                                                                 \n";
  std::cout << " enduse                                                                        \n";
- std::cout << " Llamando al modulo                                                            \n";
- std::cout << " apply tempscaling start=0 each=10 end=100                                     \n\n";
- std::cout << "      De esta forma aplicamos el termostato entre 0 y 100 cada 10 steps.       \n";
+ std::cout << " #Applying the plugin :                                                        \n";
+ std::cout << " apply tempscaling start=0 each=10 end=100                                     \n";
+ std::cout << "      With this we reduce the temperature of the simulation from 84 to 10 K.   \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
 }
 
 void TempScalingModifier::Apply(Simulation & sim)
