@@ -18,7 +18,7 @@ Vacf::Vacf(std::string args): Plugin("vacf", "2.1")
 
 Vacf::~Vacf() { }
 
-void VariableStep::ShowHelp() const
+void Vacf::ShowHelp() const
 {
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " Module Name        = vacf                                                     \n";

@@ -30,7 +30,7 @@ void Verlet::ShowHelp() const
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
  std::cout << "      The plugin is used to itnegrate the movement equation using the verlet   \n";
- std::cout < "  method.                                                                       \n";
+ std::cout << "  method.                                                                      \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Options   >>                                                          \n";
  std::cout << "      dt            : Set the integration time in femto-seconds.               \n";
