@@ -30,17 +30,26 @@ UndoPBCModifier::~UndoPBCModifier() { delete [] oldpositions; }
 
 void UndoPBCModifier::ShowHelp() const
 {
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+ std::cout << " Module Name        = undopbc                                                  \n";
+ std::cout << " Problems Report to = admin@lpmd.cl                                            \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
- std::cout << "      El modulo es utilizado para posicionar los atomos sin condiciones        \n";
- std::cout << " periodicas de borde.                                                          \n";
+ std::cout << "      This plugin is used to remove the periodical boundary conditions in a set\n";
+ std::cout << " of multiple configurations.                                                   \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Options   >>                                                          \n";
- std::cout << " Example:                                                                      \n";
+ std::cout << "      This plugin do not require additional options.                           \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+ std::cout << " Example           >>                                                          \n";
+ std::cout << " #Load the plugin  :                                                           \n";
  std::cout << " use undopbc                                                                   \n";
  std::cout << " enduse                                                                        \n";
- std::cout << " Llamando al modulo :                                                          \n";
- std::cout << " apply undopbc start=0 each=300 end=1000                                     \n\n";
- std::cout << "      De esta forma modificamos las posiciones atomicas de nuestra muestra     \n";
- std::cout << " desde el paso 0 hasta el 1000 cada 300.                                       \n";
+ std::cout << " #Applying the plugin :                                                        \n";
+ std::cout << " apply undopbc start=0 each=1 end=-1                                           \n";
+ std::cout << "      With this we change the atomic positions of the atoms in the boundary of \n";
+ std::cout << " the simulation for all the configurations.                                    \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
 }
 
 void UndoPBCModifier::Apply(Simulation & sim)
