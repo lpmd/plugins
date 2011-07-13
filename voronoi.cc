@@ -36,25 +36,31 @@ VoronoiGenerator::~VoronoiGenerator() { }
 
 void VoronoiGenerator::ShowHelp() const
 {
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+ std::cout << " Module Name        = voronoi                                                  \n";
+ std::cout << " Problems Report to = admin@lpmd.cl                                            \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
- std::cout << "      El modulo es usado para generar un cristal nanoestructurado usando el    \n";
- std::cout << "      metodo Voronoi.                                                          \n";
- std::cout << " General Options   >>                                                         	\n";
- std::cout << "      symbol  : Especifica el simbolo atomico de la especie a generar, como    \n";
- std::cout << "                Cu, Ar, Fe, etc.                                               \n";
- std::cout << "      type    : Especifica el tipo de grano cristalino (sc, bcc, fcc).         \n";
- std::cout << "      a       : Constante de red del cristal.                                  \n";
- std::cout << "      grains  : Numero de granos a situar en la celda de simulacion.           \n";
- std::cout << " Example                                                                       \n";
- std::cout << " Utilizando el Modulo :                                                              \n";
+ std::cout << "      The plugin is used to build a no-structured crytal using the Voronoi     \n";
+ std::cout << "      method.                                                                  \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+ std::cout << " General Options   >>                                                          \n";
+ std::cout << "      symbol  : Set the atomic species to generate in the cell, like as Cu,    \n";
+ std::cout << "                Ar, Fe, etc.                                                   \n";
+ std::cout << "      type    : Set the kind of crystaline graine (fcc, bcc, hcp and sc)       \n";
+ std::cout << "      a       : Crystal constant of the cell in [A].                           \n";
+ std::cout << "      grains  : Number of grains to put in the final cell.                     \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+ std::cout << " Example           >>                                                          \n";
+ std::cout << " #Using the plugin to generate a crystal                                       \n";
  std::cout << " input module voronoi symbol=Ar type=fcc a=3.61 grains=10                      \n";
  std::cout << " Explanation :                                                                 \n";
- std::cout << "      De esta forma se genera una celda de simulacionque contiene 10 granos    \n";
- std::cout << "      cristalizados de argon, uniformemente distribuidos (usando el metodo     \n";
- std::cout << "      skewstart), siendo cada uno de ellos un cristal fcc perfecto.            \n";
- std::cout << "      El numero de atomos que tendra la celda finalmente, depende del numero   \n";
- std::cout << "      de granos escogidos y del tamano de la celda de simulacion (mientras mas \n";
- std::cout << "      granos se escojan, mas pequenos se vulven, y menos atomos se tienen).    \n";
+ std::cout << "      With this we generate a simulation cell with 10 crystal grains of Argon  \n";
+ std::cout << "      atoms unifromly distributed (using the skewstart method), each one of    \n";
+ std::cout << "      this grains is a perfect FCC crystal. The final number of atoms of the   \n";
+ std::cout << "      cell, depends of the number of choiced grains and the size of the simula-\n";
+ std::cout << "      tion cell (more grains, more small will be, and less atomes will have).  \n"; 
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
 }
 
 void VoronoiGenerator::Generate(lpmd::Configuration & conf) const

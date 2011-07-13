@@ -17,6 +17,7 @@ class VerletListCellManager: public CellManager, public Plugin
    VerletListCellManager(std::string args);
    ~VerletListCellManager();
 
+   void ShowHelp() const;
    void Reset();
    void UpdateCell(Configuration & conf);
    void UpdateAtom(Configuration & conf, long i);

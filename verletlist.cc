@@ -30,6 +30,37 @@ VerletListCellManager::VerletListCellManager(std::string args): Plugin("verletli
 
 VerletListCellManager::~VerletListCellManager() { }
 
+void VerletListCellManager::ShowHelp() const
+{
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+ std::cout << " Module Name        = verletlist                                               \n";
+ std::cout << " Problems Report to = admin@lpmd.cl                                            \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+ std::cout << " General Info      >>                                                          \n";
+ std::cout << "      The plugin is used to specify the verlet-list cellmanager method.        \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+ std::cout << " General Options   >>                                                          \n";
+ std::cout << "      cutoff        : Set the internal cutoff for the list. [A]                \n";
+ std::cout << "      extcutoff     : Set the external cutoff for the list. If is not specified\n";
+ std::cout << "                      then is set to cutoff + .08*cutoff.   [A]                \n"; 
+ std::cout << "      maxneighbors  : Set the maximum number of neighbors that have a atom in  \n";
+ std::cout << "                      the list.                                                \n";
+ std::cout << "      each          : Set the frequency to 'rebuild' the atomic neighbors list.\n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+ std::cout << " Example           >>                                                          \n";
+ std::cout << " #Loading the plugin :                                                         \n";
+ std::cout << " use verletlist                                                                \n";
+ std::cout << "     cutoff 5.0                                                                \n";
+ std::cout << "     maxneighbors 15                                                           \n";
+ std::cout << "     each 10                                                                   \n";
+ std::cout << " enduse                                                                        \n";
+ std::cout << " #Applying the plugin :                                                        \n";
+ std::cout << " cellmanager verletlist                                                        \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+
+}
+
+
 void VerletListCellManager::Reset() { }
 
 void VerletListCellManager::UpdateVerletList(Configuration & conf) 
