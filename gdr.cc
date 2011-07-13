@@ -35,27 +35,35 @@ Gdr::~Gdr() { }
 
 void Gdr::ShowHelp() const
 {
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+ std::cout << " Module Name        = gdr                                                      \n";
+ std::cout << " Problems Report to = admin@lpmd.cl                                            \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n"; 
  std::cout << " General Info      >>                                                          \n";
- std::cout << "      Modulo utilizado para calcular la funcion de autocorrelacion de pares    \n";
- std::cout << " utiliza las condiciones de borde periodicas de la celda.                      \n";
+ std::cout << "      This module is used to calculate the radial distribution function (also  \n";
+ std::cout << "      called pair correlation funcion): g(r).                                  \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n"; 
  std::cout << " General Options   >>                                                          \n";
- std::cout << "      bins          : Especifica el numero de divisiones entre 0 y rcut.       \n";
- std::cout << "      rcut          : Especifica el radio maximo para el calculo de gdr.       \n";
- std::cout << "      output        : Fichero en el que se graba el RDF.                       \n";
- std::cout << "      average       : Setea si calculo o no el promedio de cada calculo.       \n";
- std::cout << '\n';
+ std::cout << "      bins          : Sets the number of subdivisions of the range [0,rcut].   \n";
+ std::cout << "      rcut          : Set the cutoff radius for the function.                  \n";
+ std::cout << "      output        : Output file.                                             \n";
+ std::cout << "      average       : Sets if the the property must be averaged over all       \n";
+ std::cout << "                      configurations (true / false)                            \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n"; 
  std::cout << " Example                                                                       \n";
- std::cout << " Cargando el Modulo :                                                          \n";
+ std::cout << " #Loading the plugin :                                                         \n";
  std::cout << " use gdr                                                                       \n";
  std::cout << "     bins 200                                                                  \n";
  std::cout << "     output filegdr.dat                                                        \n";
  std::cout << "     rcut 15.0                                                                 \n";
  std::cout << "     average true                                                              \n";
  std::cout << " enduse                                                                        \n";
- std::cout << " Llamando al Modulo :                                                          \n";  
+ std::cout << " #Applying the plugin :                                                        \n";
  std::cout << " property gdr start=1 each=10 end=100                                        \n\n";
- std::cout << "      De esta forma calculamos la funcion de distribucion radial de pares en    \n";
- std::cout << " la simulacion entre 1 y 100 cada 10 pasos.                                    \n";
+ std::cout << "      The plugin is used to calculate the g(r) function of the atomic          \n";
+ std::cout << "      configuration every 10 steps of the first 100 steps. The data is written \n";
+ std::cout << "      in the file filegdr.dat                                                  \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
 }
 
 void Gdr::Evaluate(Configuration & con, Potential & pot)

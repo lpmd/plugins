@@ -102,9 +102,10 @@ void CommonNeighborAnalysis::ShowHelp() const
  std::cout << "                      is being analyzed.                                       \n";
  std::cout << "      mode          : Sets the output mode (full/statistics/defects).          \n";
  std::cout << "      species       : Sets the species to be analyzed (.....).                 \n";
- std::cout << "      filterby      :                                                          \n";
  std::cout << "      output        : Output file.                                             \n";
- std::cout << "      filterout     :                                                          \n";
+ std::cout << "      filterout     : In mode=defects, indicates what atoms will be considered.\n";
+ std::cout << "                      The CNA will be done only over the atoms that have the   \n";
+ std::cout << "                      tag set by filterout (see 'tag' and 'settag' plugins).   \n";
  std::cout << "      start         : Determines in which step the plugin begins to be applied.\n";
  std::cout << "      end           : Determines in which step the plugin ceases to be applied.\n";
  std::cout << "      each          : Determines how often (each how many time-steps) the      \n";

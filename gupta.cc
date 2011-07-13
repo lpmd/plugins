@@ -1,5 +1,5 @@
 //Gupta Potential
-//Cleri, F., and Rosato, F., 1993, Phys. Rev. B, 48, 22. 30
+//Cleri, F., and Rosato, V., 1993, Phys. Rev. B, 48, 22. 30
 //
 
 #include "gupta.h"
@@ -29,19 +29,27 @@ Gupta::Gupta(std::string args): Plugin("gupta", "2.1")
 
 void Gupta::ShowHelp() const
 {
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+ std::cout << " Module Name        = gupta                                                    \n";
+ std::cout << " Problems Report to = admin@lpmd.cl                                            \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n"; 
  std::cout << " General Info      >>                                                          \n";
- std::cout << "      The plugin incorporate the Gupta potencial, used frequently              \n";
- std::cout << " for metallic atomic interaction. Based in embedded atom model.                \n\n";
- std::cout << " V(r) = A*exp(-p*(r-r0)/r0) ; F(rho) = -B*sqrt(rhoi) ;                         \n";
- std::cout << " F(rho) = exp(-2*q*(r-r0)/r0)                                                \n\n";
+ std::cout << "      The plugin is used to implement the Gupta potential, used for metals. It \n";
+ std::cout << "      is based in the embedded atom model, with                                \n";
+ std::cout << "                       V(r) = A*exp(-p*(r-r0)/r0)                              \n";
+ std::cout << "                     rho(r) = exp(-2*q*(r-r0)/r0)                              \n";
+ std::cout << "                     F(rho) = -B*sqrt(rho)                                     \n";
+ std::cout << "      See: Fabrizio Cleri and Vittorio Rosato PRB 48, pag. 22 (1993).          \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n"; 
  std::cout << " General Options   >>                                                          \n";
- std::cout << "      A             : Value of the A variable. [eV]                            \n";
- std::cout << "      B             : Value of the B variable. [eV]                            \n";
- std::cout << "      r0            : Value of r0, first neighbours distance. [A]              \n";
- std::cout << "      p             : Value of the p variable.                                 \n";
- std::cout << "      q             : Value of the q variable.                                 \n";
- std::cout << "      cutoff        : Cutoff of the potential.                                 \n";
- std::cout << '\n';
+ std::cout << "      A             : Sets the value of  A in the potential (in eV).           \n";
+ std::cout << "      B             : Sets the value of  B in the potential (in eV).           \n";
+ std::cout << "      r0            : Sets the value of r0 (first neighbors distance) in the   \n";
+ std::cout << "                      the potential (in angstrom).                             \n";
+ std::cout << "      p             : Sets the value of  p in the potential (dimensionless).   \n";
+ std::cout << "      q             : Sets the value of  q in the potential (dimensionless).   \n";
+ std::cout << "      cutoff        : Cutoff for the potential (in angstrom).                  \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " Example           >>                                                          \n";
  std::cout << " #Loading the plugin                                                           \n";
  std::cout << " use gupta as Gup                                                              \n";
@@ -52,9 +60,10 @@ void Gupta::ShowHelp() const
  std::cout << "     q  4.0360                                                                 \n";
  std::cout << "     cutoff 15.0                                                               \n";
  std::cout << " enduse                                                                        \n";
- std::cout << " #Using the loaded plugin                                                      \n";
- std::cout << " potential Gup Au Au                                                           \n";
- std::cout << " #Real values from: Fabrizio Cleri and Vittorio Rosato PRB 48, pag. 22 (1993). \n\n";
+ std::cout << " #Applying the plugin :                                                        \n";
+ std::cout << " potential Gup Au Au                                                         \n\n";
+ std::cout << "      The plugin implements a the Gupta potential between gold (Au) atoms.     \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n"; 
 }
 
 double Gupta::pairEnergy(const double &r) const { return A*exp(-p*(r-r0)/r0); }
