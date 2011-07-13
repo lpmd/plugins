@@ -40,27 +40,33 @@ XYZFormat::~XYZFormat() { delete linecounter; }
 
 void XYZFormat::ShowHelp() const
 {
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+ std::cout << " Module Name        = xyz                                                      \n";
+ std::cout << " Problems Report to = admin@lpmd.cl                                            \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
- std::cout << "      El modulo es utilizado para la lectura/escritura de archivos en formato  \n";
- std::cout << " xyz, este es un formato con posiciones absolutas.                             \n";
+ std::cout << "      This plugins is used for read/write files in xyz format, this format have\n";
+ std::cout << " the atomic positions in [A].                                                  \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Options   >>                                                          \n";
- std::cout << "      module        : En la opcion input, es necesario especificar el formato  \n";
- std::cout << "                      en este caso xyz.                                        \n";
- std::cout << "      file          : Especifica el archivo que posee el formato lpmd.         \n";
- std::cout << "      level         : Se especifica el nivel del formato de xyz, estos son     \n";
- std::cout << "                      0/1/2 <-> pos/pos-vel/pos-vel-ace.                       \n";
- std::cout << "      coords        : Especifica si la celda esta o no centrada en el          \n";
- std::cout << "                      origen (centered/positive=default).                      \n";
- std::cout << "      inside        : Especifica si se deben reacomodar los atomos que         \n";
- std::cout << "                      se encuentran fuera de la celda (true/false=default).    \n";
- std::cout << "      external      : Especifica si se deben ignorar o no los atomos que       \n";
- std::cout << "                      se encuentran fuera de la celda(ignore/consider=default).\n";
- std::cout << " Example                                                                       \n";
- std::cout << " Llamando al modulo :                                                          \n";
+ std::cout << "      file          : Specify the filename of the xyz input.                   \n";
+ std::cout << "      level         : Set the level of the xyz file, the levels availables are \n";
+ std::cout << "                      0/1/2 <-> pos/pos-vel/pos-vel-acce.                      \n";
+ std::cout << "      coords        : Indicate if the input cell is centered in the origin or  \n";
+ std::cout << "                      not, the possible values are centered/positive=default.  \n";
+ std::cout << "      inside        : Specify if the atoms outside of the cell boundary have to\n";
+ std::cout << "                      bee rellocated inside (periodicity) the available values \n";
+ std::cout << "                      are true/false=default.                                  \n";
+ std::cout << "      external      : Indicate if you have to ignore or not the atoms that are \n";
+ std::cout << "                      located outside of the simulationc cell, the availables  \n";
+ std::cout << "                      values are ignore/consider=default.                      \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+ std::cout << " Example           >>                                                          \n";
+ std::cout << " #Loading a inputfile using this plugin.                                       \n";
  std::cout << " input module=xyz file=inputfile.xyz level=0                                   \n";
- std::cout << " output module=xyz file=outputfile.xyz level=1 each=5                        \n\n";
- std::cout << "      De esta forma podemos leer o escribir archivos en formato xyz, en el     \n";
- std::cout << " en el caso de la salida, es necesaria la opcion each.                         \n";
+ std::cout << " #Writing using this plugin.                                                   \n";
+ std::cout << " output module=xyz file=outputfile.xyz level=1 each=5                          \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
 }
 
 void XYZFormat::ReadHeader(std::istream & is) const
