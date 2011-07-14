@@ -21,14 +21,20 @@ Harmonic::Harmonic(std::string args): Plugin("harmonic", "2.0")
 
 void Harmonic::ShowHelp() const
 {
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+ std::cout << " Module Name        = harmonic                                                 \n";
+ std::cout << " Problems Report to = admin@lpmd.cl                                            \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
- std::cout << "      El modulo implementa el potencial Armonico para la interaccion de       \n";
- std::cout << " de pares.                                                                     \n";
- std::cout << "      Se utiliza pairpotential de la API para llevar a cabo el calculo.        \n";
+ std::cout << "      The module implements a modified Lenard-Jones potential for pairs        \n";
+ std::cout << "      interaction, with the form                                               \n";
+ std::cout << "                             V(r) = (1/2) k*(r-a).                             \n"; 
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Options   >>                                                          \n";
- std::cout << "      k             : Especifica la constante del resorte interatomico.        \n";
- std::cout << "      a             : Especifica el valor para el largo interatomico.          \n";
- std::cout << '\n';
+ std::cout << "      k             : Determines de value of k (spring constant) for the       \n";
+ std::cout << "                      potential.                                               \n";
+ std::cout << "      k             : Determines de value of a for the potential.              \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " Example                                                                       \n";
  std::cout << " Cargando el Modulo :                                                          \n";
  std::cout << " use harmonic as HP                                                            \n";
@@ -37,8 +43,8 @@ void Harmonic::ShowHelp() const
  std::cout << " enduse                                                                        \n";
  std::cout << " Llamando al modulo                                                            \n";
  std::cout << " potential HP Ar Ar                                                          \n\n";
- std::cout << "      De esta forma seteamos el potencial de Harmonic entre los atomos         \n";
- std::cout << " de Ar con las constantes usadas en HP.                                        \n";
+ std::cout << "      In this way we set the harmonic potential between two atoms of argon (Ar).\n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
 }
 
 double Harmonic::pairEnergy(const double & r) const

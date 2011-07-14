@@ -22,23 +22,28 @@ HardSpheres::~HardSpheres() { }
 
 void HardSpheres::ShowHelp() const
 {
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+ std::cout << " Module Name        = hardspheres                                              \n";
+ std::cout << " Problems Report to = admin@lpmd.cl                                            \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
- std::cout << "      El modulo es utilizado para integrar utilizando el metodo de esferas     \n";
- std::cout << "      duras, este metodo no requiere de potenciales para su utilizacion.       \n";
+ std::cout << "      The plugin is used to integrate the movement equations using the hard    \n";
+ std::cout << "      spheres method. This method does not require potentials to be used.      \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Options   >>                                                          \n";
- std::cout << "      symbol        : Especifica el radio del atomo asociado que sera          \n" ;
- std::cout << "                      utilizado en la simulacion.                              \n";
- std::cout << '\n';
+ std::cout << "      symbol        : Sets the atom's radius.                                  \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " Example                                                                       \n";
- std::cout << " Cargando el Modulo :                                                          \n";
+ std::cout << " #Loading the plugin :                                                         \n";
  std::cout << " use hardspheres                                                               \n";
  std::cout << "     Ar 5.0                                                                    \n";
  std::cout << " enduse                                                                        \n";
- std::cout << " Llamando al modulo :                                                          \n";
+ std::cout << " #Applying the plugin :                                                        \n";
  std::cout << " integrator hardspheres start=1000                                           \n\n";
- std::cout << "      El integrador puede ser llamado desde el principio (sin usar start) o en \n";
- std::cout << " otro instante de tiempo, para poder modificar el integrador durante la        \n";
- std::cout << " simulacion.                                                                   \n";
+ std::cout << "      The plugin can be called at the begin (without start option) or during   \n";
+ std::cout << "      the simulation at any other time step, with this you can change the      \n";
+ std::cout << "      integration plugin during the simulation.                                \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
 }
 
 void HardSpheres::Initialize(Simulation & sim, Potential & p) { assert(&p != 0); UseOldConfig(sim); }//icc 869

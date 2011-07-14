@@ -30,11 +30,11 @@ void Beeman::ShowHelp() const
  std::cout << " Problems Report to = admin@lpmd.cl                                            \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
- std::cout << "      The plugin is used to integrate the movement equation using the beeman   \n";
+ std::cout << "      The plugin is used to integrate the movement equations using the beeman  \n";
  std::cout << "      method.                                                                  \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Options   >>                                                          \n";
- std::cout << "      dt            : Set the time-step in femto-seconds for the integration   \n" ;
+ std::cout << "      dt            : Sets the time-step in femto-seconds for the integration  \n" ;
  std::cout << "                      step.                                                    \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " Example                                                                       \n";
@@ -43,10 +43,10 @@ void Beeman::ShowHelp() const
  std::cout << "     dt 10.0                                                                   \n";
  std::cout << " enduse                                                                        \n";
  std::cout << " #Applying the plugin :                                                        \n";
- std::cout << " integrator beeman start=1000                                                  \n";
+ std::cout << " integrator beeman start=1000                                                \n\n";
  std::cout << "      The plugin can be called at the begin (without start option) or during   \n";
- std::cout << " the simulation at any other time step, with this you can change the           \n";
- std::cout << " integration plugin during the simulation.                                     \n";
+ std::cout << "      the simulation at any other time step, with this you can change the      \n";
+ std::cout << "      integration plugin during the simulation.                                \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
 }
 

@@ -32,8 +32,8 @@ void Buckingham::ShowHelp() const
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
  std::cout << "      This plugin incorparate the buckingham potential, this plugin do not     \n";
- std::cout << " incorporate the coulombian part. In or der to add the coulombian part, take a \n";
- std::cout << " look to the ewald plugin.                                                     \n";
+ std::cout << "      incorporate the coulombian part. In or der to add the coulombian part,   \n";
+ std::cout << "      take a look to the ewald plugin.                                         \n";
  std::cout << " V(r) = B1*exp(-r/rho) - B2/(r^6)                                              \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Options   >>                                                          \n";
