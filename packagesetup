@@ -245,13 +245,6 @@ directory .
        pkgconfig += liblpmd-2.0
     end
 
-    module glj.so
-       language = c++
-       sources = glj.cc
-       installpath = lib/lpmd
-       pkgconfig += liblpmd-2.0
-    end
-
     module gupta.so
        language = c++
        sources = gupta.cc
