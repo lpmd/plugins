@@ -32,6 +32,7 @@ void HardSpheres::ShowHelp() const
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Options   >>                                                          \n";
  std::cout << "      symbol        : Sets the atom's radius.                                  \n";
+ std::cout << "      start         : Determines in which step the plugin begins to be applied.\n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " Example                                                                       \n";
  std::cout << " #Loading the plugin :                                                         \n";

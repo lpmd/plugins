@@ -16,7 +16,8 @@ class LinkedCell: public lpmd::CellManager, public lpmd::Plugin
  public:
    LinkedCell(std::string args);
    ~LinkedCell();
-
+   void ShowHelp() const;
+   
    void Reset();
    void UpdateCell(Configuration & conf);
    void UpdateAtom(Configuration & conf, long i);

@@ -27,22 +27,30 @@ Leapfrog::~Leapfrog() { }
 
 void Leapfrog::ShowHelp() const
 {
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+ std::cout << " Module Name        = leapfrog                                                 \n";
+ std::cout << " Problems Report to = admin@lpmd.cl                                            \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
- std::cout << "      El modulo es utilizado para integrar utilizando el algoritmo leapfrog.   \n";
+ std::cout << "      The plugin is used to integrate the movement equations using the leap    \n";
+ std::cout << "      frog method.                                                             \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Options   >>                                                          \n";
- std::cout << "      dt            : Especifica el tiempo en femtosegundos para el            \n";
- std::cout << "                      integrador.                                              \n";
- std::cout << '\n';
+ std::cout << "      dt            : Sets the time-step in femto-seconds for the integration  \n" ;
+ std::cout << "                      step.                                                    \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " Example                                                                       \n";
- std::cout << " Cargando el Modulo :                                                          \n";
+ std::cout << " #Loading the plugin :                                                         \n";
  std::cout << " use leapfrog                                                                  \n";
- std::cout << "     dt 10.0                                                                   \n";
+ std::cout << "     dt 1.0                                                                    \n";
  std::cout << " enduse                                                                        \n";
- std::cout << " Llamando al modulo :                                                          \n";
- std::cout << " integrator leapfrog start=1000                                                \n\n";
- std::cout << "      El integrador puede ser llamado desde el principio (sin usar start) o en \n";
- std::cout << " otro instante de tiempo, para poder modificar el integrador durante la        \n";
- std::cout << " simulacion.                                                                   \n";
+ std::cout << " #Applying the plugin :                                                        \n";
+ std::cout << " integrator leapfrog start=1000                                              \n\n";
+ std::cout << "      The plugin can be called at the beginning of the simulation (without the \n";
+ std::cout << "      start option or setting start=0) or at any other time step (like         \n";
+ std::cout << "      start=1000). This allows you to change integration method during the     \n";
+ std::cout << "      simulation.                                                              \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
 }
 
 void Leapfrog::Initialize(Simulation & sim, Potential & p)

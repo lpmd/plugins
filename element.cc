@@ -69,12 +69,16 @@ void ElementFilter::ShowHelp() const
  std::cout << "      called with the 'filter' or 'over' keyword.                              \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Options   >>                                                          \n";
- std::cout << "      element       : Sets the symbol of the element.         .                \n";
+ std::cout << "      symbol        : Sets the atomic symbol of the element.  .                \n";
+ std::cout << "      start         : Determines in which step the plugin begins to be applied.\n";
+ std::cout << "      end           : Determines in which step the plugin ceases to be applied.\n";
+ std::cout << "      each          : Determines how often (each how many time-steps) the      \n";
+ std::cout << "                      plugin must be applied.                                  \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " Example                                                                       \n";
  std::cout << " #Applying plugin :                                                            \n";
  std::cout << " filter element symbol=Ar                                                      \n";
- std::cout << " apply myplugin over element symbol=Kr                                       \n\n";
+ std::cout << " apply myplugin over element symbol=Kr start=0 end=1 each=1                  \n\n";
  std::cout << "      The plugin is used to eliminate (filter) all the argon (Ar) atoms of the \n";
  std::cout << "      configuration in the first case, and to apply the 'myplugin' plugin      \n";
  std::cout << "      to all krypton (Kr) atoms in the second case ('myplugin' must be loaded  \n";

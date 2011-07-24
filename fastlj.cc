@@ -59,7 +59,7 @@ void FastLJ::ShowHelp() const
  std::cout << " enduse                                                                        \n";
  std::cout << " #Applying the plugin :                                                        \n";
  std::cout << " potential fastlj Ar Ar                                                      \n\n";
- std::cout << "      The plugin implements a the Lennard-Jones potential between argon (Ar)   \n";
+ std::cout << "      The plugin implements the Lennard-Jones potential between argon (Ar)     \n";
  std::cout << "      atoms using a table of values of 500 cells.                              \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
 }

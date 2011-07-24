@@ -48,7 +48,7 @@ void LennardJonesMod::ShowHelp() const
  std::cout << "      cutoff        : Cutoff for the potential.                                \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " Example                                                                       \n";
- std::cout << " Calling the module in a control file :                                        \n";
+ std::cout << " #Loading the plugin :                                                         \n";
  std::cout << " use lennardjonesMod as ljm                                                    \n";
  std::cout << "     sigma 3.4                                                                 \n";
  std::cout << "     epsilon 2.0                                                               \n";
@@ -57,10 +57,10 @@ void LennardJonesMod::ShowHelp() const
  std::cout << "     n 2                                                                       \n";
  std::cout << "     cutoff 1.90                                                               \n";
  std::cout << " enduse                                                                        \n";
- std::cout << " Llamando al modulo                                                            \n";
+ std::cout << " #Applying the plugin :                                                        \n";
  std::cout << " potential ljm Ar Ar                                                         \n\n";
- std::cout << "      In this way we set the lennardjonesMod potential between two atoms of    \n";
- std::cout << "      Ar with little cohesion (cohesive=0 is a purely repulsive potential).    \n";
+ std::cout << "      The plugin implements the Lennard-Jones potential between argon (Ar)     \n";
+ std::cout << "      atoms with little cohesion (cohesive=0 is a purely repulsive potential). \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
 }
 

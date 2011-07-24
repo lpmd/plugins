@@ -88,12 +88,34 @@ IndexFilter::~IndexFilter() { delete selector; }
 
 void IndexFilter::ShowHelp() const
 {
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+ std::cout << " Module Name        = index                                                    \n";
+ std::cout << " Problems Report to = admin@lpmd.cl                                            \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
+ std::cout << "      This module is used to select atoms by their index in the list of atoms  \n";
+ std::cout << "      of the cell. It can be called with the 'filter' or 'over' keyword.       \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Options   >>                                                          \n";
+ std::cout << "      index         : Sets the indices (separated by comma) or range (separated\n";
+ std::cout << "                      by a minus (-) sign) in the atoms list that are wanted   \n";
+ std::cout << "                      to be considered. The index of an atom corresponds to the\n";
+ std::cout << "                      place in which the atom appears in the input file (the   \n";
+ std::cout << "                      first lines will corespond to the atoms 1,2,3,4,etc.).   \n";
+ std::cout << "      start         : Determines in which step the plugin begins to be applied.\n";
+ std::cout << "      end           : Determines in which step the plugin ceases to be applied.\n";
+ std::cout << "      each          : Determines how often (each how many time-steps) the      \n";
+ std::cout << "                      plugin must be applied.                                  \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " Example                                                                       \n";
+ std::cout << " #Applying plugin :                                                            \n";
  std::cout << " filter index index=5,6,8,10                                                   \n";
- std::cout << " filter index index=5-10                                                       \n";
- std::cout << '\n';
+ std::cout << " apply myplugin over index index=5-10 start=0 end=1 each=1                   \n\n";
+ std::cout << "      The plugin is used to eliminate (filter) four atoms: the 5th, 6th, 8th   \n";
+ std::cout << "      and 10th of the atoms list in the first case, and to apply the 'myplugin'\n";
+ std::cout << "      plugin to all atoms with an index in the range from 5 to 10 in the second\n";
+ std::cout << "      case ('myplugin' must be loaded previously).                             \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
 }
 
 Selector<BasicParticleSet> & IndexFilter::CreateSelector()

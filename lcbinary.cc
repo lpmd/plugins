@@ -39,6 +39,46 @@ LCBinary::~LCBinary()
  delete [] subcell;
 }
 
+void LCBinary::ShowHelp() const
+{
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+ std::cout << " Module Name        = lcbinary                                                 \n";
+ std::cout << " Problems Report to = admin@lpmd.cl                                            \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+ std::cout << " General Info      >>                                                          \n";
+ std::cout << "      This module corresponds to a modification of the linked-cell method for  \n";
+ std::cout << "      making neighbors lists. This method was developed by our group and it is \n";
+ std::cout << "      one of the available cell managers. The difference between linked-cell   \n";
+ std::cout << "      and lcbinary is that subcells are chosen such that each one of them can  \n";
+ std::cout << "      accommodate at most one atom. In this way atoms lists can be avoided,    \n";
+ std::cout << "      just a binary value is stored for each subcell (occupied/empty).         \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+ std::cout << " General Options   >>                                                          \n";
+ std::cout << "      cutoff        : Sets the cutoff radius for the evaluation.               \n";
+ std::cout << "      nx            : Sets the number of subdivisions in the X axis.           \n";
+ std::cout << "      ny            : Sets the number of subdivisions in the Y axis.           \n";
+ std::cout << "      nz            : Sets the number of subdivisions in the Z axis.           \n";
+ std::cout << "      mode          : Sets manual (default) or automatic selection of the      \n";
+ std::cout << "                      values of nx, ny and nz (auto / noauto).                 \n";
+ std::cout << "                      auto: values are chosen automatically.                   \n";
+ std::cout << "                      noauto: values must be entered by the user.              \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+ std::cout << " Example                                                                       \n";
+ std::cout << " #Loading the plugin :                                                         \n";
+ std::cout << " use lcbinary                                                                  \n";
+ std::cout << "     cutoff 8.5                                                                \n";
+ std::cout << "     nx 15                                                                     \n";
+ std::cout << "     ny 15                                                                     \n";
+ std::cout << "     nz 15                                                                     \n";
+ std::cout << "     mode noauto                                                               \n";
+ std::cout << " enduse                                                                        \n";
+ std::cout << " #Applying the plugin :                                                        \n";
+ std::cout << " cellmanager lcbinary                                                        \n\n";
+ std::cout << "      The plugin is used to select the lcbinary method for making the lists    \n";
+ std::cout << "      of atoms' neighbors.                                                     \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+}
+
 void LCBinary::Reset() { }
 
 void LCBinary::UpdateCell(Configuration & conf) 

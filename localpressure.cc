@@ -39,12 +39,38 @@ LocalPressure::~LocalPressure() { }
 
 void LocalPressure::ShowHelp() const
 {
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+ std::cout << " Module Name        = localpressure                                            \n";
+ std::cout << " Problems Report to = admin@lpmd.cl                                            \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
+ std::cout << "      This module is used to evaluate a density profile of the simulation cell.\n";
+ std::cout << "      This is a one-dimensional analysis, you can choose only one axis.        \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Options   >>                                                          \n";
+ std::cout << "      rcut          : Sets the cutoff radius for the evaluation.               \n";
+ std::cout << "      nx            : Sets the number of subdivisions in the X axis.           \n";
+ std::cout << "      ny            : Sets the number of subdivisions in the Y axis.           \n";
+ std::cout << "      nz            : Sets the number of subdivisions in the Z axis.           \n";
+ std::cout << "      output        : Output file.                                             \n";
+ std::cout << "      start         : Determines in which step the plugin begins to be applied.\n";
+ std::cout << "      end           : Determines in which step the plugin ceases to be applied.\n";
+ std::cout << "      each          : Determines how often (each how many time-steps) the      \n";
+ std::cout << "                      plugin must be applied.                                  \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " Example                                                                       \n";
- std::cout << " Cargando el Modulo :                                                          \n";
- std::cout << " Llamando al Modulo :                                                          \n";  
+ std::cout << " #Loading plugin :                                                             \n";
+ std::cout << " use localpressure                                                             \n";
+ std::cout << "     rcut 8.5                                                                  \n";
+ std::cout << "     nx 15                                                                     \n";
+ std::cout << "     ny 15                                                                     \n";
+ std::cout << "     nz 15                                                                     \n";
+ std::cout << "     output localpress.out                                                     \n";
+ std::cout << " enduse                                                                        \n";
+ std::cout << " #Aplying plugin :                                                             \n";  
  std::cout << " property localpressure start=1 each=10 end=100                              \n\n";
+ std::cout << "      The plugin is used to perform a pressure profile of the sample...        \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
 }
 
 void LocalPressure::Evaluate(Configuration & sim, Potential & pot)

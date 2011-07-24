@@ -16,6 +16,7 @@ class LCBinary: public lpmd::CellManager, public lpmd::Plugin
  public:
    LCBinary(std::string args);
    ~LCBinary();
+   void ShowHelp() const;
 
    void Reset();
    void UpdateCell(Configuration & conf);

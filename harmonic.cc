@@ -26,24 +26,26 @@ void Harmonic::ShowHelp() const
  std::cout << " Problems Report to = admin@lpmd.cl                                            \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
- std::cout << "      The module implements a modified Lenard-Jones potential for pairs        \n";
- std::cout << "      interaction, with the form                                               \n";
+ std::cout << "      The module implements the harmonic potential for pairs interaction,      \n";
+ std::cout << "      with the form                                                            \n";
  std::cout << "                             V(r) = (1/2) k*(r-a).                             \n"; 
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Options   >>                                                          \n";
  std::cout << "      k             : Determines de value of k (spring constant) for the       \n";
  std::cout << "                      potential.                                               \n";
- std::cout << "      k             : Determines de value of a for the potential.              \n";
+ std::cout << "      a             : Determines de value of a (equilibrium position) for      \n";
+ std::cout << "                      the 0potential.                                          \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " Example                                                                       \n";
- std::cout << " Cargando el Modulo :                                                          \n";
+ std::cout << " #Loading the plugin :                                                         \n";
  std::cout << " use harmonic as HP                                                            \n";
  std::cout << "     k 3.4                                                                     \n";
  std::cout << "     a 3                                                                       \n";
  std::cout << " enduse                                                                        \n";
- std::cout << " Llamando al modulo                                                            \n";
+ std::cout << " #Applying the plugin :                                                        \n";
  std::cout << " potential HP Ar Ar                                                          \n\n";
- std::cout << "      In this way we set the harmonic potential between two atoms of argon (Ar).\n";
+ std::cout << "      The plugin implements a the harmonic potential between argon (Ar) atoms  \n";
+ std::cout << "      with the values of k and a indicated above.                              \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
 }
 
