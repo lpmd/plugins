@@ -29,23 +29,32 @@ Metropolis::~Metropolis() { }
 
 void Metropolis::ShowHelp() const
 {
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+ std::cout << " Module Name        = metropolis                                               \n";
+ std::cout << " Problems Report to = admin@lpmd.cl                                            \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
- std::cout << "      El modulo es utilizado para minimzar utilizando el metodo de metropoli.  \n";
+ std::cout << "      The plugin is used to integrate the equations of movement using the      \n";
+ std::cout << "      metropolis method.                                                       \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Options   >>                                                          \n";
- std::cout << "      temp            Utilizado para asignar una temperatura externa.          \n";
- std::cout << "      rand            Utilizado para el tamaño de los vectores al azar.        \n";
- std::cout << '\n';
+ std::cout << "      temp          : Sets the external temperature.                         . \n";
+ std::cout << "      percent       : Sets the percent of randomness for the random vector     \n";
+ std::cout << "                      that is going to be added to the atom's position.        \n";
+ std::cout << "      start         : Determines in which step the plugin begins to be applied.\n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " Example                                                                       \n";
- std::cout << " Cargando el Modulo :                                                          \n";
- std::cout << " use metropoli                                                                 \n";
- std::cout << "    temp 300                                                                   \n";
+ std::cout << " #Loading the plugin :                                                         \n";
+ std::cout << " use metropolis                                                                \n";
+ std::cout << "     temp 300.0                                                                \n";
+ std::cout << "     percent 10                                                                \n";
  std::cout << " enduse                                                                        \n";
- std::cout << '\n';
- std::cout << " Llamando al modulo :                                                          \n";
- std::cout << " integrator metropoli start=1 end=500 each=2                                 \n\n";
- std::cout << "      El integrador puede ser llamado desde el principio (sin usar start) o en \n";
- std::cout << " otro instante de tiempo, para poder modificar el integrador durante la        \n";
- std::cout << " simulacion.                                                                   \n";
+ std::cout << " #Applying the plugin :                                                        \n";
+ std::cout << " integrator metropolis start=1000                                            \n\n";
+ std::cout << "      The plugin can be called during or at the begining of the simulation     \n";
+ std::cout << "      with the start option. This enables the user to change the integration   \n";
+ std::cout << "      method during the simulation.                                            \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
 }
 
 void Metropolis::Initialize(Simulation & sim, Potential & p) { assert(&p != 0); UseOldConfig(sim); }//icc 869

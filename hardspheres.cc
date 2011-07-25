@@ -27,7 +27,7 @@ void HardSpheres::ShowHelp() const
  std::cout << " Problems Report to = admin@lpmd.cl                                            \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
- std::cout << "      The plugin is used to integrate the movement equations using the hard    \n";
+ std::cout << "      The plugin is used to integrate the equations of movement using the hard \n";
  std::cout << "      spheres method. This method does not require potentials to be used.      \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Options   >>                                                          \n";

@@ -15,6 +15,7 @@ class Mobility: public lpmd::StoredValue<lpmd::Matrix>, public lpmd::TemporalPro
  public:
   Mobility(std::string args);
   ~Mobility();
+  void ShowHelp() const;
 
   void Evaluate(lpmd::ConfigurationSet & hist, lpmd::Potential & pot);
 

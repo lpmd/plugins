@@ -28,23 +28,35 @@ MCY::MCY(std::string args): Plugin("mcy", "1.0")
 
 void MCY::ShowHelp() const
 {
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+ std::cout << " Module Name        = mcy                                                      \n";
+ std::cout << " Problems Report to = admin@lpmd.cl                                            \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
- std::cout << "      El modulo implementa el potencial de MCY para la interaccion             \n";
- std::cout << " de pares, u(r)=A*exp(-B*r)-C*exp(-D*r).                                       \n";
+ std::cout << "      The module implements the Matsuoka, Clementi, and Yoshimine (MCY)        \n";
+ std::cout << "      potential for pairs interaction, with the form                           \n";
+ std::cout << "                   V(r) = A*exp(-B*r)-C*exp(-D*r)                              \n"; 
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Options   >>                                                          \n";
- std::cout << '\n';
+ std::cout << "      cutoff        : Cutoff for the potential.                                \n";
+ std::cout << "      A             : Sets the value of  A in the potential (in eV).           \n";
+ std::cout << "      B             : Sets the value of  B in the potential (in 1/angstrom).   \n";
+ std::cout << "      C             : Sets the value of  C in the potential (in eV).           \n";
+ std::cout << "      D             : Sets the value of  D in the potential (in 1/angstrom).   \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " Example                                                                       \n";
- std::cout << " Cargando el Modulo :                                                          \n";
+ std::cout << " #Loading the plugin :                                                         \n";
  std::cout << " use mcy                                                                       \n";
  std::cout << "     A 0.001                                                                   \n";
  std::cout << "     B 2.5                                                                     \n";
  std::cout << "     C 0.002                                                                   \n";
  std::cout << "     D 2.7                                                                     \n";
  std::cout << " enduse                                                                        \n";
- std::cout << " Llamando al modulo                                                            \n";
- std::cout << " potential mcy H O                                                             \n\n";
- std::cout << "      De esta forma seteamos el potencial de MCY entre los atomos              \n";
- std::cout << " de H y O con las constantes usadas en mcy.                                    \n";
+ std::cout << " #Applying the plugin :                                                        \n";
+ std::cout << " potential mcy H O                                                           \n\n";
+ std::cout << "      The plugin implements the MCY potential between hydrogen (H) and         \n";
+ std::cout << "      oxigen (O) atoms.                                                        \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
 }
 
 double MCY::pairEnergy(const double & r) const

@@ -14,6 +14,7 @@ class MSD: public lpmd::StoredValue<lpmd::Matrix>, public lpmd::TemporalProperty
 {
  public:
   MSD(std::string args);
+  void ShowHelp() const;
 
   void Evaluate(lpmd::ConfigurationSet & hist, lpmd::Potential & pot);
   void ZeroCM(lpmd::Configuration & conf);

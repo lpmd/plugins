@@ -64,8 +64,8 @@ void LinkedCell::ShowHelp() const
  std::cout << " Problems Report to = admin@lpmd.cl                                            \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
- std::cout << "      This module the linked-cell method for making neighbors lists. Is one of \n";
- std::cout << "      the available cell managers.                                             \n";
+ std::cout << "      This module implements the linked-cell method for making neighbors lists.\n";
+ std::cout << "      It is one of the available cell managers.                                \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Options   >>                                                          \n";
  std::cout << "      cutoff        : Sets the cutoff radius for the evaluation.               \n";

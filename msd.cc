@@ -22,6 +22,33 @@ MSD::MSD(std::string args): Plugin("msd", "2.0")
  zerocm = bool(params["zerocm"] == "true");
 }
 
+void MSD::ShowHelp() const
+{
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+ std::cout << " Module Name        = msd                                                      \n";
+ std::cout << " Problems Report to = admin@lpmd.cl                                            \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+ std::cout << " General Info      >>                                                          \n";
+ std::cout << "      This module is used to calculate de mean square displacement (msd) of    \n";
+ std::cout << "      the atoms.                                                               \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+ std::cout << " General Options   >>                                                          \n";
+ std::cout << "      rcutmin       : Sets ...                                                 \n";
+ std::cout << "      rcutmax       : Sets ...                                                 \n";
+ std::cout << "      zerocm        : ...                                                      \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+ std::cout << " Example                                                                       \n";
+ std::cout << " #Loading the plugin:                                                          \n";
+ std::cout << " use msd                                                                       \n";
+ std::cout << "  rcutmin 4                                                                    \n";
+ std::cout << "  rcutmax 20                                                                   \n";
+ std::cout << "  zerocm true                                                                  \n";
+ std::cout << " enduse                                                                        \n";
+ std::cout << " #Applying the plugin                                                          \n";
+ std::cout << " property msd start=0 end=-1 each=5                                            \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+}
+
 void MSD::ZeroCM(Configuration & conf)
 {
  Vector cm(0.0, 0.0, 0.0);

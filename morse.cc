@@ -23,26 +23,33 @@ Morse::Morse(std::string args): Plugin("morse", "2.0")
 
 void Morse::ShowHelp() const
 {
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+ std::cout << " Module Name        = morse                                                    \n";
+ std::cout << " Problems Report to = admin@lpmd.cl                                            \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
- std::cout << "      El modulo implementa el potencial de Morse para la interaccion de        \n";
- std::cout << " de pares.                                                                     \n";
- std::cout << "      Se utiliza pairpotential de la API para llevar a cabo el calculo.        \n";
+ std::cout << "      The module implements the Morse potential for pairs interaction, with    \n";
+ std::cout << "      the form                                                                 \n";
+ std::cout << "            V(r) = depth*(1.0-exp(-a*(r - re))) * (1.0-exp(-a*(r - re)))       \n"; 
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Options   >>                                                          \n";
- std::cout << "      depth         : Especifica la profundidad del pozo de potencial.         \n";
- std::cout << "      a             : Especifica el valor de a (ancho)para el potencial.       \n";
- std::cout << "      re            : Especifica valor de re (distancia eq) para el potencial. \n";
- std::cout << '\n';
+ std::cout << "      depth         : Determines de value of depth for the potential           \n";
+ std::cout << "                     (depth of the potential well).                            \n";
+ std::cout << "      a             : Determines de value of a for the potential (width).      \n";
+ std::cout << "      re            : Determines de value of re for the potential (equilibrium \n";
+ std::cout << "                      position).                                               \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " Example                                                                       \n";
- std::cout << " Cargando el Modulo :                                                          \n";
+ std::cout << " #Loading the plugin :                                                         \n";
  std::cout << " use morse as MO                                                               \n";
  std::cout << "     depth 3.4                                                                 \n";
  std::cout << "     a 3.0                                                                     \n";
  std::cout << "     re 1.4                                                                    \n";
  std::cout << " enduse                                                                        \n";
- std::cout << " Llamando al modulo                                                            \n";
+ std::cout << " #Applying the plugin :                                                        \n";
  std::cout << " potential MO Ar Ar                                                          \n\n";
- std::cout << "      De esta forma seteamos el potencial de Morse entre los atomos            \n";
- std::cout << " de Ar con las constantes usadas en MO.                                        \n";
+ std::cout << "      The plugin implements the Morse potential between argon (Ar) atoms.      \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
 }
 
 double Morse::pairEnergy(const double & r) const

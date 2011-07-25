@@ -37,21 +37,39 @@ MonitorVisualizer::~MonitorVisualizer()
 
 void MonitorVisualizer::ShowHelp() const
 {
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+ std::cout << " Module Name        = monitor                                                  \n";
+ std::cout << " Problems Report to = admin@lpmd.cl                                            \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n"; 
  std::cout << " General Info      >>                                                          \n";
+ std::cout << "      The plugin is used to export physical properties of the sample to a file.\n";
+ std::cout << "      Available properties :                                                   \n";
+ std::cout << "         step, temperature, volume, volume-per-atom,                           \n";
+ std::cout << "         cell-a, cell-b, cell-c, particle-density,                             \n";
+ std::cout << "         density, momentum, px, py, pz,                                        \n";
+ std::cout << "         potential-energy, kinetic-energy, total-energy,                       \n";
+ std::cout << "         virial-pressure, kinetic-pressure, pressure                           \n";
+ std::cout << "         sxx, sxy, sxz, syx, syy, syz, szx, szy, szz.                          \n";
+ std::cout << "      For a detailed information about units, refeer to the 'General Properties'\n";
+ std::cout << "      section of the lpmd's manual.                                            \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n"; 
  std::cout << " General Options   >>                                                          \n";
- std::cout << "                     Availables properties :                                   \n";
- std::cout << "                                           step,temperature,volume,pressure,   \n";
- std::cout << "                                           volume-per-atom,cell-a,cell-b,cell-c\n";
- std::cout << "                                           particle-density,density,momentum   \n";
- std::cout << "                                           px,py,pz,potential-energy,          \n";
- std::cout << "                                           kinetic-energy,total-energy,        \n";
- std::cout << "                                           virial-pressure,kinetic-pressure    \n";
- std::cout << "                                           sxx,sxy,sxz,etc.                    \n";
- std::cout << "                     For a detailed information about units, refeer to the     \n";
- std::cout << "                     manual of lpmd in General Proerties section.              \n";
- std::cout << '\n';
- std::cout << " Example                                                                       \n";
- std::cout << " monitor step,temperature start=1 end=1000 each=50                           \n\n";
+ std::cout << "      properties    : Sets the properties to monitor.                          \n";
+ std::cout << "      output        : Output file.                                             \n";
+ std::cout << "      start         : Determines in which step the plugin begins to be applied.\n";
+ std::cout << "      end           : Determines in which step the plugin ceases to be applied.\n";
+ std::cout << "      each          : Determines how often (each how many time-steps) the      \n";
+ std::cout << "                      plugin must be applied.                                  \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n"; 
+ std::cout << " Example           >>                                                          \n";
+ std::cout << " #Applying the plugin :                                                        \n";
+ std::cout << " monitor properties=temperature,sxx start=0 end=-1 each=50 output=prop.dat     \n";
+ std::cout << " monitor temperature,sxx start=0 end=-1 each=50 output=out.dat               \n\n";
+ std::cout << "      The plugin is used to export the temperature and the xx component of the \n";
+ std::cout << "      the stress tensor (sxx) in the file prop.dat during all the simulation   \n";
+ std::cout << "      (end=-1), each 50 simulation steps.                                      \n";
+ std::cout << "      As you can see, 'properties=' can be ommited.                            \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n"; 
 }
 
 void MonitorVisualizer::Apply(const Simulation & sim)

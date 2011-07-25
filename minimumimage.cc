@@ -21,6 +21,31 @@ MinimumImageCellManager::MinimumImageCellManager(std::string args): Plugin("mini
 
 MinimumImageCellManager::~MinimumImageCellManager() { }
 
+void MinimumImageCellManager::ShowHelp() const
+{
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+ std::cout << " Module Name        = minimumimage                                             \n";
+ std::cout << " Problems Report to = admin@lpmd.cl                                            \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+ std::cout << " General Info      >>                                                          \n";
+ std::cout << "      This module implements the minimum image method for making neighbors     \n";
+ std::cout << "      lists.It is one of the available cell managers.                          \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+ std::cout << " General Options   >>                                                          \n";
+ std::cout << "      cutoff        : Sets the cutoff radius for the evaluation.               \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+ std::cout << " Example                                                                       \n";
+ std::cout << " #Loading the plugin :                                                         \n";
+ std::cout << " use minimumimage                                                              \n";
+ std::cout << "     cutoff 8.5                                                                \n";
+ std::cout << " enduse                                                                        \n";
+ std::cout << " #Applying the plugin :                                                        \n";
+ std::cout << " cellmanager minimumimage                                                    \n\n";
+ std::cout << "      The plugin is used to select the minimumimage method for making the lists\n";
+ std::cout << "      of atoms' neighbors.                                                     \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+}
+
 void MinimumImageCellManager::Show(std::ostream & os) const
 {
  Module::Show(os);

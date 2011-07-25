@@ -16,6 +16,7 @@ class MinimumImageCellManager: public CellManager, public Plugin
 
    MinimumImageCellManager(std::string args);
    ~MinimumImageCellManager();
+   void ShowHelp() const;
 
    void Show(std::ostream & os) const;
 

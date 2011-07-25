@@ -23,6 +23,34 @@ Mobility::Mobility(std::string args): Plugin("mobility", "2.0")
 
 Mobility::~Mobility() { }
 
+void Mobility::ShowHelp() const
+{
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+ std::cout << " Module Name        = mobility                                                 \n";
+ std::cout << " Problems Report to = admin@lpmd.cl                                            \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+ std::cout << " General Info      >>                                                          \n";
+ std::cout << "      This module is used to ...                                               \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+ std::cout << " General Options   >>                                                          \n";
+ std::cout << "      t             : Sets ...                                                 \n";
+ std::cout << "      rcutmin       : Sets ...                                                 \n";
+ std::cout << "      rcutmax       : Sets ...                                                 \n";
+ std::cout << "      output        : Ouput file.                                              \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+ std::cout << " Example                                                                       \n";
+ std::cout << " #Loading the plugin:                                                          \n";
+ std::cout << " use mobility                                                                  \n";
+ std::cout << "  t  5                                                                         \n";
+ std::cout << "  rcutmin 4                                                                    \n";
+ std::cout << "  rcutmax 20                                                                   \n";
+ std::cout << "  output mob.dat                                                               \n";
+ std::cout << " enduse                                                                        \n";
+ std::cout << " #Applying the plugin                                                          \n";
+ std::cout << " property mobility start=0 end=-1 each=5                                       \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+}
+
 void Mobility::Evaluate(ConfigurationSet & hist, Potential & pot)
 {
  assert(&pot != 0);//icc 869
