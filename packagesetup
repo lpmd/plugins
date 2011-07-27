@@ -119,6 +119,13 @@ directory .
        pkgconfig += liblpmd-2.0
     end
 
+    module cone.so
+       language = c++
+       sources = cone.cc
+       installpath = lib/lpmd
+       pkgconfig += liblpmd-2.0
+    end
+
     module constantforce.so
        language = c++
        sources = constantforce.cc

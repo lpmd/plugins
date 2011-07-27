@@ -1,0 +1,99 @@
+//
+//
+//
+
+#include "cone.h"
+
+#include <lpmd/simulation.h>
+#include <lpmd/refparticleset.h>
+#include <lpmd/util.h>
+
+#include <iostream>
+
+using namespace lpmd;
+
+class ConeSelector: public Selector<BasicParticleSet>
+{
+ public:
+   ConeSelector(const Cone & cn): cone(cn) { }
+
+   const BasicParticleSet & SelectFrom(const BasicParticleSet & ps) 
+   { 
+    innerps.Clear();
+    for (long int i=0;i<ps.Size();++i) 
+      if (cone.IsInside(ps[i].Position())) innerps.Append(ps[i]);
+    return innerps;
+   }
+
+   const BasicParticleSet & InverseSelectFrom(const BasicParticleSet & ps) 
+   { 
+    innerps.Clear();
+    for (long int i=0;i<ps.Size();++i) 
+      if (!cone.IsInside(ps[i].Position())) innerps.Append(ps[i]);
+    return innerps;
+   }
+
+ private:
+   Cone cone;
+   RefParticleSet innerps;
+};
+
+ConeFilter::ConeFilter(std::string args): Plugin("cone", "2.1"), selector(0)
+{
+ ParamList & params = (*this);
+ //
+ DefineKeyword("start", "0");
+ DefineKeyword("end", "-1");
+ DefineKeyword("each", "1");
+ DefineKeyword("alpha");
+ DefineKeyword("beta","0.0");
+ DefineKeyword("bot");
+ DefineKeyword("tip");
+ DefineKeyword("except", "");
+ // hasta aqui los valores por omision
+ ProcessArguments(args);
+ start = int(params["start"]);
+ end = int(params["end"]);
+ each = int(params["each"]);
+ alpha = double(params["alpha"]);
+ beta = double(params["beta"]);
+ bot = Vector(params["bot"].c_str());
+ tip = Vector(params["tip"].c_str());
+ except = params["except"];
+}
+
+ConeFilter::~ConeFilter() { delete selector; }
+
+void ConeFilter::ShowHelp() const
+{
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+ std::cout << " Module Name        = cone                                                     \n";
+ std::cout << " Problems Report to = admin@lpmd.cl                                            \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+ std::cout << " General Info      >>                                                          \n";
+ std::cout << "      This plugin is used to select a group of atoms in a conical region.      \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+ std::cout << " General Options   >>                                                          \n";
+ std::cout << "      long          : Set the long of the cone in [A].                         \n";
+ std::cout << "      tip           : Set the tip position vector of the cone.                 \n";
+ std::cout << "      alpha         : Set the alpha angle of the cone.                         \n";
+ std::cout << "      beta          : Set internatl beta angle, by default is zero.            \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+ std::cout << " Example           >>                                                          \n";
+ std::cout << " #Filter using sphere configuration.                                           \n";
+ std::cout << " filter cone tip=<25,25,25> bot=<25,25,0> alpha=45                             \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+}
+
+Selector<BasicParticleSet> & ConeFilter::CreateSelector()
+{
+ Cone cone_region(tip, bot, alpha, beta);
+ if (selector != 0) delete selector;
+ selector = new ConeSelector(cone_region);
+ return *selector;
+}
+
+// Esto se incluye para que el modulo pueda ser cargado dinamicamente
+Plugin * create(std::string args) { return new ConeFilter(args); }
+void destroy(Plugin * m) { delete m; }
+
