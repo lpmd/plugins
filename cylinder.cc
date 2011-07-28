@@ -12,6 +12,8 @@
 
 using namespace lpmd;
 
+void CylinderFilter::Apply(lpmd::Simulation & sim) { mycell = &(sim.Cell()); lpmd::SystemFilter::Apply(sim); }
+
 class CylinderSelector: public Selector<BasicParticleSet>
 {
  public:
@@ -100,7 +102,13 @@ void CylinderFilter::ShowHelp() const
 
 Selector<BasicParticleSet> & CylinderFilter::CreateSelector()
 {
- Cylinder cyl_region(S, origin, rmax, rmin);
+ //change origin and S based on cell-vectors
+ lpmd::Vector a = (*mycell)[0]; double ma = (*mycell)[0].Module();
+ lpmd::Vector b = (*mycell)[1]; double mb = (*mycell)[1].Module();
+ lpmd::Vector c = (*mycell)[2]; double mc = (*mycell)[2].Module();
+ lpmd::Vector newS(S[0]*a/ma+S[1]*b/mb+S[2]*c/mc); 
+ lpmd::Vector neworigin(origin[0]*a/ma+origin[1]*b/mb+origin[2]*c/mc);
+ Cylinder cyl_region(newS, neworigin, rmax, rmin);
  ParamList & params = (*this);
  DebugStream() << "-> Selecting cylinder: "<< '\n';
  DebugStream() << "origin   = " << params["origin"] << '\n';

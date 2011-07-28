@@ -12,6 +12,8 @@
 
 using namespace lpmd;
 
+void ConeFilter::Apply(lpmd::Simulation & sim) { mycell = &(sim.Cell()); lpmd::SystemFilter::Apply(sim); }
+
 class ConeSelector: public Selector<BasicParticleSet>
 {
  public:
@@ -87,7 +89,15 @@ void ConeFilter::ShowHelp() const
 
 Selector<BasicParticleSet> & ConeFilter::CreateSelector()
 {
- Cone cone_region(tip, bot, alpha, beta);
+ //Set tip and both using cell-vectors
+ lpmd::Vector a = (*mycell)[0]; double ma = (*mycell)[0].Module();
+ lpmd::Vector b = (*mycell)[1]; double mb = (*mycell)[1].Module();
+ lpmd::Vector c = (*mycell)[2]; double mc = (*mycell)[2].Module();
+ lpmd::Vector newtip(tip[0]*a/ma+tip[1]*b/mb+tip[2]*c/mc);
+ lpmd::Vector newbot(bot[0]*a/ma+bot[1]*b/mb+bot[2]*c/mc);
+ std::cerr << "newtip = " << newtip << '\n';
+ std::cerr << "newbot = " << newbot << '\n';
+ Cone cone_region(newtip, newbot, alpha, beta);
  if (selector != 0) delete selector;
  selector = new ConeSelector(cone_region);
  return *selector;

@@ -17,12 +17,14 @@ class CylinderFilter: public lpmd::SystemFilter, public lpmd::Plugin
 
   void ShowHelp() const;
 
+  void Apply(lpmd::Simulation & sim);
   lpmd::Selector<lpmd::BasicParticleSet> & CreateSelector();
 
   private:
    lpmd::Vector S, origin;
    double rmax,rmin;
    lpmd::Selector<lpmd::BasicParticleSet> * selector;
+   lpmd::BasicCell *mycell;
 };
 
 #endif

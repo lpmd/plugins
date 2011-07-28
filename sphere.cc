@@ -12,6 +12,8 @@
 
 using namespace lpmd;
 
+void SphereFilter::Apply(lpmd::Simulation & sim) { mycell = &(sim.Cell()); lpmd::SystemFilter::Apply(sim); }
+
 class SphereSelector: public Selector<BasicParticleSet>
 {
  public:
@@ -82,7 +84,12 @@ void SphereFilter::ShowHelp() const
 
 Selector<BasicParticleSet> & SphereFilter::CreateSelector()
 {
- Sphere spheric_region(center, radius);
+ //rellocate the center based in the cell-vectors
+ lpmd::Vector a = (*mycell)[0]; double ma = (*mycell)[0].Module();
+ lpmd::Vector b = (*mycell)[1]; double mb = (*mycell)[1].Module();
+ lpmd::Vector c = (*mycell)[2]; double mc = (*mycell)[2].Module();
+ lpmd::Vector newcenter(center[0]*a/ma+center[1]*b/mb+center[2]*c/mc);
+ Sphere spheric_region(newcenter, radius);
  if (selector != 0) delete selector;
  selector = new SphereSelector(spheric_region);
  return *selector;

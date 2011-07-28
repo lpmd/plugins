@@ -17,12 +17,14 @@ class ConeFilter: public lpmd::SystemFilter, public lpmd::Plugin
 
   void ShowHelp() const;
 
+  void Apply(lpmd::Simulation & sim);
   lpmd::Selector<lpmd::BasicParticleSet> & CreateSelector();
 
   private:
    double alpha, beta;
    lpmd::Vector tip, bot;
    lpmd::Selector<lpmd::BasicParticleSet> * selector;
+   lpmd::BasicCell * mycell;
 };
 
 #endif

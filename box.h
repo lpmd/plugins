@@ -16,12 +16,14 @@ class BoxFilter: public lpmd::SystemFilter, public lpmd::Plugin
   ~BoxFilter();
 
   void ShowHelp() const;
+  void Apply(lpmd::Simulation & sim);
 
   lpmd::Selector<lpmd::BasicParticleSet> & CreateSelector();
 
   private:
    double x[2],y[2],z[2];
    lpmd::Selector<lpmd::BasicParticleSet> * selector;
+   lpmd::BasicCell *mycell;
 };
 
 #endif

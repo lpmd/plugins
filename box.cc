@@ -14,6 +14,8 @@ using namespace lpmd;
 
 #define DELTA (1.0E+12)
 
+void BoxFilter::Apply(lpmd::Simulation & sim) { mycell = &(sim.Cell()); lpmd::SystemFilter::Apply(sim); }
+
 class BoxSelector: public Selector<BasicParticleSet>
 {
  public:
@@ -126,7 +128,25 @@ void BoxFilter::ShowHelp() const
 
 Selector<BasicParticleSet> & BoxFilter::CreateSelector()
 {
- Box box_region(x[0], x[1], y[0], y[1], z[0], z[1]);
+ Vector a = (*mycell)[0]; Vector b = (*mycell)[1] ; Vector c = (*mycell)[2];
+ //Angles in radian for each axis with standard system.
+ double aa = acos(Dot(a,Vector(1,0,0))/a.Module());//*180.0/M_PI;
+ double ab = acos(Dot(b,Vector(0,1,0))/b.Module());//*180.0/M_PI;
+ double ac = acos(Dot(c,Vector(0,0,1))/c.Module());//*180.0/M_PI;
+
+ double minx=0.0e0,miny=0.0e0,minz=0.0e0;
+ double maxx=0.0e0,maxy=0.0e0,maxz=0.0e0;
+ if(x[0] < 0 ) minx=x[0];
+ else minx = fabs(x[0]*cos(aa));
+ maxx = fabs(x[1]*cos(aa));
+ if(y[0] < 0 ) miny=y[0];
+ else miny = fabs(y[0]*cos(ab));
+ maxy = fabs(y[1]*cos(ab));
+ if(z[0] < 0) minz=z[0];
+ else minz = fabs(z[0]*cos(ac));
+ maxz = fabs(z[1]*cos(ac));
+
+ Box box_region(minx, maxx, miny, maxy, minz, maxz, a, b, c);
  ParamList & params = (*this);
  DebugStream() << "-> Selecting range: ";
  DebugStream() << "X=";

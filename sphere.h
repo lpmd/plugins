@@ -17,12 +17,14 @@ class SphereFilter: public lpmd::SystemFilter, public lpmd::Plugin
 
   void ShowHelp() const;
 
+  void Apply(lpmd::Simulation & sim); 
   lpmd::Selector<lpmd::BasicParticleSet> & CreateSelector();
 
   private:
    double radius;
    lpmd::Vector center;
    lpmd::Selector<lpmd::BasicParticleSet> * selector;
+   lpmd::BasicCell *mycell;
 };
 
 #endif
