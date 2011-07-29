@@ -12,7 +12,7 @@
 
 using namespace lpmd;
 
-void CylinderFilter::Apply(lpmd::Simulation & sim) { mycell = &(sim.Cell()); lpmd::SystemFilter::Apply(sim); }
+void CylinderFilter::Update(lpmd::Simulation & sim) { mycell = &(sim.Cell()); }
 
 class CylinderSelector: public Selector<BasicParticleSet>
 {

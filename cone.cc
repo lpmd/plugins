@@ -12,7 +12,7 @@
 
 using namespace lpmd;
 
-void ConeFilter::Apply(lpmd::Simulation & sim) { mycell = &(sim.Cell()); lpmd::SystemFilter::Apply(sim); }
+void ConeFilter::Update(lpmd::Simulation & sim) { mycell = &(sim.Cell()); }
 
 class ConeSelector: public Selector<BasicParticleSet>
 {

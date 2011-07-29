@@ -17,7 +17,7 @@ class ConeFilter: public lpmd::SystemFilter, public lpmd::Plugin
 
   void ShowHelp() const;
 
-  void Apply(lpmd::Simulation & sim);
+  void Update(lpmd::Simulation & sim);
   lpmd::Selector<lpmd::BasicParticleSet> & CreateSelector();
 
   private:

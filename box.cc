@@ -14,7 +14,7 @@ using namespace lpmd;
 
 #define DELTA (1.0E+12)
 
-void BoxFilter::Apply(lpmd::Simulation & sim) { mycell = &(sim.Cell()); lpmd::SystemFilter::Apply(sim); }
+void BoxFilter::Update(lpmd::Simulation & sim) { mycell = &(sim.Cell()); }
 
 class BoxSelector: public Selector<BasicParticleSet>
 {

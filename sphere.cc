@@ -12,7 +12,7 @@
 
 using namespace lpmd;
 
-void SphereFilter::Apply(lpmd::Simulation & sim) { mycell = &(sim.Cell()); lpmd::SystemFilter::Apply(sim); }
+void SphereFilter::Update(lpmd::Simulation & sim) { mycell = &(sim.Cell()); }
 
 class SphereSelector: public Selector<BasicParticleSet>
 {

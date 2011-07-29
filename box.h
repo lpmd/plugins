@@ -16,7 +16,7 @@ class BoxFilter: public lpmd::SystemFilter, public lpmd::Plugin
   ~BoxFilter();
 
   void ShowHelp() const;
-  void Apply(lpmd::Simulation & sim);
+  void Update(lpmd::Simulation & sim);
 
   lpmd::Selector<lpmd::BasicParticleSet> & CreateSelector();
 
