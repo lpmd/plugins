@@ -30,16 +30,37 @@ PrintAtomsVisualizer::~PrintAtomsVisualizer() { }
 
 void PrintAtomsVisualizer::ShowHelp() const
 {
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+ std::cout << " Module Name        = printatoms                                               \n";
+ std::cout << " Problems Report to = admin@lpmd.cl                                            \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n"; 
  std::cout << " General Info      >>                                                          \n";
+ std::cout << "      The plugin is used to show the basic characteristics of an atom: position,\n";
+ std::cout << "      velocity, acceleration and color. The output is written in the standard  \n";
+ std::cout << "      output, so you can redirect it to a file if you want to save it.         \n";
+ std::cout << "      The tags to do this are: x,y,z,vx,vy,vz,ax,ay,az,r,g,b. The first 3 are  \n";
+ std::cout << "      the coordinates of the position, the second 3, the velocity ones, and    \n";
+ std::cout << "      the third threesome are the coordinates of the acceleration vector. The  \n";
+ std::cout << "      last 3 corresponds to the color in RGB (red-green-blue) format.          \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n"; 
  std::cout << " General Options   >>                                                          \n";
- std::cout << '\n';
- std::cout << " Example                                                                       \n";
- std::cout << " Cargando el Modulo :                                                          \n";
+ std::cout << "      print         : Sets the tags that are going to be printed:              \n";
+ std::cout << "                      (x,y,z,vx,vy,vz,ax,ay,az,r,g,b).                         \n";
+ std::cout << "      start         : Determines in which step the plugin begins to be applied.\n";
+ std::cout << "      end           : Determines in which step the plugin ceases to be applied.\n";
+ std::cout << "      each          : Determines how often (each how many time-steps) the      \n";
+ std::cout << "                      plugin must be applied.                                  \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n"; 
+ std::cout << " Example           >>                                                          \n";
+ std::cout << " #Loading the plugin :                                                         \n";
  std::cout << " use printatoms                                                                \n";
  std::cout << "     print x,y,z,vx,vy,vz                                                      \n";
  std::cout << " enduse                                                                        \n";
- std::cout << " Llamando al modulo :                                                          \n";
+ std::cout << " #Applying the plugin :                                                        \n";
  std::cout << " visualize printatoms start=1 end=1000 each=50 over index index=10-10        \n\n";
+ std::cout << "      The plugin is used to monitor the position and velocity of the atom      \n";
+ std::cout << "      10 in the standard output during the first 1000 steps, each 50.          \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
 }
 
 void PrintAtomsVisualizer::Apply(const Simulation & sim) 

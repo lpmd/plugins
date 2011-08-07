@@ -28,17 +28,27 @@ PDBFormat::~PDBFormat() { }
 
 void PDBFormat::ShowHelp() const
 {
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+ std::cout << " Module Name        = pdb                                                      \n";
+ std::cout << " Problems Report to = admin@lpmd.cl                                            \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
- std::cout << "      El modulo es utilizado para la escritura de archivos en formato PDB     \n";
+ std::cout << "      This module is used to read/write atomic configurations files in PDB format.\n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Options   >>                                                          \n";
- std::cout << "      module        : En la opcion input, es necesario especificar el formato  \n";
- std::cout << "                      en este caso pdb.                                        \n";
- std::cout << "      file          : Especifica el archivo que posee el formato pdb.          \n";
- std::cout << '\n';
+ std::cout << "      file          : Input/output file that contains the atomic configurations\n";
+ std::cout << "                      in PDB format.                                           \n";
+ std::cout << "      each          : Determines how often (each how many time-steps) the      \n";
+ std::cout << "                      input/output file must be read/written.                  \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " Example                                                                       \n";
- std::cout << " Llamando al modulo :                                                          \n";
+ std::cout << " #Loading the plugin :                                                         \n";
+ std::cout << " input module=pdb file=configuration.pdb                                       \n";
  std::cout << " output module=pdb file=outputfile.pdb each=5                                \n\n";
- std::cout << "      De esta forma podemos escribir archivos en formato pdb.                  \n";
+ std::cout << "      The plugin is used to read and write atomic configurations in PDB format.\n";
+ std::cout << "      The file extension (.pdb) is irrelevant, what matters is the module      \n";
+ std::cout << "      loaded (module=pdb).                                                     \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
 }
 
 void PDBFormat::WriteHeader(std::ostream & os, SimulationHistory * sh) const

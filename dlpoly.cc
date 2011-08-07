@@ -48,7 +48,7 @@ void DlPolyFormat::ShowHelp() const
  std::cout << "      (HISTORY or CONFIG files).                                               \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Options   >>                                                          \n";
- std::cout << "      file          : Input/output file that contains the atomic configurarions\n";
+ std::cout << "      file          : Input/output file that contains the atomic configurations\n";
  std::cout << "                      in DLPOLY format.                                        \n";
  std::cout << "      each          : Determines how often (each how many time-steps) the      \n";
  std::cout << "                      input/output file must be read/written.                  \n";

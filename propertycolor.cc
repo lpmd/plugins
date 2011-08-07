@@ -54,10 +54,46 @@ PropertyColorModifier::~PropertyColorModifier()
 
 void PropertyColorModifier::ShowHelp() const
 {
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+ std::cout << " Module Name        = propertycolor                                            \n";
+ std::cout << " Problems Report to = admin@lpmd.cl                                            \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
+ std::cout << "      This module is used to color the atoms by some specific property.        \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Options   >>                                                          \n";
- std::cout << " Example                                                                       \n";
- std::cout << '\n';
+ std::cout << "      property      : Sets the property to be evaluated for coloring           \n";
+ std::cout << "                      (exernal / temperature / velocity / acceleration /       \n";
+ std::cout << "                      neighbors / random).                                     \n";
+ std::cout << "      min           : Minimum value of the property (corresponding to blue).   \n";
+ std::cout << "      max           : Maximum value of the property (corresponding to red).    \n";
+ std::cout << "      cutoff        : Sets the cutoff radius for the neighbors counting in the \n";
+ std::cout << "                      case of choosing that property.                          \n";
+ std::cout << "      extfile       : Specify the file where the property is stored in case of \n";
+ std::cout << "                      choosing an external property.                           \n";
+ std::cout << "      extcolumn     : Choose the column of extfile that has the data to check  \n";
+ std::cout << "                      for filter in the case of choosing an external property. \n";
+ std::cout << "      extheader     :                                                          \n";
+ std::cout << "      filerby       :                                                          \n";
+ std::cout << "      start         : Determines in which step the plugin begins to be applied.\n";
+ std::cout << "      end           : Determines in which step the plugin ceases to be applied.\n";
+ std::cout << "      each          : Determines how often (each how many time-steps) the      \n";
+ std::cout << "                      plugin must be applied.                                  \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+ std::cout << " Example           >>                                                          \n";
+ std::cout << " #Loading the plugin :                                                         \n";
+ std::cout << " use propertycolor                                                             \n";
+ std::cout << "     property temperature                                                      \n";
+ std::cout << "     min 0                                                                     \n";
+ std::cout << "     max 300                                                                   \n";
+ std::cout << " enduse                                                                        \n";
+ std::cout << " #Applying the plugin :                                                        \n";
+ std::cout << " apply propertycolor start=0 each=1 end=1000                                 \n\n";
+ std::cout << "      The plugin is used to color the atoms by temperature during the first    \n";
+ std::cout << "      1000 steps. Red atoms will represent a temperature of 300 K or higher,   \n";
+ std::cout << "      while lower temperaures are represented by a color gradient that goes from\n";
+ std::cout << "      red to blue (0 K).                                                       \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
 }
 
 void PropertyColorModifier::Apply(Simulation & sim)

@@ -32,19 +32,34 @@ PairDistances::PairDistances(std::string args): Plugin("pairdistances", "2.0")
 
 void PairDistances::ShowHelp() const
 {
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+ std::cout << " Module Name        = pairdistances                                            \n";
+ std::cout << " Problems Report to = admin@lpmd.cl                                            \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
+ std::cout << "      This module is used to calculate the distance between all pair of atoms  \n";
+ std::cout << "      of the simulation cell.                                                  \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Options   >>                                                          \n";
- std::cout << "      rcut          : Especifica el radio maximo para el conteo de pares       \n";
- std::cout << "      output        : Fichero en el que se graba la salida                     \n";
- std::cout << '\n';
+ std::cout << "      rcut          : Set the cutoff radius for the function. Pairs at a       \n";
+ std::cout << "                      distance r > rcut will not be considered.                \n";
+ std::cout << "      output        : Output file.                                             \n";
+ std::cout << "      start         : Determines in which step the plugin begins to be applied.\n";
+ std::cout << "      end           : Determines in which step the plugin ceases to be applied.\n";
+ std::cout << "      each          : Determines how often (each how many time-steps) the      \n";
+ std::cout << "                      plugin must be applied.                                  \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " Example                                                                       \n";
- std::cout << " Cargando el Modulo :                                                          \n";
+ std::cout << " #Loading the plugin :                                                         \n";
  std::cout << " use pairdistances                                                             \n";
- std::cout << "     output pd.dat                                                             \n";
- std::cout << "     rcut 15.0                                                                 \n";
+ std::cout << "     rcut 10.5                                                                 \n";
+ std::cout << "     output pairs.dat                                                          \n";
  std::cout << " enduse                                                                        \n";
- std::cout << " Llamando al Modulo :                                                          \n";  
- std::cout << " property pairdistances start=1 each=10 end=100                                \n\n";
+ std::cout << " #Applying the plugin :                                                        \n";
+ std::cout << " property pairdistances start=0 each=1 end=100                               \n\n";
+ std::cout << "      The plugin is used to find all pairs separated at a distace r < rcut in  \n";
+ std::cout << "      every one of the first 100 steps. The data is written in the file pairs.dat\n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
 }
 
 void PairDistances::Evaluate(Configuration & conf, Potential & pot)
