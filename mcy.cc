@@ -34,7 +34,7 @@ void MCY::ShowHelp() const
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
  std::cout << "      The module implements the Matsuoka, Clementi, and Yoshimine (MCY)        \n";
- std::cout << "      potential for pairs interaction, with the form                           \n";
+ std::cout << "      potential for pairs interaction, which has the form                      \n";
  std::cout << "                   V(r) = A*exp(-B*r)-C*exp(-D*r)                              \n"; 
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Options   >>                                                          \n";

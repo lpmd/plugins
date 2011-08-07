@@ -42,9 +42,10 @@ void Verlet::ShowHelp() const
  std::cout << " enduse                                                                        \n";
  std::cout << " #Applying the plugin :                                                        \n";
  std::cout << " integrator verlet start=1000                                                  \n";
- std::cout << "      The plugin can be called at the begin (without start option) or during   \n";
- std::cout << " the simulation at any other time step, with this you can change the           \n";
- std::cout << " integration plugin during the simulation.                                     \n";
+ std::cout << "      The plugin can be called at the beginning of the simulation (without the \n";
+ std::cout << "      start option or setting start=0) or at any other time step (like         \n";
+ std::cout << "      start=1000). This allows you to change integration method during the     \n";
+ std::cout << "      simulation.                                                              \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
 
 }

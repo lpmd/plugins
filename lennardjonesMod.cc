@@ -36,7 +36,7 @@ void LennardJonesMod::ShowHelp() const
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
  std::cout << "      The module implements a modified Lenard-Jones potential for pairs        \n";
- std::cout << "      interaction, with the form                                               \n";
+ std::cout << "      interaction, which has the form                                          \n";
  std::cout << "            V(r)=4*epsilon( (sigma/r)^m - (sigma/r)^n )                        \n"; 
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Options   >>                                                          \n";

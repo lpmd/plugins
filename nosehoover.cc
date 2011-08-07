@@ -30,26 +30,35 @@ NoseHoover::~NoseHoover() { }
 
 void NoseHoover::ShowHelp() const
 {
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+ std::cout << " Module Name        = nosehoover                                               \n";
+ std::cout << " Problems Report to = admin@lpmd.cl                                            \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
- std::cout << "      El modulo es utilizado para simular ensemble NVT.                        \n";
+ std::cout << "      This plugin implements the Nose-Hoover thermostat method to integrate    \n";
+ std::cout << "      the movement equations. This allows the user to make simulations in the  \n";
+ std::cout << "      NVT ensemble.                                                            \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Options   >>                                                          \n";
- std::cout << "      dt            : Especifica el tiempo en femto-segundos para el           \n";
- std::cout << "                      integrador.                                              \n";
- std::cout << "      fmass         : Masa ficticia Q                                          \n";
- std::cout << "      t             : Temperatura fijada por el integrador                     \n";
- std::cout << '\n';
+ std::cout << "      dt            : Sets the time-step in femto-seconds for the integration  \n";
+ std::cout << "                      step.                                                    \n";
+ std::cout << "      fmass         : Ficticius mass Q.                                        \n";
+ std::cout << "      t             : Temperature of the reservoir.                            \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " Example                                                                       \n";
- std::cout << " Cargando el Modulo :                                                          \n";
+ std::cout << " #Loading the plugin :                                                         \n";
  std::cout << " use nosehoover                                                                \n";
  std::cout << "     dt 10.0                                                                   \n";
  std::cout << "     fmass 1.0                                                                 \n";
- std::cout << "     t  600.0                                                                  \n";
+ std::cout << "     t 600.0                                                                   \n";
  std::cout << " enduse                                                                        \n";
- std::cout << " Llamando al modulo :                                                          \n";
+ std::cout << " #Applying the plugin :                                                        \n";
  std::cout << " integrator nosehoover start=1000                                            \n\n";
- std::cout << "      El integrador puede ser llamado desde el principio (sin usar start) o en \n";
- std::cout << " otro instante de tiempo, para poder modificar el integrador durante la        \n";
- std::cout << " simulacion.                                                                   \n";
+ std::cout << "      The plugin can be called at the beginning of the simulation (without the \n";
+ std::cout << "      start option or setting start=0) or at any other time step (like         \n";
+ std::cout << "      start=1000). This allows you to change integration method during the     \n";
+ std::cout << "      simulation.                                                              \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
 }
 
 void NoseHoover::Initialize(Simulation & sim, Potential & p)

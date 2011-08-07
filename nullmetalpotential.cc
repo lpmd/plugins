@@ -16,17 +16,25 @@ NullMetalPotential::NullMetalPotential(std::string args): Plugin("nullmetalpoten
 
 void NullMetalPotential::ShowHelp() const
 {
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+ std::cout << " Module Name        = nullmetalpotential                                       \n";
+ std::cout << " Problems Report to = admin@lpmd.cl                                            \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
- std::cout << "      El modulo implementa un potencial nulo de tipo embedded atom, para       \n";
- std::cout << " propositos de depuracion y benchmarking.                                      \n";
+ std::cout << "      This plugin implements a 'phantom' emmbeded-atom-like potential. The     \n";
+ std::cout << "      potential is zero everywhere, so the atoms feel no force at all.         \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Options   >>                                                          \n";
- std::cout << '\n';
+ std::cout << "      None.                                                                    \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " Example                                                                       \n";
- std::cout << " Cargando el Modulo :                                                          \n";
+ std::cout << " #Loading the plugin :                                                         \n";
  std::cout << " use nullmetalpotential                                                        \n";
  std::cout << " enduse                                                                        \n";
- std::cout << " Llamando al modulo                                                            \n";
- std::cout << " potential nullmetalpotential Cu Cu                                            \n\n";
+ std::cout << " #Applying the plugin :                                                        \n";
+ std::cout << " potential nullmetalpotential Cu Cu                                          \n\n";
+ std::cout << "      The plugin implements a null potential between copper (Cu) atoms.        \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
 }
 
 double NullMetalPotential::pairEnergy(const double &r) const {assert(&r != 0); return 0.0; }//icc 869
