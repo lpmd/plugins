@@ -34,21 +34,35 @@ Overlap::Overlap(std::string args): Plugin("overlap", "1.0")
 
 void Overlap::ShowHelp() const
 {
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+ std::cout << " Module Name        = overlap                                                  \n";
+ std::cout << " Problems Report to = admin@lpmd.cl                                            \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
+ std::cout << "      This module is used to...                                                \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Options   >>                                                          \n";
- std::cout << "      rcut          : Especifica el radio maximo para el calculo del overlap   \n";
- std::cout << "      bins          : Especifica el numero de intervalos en distancia          \n";
- std::cout << "      output        : Fichero en el que se graba la salida                     \n";
- std::cout << '\n';
+ std::cout << "      bins          : Sets the number of subdivisions of the range [0,rcut].   \n";
+ std::cout << "      rcut          : Set the cutoff radius for the function.                  \n";
+ std::cout << "      output        : Output file.                                             \n";
+ std::cout << "      start         : Determines in which step the plugin begins to be applied.\n";
+ std::cout << "      end           : Determines in which step the plugin ceases to be applied.\n";
+ std::cout << "      each          : Determines how often (each how many time-steps) the      \n";
+ std::cout << "                      plugin must be applied.                                  \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " Example                                                                       \n";
- std::cout << " Cargando el Modulo :                                                          \n";
+ std::cout << " #Loading the plugin :                                                         \n";
  std::cout << " use overlap                                                                   \n";
+ std::cout << "     bins 200                                                                  \n";
+ std::cout << "     rcut 10.0                                                                 \n";
  std::cout << "     output overlap.dat                                                        \n";
- std::cout << "     bins 50                                                                   \n";
- std::cout << "     rcut 15.0                                                                 \n";
  std::cout << " enduse                                                                        \n";
- std::cout << " Llamando al Modulo :                                                          \n";  
- std::cout << " property overlap start=1 each=10 end=100                                    \n\n";
+ std::cout << " #Applying the plugin :                                                        \n";
+ std::cout << " property overlap start=0 each=1 end=100                                     \n\n";
+ std::cout << "      The plugin is used to calculate the overlap of the atomic configuration  \n";
+ std::cout << "      every step of the first 100 steps. The data is written in the file       \n";
+ std::cout << "      overlap.dat.                                                             \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
 }
 
 double Foverlap(double r0, double r)
