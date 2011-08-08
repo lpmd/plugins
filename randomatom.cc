@@ -14,13 +14,13 @@ RandomAtomModifier::RandomAtomModifier(std::string args): Plugin("randomatom", "
 {
  ParamList & params = (*this);
  DefineKeyword("type", "delete");
- DefineKeyword("value", "10");
+ DefineKeyword("percent", "10");
  DefineKeyword("symbol", "e");
  DefineKeyword("density", "fixed");
  // 
  ProcessArguments(args);
  type = params["type"];
- value = double(params["value"]);
+ percent = double(params["percent"]);
  symbol = params["symbol"];
  density = params["density"];
 }
@@ -29,19 +29,34 @@ RandomAtomModifier::~RandomAtomModifier() { }
 
 void RandomAtomModifier::ShowHelp() const
 {
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+ std::cout << " Module Name        = randomatom                                               \n";
+ std::cout << " Problems Report to = admin@lpmd.cl                                            \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
- std::cout << "      El modulo es utilizado para elmininar/modificar átomos dentro de una     \n";
- std::cout << " muestra. Puede aplicarse al inicio en la instruccion \"prepare\"              \n";
- std::cout << " como durante la simulacion en la instruccion \"apply\".                       \n";
+ std::cout << "      This module is used to delete or replace atoms of the simulation cell.   \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Options   >>                                                          \n";
- std::cout << "      type          : Tipo de Accion delete/replace                            \n";
- std::cout << "      value         : Valor porcentual de atomos a eliminar/reemplazar         \n";
- std::cout << "      symbol        : simbolo atomico, en el caso de reemplazar.               \n";
- std::cout << "      density       : fixed/free Para fijar o no la densidad de la muestra.    \n";
- std::cout << "                      Toma importancia solo para el modo elminar.              \n";
- std::cout << " Example                                                                       \n";
- std::cout << " Cargando el Modulo :                                                          \n";
- std::cout << " prepare randomatom type=replace value=20 symbol=Cu                            \n";
+ std::cout << "      type          : Sets the type of action to be done (delete / replace).   \n";
+ std::cout << "      percent       : Sets the percentage of atoms that will be deleted or     \n";
+ std::cout << "                      replaced.                                                \n";
+ std::cout << "      symbol        : In the case 'replace', sets the atomic symbol of the     \n";
+ std::cout << "                      atoms that will be replaced.                             \n";
+ std::cout << "      density       : In the case 'delete', sets if the density is forced to   \n";
+ std::cout << "                      remain constant or not (fixed / free).                   \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+ std::cout << " Example           >>                                                          \n";
+ std::cout << " #Loading the plugin :                                                         \n";
+ std::cout << " use randomatom                                                                \n";
+ std::cout << "     type replace                                                              \n";
+ std::cout << "     percent 10                                                                \n";
+ std::cout << "     symbol Cu                                                                 \n";
+ std::cout << " enduse                                                                        \n";
+ std::cout << " #Applying the plugin :                                                        \n";
+ std::cout << " prepare randomatom type=replace percent=20 symbol=Cu                          \n";
+ std::cout << "      The plugin is used to replace 10\% of the atoms of the simulation cell by\n";
+ std::cout << "      copper (Cu) atoms.                                                       \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
 }
 
 void RandomAtomModifier::Apply(Simulation & conf)
@@ -50,8 +65,8 @@ void RandomAtomModifier::Apply(Simulation & conf)
  BasicCell & cell = conf.Cell();
  lpmd::Array<int> random;
  random.Clear();
- if(value<=0) throw PluginError("randomatom","Error in value assignation in plugin.");
- int tochange = (int)(atoms.Size()*value/100.0);
+ if(percent<=0) throw PluginError("randomatom","Error in percent assignation in plugin.");
+ int tochange = (int)(atoms.Size()*percent/100.0);
  if(type=="replace")
  {
   while(random.Size()<tochange)

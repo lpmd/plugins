@@ -26,7 +26,7 @@ class RandomAtomModifier: public lpmd::SystemModifier, public lpmd::Plugin
  
  private:
   std::string type;
-  double value;
+  double percent;
   std::string symbol;
   std::string density;
 };

@@ -23,12 +23,24 @@ QuenchedMDModifier::~QuenchedMDModifier() { }
 
 void QuenchedMDModifier::ShowHelp() const
 {
- std::cout << " Example                                                                       \n";
- std::cout << " Cargando el Modulo :                                                          \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+ std::cout << " Module Name        = quenchedmd                                               \n";
+ std::cout << " Problems Report to = admin@lpmd.cl                                            \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+ std::cout << " General Info      >>                                                          \n";
+ std::cout << "      This module is used to .                                                 \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+ std::cout << " General Options   >>                                                          \n";
+ std::cout << "      None.                                                                   .\n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+ std::cout << " Example           >>                                                          \n";
+ std::cout << " #Loading the plugin :                                                         \n";
  std::cout << " use quenchedmd                                                                \n";
  std::cout << " enduse                                                                        \n";
- std::cout << " Llamando al modulo                                                            \n";
+ std::cout << " #Applying the plugin :                                                        \n";
  std::cout << " apply quenchedmd start=0 each=1 end=1000                                    \n\n";
+ std::cout << "      The plugin is used to... during the first 1000 steps.                    \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
 }
 
 void QuenchedMDModifier::Apply(Simulation & sim)
