@@ -36,24 +36,39 @@ RVCorr::~RVCorr() { }
 
 void RVCorr::ShowHelp() const
 {
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+ std::cout << " Module Name        = rvcorr                                                   \n";
+ std::cout << " Problems Report to = admin@lpmd.cl                                            \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
- std::cout << "      Plugin utilizado para calcular la correlacion de velocidades en funcion de\n";
- std::cout << "      la distancia radial desde un atomo.                                      \n";
+ std::cout << "      This plugin is used to evaluate velocity autocorrelation function for    \n";
+ std::cout << "      every configuration as function of the distance (see also 'vacf' plugin).\n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Options   >>                                                          \n";
- std::cout << "      bins          : Especifica el numero de divisiones entre 0 y rcut.       \n";
- std::cout << "      rcut          : Especifica el radio maximo para el calculo de rvcorr     \n";
- std::cout << "      output        : Fichero en el que se graba rvcorr.                       \n";
- std::cout << "      average       : Setea si calculo o no el promedio de cada calculo.       \n";
+ std::cout << "      bins          : Sets the number of subdivisions of the range [0,rcut].   \n";
+ std::cout << "      rcut          : Set the cutoff radius for the function.                  \n";
+ std::cout << "      output        : Output file.                                             \n";
+ std::cout << "      average       : Sets if the the property must be averaged over all       \n";
+ std::cout << "                      configurations (true / false)                            \n";
+ std::cout << "      start         : Determines in which step the plugin begins to be applied.\n";
+ std::cout << "      end           : Determines in which step the plugin ceases to be applied.\n";
+ std::cout << "      each          : Determines how often (each how many time-steps) the      \n";
+ std::cout << "                      plugin must be applied.                                  \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " Example                                                                       \n";
- std::cout << " Cargando el Modulo :                                                          \n";
+ std::cout << " #Loading the plugin :                                                         \n";
  std::cout << " use rvcorr                                                                    \n";
  std::cout << "     bins 200                                                                  \n";
  std::cout << "     output rvcorr.dat                                                         \n";
  std::cout << "     rcut 15.0                                                                 \n";
  std::cout << "     average true                                                              \n";
  std::cout << " enduse                                                                        \n";
- std::cout << " Llamando al Modulo :                                                          \n";  
- std::cout << " property rvcorr start=1 each=10 end=100                                       \n\n";
+ std::cout << " #Applying the plugin :                                                        \n";
+ std::cout << " property rvcorr start=1 each=10 end=100                                     \n\n";
+ std::cout << "      The plugin is used to calculate the velocity autocorrelation function    \n";
+ std::cout << "      of the atomic configuration every 10 steps of the first 100 steps. The   \n";
+ std::cout << "      data is written in the file rvcorr.dat                                   \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
 }
 
 void RVCorr::Evaluate(Configuration & conf, Potential & pot)

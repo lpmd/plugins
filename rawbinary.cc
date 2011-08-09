@@ -28,21 +28,31 @@ RawBinFormat::~RawBinFormat() { }
 
 void RawBinFormat::ShowHelp() const
 {
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+ std::cout << " Module Name        = rawbinary                                                \n";
+ std::cout << " Problems Report to = admin@lpmd.cl                                            \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
- std::cout << "      El modulo es utilizado para la lectura/escritura de archivos en formato  \n";
- std::cout << " binario.                                                                      \n";
+ std::cout << "      This module is used to read/write atomic configurations files in binary  \n";
+ std::cout << "      format. This means that you cannot see the content of the file, just     \n";
+ std::cout << "      read it with LPMD.                                                       \n";  
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Options   >>                                                          \n";
- std::cout << "      module        : En la opcion input, es necesario especificar el formato  \n";
- std::cout << "                      en este caso rawbinary.                                  \n";
- std::cout << "      file          : Especifica el archivo que posee el formato lpmd.         \n";
- std::cout << "      level         : Se especifica el nivel del formato de rawbinary, estos son \n";
- std::cout << "                      0/1/2 <-> pos/pos-vel/pos-vel-ace.                       \n";
+ std::cout << "      file          : Input/output file that contains the atomic configurations\n";
+ std::cout << "                      in binary format.                                        \n";
+ std::cout << "      each          : Determines how often (each how many time-steps) the      \n";
+ std::cout << "                      input/output file must be read/written.                  \n";
+ std::cout << "      level         : Determines the file format level (0/1/2):                \n";
+ std::cout << "                      0/1/2 <-> pos/pos-vel/pos-vel-acel.                      \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " Example                                                                       \n";
- std::cout << " Llamando al modulo :                                                          \n";
- std::cout << " input module=rawbinary file=inputfile.raw level=0                             \n";
- std::cout << " output module=rawbinary file=outputfile.raw level=1 each=5                    \n\n";
- std::cout << "      De esta forma podemos leer o escribir archivos en formato rawbinary, en  \n";
- std::cout << "      el caso de la salida, es necesaria la opcion each.                       \n";
+ std::cout << " Calling the module in a control file :                                        \n";
+ std::cout << " input module=rawbinary file=inputfile.rb level=0                              \n";
+ std::cout << " output module=rawbinary file=outputfile.rb level=1 each=5                   \n\n";
+ std::cout << "      In this way we can read and write atomic configurations in binary        \n";
+ std::cout << "      format. The file extension (.rb) is irrelevant, what matters is the      \n";
+ std::cout << "      module loaded (module=rawbinary).                                        \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
 }
 
 void RawBinFormat::ReadHeader(std::istream & is) const

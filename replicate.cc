@@ -28,12 +28,28 @@ ReplicateModifier::~ReplicateModifier() { }
 
 void ReplicateModifier::ShowHelp() const
 {
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+ std::cout << " Module Name        = replicate                                                \n";
+ std::cout << " Problems Report to = admin@lpmd.cl                                            \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
+ std::cout << "      This module is used to replicate a group of atoms. It is useful to create\n";
+ std::cout << "      crystals, where you have a motive that can be replicated.                \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Options   >>                                                          \n";
- std::cout << '\n';
+ std::cout << "      nx            : Sets the number of replications of the set of atoms in   \n";
+ std::cout << "                      the X  direction.                                        \n";
+ std::cout << "      ny            : Sets the number of replications of the set of atoms in the\n";
+ std::cout << "                      the Y  direction.                                        \n";
+ std::cout << "      nz            : Sets the number of replications of the set of atoms in the\n";
+ std::cout << "                      the Z  direction.                                        \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " Example                                                                       \n";
- std::cout << "  Aplicando el Modulo                                                          \n";
+ std::cout << " #Loading plugin :                                                             \n";
+ std::cout << " input module=xyz file=example.xyz                                             \n";
  std::cout << " prepare replicate nx=3 ny=3 nz=3                                              \n";
+ std::cout << "      The plugin is used to replicate the sample of atoms in the simulation cell.\n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
 }
 
 void ReplicateModifier::Apply(Simulation & con)

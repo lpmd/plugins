@@ -85,11 +85,21 @@ RandomFilter::~RandomFilter() { delete selector; }
 
 void RandomFilter::ShowHelp() const
 {
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+ std::cout << " Module Name        = random                                                   \n";
+ std::cout << " Problems Report to = admin@lpmd.cl                                            \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
+ std::cout << "      This module is used to delete atoms randomly in the simulation cell.     \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Options   >>                                                          \n";
+ std::cout << "      percent       : Sets the percentage of atoms that will NOT be deleted.   \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " Example                                                                       \n";
  std::cout << " filter random percent=90                                                      \n";
- std::cout << '\n';
+ std::cout << "      The plugin is used to eliminate, randomly, 10\% of the atoms of the      \n";
+ std::cout << "      simulation cell.                                                         \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
 }
 
 Selector<BasicParticleSet> & RandomFilter::CreateSelector()

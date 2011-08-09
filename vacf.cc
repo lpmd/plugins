@@ -34,12 +34,12 @@ void Vacf::ShowHelp() const
  std::cout << "      output        : Set the output file-name.                                \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " Example                                                                       \n";
- std::cout << " Cargando el Modulo :                                                          \n";
+ std::cout << " #Loading the plugin :                                                         \n";
  std::cout << " use varstep                                                                   \n";
  std::cout << "     output vacf.dat                                                           \n";
  std::cout << "     dt 10.0                                                                   \n";
  std::cout << " enduse                                                                        \n";
- std::cout << " Llamando al modulo :                                                          \n";
+ std::cout << " #Applying the plugin :                                                        \n";
  std::cout << " integrator varstep start=1000                                                 \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
 }

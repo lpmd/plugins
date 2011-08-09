@@ -43,18 +43,27 @@ RotateModifier::~RotateModifier() { }
 
 void RotateModifier::ShowHelp() const
 {
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+ std::cout << " Module Name        = rotate                                                   \n";
+ std::cout << " Problems Report to = admin@lpmd.cl                                            \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
- std::cout << "      El modulo es utilizado para rotar el sistema en torno a un eje en un     \n";
- std::cout << " angulo determinado. Puede aplicarse al inicio en la instruccion \"prepare\"   \n";
- std::cout << " como durante la simulacion en la instruccion \"apply\".                       \n";
+ std::cout << "      This module is used to rotate a group of atoms in a given angle about    \n";
+ std::cout << "      a given axis of rotation.                                                \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Options   >>                                                          \n";
- std::cout << "      x             : Coord. X del eje de rotacion                             \n";
- std::cout << "      y             : Coord. Y del eje de rotacion                             \n";
- std::cout << "      z             : Coord. Z del eje de rotacion                             \n";
- std::cout << "      angle         : Angulo de rotacion (en grados)                           \n";
+ std::cout << "      x             : Sets the X-coordinate of the rotation axis.              \n";
+ std::cout << "      y             : Sets the Y-coordinate of the rotation axis.              \n";
+ std::cout << "      z             : Sets the Z-coordinate of the rotation axis.              \n";
+ std::cout << "      angle         : Sets the angle in which the sample will be rotated about \n";
+ std::cout << "                      the rotation axis.                                       \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " Example                                                                       \n";
- std::cout << " Cargando el Modulo :                                                          \n";
- std::cout << " prepare rotate x=1.0 y=0.0 z=0.0 angle=45.0                                   \n";
+ std::cout << " #Loading plugin :                                                             \n";
+ std::cout << " prepare rotate x=0.0 y=0.0 z=1.0 angle=45.0                                   \n";
+ std::cout << "      The plugin is used to rotate the sample of atoms in the simulation cell  \n";
+ std::cout << "      in 45 degrees about the z-axis.                                          \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
 }
 
 void RotateVector(double * vect, double * axis, float ang)
