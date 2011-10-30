@@ -66,6 +66,8 @@ void LinkedCell::ShowHelp() const
  std::cout << " General Info      >>                                                          \n";
  std::cout << "      This module implements the linked-cell method for making neighbors lists.\n";
  std::cout << "      It is one of the available cell managers.                                \n";
+ std::cout << "      Advice: When dividing the simulation cell in cells, their edge should    \n";
+ std::cout << "      be at least the cutoff the cutoff of the potential.                      \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Options   >>                                                          \n";
  std::cout << "      cutoff        : Sets the cutoff radius for the evaluation.               \n";
@@ -94,7 +96,11 @@ void LinkedCell::ShowHelp() const
  std::cout << " #Applying the plugin :                                                        \n";
  std::cout << " cellmanager linkedcell                                                      \n\n";
  std::cout << "      The plugin is used to select the linkedcell method for making the lists  \n";
- std::cout << "      of atoms' neighbors.                                                     \n";
+ std::cout << "      of atoms' neighbors. In this case, the simulation cell is divided 5x5x5  \n";
+ std::cout << "      (125) cubic cells, whose edge is L/15, being L the edge of the cubic     \n";
+ std::cout << "      simulation cell. In this case, L/15 should be greater than rc, the cutoff\n";
+ std::cout << "      of the potential. For cubic cells, it is recommended to use nx=ny=nz=L/n,\n";
+ std::cout << "      where n=[L/rc] and [] is the floor function.                             \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
 }
 

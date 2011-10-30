@@ -29,11 +29,12 @@ void Verlet::ShowHelp() const
  std::cout << " Problems Report to = admin@lpmd.cl                                            \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
- std::cout << "      The plugin is used to integrate the movement equation using the verlet   \n";
- std::cout << "  method.                                                                      \n";
+ std::cout << "      The plugin is used to integrate the movement equations using the         \n";
+ std::cout << "      verlet method.                                                           \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Options   >>                                                          \n";
- std::cout << "      dt            : Set the integration time in femto-seconds.               \n";
+ std::cout << "      dt            : Sets the time-step in femto-seconds for the integration  \n";
+ std::cout << "                      step.                                                    \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " Example           >>                                                          \n";
  std::cout << " #Loading the plugin :                                                         \n";

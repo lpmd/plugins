@@ -43,6 +43,7 @@ void RVCorr::ShowHelp() const
  std::cout << " General Info      >>                                                          \n";
  std::cout << "      This plugin is used to evaluate velocity autocorrelation function for    \n";
  std::cout << "      every configuration as function of the distance (see also 'vacf' plugin).\n";
+ std::cout << "      This is an instantaneous property.                                       \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Options   >>                                                          \n";
  std::cout << "      bins          : Sets the number of subdivisions of the range [0,rcut].   \n";

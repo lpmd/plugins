@@ -111,13 +111,13 @@ void LPMDFormat::ShowHelp() const
  std::cout << "      compression   : Compression level for zlp files (from 0 to 9, being 9 the\n";
  std::cout << "                      maximum compression level; but the slowest).             \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
- std::cout << " Example                                                                       \n";
- std::cout << " Calling the module in a control file :                                        \n";
+ std::cout << " Example           >>                                                          \n";
+ std::cout << " #Loading the plugin :                                                         \n";
  std::cout << " input module=lpmd file=inputfile.lpmd level=0                                 \n";
  std::cout << " input module=lpmd file=inputfile.zlp level=1                                  \n";
  std::cout << " output module=lpmd file=output.zlp level=1 type=zlp each=5                    \n";
  std::cout << " output module=lpmd file=outputfile.lpmd level=1 each=5                      \n\n";
- std::cout << "      In this way we can read and write atomic configurations in LPMD's        \n";
+ std::cout << "      The plugin is used to read and write atomic configurations in LPMD's     \n";
  std::cout << "      formats. The file extension (.lpmd or .zlp) is irrelevant, what matters  \n";
  std::cout << "      is the module loaded (module=lpmd).                                      \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";

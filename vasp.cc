@@ -53,13 +53,13 @@ void VaspFormat::ShowHelp() const
  std::cout << "                      0/1/2 <-> pos/pos-vel/pos-vel-acel.                      \n";
  std::cout << "      type          : Lattice type (Direct / Cartesian) of the POSCAR file.    \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
- std::cout << " Example                                                                       \n";
- std::cout << " Calling the module in a control file :                                        \n";
+ std::cout << " Example           >>                                                          \n";
+ std::cout << " #Loading the plugin :                                                         \n";
  std::cout << " input module=vasp file=POSCAR species=Si level=0                              \n";
  std::cout << " output module=vasp file=POSCAR.output species=Si level=1 each=5             \n\n";
- std::cout << "      In this way we can read and write atomic configurations in LPMD's        \n";
- std::cout << "      formats. The file extension (.output) is irrelevant, what matters        \n";
- std::cout << "      is the module loaded (module=vasp).                                      \n";
+ std::cout << "      In this way we can read and write atomic configurations in VASP          \n";
+ std::cout << "      formats (POSCAR). The file extension (.output) is irrelevant, what       \n";
+ std::cout << "      matters is the module loaded (module=vasp).                              \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
 }
 

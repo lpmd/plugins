@@ -35,20 +35,23 @@ void UndoPBCModifier::ShowHelp() const
  std::cout << " Problems Report to = admin@lpmd.cl                                            \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
- std::cout << "      This plugin is used to remove the periodical boundary conditions in a set\n";
- std::cout << " of multiple configurations.                                                   \n";
+ std::cout << "      This plugin is used to remove periodic boundary conditions in a set      \n";
+ std::cout << "      of multiple configurations.                                              \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Options   >>                                                          \n";
- std::cout << "      This plugin do not require additional options.                           \n";
+ std::cout << "      start         : Determines in which step the plugin begins to be applied.\n";
+ std::cout << "      end           : Determines in which step the plugin ceases to be applied.\n";
+ std::cout << "      each          : Determines how often (each how many time-steps) the      \n";
+ std::cout << "                      plugin must be applied.                                  \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " Example           >>                                                          \n";
  std::cout << " #Load the plugin  :                                                           \n";
  std::cout << " use undopbc                                                                   \n";
  std::cout << " enduse                                                                        \n";
  std::cout << " #Applying the plugin :                                                        \n";
- std::cout << " apply undopbc start=0 each=1 end=-1                                           \n";
- std::cout << "      With this we change the atomic positions of the atoms in the boundary of \n";
- std::cout << " the simulation for all the configurations.                                    \n";
+ std::cout << " apply undopbc start=0 each=1 end=100                                          \n";
+ std::cout << "      The plugin is used to turn off the periodic boundary conditions for the  \n";
+ std::cout << "      first 100 time steps.                                                    \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
 }
 

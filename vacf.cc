@@ -25,22 +25,26 @@ void Vacf::ShowHelp() const
  std::cout << " Problems Report to = admin@lpmd.cl                                            \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
- std::cout << "      This plugin is used to evaluate velocity autocorrelation function of a   \n";
- std::cout << " set of atomic configurations from a file.                                     \n";
+ std::cout << "      This plugin is used to evaluate velocity autocorrelation function for    \n";
+ std::cout << "      every configuration as function of time (see also 'rvcorr' plugin).      \n";
+ std::cout << "      This is a temporal property.                                             \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Options   >>                                                          \n";
  std::cout << "      dt            : Set the time step in femto-seconds in case that the      \n";
  std::cout << "                      velocity are not specified in the input file.            \n";
  std::cout << "      output        : Set the output file-name.                                \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
- std::cout << " Example                                                                       \n";
+ std::cout << " Example           >>                                                          \n";
  std::cout << " #Loading the plugin :                                                         \n";
- std::cout << " use varstep                                                                   \n";
+ std::cout << " use vacf                                                                      \n";
  std::cout << "     output vacf.dat                                                           \n";
  std::cout << "     dt 10.0                                                                   \n";
  std::cout << " enduse                                                                        \n";
  std::cout << " #Applying the plugin :                                                        \n";
- std::cout << " integrator varstep start=1000                                                 \n";
+ std::cout << " property vacf start=1 each=10 end=100                                       \n\n";
+ std::cout << "      The plugin is used to calculate the velocity autocorrelation function    \n";
+ std::cout << "      of the atomic configuration every 10 steps of the first 100 steps. The   \n";
+ std::cout << "      data is written in the file vacf.dat                                     \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
 }
 

@@ -37,12 +37,13 @@ void VerletListCellManager::ShowHelp() const
  std::cout << " Problems Report to = admin@lpmd.cl                                            \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
- std::cout << "      The plugin is used to specify the verlet-list cellmanager method.        \n";
+ std::cout << "      This module implements the verlet-list method for making neighbors lists.\n";
+ std::cout << "      It is one of the available cell managers.                                \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Options   >>                                                          \n";
- std::cout << "      cutoff        : Set the internal cutoff for the list. [A]                \n";
- std::cout << "      extcutoff     : Set the external cutoff for the list. If is not specified\n";
- std::cout << "                      then is set to cutoff + .08*cutoff.   [A]                \n"; 
+ std::cout << "      cutoff        : Sets the inner cutoff radius for the list (in angstrom). \n";
+ std::cout << "      extcutoff     : Sets the outter cutoff radius for the list. Its default  \n";
+ std::cout << "                      value is (cutoff + .08*cutoff).                          \n"; 
  std::cout << "      maxneighbors  : Set the maximum number of neighbors that have a atom in  \n";
  std::cout << "                      the list.                                                \n";
  std::cout << "      each          : Set the frequency to 'rebuild' the atomic neighbors list.\n";
@@ -56,6 +57,9 @@ void VerletListCellManager::ShowHelp() const
  std::cout << " enduse                                                                        \n";
  std::cout << " #Applying the plugin :                                                        \n";
  std::cout << " cellmanager verletlist                                                        \n";
+ std::cout << "      The plugin is used to select the verlet-list method for making the lists \n";
+ std::cout << "      of atoms' neighbors. In this case, the maximum number of neighbors allowed\n";
+ std::cout << "      is 15, and the list is updated each 10 steps.                            \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
 
 }

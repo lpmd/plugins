@@ -37,7 +37,7 @@ void Beeman::ShowHelp() const
  std::cout << "      dt            : Sets the time-step in femto-seconds for the integration  \n" ;
  std::cout << "                      step.                                                    \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
- std::cout << " Example                                                                       \n";
+ std::cout << " Example           >>                                                          \n";
  std::cout << " #Loading the plugin :                                                         \n";
  std::cout << " use beeman                                                                    \n";
  std::cout << "     dt 10.0                                                                   \n";

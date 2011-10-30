@@ -38,8 +38,7 @@ void VelDist::ShowHelp() const
  std::cout << " Problems Report to = admin@lpmd.cl                                            \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
- std::cout << "   This plugin is used to evaluate a velocities histogram, can be evaluated    \n";
- std::cout << " in both velocities as components.                                             \n";
+ std::cout << "      This plugin is used to evaluate a velocities histogram.                  \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Options   >>                                                          \n";
  std::cout << "      bins          : Set the number of bins fo the histogram.                 \n";
@@ -53,6 +52,9 @@ void VelDist::ShowHelp() const
  std::cout << " enduse                                                                        \n";
  std::cout << " #Applying the plugin :                                                        \n";  
  std::cout << " property veldist start=1 each=10 end=100                                      \n";
+ std::cout << "      The plugin is used to make a velocities histogram for the first 100      \n";
+ std::cout << "      steps, each 10 steps, using a 500 different velocities. The data is      \n";
+ std::cout << "      written in the file veldist.dat.                                         \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
 }
 

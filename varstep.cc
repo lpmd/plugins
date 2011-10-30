@@ -37,11 +37,12 @@ void VariableStep::ShowHelp() const
  std::cout << " Problems Report to = admin@lpmd.cl                                            \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
- std::cout << "      The plugin is used to integrate the movement equation using the varibalbe\n";
- std::cout << " step method.                                                                  \n";
+ std::cout << "      The plugin is used to integrate the movement equations using the         \n";
+ std::cout << "      variable step method.                                                    \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Options   >>                                                          \n";
- std::cout << "      dt            : Set the time in femto-seconds for the integrator.        \n";
+ std::cout << "      dt            : Sets the time-step in femto-seconds for the integration  \n";
+ std::cout << "                      step.                                                    \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " Example           >>                                                          \n";
  std::cout << " #Loading the plugin :                                                         \n";
@@ -50,9 +51,10 @@ void VariableStep::ShowHelp() const
  std::cout << " enduse                                                                        \n";
  std::cout << " #Applying the plugin :                                                        \n";
  std::cout << " integrator varstep start=500                                                  \n";
- std::cout << "      The plugin can be called at the begin (without start option) or during   \n";
- std::cout << " the simulation at any other time step, with this you can change the           \n";
- std::cout << " integration plugin during the simulation.                                     \n";
+ std::cout << "      The plugin can be called at the beginning of the simulation (without the \n";
+ std::cout << "      start option or setting start=0) or at any other time step (like         \n";
+ std::cout << "      start=1000). This allows you to change integration method during the     \n";
+ std::cout << "      simulation.                                                              \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
 }
 

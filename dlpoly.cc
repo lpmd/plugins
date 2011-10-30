@@ -63,8 +63,8 @@ void DlPolyFormat::ShowHelp() const
  std::cout << "      replacecell   : Replace the dimensions of the cell by those found in the \n";
  std::cout << "                      CONFIG or HISTORY file (true / false).                   \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
- std::cout << " Example                                                                       \n";
- std::cout << " Calling the module in a control file :                                      \n\n";
+ std::cout << " Example           >>                                                          \n";
+ std::cout << " #Loading the plugin :                                                         \n";
  std::cout << " input module=dlpoly file=CONFIG level=0                                       \n";
  std::cout << " output module=dlpoly file=CONFIG.output level=1 periodicity=2 each=5        \n\n";
  std::cout << "      In this way we can read and write atomic configurations in DL_POLY's     \n";
