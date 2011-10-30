@@ -16,6 +16,7 @@ RawBinFormat::RawBinFormat(std::string args): Plugin("rawbinary", "2.0")
  AssignParameter("level", "0");
  AssignParameter("each", "1");
  AssignParameter("replacecell", "false");
+ AssignParameter("file","file.raw");
  // hasta aqui los valores por omision
  ProcessArguments(args);
  readfile = writefile = param["file"];

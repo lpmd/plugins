@@ -28,7 +28,11 @@ void QuenchedMDModifier::ShowHelp() const
  std::cout << " Problems Report to = admin@lpmd.cl                                            \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
- std::cout << "      HELP NOT AVAILABLE YET                                                   \n";
+ std::cout << "      This plugin realize a quenched molecular dynamics process on the sample. \n";
+ std::cout << "      That mean when a.v < 0 (with a the atomic acceleration, v the atomic     \n";
+ std::cout << "      velocity and . the dot product) then the velocity of the atom will be set\n";
+ std::cout << "      to zero. This procedure is frequently used to find structure of minimum  \n";
+ std::cout << "      energy of the system.                                                    \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Options   >>                                                          \n";
  std::cout << "      start         : Determines in which step the plugin begins to be applied.\n";

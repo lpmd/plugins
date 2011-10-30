@@ -20,8 +20,7 @@ DensityProfile::DensityProfile(std::string args): Plugin("densityprofile", "2.0"
  DefineKeyword("start", "0");
  DefineKeyword("end", "-1");
  DefineKeyword("each", "1");
- DefineKeyword("rcut");
- DefineKeyword("output");
+ DefineKeyword("output","densityprofile.dat");
  DefineKeyword("bins", "200");
  DefineKeyword("counter", "0");
  range[0][0]=0.0e0;range[0][1]=0.0e0;
@@ -134,6 +133,8 @@ void DensityProfile::ShowHelp() const
  std::cout << "      interval [10,20] (divided in 200 slices) of the Y-axis of the simulation \n";
  std::cout << "      cell, each 10 steps, for the first 100 steps of the simulation. The data \n";
  std::cout << "      is averaged in time and written in the file filedensity.dat              \n";
+ std::cout << "      You can see a direct way to use this plugin in C. Loyola et al. Comput.  \n";
+ std::cout << "      Mat. Science Vol 49, Issue 3, September 2010, pages 582-587.             \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
 }
 
