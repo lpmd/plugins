@@ -107,6 +107,10 @@ void TempProfile::ShowHelp() const
  std::cout << "      range         : Set the range for the evaluation in each axis.           \n";
  std::cout << "      output        : Output file with the temperature.                        \n";
  std::cout << "      average       : Evaluate an average over the configurations or not.      \n";
+ std::cout << "      start         : Determines in which step the plugin begins to be applied.\n";
+ std::cout << "      end           : Determines in which step the plugin ceases to be applied.\n";
+ std::cout << "      each          : Determines how often (each how many time-steps) the      \n";
+ std::cout << "                      plugin must be applied.                                  \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " Example           >>                                                          \n";
  std::cout << " #Loading the plugin :                                                         \n";
@@ -120,7 +124,7 @@ void TempProfile::ShowHelp() const
  std::cout << "     average true                                                              \n";
  std::cout << " enduse                                                                        \n";
  std::cout << " #Applying the plugin :                                                        \n";  
- std::cout << " property tempprofile start=1 each=10 end=100                                  \n";
+ std::cout << " property tempprofile start=1 each=10 end=100                                \n\n";
  std::cout << "      The plugin is used to perform a temperature profile of the sample in     \n";
  std::cout << "      X-axis, divided in 200 slices, and just for the atoms with Y-coordinate  \n";
  std::cout << "      between 10 and 20. The data is written in the file temperature.dat.      \n";

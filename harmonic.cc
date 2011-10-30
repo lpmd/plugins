@@ -32,11 +32,11 @@ void Harmonic::ShowHelp() const
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Options   >>                                                          \n";
  std::cout << "      k             : Determines de value of k (spring constant) for the       \n";
- std::cout << "                      potential.                                               \n";
+ std::cout << "                      potential (in eV/angstrom).                              \n";
  std::cout << "      a             : Determines de value of a (equilibrium position) for      \n";
- std::cout << "                      the 0potential.                                          \n";
+ std::cout << "                      the potential (in angstrom).                             \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
- std::cout << " Example                                                                       \n";
+ std::cout << " Example           >>                                                          \n";
  std::cout << " #Loading the plugin :                                                         \n";
  std::cout << " use harmonic as HP                                                            \n";
  std::cout << "     k 3.4                                                                     \n";

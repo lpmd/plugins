@@ -82,8 +82,12 @@ void ConeFilter::ShowHelp() const
  std::cout << "      beta          : Set internatl beta angle, by default is zero.            \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " Example           >>                                                          \n";
- std::cout << " #Filter using sphere configuration.                                           \n";
+ std::cout << " #Applying plugin :                                                            \n";
  std::cout << " filter cone tip=<25,25,25> bot=<25,25,0> alpha=45                             \n";
+ std::cout << " apply tempscaling each=1 start=1 end=-1 over cone tip=<25,25,25> bot=<25,25,0> alpha=45\n\n";
+ std::cout << "      The plugin is used to eliminate atoms outside the specified region, in   \n";
+ std::cout << "      first case, and used to apply a property (tempscaling) over the specified\n";
+ std::cout << "      region, in the second case.                                              \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
 }
 

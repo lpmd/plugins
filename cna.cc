@@ -111,7 +111,7 @@ void CommonNeighborAnalysis::ShowHelp() const
  std::cout << "      each          : Determines how often (each how many time-steps) the      \n";
  std::cout << "                      plugin must be applied.                                  \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
- std::cout << " Example                                                                       \n";
+ std::cout << " Example           >>                                                          \n";
  std::cout << " #Loading the plugin :                                                         \n";
  std::cout << " use cna                                                                       \n";
  std::cout << "     output cna.dat                                                            \n";
@@ -121,7 +121,7 @@ void CommonNeighborAnalysis::ShowHelp() const
  std::cout << "     species all                                                               \n";
  std::cout << " enduse                                                                        \n";
  std::cout << " #Applying the plugin :                                                        \n";
- std::cout << " property cna start=1 each=10 end=100                                          \n\n";
+ std::cout << " property cna start=1 each=10 end=100                                        \n\n";
  std::cout << "      The plugin is used perform the CNA each 10 steps, between the first 100  \n";
  std::cout << "      steps, using a cutoff of rcut=2.0 angstroms in mode statistics. The data \n";
  std::cout << "      is written in the file cna.dat.                                          \n";

@@ -54,7 +54,7 @@ void OsciForcePotential::ShowHelp() const
  std::cout << "      n             : Sets the term 'n' in the force (dimensionless).          \n";
  std::cout << "      counter       : Sets the term 'c' in the force (dimensionless).          \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
- std::cout << " Example                                                                       \n";
+ std::cout << " Example           >>                                                          \n";
  std::cout << " #Loading the plugin :                                                         \n";
  std::cout << " use osciforce as sinforce                                                     \n";
  std::cout << "     force <0.0,0.0,-0.1>                                                      \n";

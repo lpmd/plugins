@@ -49,7 +49,7 @@ void Crystal2DGenerator::ShowHelp() const
  std::cout << "      nx            : Sets the number of replications in the X direction.      \n";
  std::cout << "      ny            : Sets the number of replications in the Y direction.      \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
- std::cout << " Example                                                                       \n";
+ std::cout << " Example           >>                                                          \n";
  std::cout << " #Loading the plugin :                                                         \n";
  std::cout << " input crystal2d a=1.0 b=1.0 gamma=45.0 symbol=Ar nx=2 ny=2                  \n\n";
  std::cout << "      The plugin is used to generate a two-dimensional lattice of argon atoms. \n";

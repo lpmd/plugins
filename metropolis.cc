@@ -42,8 +42,11 @@ void Metropolis::ShowHelp() const
  std::cout << "      percent       : Sets the percent of randomness for the random vector     \n";
  std::cout << "                      that is going to be added to the atom's position.        \n";
  std::cout << "      start         : Determines in which step the plugin begins to be applied.\n";
+ std::cout << "      end           : Determines in which step the plugin ceases to be applied.\n";
+ std::cout << "      each          : Determines how often (each how many time-steps) the      \n";
+ std::cout << "                      plugin must be applied.                                  \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
- std::cout << " Example                                                                       \n";
+ std::cout << " Example           >>                                                          \n";
  std::cout << " #Loading the plugin :                                                         \n";
  std::cout << " use metropolis                                                                \n";
  std::cout << "     temp 300.0                                                                \n";

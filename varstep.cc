@@ -43,6 +43,10 @@ void VariableStep::ShowHelp() const
  std::cout << " General Options   >>                                                          \n";
  std::cout << "      dt            : Sets the time-step in femto-seconds for the integration  \n";
  std::cout << "                      step.                                                    \n";
+ std::cout << "      start         : Determines in which step the plugin begins to be applied.\n";
+ std::cout << "      end           : Determines in which step the plugin ceases to be applied.\n";
+ std::cout << "      each          : Determines how often (each how many time-steps) the      \n";
+ std::cout << "                      plugin must be applied.                                  \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " Example           >>                                                          \n";
  std::cout << " #Loading the plugin :                                                         \n";
@@ -50,7 +54,7 @@ void VariableStep::ShowHelp() const
  std::cout << "     dt 1.0                                                                    \n";
  std::cout << " enduse                                                                        \n";
  std::cout << " #Applying the plugin :                                                        \n";
- std::cout << " integrator varstep start=500                                                  \n";
+ std::cout << " integrator varstep start=500                                                \n\n";
  std::cout << "      The plugin can be called at the beginning of the simulation (without the \n";
  std::cout << "      start option or setting start=0) or at any other time step (like         \n";
  std::cout << "      start=1000). This allows you to change integration method during the     \n";

@@ -47,7 +47,7 @@ void TabulatedPair::ShowHelp() const
  std::cout << "     file lennardjones.dat                                                     \n";
  std::cout << " enduse                                                                        \n";
  std::cout << " #Applying the plugin :                                                        \n";
- std::cout << " potential TABLJ Ar Ar                                                         \n";
+ std::cout << " potential TABLJ Ar Ar                                                       \n\n";
  std::cout << "      The plugin implements the potential contained in the file lennardjones.dat\n";
  std::cout << "      between argon (Ar).                                                      \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";

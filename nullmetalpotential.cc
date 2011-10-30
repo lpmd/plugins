@@ -27,7 +27,7 @@ void NullMetalPotential::ShowHelp() const
  std::cout << " General Options   >>                                                          \n";
  std::cout << "      None.                                                                    \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
- std::cout << " Example                                                                       \n";
+ std::cout << " Example           >>                                                          \n";
  std::cout << " #Loading the plugin :                                                         \n";
  std::cout << " use nullmetalpotential                                                        \n";
  std::cout << " enduse                                                                        \n";

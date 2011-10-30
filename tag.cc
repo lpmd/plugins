@@ -93,7 +93,7 @@ void TagFilter::ShowHelp() const
  std::cout << " enduse                                                                        \n";
  std::cout << " #Applying the plugin :                                                        \n";
  std::cout << " apply floor over box x=0-10 y=15-20 z=5-10                                    \n"; 
- std::cout << " apply red over tag name=floor_atoms value=true start=100 end=200 each=1       \n"; 
+ std::cout << " apply red over tag name=floor_atoms value=true start=100 end=200 each=1     \n\n"; 
  std::cout << "      The 'settag' plugin (alias 'floor') is used first to put the label to    \n";
  std::cout << "      the atoms in the box [0,10]x[15,20]x[5,10]. These atoms can be identified\n";
  std::cout << "      now as 'floor_atoms'. Then, the 'setcolor' plugin (alias 'red') is applied\n";

@@ -66,7 +66,7 @@ void FinnisSinclair::ShowHelp() const
  std::cout << "     d   3.5697450                                                             \n";
  std::cout << " enduse                                                                        \n";
  std::cout << " #Applying the plugin :                                                        \n";
- std::cout << " potential FS Fe Fe                                                            \n";
+ std::cout << " potential FS Fe Fe                                                          \n\n";
  std::cout << "      The plugin implements a the Finnis-Sinclair potential between iron (Fe)  \n";
  std::cout << "      atoms.                                                                   \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";

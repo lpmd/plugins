@@ -58,7 +58,7 @@ void LocalPressure::ShowHelp() const
  std::cout << "      each          : Determines how often (each how many time-steps) the      \n";
  std::cout << "                      plugin must be applied.                                  \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
- std::cout << " Example                                                                       \n";
+ std::cout << " Example           >>                                                          \n";
  std::cout << " #Loading plugin :                                                             \n";
  std::cout << " use localpressure                                                             \n";
  std::cout << "     rcut 8.5                                                                  \n";

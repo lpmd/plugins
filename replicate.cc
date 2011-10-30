@@ -43,11 +43,15 @@ void ReplicateModifier::ShowHelp() const
  std::cout << "                      the Y  direction.                                        \n";
  std::cout << "      nz            : Sets the number of replications of the set of atoms in the\n";
  std::cout << "                      the Z  direction.                                        \n";
+ std::cout << "      start         : Determines in which step the plugin begins to be applied.\n";
+ std::cout << "      end           : Determines in which step the plugin ceases to be applied.\n";
+ std::cout << "      each          : Determines how often (each how many time-steps) the      \n";
+ std::cout << "                      plugin must be applied.                                  \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
- std::cout << " Example                                                                       \n";
- std::cout << " #Loading plugin :                                                             \n";
+ std::cout << " Example           >>                                                          \n";
+ std::cout << " #Loading the plugin :                                                         \n";
  std::cout << " input module=xyz file=example.xyz                                             \n";
- std::cout << " prepare replicate nx=3 ny=3 nz=3                                              \n";
+ std::cout << " prepare replicate nx=3 ny=3 nz=3                                            \n\n";
  std::cout << "      The plugin is used to replicate the sample of atoms in the simulation cell.\n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
 }

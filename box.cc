@@ -121,7 +121,7 @@ void BoxFilter::ShowHelp() const
  std::cout << " Example           >>                                                          \n";
  std::cout << " #Applying plugin :                                                            \n";
  std::cout << " filter box x=0-10 y=15-20 z=5-10                                              \n";
- std::cout << " apply tempscaling each=1 start=1 end=-1 over box x=0-68.8 y=0-68.8 z=0-20     \n";
+ std::cout << " apply tempscaling each=1 start=1 end=-1 over box x=0-68.8 y=0-68.8 z=0-20   \n\n";
  std::cout << "      The plugin is used to eliminate atoms outside the specified region, in   \n";
  std::cout << "      first case, and used to apply a property (tempscaling) over the specified\n";
  std::cout << "      region, in the second case.                                              \n";

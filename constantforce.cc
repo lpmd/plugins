@@ -42,7 +42,7 @@ void ConstantForcePotential::ShowHelp() const
  std::cout << "      forcevector   : Additional force (in eV/angstrom) to be applied over     \n";
  std::cout << "                      each atom.                                               \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
- std::cout << " Example                                                                       \n";
+ std::cout << " Example           >>                                                          \n";
  std::cout << " #Loading the plugin :                                                         \n";
  std::cout << " use constantforce as gravity                                                  \n";
  std::cout << "     force <0.0,0.0,-4.06E-16>                                                 \n";

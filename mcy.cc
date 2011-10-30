@@ -44,7 +44,7 @@ void MCY::ShowHelp() const
  std::cout << "      C             : Sets the value of  C in the potential (in eV).           \n";
  std::cout << "      D             : Sets the value of  D in the potential (in 1/angstrom).   \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
- std::cout << " Example                                                                       \n";
+ std::cout << " Example           >>                                                          \n";
  std::cout << " #Loading the plugin :                                                         \n";
  std::cout << " use mcy                                                                       \n";
  std::cout << "     A 0.001                                                                   \n";

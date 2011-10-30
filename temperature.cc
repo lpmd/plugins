@@ -47,9 +47,9 @@ void TemperatureModifier::ShowHelp() const
  std::cout << "      each          : Determines how often (each how many time-steps) the      \n";
  std::cout << "                      plugin must be applied.                                  \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
- std::cout << " Example                                                                       \n";
+ std::cout << " Example           >>                                                          \n";
  std::cout << " #Loading the plugin :                                                         \n";
- std::cout << " prepare temperature t=600.0                                                   \n";
+ std::cout << " prepare temperature t=600.0                                                 \n\n";
  std::cout << "      The plugin is used to set the initial temperature of the sample to 600K. \n";
  std::cout << "      To thermalize a system at a certain temperature, the temperature         \n";
  std::cout << "      must be applied for a reasonable period of time, each certain steps to   \n";

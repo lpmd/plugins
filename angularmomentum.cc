@@ -40,11 +40,15 @@ void AngularMomentum::ShowHelp() const
  std::cout << " Problems Report to = admin@lpmd.cl                                            \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n"; 
  std::cout << " General Info      >>                                                          \n";
- std::cout << "   Evaluate the angular momentum of a system respecto to a center point.       \n";
+ std::cout << "      Evaluate the angular momentum of a system respect to an origin (center). \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n"; 
  std::cout << " General Options   >>                                                          \n";
- std::cout << "     center : Vector that specify the center.                                  \n";
- std::cout << "     output : Output File.                                                     \n";
+ std::cout << "      center        : Vector that specify the center.                          \n";
+ std::cout << "      output        : Output File.                                             \n";
+ std::cout << "      start         : Determines in which step the plugin begins to be applied.\n";
+ std::cout << "      end           : Determines in which step the plugin ceases to be applied.\n";
+ std::cout << "      each          : Determines how often (each how many time-steps) the      \n";
+ std::cout << "                      plugin must be applied.                                  \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n"; 
  std::cout << " Example           >>                                                          \n";
  std::cout << " #Loading the Plugin :                                                         \n";
@@ -53,7 +57,9 @@ void AngularMomentum::ShowHelp() const
  std::cout << "     output angmom.dat                                                         \n";
  std::cout << " enduse                                                                        \n";
  std::cout << " #Apply the plugin :                                                           \n";  
- std::cout << " property angularmomentum start=1 each=10 end=100                              \n";
+ std::cout << " property angularmomentum start=1 each=10 end=100                            \n\n";
+ std::cout << "      The plugin is used to calculate angular momentum of the system respect   \n";
+ std::cout << "      to the point (5,5,5).                                                    \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n"; 
 }
 

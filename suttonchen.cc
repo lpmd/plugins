@@ -65,7 +65,7 @@ void SuttonChen::ShowHelp() const
  std::cout << "     cutoff 6.0                                                                \n";
  std::cout << " enduse                                                                        \n";
  std::cout << " #Using the loaded plugin :                                                    \n";
- std::cout << " potential sc Cu Cu                                                            \n";
+ std::cout << " potential sc Cu Cu                                                          \n\n";
  std::cout << "      The plugin implements a the Sutton-Chen potential between copper (Cu)    \n";
  std::cout << "      atoms.                                                                   \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";

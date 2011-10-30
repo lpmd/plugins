@@ -63,7 +63,7 @@ void LCBinary::ShowHelp() const
  std::cout << "                      auto: values are chosen automatically.                   \n";
  std::cout << "                      noauto: values must be entered by the user.              \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
- std::cout << " Example                                                                       \n";
+ std::cout << " Example           >>                                                          \n";
  std::cout << " #Loading the plugin :                                                         \n";
  std::cout << " use lcbinary                                                                  \n";
  std::cout << "     cutoff 8.5                                                                \n";

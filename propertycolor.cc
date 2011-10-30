@@ -73,8 +73,7 @@ void PropertyColorModifier::ShowHelp() const
  std::cout << "                      choosing an external property.                           \n";
  std::cout << "      extcolumn     : Choose the column of extfile that has the data to check  \n";
  std::cout << "                      for filter in the case of choosing an external property. \n";
- std::cout << "      extheader     :                                                          \n";
- std::cout << "      filerby       :                                                          \n";
+ std::cout << "      extheader     : HELP NOT AVAILABLE YET                                   \n";
  std::cout << "      start         : Determines in which step the plugin begins to be applied.\n";
  std::cout << "      end           : Determines in which step the plugin ceases to be applied.\n";
  std::cout << "      each          : Determines how often (each how many time-steps) the      \n";

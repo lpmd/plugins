@@ -45,6 +45,10 @@ void RandomAtomModifier::ShowHelp() const
  std::cout << "                      atoms that will be replaced.                             \n";
  std::cout << "      density       : In the case 'delete', sets if the density is forced to   \n";
  std::cout << "                      remain constant or not (fixed / free).                   \n";
+ std::cout << "      start         : Determines in which step the plugin begins to be applied.\n";
+ std::cout << "      end           : Determines in which step the plugin ceases to be applied.\n";
+ std::cout << "      each          : Determines how often (each how many time-steps) the      \n";
+ std::cout << "                      plugin must be applied.                                  \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " Example           >>                                                          \n";
  std::cout << " #Loading the plugin :                                                         \n";
@@ -54,7 +58,7 @@ void RandomAtomModifier::ShowHelp() const
  std::cout << "     symbol Cu                                                                 \n";
  std::cout << " enduse                                                                        \n";
  std::cout << " #Applying the plugin :                                                        \n";
- std::cout << " prepare randomatom type=replace percent=20 symbol=Cu                          \n";
+ std::cout << " prepare randomatom type=replace percent=20 symbol=Cu                        \n\n";
  std::cout << "      The plugin is used to replace 10\% of the atoms of the simulation cell by\n";
  std::cout << "      copper (Cu) atoms.                                                       \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";

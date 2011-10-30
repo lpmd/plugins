@@ -114,7 +114,7 @@ void CordNum::ShowHelp() const
  std::cout << "      each          : Determines how often (each how many time-steps) the      \n";
  std::cout << "                      plugin must be applied.                                  \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
- std::cout << " Example                                                                       \n";
+ std::cout << " Example           >>                                                          \n";
  std::cout << " #Loading the plugin :                                                         \n";
  std::cout << " use cordnum                                                                   \n";
  std::cout << "     maxn 15                                                                   \n";

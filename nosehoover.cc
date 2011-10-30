@@ -44,8 +44,12 @@ void NoseHoover::ShowHelp() const
  std::cout << "                      step.                                                    \n";
  std::cout << "      fmass         : Ficticius mass Q.                                        \n";
  std::cout << "      t             : Temperature of the reservoir.                            \n";
+ std::cout << "      start         : Determines in which step the plugin begins to be applied.\n";
+ std::cout << "      end           : Determines in which step the plugin ceases to be applied.\n";
+ std::cout << "      each          : Determines how often (each how many time-steps) the      \n";
+ std::cout << "                      plugin must be applied.                                  \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
- std::cout << " Example                                                                       \n";
+ std::cout << " Example           >>                                                          \n";
  std::cout << " #Loading the plugin :                                                         \n";
  std::cout << " use nosehoover                                                                \n";
  std::cout << "     dt 10.0                                                                   \n";

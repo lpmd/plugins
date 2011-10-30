@@ -33,13 +33,12 @@ void Morse::ShowHelp() const
  std::cout << "            V(r) = depth*(1.0-exp(-a*(r - re))) * (1.0-exp(-a*(r - re)))       \n"; 
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Options   >>                                                          \n";
- std::cout << "      depth         : Determines de value of depth for the potential           \n";
- std::cout << "                     (depth of the potential well).                            \n";
- std::cout << "      a             : Determines de value of a for the potential (width).      \n";
- std::cout << "      re            : Determines de value of re for the potential (equilibrium \n";
- std::cout << "                      position).                                               \n";
+ std::cout << "      depth         : Sets de value of depth for the potential (in eV).        \n";
+ std::cout << "      a             : Sets de value of a (width) for the potential (in angstrom).\n";
+ std::cout << "      re            : Sets de value of re (equilibrium position) for the       \n";
+ std::cout << "                      potential (in angstrom).                                 \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
- std::cout << " Example                                                                       \n";
+ std::cout << " Example           >>                                                          \n";
  std::cout << " #Loading the plugin :                                                         \n";
  std::cout << " use morse as MO                                                               \n";
  std::cout << "     depth 3.4                                                                 \n";

@@ -46,7 +46,7 @@ void SimpleBond::ShowHelp() const
  std::cout << "     epsilon 0.001                                                             \n";
  std::cout << " enduse                                                                        \n";
  std::cout << " #Applying the plugin :                                                        \n"; 
- std::cout << " potential sb Ar Ar                                                            \n";
+ std::cout << " potential sb Ar Ar                                                          \n\n";
  std::cout << "      The plugin is used to set the Simple-Bond potential between argon (Ar)   \n";
  std::cout << "      atoms.                                                                   \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";

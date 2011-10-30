@@ -39,10 +39,14 @@ void AtomEnergy::ShowHelp() const
  std::cout << " Problems Report to = admin@lpmd.cl                                            \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n"; 
  std::cout << " General Info      >>                                                          \n";
- std::cout << "      Plugin designed to evaluate the potential energy by atom.                \n"; 
+ std::cout << "      Plugin designed to evaluate the potential energy per atom.               \n"; 
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n"; 
  std::cout << " General Options   >>                                                          \n";
  std::cout << "      output        : Output File                                              \n";
+ std::cout << "      start         : Determines in which step the plugin begins to be applied.\n";
+ std::cout << "      end           : Determines in which step the plugin ceases to be applied.\n";
+ std::cout << "      each          : Determines how often (each how many time-steps) the      \n";
+ std::cout << "                      plugin must be applied.                                  \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n"; 
  std::cout << " Example           >>                                                          \n";
  std::cout << " #Load the Plugin   :                                                          \n";
@@ -50,7 +54,9 @@ void AtomEnergy::ShowHelp() const
  std::cout << "     output energ.dat                                                          \n";
  std::cout << " enduse                                                                        \n";
  std::cout << " #Apply the Plugin :                                                           \n";  
- std::cout << " property atomenergy start=1 each=10 end=100                                   \n";
+ std::cout << " property atomenergy start=1 each=10 end=100                                 \n\n";
+ std::cout << "      The plugin is used to calculate the potential energy per atom as a       \n";
+ std::cout << "      function of time. The data is written in the file energ.dat.             \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n"; 
 }
 

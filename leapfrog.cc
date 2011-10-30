@@ -36,10 +36,14 @@ void Leapfrog::ShowHelp() const
  std::cout << "      frog method.                                                             \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Options   >>                                                          \n";
- std::cout << "      dt            : Sets the time-step in femto-seconds for the integration  \n" ;
+ std::cout << "      dt            : Sets the time-step in femto-seconds for the integration  \n";
  std::cout << "                      step.                                                    \n";
+ std::cout << "      start         : Determines in which step the plugin begins to be applied.\n";
+ std::cout << "      end           : Determines in which step the plugin ceases to be applied.\n";
+ std::cout << "      each          : Determines how often (each how many time-steps) the      \n";
+ std::cout << "                      plugin must be applied.                                  \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
- std::cout << " Example                                                                       \n";
+ std::cout << " Example           >>                                                          \n";
  std::cout << " #Loading the plugin :                                                         \n";
  std::cout << " use leapfrog                                                                  \n";
  std::cout << "     dt 1.0                                                                    \n";

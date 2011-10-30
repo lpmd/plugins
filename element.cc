@@ -75,14 +75,13 @@ void ElementFilter::ShowHelp() const
  std::cout << "      each          : Determines how often (each how many time-steps) the      \n";
  std::cout << "                      plugin must be applied.                                  \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
- std::cout << " Example                                                                       \n";
+ std::cout << " Example           >>                                                          \n";
  std::cout << " #Applying plugin :                                                            \n";
  std::cout << " filter element symbol=Ar                                                      \n";
- std::cout << " apply myplugin over element symbol=Kr start=0 end=1 each=1                  \n\n";
- std::cout << "      The plugin is used to eliminate (filter) all the argon (Ar) atoms of the \n";
- std::cout << "      configuration in the first case, and to apply the 'myplugin' plugin      \n";
- std::cout << "      to all krypton (Kr) atoms in the second case ('myplugin' must be loaded  \n";
- std::cout << "      previously).                                                             \n";
+ std::cout << " apply tempscaling each=1 start=1 end=-1 over element symbol=Kr start=0 end=1 each=1\n\n";
+ std::cout << "      The plugin is used to eliminate atoms outside the specified region, in   \n";
+ std::cout << "      first case, and used to apply a property (tempscaling) over the specified\n";
+ std::cout << "      region, in the second case.                                              \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
 }
 

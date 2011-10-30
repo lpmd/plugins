@@ -44,7 +44,7 @@ void BerendsenModifier::ShowHelp() const
  std::cout << " Problems Report to = admin@lpmd.cl                                            \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
- std::cout << "      The plugin is used to rescale the system temperature using the berendsen \n";
+ std::cout << "      This plugin is used to rescale the system temperature using the berendsen\n";
  std::cout << "      thermostat. This is one of the most used methods in velocity rescaling   \n";
  std::cout << "      process because the change in the system temperature is less sharp.      \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
@@ -52,8 +52,12 @@ void BerendsenModifier::ShowHelp() const
  std::cout << "      from          : Initial temperature for the scaling process.             \n";
  std::cout << "      to            : Final temperature for the scaling process.               \n";
  std::cout << "      tau           : Thermostat interval.                                     \n";
+ std::cout << "      start         : Determines in which step the plugin begins to be applied.\n";
+ std::cout << "      end           : Determines in which step the plugin ceases to be applied.\n";
+ std::cout << "      each          : Determines how often (each how many time-steps) the      \n";
+ std::cout << "                      plugin must be applied.                                  \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
- std::cout << " Example                                                                       \n";
+ std::cout << " Example           >>                                                          \n";
  std::cout << " #Loading the plugin :                                                         \n";
  std::cout << " use berendsen                                                                 \n";
  std::cout << "     tau  400.0                                                                \n";
@@ -61,7 +65,7 @@ void BerendsenModifier::ShowHelp() const
  std::cout << "     to   10.0                                                                 \n";
  std::cout << " enduse                                                                        \n";
  std::cout << " #Applying the plugin :                                                        \n";
- std::cout << " apply berendsen start=0 each=10 end=100                                       \n";
+ std::cout << " apply berendsen start=0 each=10 end=100                                     \n\n";
  std::cout << "      With this, we will apply the plugin between the 0 and 100 timesteps      \n";
  std::cout << "      each 10 timesteps.                                                       \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";

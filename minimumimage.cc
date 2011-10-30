@@ -34,7 +34,7 @@ void MinimumImageCellManager::ShowHelp() const
  std::cout << " General Options   >>                                                          \n";
  std::cout << "      cutoff        : Sets the cutoff radius for the evaluation.               \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
- std::cout << " Example                                                                       \n";
+ std::cout << " Example           >>                                                          \n";
  std::cout << " #Loading the plugin :                                                         \n";
  std::cout << " use minimumimage                                                              \n";
  std::cout << "     cutoff 8.5                                                                \n";

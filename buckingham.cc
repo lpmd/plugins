@@ -34,15 +34,15 @@ void Buckingham::ShowHelp() const
  std::cout << "      This plugin incorparate the buckingham potential, this plugin do not     \n";
  std::cout << "      incorporate the coulombian part. In or der to add the coulombian part,   \n";
  std::cout << "      take a look to the ewald plugin.                                         \n";
- std::cout << " V(r) = B1*exp(-r/rho) - B2/(r^6)                                              \n";
+ std::cout << "                  V(r) = B1*exp(-r/rho) - B2/(r^6)                             \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Options   >>                                                          \n";
- std::cout << "      Ro            : Set the rho value for the potential.                     \n";
- std::cout << "      B1            : Set the B1 value for the potential.                      \n";
- std::cout << "      B2            : Set the B2 value for the potential.                      \n";
- std::cout << "      cutoff        : Cutoff radius set for the potential.                     \n";
+ std::cout << "      Ro            : Sets the rho value for the potential (in angstrom).      \n";
+ std::cout << "      B1            : Sets the B1 value for the potential (in eV).             \n";
+ std::cout << "      B2            : Sets the B2 value for the potential (in eV*angstrom^6).  \n";
+ std::cout << "      cutoff        : Cutoff radius set for the potential (in angstrom).       \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
- std::cout << " Example                                                                       \n";
+ std::cout << " Example           >>                                                          \n";
  std::cout << " #Loading the plugin :                                                         \n";
  std::cout << " use buckingham as BK1                                                         \n";
  std::cout << "     Ro 1.0                                                                    \n";
@@ -51,9 +51,9 @@ void Buckingham::ShowHelp() const
  std::cout << "     cutoff 1.90                                                               \n";
  std::cout << " enduse                                                                        \n";
  std::cout << " #Applying the plugin :                                                        \n";
- std::cout << " potential BK1 Ge O                                                            \n";
- std::cout << "      In this procedure, we are seted the interatomic potential between the Ge \n";
- std::cout << " and the O atoms used in the BK1 defined potential.                            \n";
+ std::cout << " potential BK1 Ge O                                                          \n\n";
+ std::cout << "      The plugin implements the Buckingham potential between the germanium (Ge)\n";
+ std::cout << "      and oxigen (O) atoms.                                                    \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
 }
 

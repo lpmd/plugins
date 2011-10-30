@@ -49,7 +49,7 @@ void UndoPBCModifier::ShowHelp() const
  std::cout << " use undopbc                                                                   \n";
  std::cout << " enduse                                                                        \n";
  std::cout << " #Applying the plugin :                                                        \n";
- std::cout << " apply undopbc start=0 each=1 end=100                                          \n";
+ std::cout << " apply undopbc start=0 each=1 end=100                                        \n\n";
  std::cout << "      The plugin is used to turn off the periodic boundary conditions for the  \n";
  std::cout << "      first 100 time steps.                                                    \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";

@@ -41,10 +41,14 @@ void DisplaceModifier::ShowHelp() const
  std::cout << "      x             : X coordinate of the displacement vector.                 \n";
  std::cout << "      y             : Y coordinate of the displacement vector.                 \n";
  std::cout << "      z             : Z coordinate of the displacement vector.                 \n";
+ std::cout << "      start         : Determines in which step the plugin begins to be applied.\n";
+ std::cout << "      end           : Determines in which step the plugin ceases to be applied.\n";
+ std::cout << "      each          : Determines how often (each how many time-steps) the      \n";
+ std::cout << "                      plugin must be applied.                                  \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " Example                                                                       \n";
  std::cout << " #Loading plugin :                                                             \n";
- std::cout << " prepare displace x=1.0 y=0.0 z=0.0                                          \n\n";
+ std::cout << " prepare displace x=1.0 y=0.0 z=0.0 start=0 each=1 end=1                     \n\n";
  std::cout << "      The plugin is used to displace all the atoms in <1,0,0> of its original  \n";
  std::cout << "      position.                                                                \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";

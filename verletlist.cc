@@ -56,7 +56,7 @@ void VerletListCellManager::ShowHelp() const
  std::cout << "     each 10                                                                   \n";
  std::cout << " enduse                                                                        \n";
  std::cout << " #Applying the plugin :                                                        \n";
- std::cout << " cellmanager verletlist                                                        \n";
+ std::cout << " cellmanager verletlist                                                      \n\n";
  std::cout << "      The plugin is used to select the verlet-list method for making the lists \n";
  std::cout << "      of atoms' neighbors. In this case, the maximum number of neighbors allowed\n";
  std::cout << "      is 15, and the list is updated each 10 steps.                            \n";

@@ -47,13 +47,13 @@ void SetVelocityModifier::ShowHelp() const
  std::cout << "      each          : Determines how often (each how many time-steps) the      \n";
  std::cout << "                      plugin must be applied.                                  \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
- std::cout << " Example                                                                       \n";
+ std::cout << " Example           >>                                                          \n";
  std::cout << " #Loading the plugin :                                                         \n";
  std::cout << " use setvelocity                                                               \n";
  std::cout << "     velocity <0.002,0.001,0.005>                                              \n";
  std::cout << " enduse                                                                        \n";
  std::cout << " #Applying the plugin :                                                        \n"; 
- std::cout << " apply setvelocity over box x=0-37 y=0-37 z=27.0-37.0 start=0 each=10 end=100  \n";
+ std::cout << " apply setvelocity over box x=0-37 y=0-37 z=27.0-37.0 start=0 each=10 end=100\n\n";
  std::cout << "      The plugin is used to set a velocity of (0.002,0.001,0.005) to the atoms \n";
  std::cout << "      of the box delimited by the intervals [0,37]x[0,37]x[27,37] each 10 steps,\n";
  std::cout << "      ending in the step 100. This plugin can also be used just in the first   \n";

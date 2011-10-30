@@ -44,8 +44,8 @@ void Mol2Format::ShowHelp() const
  std::cout << "      each          : Determines how often (each how many time-steps) the      \n";
  std::cout << "                      input/output file must be read/written.                  \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
- std::cout << " Example                                                                       \n";
- std::cout << " Calling the module in a control file :                                        \n";
+ std::cout << " Example           >>                                                          \n";
+ std::cout << " #Loading the plugin :                                                         \n";
  std::cout << " input module=mol2 file=inputfile.mol2                                         \n";
  std::cout << " output module=mol2 file=outputfile.mol2 each=5                              \n\n";
  std::cout << "      The plugin is used to read and write atomic configurations in MOL2 format.\n";

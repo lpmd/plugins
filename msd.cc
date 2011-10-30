@@ -37,7 +37,7 @@ void MSD::ShowHelp() const
  std::cout << "      rcutmax       : Sets ...                                                 \n";
  std::cout << "      zerocm        : ...                                                      \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
- std::cout << " Example                                                                       \n";
+ std::cout << " Example           >>                                                          \n";
  std::cout << " #Loading the plugin:                                                          \n";
  std::cout << " use msd                                                                       \n";
  std::cout << "  rcutmin 4                                                                    \n";
@@ -45,7 +45,9 @@ void MSD::ShowHelp() const
  std::cout << "  zerocm true                                                                  \n";
  std::cout << " enduse                                                                        \n";
  std::cout << " #Applying the plugin                                                          \n";
- std::cout << " property msd start=0 end=-1 each=5                                            \n";
+ std::cout << " property msd start=0 end=-1 each=5                                          \n\n";
+ std::cout << "      The plugin is used to calculate the mean square displacement             \n";
+ std::cout << "      of the atoms.                                                            \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
 }
 

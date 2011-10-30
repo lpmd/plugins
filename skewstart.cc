@@ -38,9 +38,9 @@ void SkewStartGenerator::ShowHelp() const
  std::cout << "      symbol        : Sets the atomic symbol of the atoms that are going to be \n";
  std::cout << "                      put in the simulation cell.                              \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
- std::cout << " Example                                                                       \n";
+ std::cout << " Example           >>                                                          \n";
  std::cout << " #Loading the plugin :                                                         \n";
- std::cout << " input module=skewstart atoms=108 symbol=Ar                                    \n";
+ std::cout << " input module=skewstart atoms=108 symbol=Ar                                  \n\n";
  std::cout << "      The plugin is used to generate a three-dimensional lattice of argon      \n";
  std::cout << "      atoms. The total number of atoms generated this case is 108.             \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";

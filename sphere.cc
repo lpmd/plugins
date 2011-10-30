@@ -80,7 +80,7 @@ void SphereFilter::ShowHelp() const
  std::cout << " Example           >>                                                          \n";
  std::cout << " #Applying plugin :                                                            \n";
  std::cout << " filter sphere radius=5.0 center=<10.0,10.0,10.0>                              \n";
- std::cout << " apply tempscaling each=1 start=1 end=-1 over sphere radius=5.0 center=<10.0,10.0,10.0>\n";
+ std::cout << " apply tempscaling each=1 start=1 end=-1 over sphere radius=5.0 center=<10.0,10.0,10.0>\n\n";
  std::cout << "      The plugin is used to eliminate atoms outside the specified spherical    \n";
  std::cout << "      region in the first case, and used to apply a property (tempscaling) over\n";
  std::cout << "      the specified region, in the second case.                                \n";

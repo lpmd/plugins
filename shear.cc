@@ -57,7 +57,7 @@ void ShearModifier::ShowHelp() const
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " Example           >>                                                          \n";
  std::cout << " #Loading the plugin :                                                         \n";
- std::cout << " prepare shear axis=X normal=Y strain=0.01                                     \n";
+ std::cout << " prepare shear axis=X normal=Y strain=0.01                                   \n\n";
  std::cout << "      The plugin is used apply a shear in the X-axis direction, keeping the    \n";
  std::cout << "      Y-axis as vector normal to the plane of shearing.                        \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";

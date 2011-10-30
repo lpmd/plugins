@@ -38,7 +38,7 @@ void Mobility::ShowHelp() const
  std::cout << "      rcutmax       : Sets ...                                                 \n";
  std::cout << "      output        : Ouput file.                                              \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
- std::cout << " Example                                                                       \n";
+ std::cout << " Example           >>                                                          \n";
  std::cout << " #Loading the plugin:                                                          \n";
  std::cout << " use mobility                                                                  \n";
  std::cout << "  t  5                                                                         \n";

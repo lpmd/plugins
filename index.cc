@@ -110,11 +110,11 @@ void IndexFilter::ShowHelp() const
  std::cout << " Example           >>                                                          \n";
  std::cout << " #Applying plugin :                                                            \n";
  std::cout << " filter index index=5,6,8,10                                                   \n";
- std::cout << " apply myplugin over index index=5-10 start=0 end=1 each=1                   \n\n";
+ std::cout << " apply tempscaling over index index=5-10 start=0 end=1 each=1                \n\n";
  std::cout << "      The plugin is used to eliminate (filter) four atoms: the 5th, 6th, 8th   \n";
- std::cout << "      and 10th of the atoms list in the first case, and to apply the 'myplugin'\n";
- std::cout << "      plugin to all atoms with an index in the range from 5 to 10 in the second\n";
- std::cout << "      case ('myplugin' must be loaded previously).                             \n";
+ std::cout << "      and 10th of the atoms list in the first case, and to apply a property    \n";
+ std::cout << "      (tempscaling) to all atoms with an index in the range from 5 to 10 in the\n";
+ std::cout << "      second case.                                                             \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
 }
 

@@ -44,7 +44,7 @@ void Ewald::ShowHelp() const
  std::cout << "      control file, for example, 'charge 1.9 O #The units are in eV.' sets a   \n";
  std::cout << "      charge of 1.9 eV to the oxigen (O) atoms.                                \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
- std::cout << " Example                                                                       \n";
+ std::cout << " Example           >>                                                          \n";
  std::cout << " #Loading the plugin :                                                         \n";
  std::cout << " use ewald                                                                     \n";
  std::cout << " enduse                                                                        \n";

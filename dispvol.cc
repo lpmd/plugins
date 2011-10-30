@@ -56,16 +56,16 @@ void DispVol::ShowHelp() const
  std::cout << "                      (volume / vector / vectorhistogram).                     \n"; 
  std::cout << "      bins          : Sets the number of subdivisions of the interval for the  \n";
  std::cout << "                      mode vectorhistogram.                                    \n";
- std::cout << "      maxlength     : The maximum length of ...                                 \n";
+ std::cout << "      maxlength     : The maximum length of ...                                \n";
  std::cout << "      output        : Output file.                                             \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
- std::cout << " Example                                                                       \n";
+ std::cout << " Example           >>                                                          \n";
  std::cout << " #Loading the plugin:                                                          \n";
  std::cout << " use dispvol                                                                   \n";
  std::cout << "  mode  volume                                                                 \n";
  std::cout << "  output out.dat                                                               \n";
  std::cout << " enduse                                                                        \n";
- std::cout << " #Evaluating the plugin                                                        \n";
+ std::cout << " #Applying the plugin                                                          \n";
  std::cout << " property dispvol start=0 end=-1 each=5                                        \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
 }

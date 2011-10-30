@@ -75,7 +75,7 @@ void FinnisSinclairExt::ShowHelp() const
  std::cout << "     d   4.147200                                                              \n";
  std::cout << " enduse                                                                        \n";
  std::cout << " #Applying the plugin :                                                        \n";
- std::cout << " potential FS Mo Mo                                                            \n";
+ std::cout << " potential FS Mo Mo                                                          \n\n";
  std::cout << "      The plugin implements a the Finnis-Sinclair potential between molibdenum \n";
  std::cout << "      (Mo) atoms.                                                              \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";

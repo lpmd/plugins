@@ -44,12 +44,12 @@ void FastLJ::ShowHelp() const
  std::cout << "      quick access to the potential.                                           \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Options   >>                                                          \n";
- std::cout << "      sigma         : Sets the value of the constant sigma in the potential.   \n";
- std::cout << "      epsilon       : Sets the value of the constant epsilon in the potential. \n";
- std::cout << "      cutoff        : Sets the cutoff radius for the potential.                \n";
+ std::cout << "      sigma         : Sets the value of sigma in the potential (in angstrom).  \n";
+ std::cout << "      epsilon       : Sets the value of epsilon in the potential (in eV).      \n";
+ std::cout << "      cutoff        : Sets the cutoff radius for the potential (in angstrom).  \n";
  std::cout << "      bins          : Sets the number of cells for the table.                  \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
- std::cout << " Example                                                                       \n";
+ std::cout << " Example           >>                                                          \n";
  std::cout << " #Loading plugin :                                                             \n";
  std::cout << " use fastlj                                                                    \n";
  std::cout << "     sigma 3.4                                                                 \n";

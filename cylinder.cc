@@ -94,9 +94,13 @@ void CylinderFilter::ShowHelp() const
  std::cout << "      each          : Determines how often (each how many time-steps) the      \n";
  std::cout << "                      plugin must be applied.                                  \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
- std::cout << " Example                                                                       \n";
- std::cout << " #Loading the plugin :                                                         \n";
+ std::cout << " Example           >>                                                          \n";
+ std::cout << " #Applying plugin :                                                            \n";
  std::cout << " filter cylinder origin=<5,5,5> endpoint=<6,6,6> rmax=10 rmin=0 except=my-atoms\n";
+ std::cout << " apply tempscaling each=1 start=1 end=-1 over cylinder origin=<5,5,5> endpoint=<6,6,6> rmax=10 rmin=0\n\n";
+ std::cout << "      The plugin is used to eliminate atoms outside the specified region, in   \n";
+ std::cout << "      first case, and used to apply a property (tempscaling) over the specified\n";
+ std::cout << "      region, in the second case.                                              \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
 }
 

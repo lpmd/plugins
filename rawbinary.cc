@@ -45,8 +45,8 @@ void RawBinFormat::ShowHelp() const
  std::cout << "      level         : Determines the file format level (0/1/2):                \n";
  std::cout << "                      0/1/2 <-> pos/pos-vel/pos-vel-acel.                      \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
- std::cout << " Example                                                                       \n";
- std::cout << " Calling the module in a control file :                                        \n";
+ std::cout << " Example           >>                                                          \n";
+ std::cout << " #Loading the plugin :                                                         \n";
  std::cout << " input module=rawbinary file=inputfile.rb level=0                              \n";
  std::cout << " output module=rawbinary file=outputfile.rb level=1 each=5                   \n\n";
  std::cout << "      In this way we can read and write atomic configurations in binary        \n";

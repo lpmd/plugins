@@ -56,18 +56,21 @@ void AtomTrail::ShowHelp() const
  std::cout << " Problems Report to = admin@lpmd.cl                                            \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n"; 
  std::cout << " General Info      >>                                                          \n";
- std::cout << "      The plugin determine the atom-trail of the atoms in the simulation       \n";
- std::cout << " the atom-trail could be stored in 2D and 3D format.                           \n";
+ std::cout << "      This plugin determines the atom-trail of the atoms in the simulation.    \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n"; 
  std::cout << " General Options   >>                                                          \n";
  std::cout << "      nx            : Number of subdivisions in x axis.                        \n";
  std::cout << "      ny            : Number of subdivisions in y axis.                        \n";
  std::cout << "      nz            : Number of subdivisions in z axis.                        \n";
- std::cout << "      mode          : Available modes in the plugin 2D/3D.                     \n";
- std::cout << "      plane         : xy/yz/xz. If mode is 2D then you have to write in what   \n";
- std::cout << "                      plane you need the analysis.                             \n";
- std::cout << "      species       : For default all. You can choose a particular species.    \n";
+ std::cout << "      mode          : Sets the the dimensions you want to consider (2D / 3D).  \n";
+ std::cout << "      plane         : If mode is 2D then you have to write in what plane you   \n";
+ std::cout << "                      want to analyze (xy/yz/xz).                              \n";
+ std::cout << "      species       : You can choose a particular species.                     \n";
  std::cout << "      output        : Name of the ouput file.                                  \n";
+ std::cout << "      start         : Determines in which step the plugin begins to be applied.\n";
+ std::cout << "      end           : Determines in which step the plugin ceases to be applied.\n";
+ std::cout << "      each          : Determines how often (each how many time-steps) the      \n";
+ std::cout << "                      plugin must be applied.                                  \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n"; 
  std::cout << " Example          >>                                                           \n";
  std::cout << " #Loading the plugin :                                                         \n";
@@ -78,7 +81,9 @@ void AtomTrail::ShowHelp() const
  std::cout << "     plane XY                                                                  \n";
  std::cout << " enduse                                                                        \n";
  std::cout << " #Using the loaded plugin :                                                    \n";
- std::cout << " property at start=0 end=-1 each=1                                             \n";
+ std::cout << " property at start=0 end=-1 each=1                                           \n\n";
+ std::cout << "      The plugin is used to find the atom's trail in the XY plane. The data is \n";
+ std::cout << "      written in the file trail2d.dat.                                         \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n"; 
 }
 

@@ -108,6 +108,10 @@ void AngDist::ShowHelp() const
  std::cout << "                      between them.                                            \n";
  std::cout << "      output        : Output File.                                             \n";
  std::cout << "      average       : True/False Average or not the different distributions.   \n";
+ std::cout << "      start         : Determines in which step the plugin begins to be applied.\n";
+ std::cout << "      end           : Determines in which step the plugin ceases to be applied.\n";
+ std::cout << "      each          : Determines how often (each how many time-steps) the      \n";
+ std::cout << "                      plugin must be applied.                                  \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n"; 
  std::cout << " Example          >>                                                           \n";
  std::cout << " #Loading the plugin :                                                         \n";
@@ -121,9 +125,9 @@ void AngDist::ShowHelp() const
  std::cout << "     average false                                                             \n";
  std::cout << " enduse                                                                        \n";
  std::cout << " #Apply the plugin :                                                           \n";
- std::cout << " property angdist start=0 each=1 end=100                                       \n";
- std::cout << "      With this we evaluate the angular distribution function of the cell each \n";
- std::cout << " one step between the step 0 and 100.                                          \n";
+ std::cout << " property angdist start=0 each=1 end=100                                     \n\n";
+ std::cout << "      The plugin is used to evaluate the angular distribution function of the  \n";
+ std::cout << "      cell each one step between the step 0 and 100.                           \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n"; 
 }
 

@@ -35,24 +35,25 @@ void AddVelocityModifier::ShowHelp() const
  std::cout << " Problems Report to = admin@lpmd.cl                                            \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
- std::cout << "      The plugin is used to add a specific velocity to a set of atoms that     \n";
- std::cout << "      have the tag addvelocity setting in true.                                \n";
+ std::cout << "      This plugin is used to add a specific velocity to a set of atoms that    \n";
+ std::cout << "      have the tag 'addvelocity' with value=true (see 'tag' plugin).           \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Options   >>                                                          \n";
+ std::cout << "      velocity      : Velocity vector that's going to be added to each atom.   \n";
  std::cout << "      start         : Determines in which step the plugin begins to be applied.\n";
  std::cout << "      end           : Determines in which step the plugin ceases to be applied.\n";
  std::cout << "      each          : Determines how often (each how many time-steps) the      \n";
  std::cout << "                      plugin must be applied.                                  \n";
- std::cout << "      velocity      : Velocity vector that's going to be added to each atom.   \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
- std::cout << " Example                                                                       \n";
- std::cout << " Calling the module in a control file :                                        \n";
+ std::cout << " Example           >>                                                          \n";
+ std::cout << " #Loading the plugin :                                                         \n";
  std::cout << " use addvelocity                                                               \n";
  std::cout << "     velocity <0.002,0.001,0.005>                                              \n";
  std::cout << " enduse                                                                        \n";
- std::cout << " Applying the plugin :                                                         \n";
- std::cout << " apply addvelocity start=0 each=10 end=100                                     \n";
- std::cout << "      With this we apply an extra-velocity between steps 0 and 100 each 10.    \n";
+ std::cout << " #Applying the plugin :                                                        \n";
+ std::cout << " apply addvelocity start=0 each=10 end=100                                   \n\n";
+ std::cout << "      The plugin is used to apply an extra-velocity to all the atoms, between  \n";
+ std::cout << "      steps 0 and 100, each 10 steps.                                          \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
 }
 

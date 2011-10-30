@@ -63,7 +63,7 @@ void SetTagModifier::ShowHelp() const
  std::cout << "     value true                                                                \n";
  std::cout << " enduse                                                                        \n";
  std::cout << " #Applying the plugin :                                                        \n"; 
- std::cout << " apply floor over box x=0-37 y=0-37 z=27.0-37.0                                \n";
+ std::cout << " apply floor over box x=0-37 y=0-37 z=27.0-37.0                              \n\n";
  std::cout << " filter sphere radius=4.5 center=<12.0,12.0,12.0> except=floor_atoms           \n";
  std::cout << "      The plugin is used to set the tag 'floor_atoms' (apply line) to all atoms\n";
  std::cout << "      in the box specified by the ranges in x, y and z. Once the atoms have    \n";

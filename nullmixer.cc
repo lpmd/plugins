@@ -27,12 +27,12 @@ void NullMixer::ShowHelp() const
  std::cout << " General Options   >>                                                          \n";
  std::cout << "      None.                                                                    \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
- std::cout << " Example                                                                       \n";
+ std::cout << " Example           >>                                                          \n";
  std::cout << " #Loading the plugin :                                                         \n";
  std::cout << " use nullmixer                                                                 \n";
  std::cout << " enduse                                                                        \n";
  std::cout << " #Applying the plugin :                                                        \n";
- std::cout << " apply nullmixer                                                               \n";
+ std::cout << " apply nullmixer                                                             \n\n";
  std::cout << "      The plugin implements ...                                                \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
 }

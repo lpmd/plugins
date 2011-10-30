@@ -56,7 +56,7 @@ void TempScalingModifier::ShowHelp() const
  std::cout << "     to   10.0                                                                 \n";
  std::cout << " enduse                                                                        \n";
  std::cout << " #Applying the plugin :                                                        \n";
- std::cout << " apply tempscaling start=0 each=10 end=100                                     \n";
+ std::cout << " apply tempscaling start=0 each=10 end=100                                   \n\n";
  std::cout << "      The plugin is used to reduce the temperature of the system from 84 to 10 K\n";
  std::cout << "      in 100 steps linearly.                                                   \n";
  std::cout << "      To thermalize a system at a certain temperature, the temperature scaling \n";

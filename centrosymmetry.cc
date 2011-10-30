@@ -62,7 +62,7 @@ void CentroSymmetry::ShowHelp() const
  std::cout << "     a 5.26                                                                    \n";
  std::cout << " enduse                                                                        \n";
  std::cout << " #Applying the plugin :                                                        \n";
- std::cout << " property centrosymmetry start=1 each=10 end=100                               \n\n";
+ std::cout << " property centrosymmetry start=1 each=10 end=100                             \n\n";
  std::cout << "      The plugin is used to calculate the CSP per site between the steps 1 and \n";
  std::cout << "      100, each 10 steps, with a cutoff of 4 angstroms and a lattice parametrer\n";
  std::cout << "      of a=5.26 angstrom. The data is written in the file csp.dat.             \n";

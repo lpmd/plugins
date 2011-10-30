@@ -43,6 +43,10 @@ void VelDist::ShowHelp() const
  std::cout << " General Options   >>                                                          \n";
  std::cout << "      bins          : Set the number of bins fo the histogram.                 \n";
  std::cout << "      output        : Set the output file name.                                \n";
+ std::cout << "      start         : Determines in which step the plugin begins to be applied.\n";
+ std::cout << "      end           : Determines in which step the plugin ceases to be applied.\n";
+ std::cout << "      each          : Determines how often (each how many time-steps) the      \n";
+ std::cout << "                      plugin must be applied.                                  \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " Example           >>                                                          \n";
  std::cout << " #Loading the plugin :                                                         \n";
@@ -51,7 +55,7 @@ void VelDist::ShowHelp() const
  std::cout << "     bins 500                                                                  \n";
  std::cout << " enduse                                                                        \n";
  std::cout << " #Applying the plugin :                                                        \n";  
- std::cout << " property veldist start=1 each=10 end=100                                      \n";
+ std::cout << " property veldist start=1 each=10 end=100                                    \n\n";
  std::cout << "      The plugin is used to make a velocities histogram for the first 100      \n";
  std::cout << "      steps, each 10 steps, using a 500 different velocities. The data is      \n";
  std::cout << "      written in the file veldist.dat.                                         \n";

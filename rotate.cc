@@ -57,10 +57,14 @@ void RotateModifier::ShowHelp() const
  std::cout << "      z             : Sets the Z-coordinate of the rotation axis.              \n";
  std::cout << "      angle         : Sets the angle in which the sample will be rotated about \n";
  std::cout << "                      the rotation axis.                                       \n";
+ std::cout << "      start         : Determines in which step the plugin begins to be applied.\n";
+ std::cout << "      end           : Determines in which step the plugin ceases to be applied.\n";
+ std::cout << "      each          : Determines how often (each how many time-steps) the      \n";
+ std::cout << "                      plugin must be applied.                                  \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
- std::cout << " Example                                                                       \n";
- std::cout << " #Loading plugin :                                                             \n";
- std::cout << " prepare rotate x=0.0 y=0.0 z=1.0 angle=45.0                                   \n";
+ std::cout << " Example           >>                                                          \n";
+ std::cout << " #Loading the plugin :                                                         \n";
+ std::cout << " prepare rotate x=0.0 y=0.0 z=1.0 angle=45.0                                 \n\n";
  std::cout << "      The plugin is used to rotate the sample of atoms in the simulation cell  \n";
  std::cout << "      in 45 degrees about the z-axis.                                          \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";

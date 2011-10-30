@@ -97,10 +97,12 @@ void RandomFilter::ShowHelp() const
  std::cout << " General Options   >>                                                          \n";
  std::cout << "      percent       : Sets the percentage of atoms that will NOT be deleted.   \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
- std::cout << " Example                                                                       \n";
+ std::cout << " Example           >>                                                          \n";
  std::cout << " filter random percent=90                                                      \n";
+ std::cout << " apply tempscaling over random percent=90 start=0 end=1 each=1               \n\n";
  std::cout << "      The plugin is used to eliminate, randomly, 10\% of the atoms of the      \n";
- std::cout << "      simulation cell.                                                         \n";
+ std::cout << "      simulation cell, and to apply a property (tempscaling) over the 10\% of  \n";
+ std::cout << "      the atoms of the simulation cell (selected randomly).                    \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
 }
 

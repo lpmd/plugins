@@ -53,7 +53,7 @@ void CrystalGenerator::ShowHelp() const
  std::cout << "      nz            : Sets the number of replications of the unit cell in the  \n";
  std::cout << "                      Z  direction.                                            \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
- std::cout << " Example                                                                       \n";
+ std::cout << " Example           >>                                                          \n";
  std::cout << " #Loading the plugin :                                                         \n";
  std::cout << " input crystal3d symbol=Ar type=fcc nx=3 ny=3 nz=3                           \n\n";
  std::cout << "      The plugin is used to generate a three-dimensional fcc lattice of argon  \n";

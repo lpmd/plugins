@@ -83,7 +83,7 @@ void LinkedCell::ShowHelp() const
  std::cout << "                      true: show warning.                                      \n";
  std::cout << "                      false: do not show warning.                              \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
- std::cout << " Example                                                                       \n";
+ std::cout << " Example           >>                                                          \n";
  std::cout << " #Loading the plugin :                                                         \n";
  std::cout << " use linkedcell                                                                \n";
  std::cout << "     cutoff 8.5                                                                \n";

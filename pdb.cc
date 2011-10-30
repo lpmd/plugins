@@ -41,7 +41,7 @@ void PDBFormat::ShowHelp() const
  std::cout << "      each          : Determines how often (each how many time-steps) the      \n";
  std::cout << "                      input/output file must be read/written.                  \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
- std::cout << " Example                                                                       \n";
+ std::cout << " Example           >>                                                          \n";
  std::cout << " #Loading the plugin :                                                         \n";
  std::cout << " input module=pdb file=configuration.pdb                                       \n";
  std::cout << " output module=pdb file=outputfile.pdb each=5                                \n\n";
