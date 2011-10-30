@@ -87,7 +87,7 @@ void LPMDFormat::ShowHelp() const
  std::cout << " Problems Report to = admin@lpmd.cl                                            \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
- std::cout << "      This module is used to read/write LPMD's atomic configurations files     \n";
+ std::cout << "      This plugin is used to read/write LPMD's atomic configurations files     \n";
  std::cout << "      (lpmd or zlp). This is the LPMD's own format, with scaled positions      \n";
  std::cout << "      (between 0 and 1).                                                       \n";  
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";

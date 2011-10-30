@@ -37,7 +37,7 @@ void VerletListCellManager::ShowHelp() const
  std::cout << " Problems Report to = admin@lpmd.cl                                            \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
- std::cout << "      This module implements the verlet-list method for making neighbors lists.\n";
+ std::cout << "      This plugin implements the verlet-list method for making neighbors lists.\n";
  std::cout << "      It is one of the available cell managers.                                \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Options   >>                                                          \n";

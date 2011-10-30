@@ -64,7 +64,7 @@ void LinkedCell::ShowHelp() const
  std::cout << " Problems Report to = admin@lpmd.cl                                            \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
- std::cout << "      This module implements the linked-cell method for making neighbors lists.\n";
+ std::cout << "      This plugin implements the linked-cell method for making neighbors lists.\n";
  std::cout << "      It is one of the available cell managers.                                \n";
  std::cout << "      Advice: When dividing the simulation cell in cells, their edge should    \n";
  std::cout << "      be at least the cutoff the cutoff of the potential.                      \n";

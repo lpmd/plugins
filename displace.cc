@@ -34,7 +34,7 @@ void DisplaceModifier::ShowHelp() const
  std::cout << " Problems Report to = admin@lpmd.cl                                            \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
- std::cout << "      This module is used to displace (move) a group of atoms. A constant      \n";
+ std::cout << "      This plugin is used to displace (move) a group of atoms. A constant      \n";
  std::cout << "      displacement vector is added to the position of each atom.               \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Options   >>                                                          \n";

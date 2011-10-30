@@ -28,7 +28,7 @@ void MinimumImageCellManager::ShowHelp() const
  std::cout << " Problems Report to = admin@lpmd.cl                                            \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
- std::cout << "      This module implements the minimum image method for making neighbors     \n";
+ std::cout << "      This plugin implements the minimum image method for making neighbors     \n";
  std::cout << "      lists.It is one of the available cell managers.                          \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Options   >>                                                          \n";

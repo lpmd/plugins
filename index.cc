@@ -93,7 +93,7 @@ void IndexFilter::ShowHelp() const
  std::cout << " Problems Report to = admin@lpmd.cl                                            \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
- std::cout << "      This module is used to select atoms by their index in the list of atoms  \n";
+ std::cout << "      This plugin is used to select atoms by their index in the list of atoms  \n";
  std::cout << "      of the cell. It can be called with the 'filter' or 'over' keyword.       \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Options   >>                                                          \n";

@@ -59,7 +59,7 @@ void PropertyColorModifier::ShowHelp() const
  std::cout << " Problems Report to = admin@lpmd.cl                                            \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
- std::cout << "      This module is used to color the atoms by some specific property.        \n";
+ std::cout << "      This plugin is used to color the atoms by some specific property.        \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Options   >>                                                          \n";
  std::cout << "      property      : Sets the property to be evaluated for coloring           \n";

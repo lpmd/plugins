@@ -30,7 +30,7 @@ void SkewStartGenerator::ShowHelp() const
  std::cout << " Problems Report to = admin@lpmd.cl                                            \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
- std::cout << "      This module is used to generate an initial simulation cell using the     \n";
+ std::cout << "      This plugin is used to generate an initial simulation cell using the     \n";
  std::cout << "      skewstart methodm developed by Keith Refson for the MOLDY software.      \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Options   >>                                                          \n";

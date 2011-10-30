@@ -35,7 +35,7 @@ void TabulatedPair::ShowHelp() const
  std::cout << " Problems Report to = admin@lpmd.cl                                            \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
- std::cout << "      This module is used to read a tabulated pair potential from a data file. \n";
+ std::cout << "      This plugin is used to read a tabulated pair potential from a data file. \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Options   >>                                                          \n";
  std::cout << "      file           : Specifies the filename that contains the potential in   \n";

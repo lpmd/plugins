@@ -28,7 +28,7 @@ void Morse::ShowHelp() const
  std::cout << " Problems Report to = admin@lpmd.cl                                            \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
- std::cout << "      The module implements the Morse potential for pairs interaction, with    \n";
+ std::cout << "      This plugin implements the Morse potential for pairs interaction, with    \n";
  std::cout << "      the form                                                                 \n";
  std::cout << "            V(r) = depth*(1.0-exp(-a*(r - re))) * (1.0-exp(-a*(r - re)))       \n"; 
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";

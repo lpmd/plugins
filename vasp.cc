@@ -40,7 +40,7 @@ void VaspFormat::ShowHelp() const
  std::cout << " Problems Report to = admin@lpmd.cl                                            \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
- std::cout << "      This module is used to read/write VASP's atomic configurations files     \n";
+ std::cout << "      This plugin is used to read/write VASP's atomic configurations files     \n";
  std::cout << "      (POSCAR files).                                                          \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Options   >>                                                          \n";

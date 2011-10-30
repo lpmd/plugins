@@ -36,7 +36,7 @@ void CrystalGenerator::ShowHelp() const
  std::cout << " Problems Report to = admin@lpmd.cl                                            \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
- std::cout << "      This module is used to generate three-dimensional lattices. The available\n";
+ std::cout << "      This plugin is used to generate three-dimensional lattices. The available\n";
  std::cout << "      lattices are BCC (base-centered cubic), FCC (face-centered cubic), HCP   \n";
  std::cout << "      (Hexagonal close-packed) and SC (simple cubic).                          \n";
  std::cout << "      The total number of atoms in the cell corresponds to nx*ny*nx*NB, (see   \n";

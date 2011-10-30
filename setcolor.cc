@@ -37,7 +37,7 @@ void SetColorModifier::ShowHelp() const
  std::cout << " Problems Report to = admin@lpmd.cl                                            \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
- std::cout << "      This module is used to give a specific color of a certain group of atoms \n";
+ std::cout << "      This plugin is used to give a specific color of a certain group of atoms \n";
  std::cout << "      (see also 'propertycolor' plugin).                                       \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Options   >>                                                          \n";

@@ -33,7 +33,7 @@ void ReplicateModifier::ShowHelp() const
  std::cout << " Problems Report to = admin@lpmd.cl                                            \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
- std::cout << "      This module is used to replicate a group of atoms. It is useful to create\n";
+ std::cout << "      This plugin is used to replicate a group of atoms. It is useful to create\n";
  std::cout << "      crystals, where you have a motive that can be replicated.                \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Options   >>                                                          \n";

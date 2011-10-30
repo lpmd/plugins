@@ -29,7 +29,7 @@ void MSD::ShowHelp() const
  std::cout << " Problems Report to = admin@lpmd.cl                                            \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
- std::cout << "      This module is used to calculate de mean square displacement (msd) of    \n";
+ std::cout << "      This plugin is used to calculate de mean square displacement (msd) of    \n";
  std::cout << "      the atoms.                                                               \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Options   >>                                                          \n";

@@ -33,7 +33,7 @@ void RawBinFormat::ShowHelp() const
  std::cout << " Problems Report to = admin@lpmd.cl                                            \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
- std::cout << "      This module is used to read/write atomic configurations files in binary  \n";
+ std::cout << "      This plugin is used to read/write atomic configurations files in binary  \n";
  std::cout << "      format. This means that you cannot see the content of the file, just     \n";
  std::cout << "      read it with LPMD.                                                       \n";  
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";

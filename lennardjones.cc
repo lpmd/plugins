@@ -29,7 +29,7 @@ void LennardJones::ShowHelp() const
  std::cout << " Problems Report to = admin@lpmd.cl                                            \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
- std::cout << "      The module implements the Lenard-Jones potential for pairs interaction,  \n";
+ std::cout << "      This plugin implements the Lenard-Jones potential for pairs interaction,  \n";
  std::cout << "      which has the form                                                       \n";
  std::cout << "            V(r)=4*epsilon( (sigma/r)^12 - (sigma/r)^6 )                       \n"; 
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";

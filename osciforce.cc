@@ -35,7 +35,7 @@ void OsciForcePotential::ShowHelp() const
  std::cout << " Problems Report to = admin@lpmd.cl                                            \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
- std::cout << "      This module is used to apply an external oscillating force over a set of \n";
+ std::cout << "      This plugin is used to apply an external oscillating force over a set of \n";
  std::cout << "      atoms. This force F is added to the force that each atoms feels, i.e.,   \n";
  std::cout << "      the atom's acceleration is augmented (or diminished) by an extra term    \n";
  std::cout << "      F/m, where m is the mass of the atom. The form of this force is        \n\n";

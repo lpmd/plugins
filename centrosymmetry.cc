@@ -40,7 +40,7 @@ void CentroSymmetry::ShowHelp() const
  std::cout << " Problems Report to = admin@lpmd.cl                                            \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
- std::cout << "      This module is used to calculate the centrosymmetry parameter (CSP) for  \n";
+ std::cout << "      This plugin is used to calculate the centrosymmetry parameter (CSP) for  \n";
  std::cout << "      individual atoms. See Kelchner et al, Phys. Rev. B 58, 11085 (1998).     \n"; 
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Options   >>                                                          \n";

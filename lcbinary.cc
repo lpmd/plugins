@@ -46,7 +46,7 @@ void LCBinary::ShowHelp() const
  std::cout << " Problems Report to = admin@lpmd.cl                                            \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
- std::cout << "      This module corresponds to a modification of the linked-cell method for  \n";
+ std::cout << "      This plugin corresponds to a modification of the linked-cell method for  \n";
  std::cout << "      making neighbors lists. This method was developed by our group and it is \n";
  std::cout << "      one of the available cell managers. The difference between linked-cell   \n";
  std::cout << "      and lcbinary is that subcells are chosen such that each one of them can  \n";

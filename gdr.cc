@@ -40,7 +40,7 @@ void Gdr::ShowHelp() const
  std::cout << " Problems Report to = admin@lpmd.cl                                            \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n"; 
  std::cout << " General Info      >>                                                          \n";
- std::cout << "      This module is used to calculate the radial distribution function (also  \n";
+ std::cout << "      This plugin is used to calculate the radial distribution function (also  \n";
  std::cout << "      called pair correlation funcion): g(r).                                  \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n"; 
  std::cout << " General Options   >>                                                          \n";

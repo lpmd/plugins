@@ -37,7 +37,7 @@ void PinAtomModifier::ShowHelp() const
  std::cout << " Problems Report to = admin@lpmd.cl                                            \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
- std::cout << "      This module is used to fix the position of a particular atom.            \n";
+ std::cout << "      This plugin is used to fix the position of a particular atom.            \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Options   >>                                                          \n";
  std::cout << "      index         : Sets the index of the atom, in the atoms list, that is   \n";

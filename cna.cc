@@ -80,7 +80,7 @@ void CommonNeighborAnalysis::ShowHelp() const
  std::cout << " Problems Report to = admin@lpmd.cl                                            \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
- std::cout << "      This module is used to perform Common Neighbor Analysis (CNA) to a set of\n";
+ std::cout << "      This plugin is used to perform Common Neighbor Analysis (CNA) to a set of\n";
  std::cout << "      atomic configurations. This method provides a way to determine the kind  \n";
  std::cout << "      of structure (FCC, BCC, HCP, etc) of a sample, and it more precise than  \n";
  std::cout << "      the pairs distribution function, g(r). Each pair of first neighbors is   \n";

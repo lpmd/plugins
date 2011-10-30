@@ -56,7 +56,7 @@ void CellScalingModifier::ShowHelp() const
  std::cout << " Problems Report to = admin@lpmd.cl                                            \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
- std::cout << "      This module is used to scale the size of the cell. It can be used to     \n";
+ std::cout << "      This plugin is used to scale the size of the cell. It can be used to     \n";
  std::cout << "      increase/decrease the size of just one cell axis, or all of them         \n";
  std::cout << "      (hydrostatic compression/expansion).                                     \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";

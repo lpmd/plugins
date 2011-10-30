@@ -90,7 +90,7 @@ void RandomFilter::ShowHelp() const
  std::cout << " Problems Report to = admin@lpmd.cl                                            \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
- std::cout << "      This module is used to delete randomly a percentage of atoms of the      \n";
+ std::cout << "      This plugin is used to delete randomly a percentage of atoms of the      \n";
  std::cout << "      simulation cell. This plugin is a filter, so it is supposed to used      \n";
  std::cout << "      with the 'filter' statement (see also 'randomatom' plugin).              \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";

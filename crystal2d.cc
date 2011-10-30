@@ -38,7 +38,7 @@ void Crystal2DGenerator::ShowHelp() const
  std::cout << " Problems Report to = admin@lpmd.cl                                            \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
- std::cout << "      This module is used to generate two-dimensional lattices.                \n";
+ std::cout << "      This plugin is used to generate two-dimensional lattices.                \n";
  std::cout << "      The total number of atoms in the cell corresponds to nx*ny (see below).  \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Options   >>                                                          \n";

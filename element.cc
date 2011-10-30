@@ -65,7 +65,7 @@ void ElementFilter::ShowHelp() const
  std::cout << " Problems Report to = admin@lpmd.cl                                            \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
- std::cout << "      This module is used to select atoms by their atomic symbol. It can be    \n";
+ std::cout << "      This plugin is used to select atoms by their atomic symbol. It can be    \n";
  std::cout << "      called with the 'filter' or 'over' keyword.                              \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Options   >>                                                          \n";

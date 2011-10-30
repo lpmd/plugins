@@ -41,7 +41,7 @@ void VoronoiGenerator::ShowHelp() const
  std::cout << " Problems Report to = admin@lpmd.cl                                            \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
- std::cout << "      This module is used to generate three-dimensional polycrystals using a   \n";
+ std::cout << "      This plugin is used to generate three-dimensional polycrystals using a   \n";
  std::cout << "      Voronoi tessallation. Every grain is a perfect lattice, and the available\n";
  std::cout << "      lattices are BCC (base-centered cubic), FCC (face-centered cubic), HCP   \n";
  std::cout << "      (Hexagonal close-packed) and SC (simple cubic). The total number of atoms\n";

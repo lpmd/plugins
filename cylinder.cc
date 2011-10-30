@@ -75,7 +75,7 @@ void CylinderFilter::ShowHelp() const
  std::cout << " Problems Report to = admin@lpmd.cl                                            \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
- std::cout << "      This module is used to cut or select a cylindrical region of the         \n";
+ std::cout << "      This plugin is used to cut or select a cylindrical region of the         \n";
  std::cout << "      simulation cell. Use 'filter' to eliminate atoms in or out of a given    \n";
  std::cout << "      cylindrical region, or use 'over' to apply certain plugin to the         \n";
  std::cout << "      cylindrical region.                                                      \n";

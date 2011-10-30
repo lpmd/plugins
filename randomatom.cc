@@ -34,7 +34,7 @@ void RandomAtomModifier::ShowHelp() const
  std::cout << " Problems Report to = admin@lpmd.cl                                            \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
- std::cout << "      This module is used to delete or replace a percentage of atoms of the    \n";
+ std::cout << "      This plugin is used to delete or replace a percentage of atoms of the    \n";
  std::cout << "      simulation cell (see also 'random' plugin).                              \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Options   >>                                                          \n";

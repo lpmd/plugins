@@ -44,7 +44,7 @@ void DlPolyFormat::ShowHelp() const
  std::cout << " Problems Report to = admin@lpmd.cl                                            \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
- std::cout << "      This module is used to read/write DL_POLY's atomic configurations files. \n";
+ std::cout << "      This plugin is used to read/write DL_POLY's atomic configurations files. \n";
  std::cout << "      (HISTORY or CONFIG files).                                               \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Options   >>                                                          \n";

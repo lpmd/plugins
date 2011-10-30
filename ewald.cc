@@ -39,7 +39,7 @@ void Ewald::ShowHelp() const
  std::cout << "      species using the ewald method.                                          \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Options   >>                                                          \n";
- std::cout << "      This module does not need options, it is activated when the user applies \n";
+ std::cout << "      This plugin does not need options, it is activated when the user applies \n";
  std::cout << "      the plugin. However, it is important to set the atomic charges in the    \n";
  std::cout << "      control file, for example, 'charge 1.9 O #The units are in eV.' sets a   \n";
  std::cout << "      charge of 1.9 eV to the oxigen (O) atoms.                                \n";

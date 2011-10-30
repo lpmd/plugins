@@ -48,7 +48,7 @@ void RotateModifier::ShowHelp() const
  std::cout << " Problems Report to = admin@lpmd.cl                                            \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
- std::cout << "      This module is used to rotate a group of atoms in a given angle about    \n";
+ std::cout << "      This plugin is used to rotate a group of atoms in a given angle about    \n";
  std::cout << "      a given axis of rotation.                                                \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Options   >>                                                          \n";
