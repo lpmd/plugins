@@ -98,8 +98,8 @@ void TempProfile::ShowHelp() const
  std::cout << " Problems Report to = admin@lpmd.cl                                            \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
- std::cout << "      This plugin is used to evaluate a temperature profile of the simulation  \n";
- std::cout << " cell, nowadays only one-dimensional.                                          \n";
+ std::cout << "      This plugin is used to evaluate a one-dimensional temperature profile    \n";
+ std::cout << "      of the simulation cell.                                                  \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Options   >>                                                          \n";
  std::cout << "      axis          : Set the axis where the evaluation will be realized.      \n";
@@ -116,12 +116,14 @@ void TempProfile::ShowHelp() const
  std::cout << "     range Y 10 20                                                             \n";
  std::cout << "     range Z all                                                               \n";
  std::cout << "     range X all                                                               \n";
- std::cout << "     output filetemperature.out                                                \n";
+ std::cout << "     output temperature.out                                                    \n";
  std::cout << "     average true                                                              \n";
  std::cout << " enduse                                                                        \n";
  std::cout << " #Applying the plugin :                                                        \n";  
  std::cout << " property tempprofile start=1 each=10 end=100                                  \n";
- std::cout << "      With this we will have a temperature profile of the sample.              \n";
+ std::cout << "      The plugin is used to perform a temperature profile of the sample in     \n";
+ std::cout << "      X-axis, divided in 200 slices, and just for the atoms with Y-coordinate  \n";
+ std::cout << "      between 10 and 20. The data is written in the file temperature.dat.      \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
 }
 

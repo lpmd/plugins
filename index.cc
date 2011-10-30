@@ -107,7 +107,7 @@ void IndexFilter::ShowHelp() const
  std::cout << "      each          : Determines how often (each how many time-steps) the      \n";
  std::cout << "                      plugin must be applied.                                  \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
- std::cout << " Example                                                                       \n";
+ std::cout << " Example           >>                                                          \n";
  std::cout << " #Applying plugin :                                                            \n";
  std::cout << " filter index index=5,6,8,10                                                   \n";
  std::cout << " apply myplugin over index index=5-10 start=0 end=1 each=1                   \n\n";

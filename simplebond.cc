@@ -28,14 +28,15 @@ void SimpleBond::ShowHelp() const
  std::cout << " Problems Report to = admin@lpmd.cl                                            \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
- std::cout << "      This plugin is used to implement the SimpleBond interatomic pair         \n";
- std::cout << " potential.                                                                    \n";
- std::cout << " V(r) = -e*(1-0.5*(r-r0)^2)*exp(((r-r0)^2)/2*s^2)                              \n";
+ std::cout << "      This plugin is used to implement the SimpleBond interatomic pair potential\n";
+ std::cout << "              V(r) = -epsilon*(1-0.5*(r-r0)^2)*exp(((r-r0)^2)/2*sigma^2).      \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Options   >>                                                          \n";
- std::cout << "      epsilon       : Set the energy bond, epsilon (e).       [eV]             \n";
- std::cout << "      sigma         : Set the well widht value sigma (s).     [A]              \n";
- std::cout << "      r0            : Set the bond lenght (r0).               [A]              \n";
+ std::cout << "      epsilon       : Sets the value of epsilon in the potential (in eV).      \n";
+ std::cout << "      sigma         : Sets the value of sigma (well widht) in the potential    \n";
+ std::cout << "                      (in angstrom).                                           \n";
+ std::cout << "      r0            : Sets the value of r0 (bond lenght) in the potential      \n";
+ std::cout << "                      (in angstrom).                                           \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " Example           >>                                                          \n";
  std::cout << " #Loading the plugin :                                                         \n";
@@ -44,10 +45,10 @@ void SimpleBond::ShowHelp() const
  std::cout << "     r0    3.6                                                                 \n";
  std::cout << "     epsilon 0.001                                                             \n";
  std::cout << " enduse                                                                        \n";
- std::cout << " Applying the plugin :                                                         \n";
+ std::cout << " #Applying the plugin :                                                        \n"; 
  std::cout << " potential sb Ar Ar                                                            \n";
- std::cout << "      With this, we set the SimpleBond potential between the Ar atoms types in \n";
- std::cout << " the simulation.                                                               \n";
+ std::cout << "      The plugin is used to set the Simple-Bond potential between argon (Ar)   \n";
+ std::cout << "      atoms.                                                                   \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
 }
 

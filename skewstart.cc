@@ -30,18 +30,19 @@ void SkewStartGenerator::ShowHelp() const
  std::cout << " Problems Report to = admin@lpmd.cl                                            \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
- std::cout << "      The plugin is used to generate a initial simulation cell using the       \n";
- std::cout << " skewstart method development by Keith Refson for the moldy software.          \n";
+ std::cout << "      This module is used to generate an initial simulation cell using the     \n";
+ std::cout << "      skewstart methodm developed by Keith Refson for the MOLDY software.      \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Options   >>                                                          \n";
- std::cout << "      atoms         : Set the number of atoms in the simulation cell.          \n";
- std::cout << "      symbol        : Set the atomic symbol for the simulation cell. (only one)\n";
+ std::cout << "      atoms         : Sets the number of atoms in the simulation cell.         \n";
+ std::cout << "      symbol        : Sets the atomic symbol of the atoms that are going to be \n";
+ std::cout << "                      put in the simulation cell.                              \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " Example                                                                       \n";
- std::cout << " #Using the plugin :                                                           \n";
+ std::cout << " #Loading the plugin :                                                         \n";
  std::cout << " input module=skewstart atoms=108 symbol=Ar                                    \n";
- std::cout << "      With this we generate a simulation cell using  the skewstart method, of  \n";
- std::cout << " 108 Argon atoms.                                                              \n";
+ std::cout << "      The plugin is used to generate a three-dimensional lattice of argon      \n";
+ std::cout << "      atoms. The total number of atoms generated this case is 108.             \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
 }
 

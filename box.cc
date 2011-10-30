@@ -108,21 +108,23 @@ void BoxFilter::ShowHelp() const
  std::cout << " Module Name        = box                                                      \n";
  std::cout << " Problems Report to = admin@lpmd.cl                                            \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
- std::cout << " General Info      >> This plugin is used to select a box region in the        \n";
- std::cout << "                      simulation cell. You can assign properties or tag to this\n";
- std::cout << "                      selection.                                               \n";
+ std::cout << " General Info      >>                                                          \n";
+ std::cout << "      This plugin is used to select a box region of the simulation cell.       \n";
+ std::cout << "      You can assign properties or tags to this region.  It can be called with \n";
+ std::cout << "      the 'filter' or 'over' keyword.                                          \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Options   >>                                                          \n";
  std::cout << "      x             : Select range in x axis. x=0-10 or x=all                  \n";
  std::cout << "      y             : Select range in y axis. x=10-100 or x=all                \n";
  std::cout << "      z             : Select range in z axis. x=5-20 or x=all                  \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
- std::cout << " Example                                                                       \n";
+ std::cout << " Example           >>                                                          \n";
+ std::cout << " #Applying plugin :                                                            \n";
  std::cout << " filter box x=0-10 y=15-20 z=5-10                                              \n";
- std::cout << "      With this you will filter the atoms between the specified region.        \n";
  std::cout << " apply tempscaling each=1 start=1 end=-1 over box x=0-68.8 y=0-68.8 z=0-20     \n";
- std::cout << "      With this you will apply a properties on the atoms of the specified      \n";
- std::cout << "      region.                                                                  \n";
+ std::cout << "      The plugin is used to eliminate atoms outside the specified region, in   \n";
+ std::cout << "      first case, and used to apply a property (tempscaling) over the specified\n";
+ std::cout << "      region, in the second case.                                              \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
 }
 

@@ -69,15 +69,21 @@ void SphereFilter::ShowHelp() const
  std::cout << " Problems Report to = admin@lpmd.cl                                            \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
- std::cout << "      This plugin is used to select a group of atoms in a spherical region.    \n";
+ std::cout << "      This plugin is used to select a spherical region of the simulation cell. \n";
+ std::cout << "      You can assign properties or tags to this region.  It can be called with \n";
+ std::cout << "      the 'filter' or 'over' keyword.                                          \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Options   >>                                                          \n";
  std::cout << "      radius        : Set the radius value of the sphere.                      \n";
  std::cout << "      center        : Set the vector center of the sphere.                     \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " Example           >>                                                          \n";
- std::cout << " #Filter using sphere configuration.                                           \n";
+ std::cout << " #Applying plugin :                                                            \n";
  std::cout << " filter sphere radius=5.0 center=<10.0,10.0,10.0>                              \n";
+ std::cout << " apply tempscaling each=1 start=1 end=-1 over sphere radius=5.0 center=<10.0,10.0,10.0>\n";
+ std::cout << "      The plugin is used to eliminate atoms outside the specified spherical    \n";
+ std::cout << "      region in the first case, and used to apply a property (tempscaling) over\n";
+ std::cout << "      the specified region, in the second case.                                \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << '\n';
 }

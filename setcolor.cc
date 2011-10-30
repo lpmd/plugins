@@ -32,10 +32,32 @@ SetColorModifier::~SetColorModifier() { }
 
 void SetColorModifier::ShowHelp() const
 {
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+ std::cout << " Module Name        = setcolor                                                 \n";
+ std::cout << " Problems Report to = admin@lpmd.cl                                            \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
+ std::cout << "      This module is used to give a specific color of a certain group of atoms \n";
+ std::cout << "      (see also 'propertycolor' plugin).                                       \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Options   >>                                                          \n";
- std::cout << " Example                                                                       \n";
- std::cout << '\n';
+ std::cout << "      color         : Sets the color, in RGB format, to be given to the atoms. \n";
+ std::cout << "                      The color is a vector written in the form <R,G,B>.       \n";
+ std::cout << "      start         : Determines in which step the plugin begins to be applied.\n";
+ std::cout << "      end           : Determines in which step the plugin ceases to be applied.\n";
+ std::cout << "      each          : Determines how often (each how many time-steps) the      \n";
+ std::cout << "                      plugin must be applied.                                  \n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
+ std::cout << " Example           >>                                                          \n";
+ std::cout << " #Loading the plugin :                                                         \n";
+ std::cout << " use setcolor                                                                  \n";
+ std::cout << "     color <1.0,0.0,1.0>                                                       \n";
+ std::cout << " enduse                                                                        \n";
+ std::cout << " #Applying the plugin :                                                        \n";
+ std::cout << " apply setcolor start=0 each=1 end=1 over index index=0-100                  \n\n";
+ std::cout << "      The plugin is used to fix a magenta color (100\% red, 0\% green, 100\%   \n";
+ std::cout << "      blue) to the first hundred atoms in the atoms list of the simulation cell.\n";
+ std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
 }
 
 void SetColorModifier::Apply(Simulation & sim)

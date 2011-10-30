@@ -35,10 +35,11 @@ void TabulatedPair::ShowHelp() const
  std::cout << " Problems Report to = admin@lpmd.cl                                            \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
- std::cout << "      This plugin read a tabulated pair potential from a data file.            \n";
+ std::cout << "      This module is used to read a tabulated pair potential from a data file. \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Options   >>                                                          \n";
- std::cout << "      file           : Specify the filename with the potential.                \n";
+ std::cout << "      file           : Specifies the filename that contains the potential in   \n";
+ std::cout << "                       the form of tabulated data.                             \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " Example           >>                                                          \n";
  std::cout << " #Loading the plugin :                                                         \n";
@@ -47,8 +48,8 @@ void TabulatedPair::ShowHelp() const
  std::cout << " enduse                                                                        \n";
  std::cout << " #Applying the plugin :                                                        \n";
  std::cout << " potential TABLJ Ar Ar                                                         \n";
- std::cout << "      In this way we set the tabulated lennard-jones pair potential between the\n";
- std::cout << " Ar atoms.                                                                     \n";
+ std::cout << "      The plugin implements the potential contained in the file lennardjones.dat\n";
+ std::cout << "      between argon (Ar).                                                      \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
 }
 

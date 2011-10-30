@@ -40,18 +40,19 @@ void SuttonChen::ShowHelp() const
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
  std::cout << "      The plugin incorporate the SuttonChen potencial, used frequently         \n";
- std::cout << " for metallic atomic interaction. Based in embedded atom model.                \n";
- std::cout << " V(r) = e*(a/r)^n ; F(rho) = -c*e*sqrt(rho) ; rho(r) = (a/r)^m                 \n";
+ std::cout << "      for metallic atomic interaction. Based in embedded atom model.           \n";
+ std::cout << "          V(r) = e*(a/r)^n ; F(rho) = -c*e*sqrt(rho) ; rho(r) = (a/r)^m        \n";
+ std::cout << "      See: Philosophical Mag. Lett. 1991, Vol 63, No 4, 217-224                \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Options   >>                                                          \n";
- std::cout << "      e             : The value of epsilon in the potential. [eV]              \n";
- std::cout << "      a             : The value of the a constant in the potencial. [A]        \n";
- std::cout << "      n             : Value of n in the potential.  [integer]                  \n";
- std::cout << "      m             : Value of m in the potential.  [integer]                  \n";
- std::cout << "      c             : Value of the c constant of the potential. [real]         \n";
- std::cout << "      cutoff        : Cutoff of the interatomic potential. [A]                 \n";
- std::cout << "      corrections   : Include(true) or not(false/default) corrections to the   \n";
- std::cout << "                      metallic potential (recommend for homogeneous systems).  \n";
+ std::cout << "      e             : Sets the value of epsilon in the potential (in eV).      \n";
+ std::cout << "      a             : Sets the value of a in the potencial (in angstrom).      \n";
+ std::cout << "      n             : Value of n in the potential (dimensionless).             \n";
+ std::cout << "      m             : Value of m in the potential (dimensionless).             \n";
+ std::cout << "      c             : Value of c in the potential (dimensionless).             \n";
+ std::cout << "      cutoff        : Sets the cutoff for the potential (in angstrom).         \n";
+ std::cout << "      corrections   : Sets if corrections to the metallic potential should be   \n";
+ std::cout << "                      considered (true / false). Recommended for homogeneous systems.\n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " Example          >>                                                           \n";
  std::cout << " #Loading the plugin :                                                         \n";
@@ -65,7 +66,8 @@ void SuttonChen::ShowHelp() const
  std::cout << " enduse                                                                        \n";
  std::cout << " #Using the loaded plugin :                                                    \n";
  std::cout << " potential sc Cu Cu                                                            \n";
- std::cout << " #Values from : Philosophical Mag. Lett. 1991, Vol 63, No 4, 217-224           \n";
+ std::cout << "      The plugin implements a the Sutton-Chen potential between copper (Cu)    \n";
+ std::cout << "      atoms.                                                                   \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
 }
 

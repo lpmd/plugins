@@ -38,14 +38,18 @@ void SiteCoord::ShowHelp() const
  std::cout << " Problems Report to = admin@lpmd.cl                                            \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
- std::cout << "      This plugin is used to evaluate the coordination number by site in a     \n";
+ std::cout << "      This plugin is used to evaluate the coordination number per site in a    \n";
  std::cout << "      simulation cell.                                                         \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Options   >>                                                          \n";
- std::cout << "      rcut          : Set the maximum cutoff for the evaluation.               \n";
- std::cout << "      output        : output filename.                                         \n";
- std::cout << "      average       : True or False in case that realize an average over the   \n";
- std::cout << "                      configurations.                                          \n";
+ std::cout << "      rcut          : Sets the maximum cutoff for the evaluation.              \n";
+ std::cout << "      output        : Output file.                                             \n";
+ std::cout << "      start         : Determines in which step the plugin begins to be applied.\n";
+ std::cout << "      end           : Determines in which step the plugin ceases to be applied.\n";
+ std::cout << "      each          : Determines how often (each how many time-steps) the      \n";
+ std::cout << "                      plugin must be applied.                                  \n";
+ std::cout << "      average       : Sets if the the property must be averaged over all       \n";
+ std::cout << "                      configurations (true / false)                            \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " Example                                                                       \n";
  std::cout << " #Loading the plugin :                                                         \n";
@@ -56,8 +60,8 @@ void SiteCoord::ShowHelp() const
  std::cout << " enduse                                                                        \n";
  std::cout << " #Applying the plugin :                                                        \n";  
  std::cout << " property sitecoord start=1 each=10 end=100                                    \n";
- std::cout << "      With this we calculate the coordination number by site between 1 and 100 \n";
- std::cout << "      each 10 timestep.                                                        \n";
+ std::cout << "      The plugin is used to calculate the coordination number per site for the \n";
+ std::cout << "      first 100 steps, each 10 steps.                                          \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
 }
 

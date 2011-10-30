@@ -38,15 +38,22 @@ void TemperatureModifier::ShowHelp() const
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
  std::cout << "      This plugin is used to set the temperature of the system using a uniform \n";
- std::cout << " distribution of velocities compatible with the temperature required.          \n";
+ std::cout << "      distribution of velocities compatible with the temperature required.     \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Options   >>                                                          \n";
- std::cout << "      t             : Goal temperature of the system in Kelvin units.          \n";
+ std::cout << "      t             : Temperature goal of the system (in kelvin).              \n";
+ std::cout << "      start         : Determines in which step the plugin begins to be applied.\n";
+ std::cout << "      end           : Determines in which step the plugin ceases to be applied.\n";
+ std::cout << "      each          : Determines how often (each how many time-steps) the      \n";
+ std::cout << "                      plugin must be applied.                                  \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " Example                                                                       \n";
  std::cout << " #Loading the plugin :                                                         \n";
  std::cout << " prepare temperature t=600.0                                                   \n";
- std::cout << "      With this we set the initial temperature of the sample to 600K.          \n";
+ std::cout << "      The plugin is used to set the initial temperature of the sample to 600K. \n";
+ std::cout << "      To thermalize a system at a certain temperature, the temperature         \n";
+ std::cout << "      must be applied for a reasonable period of time, each certain steps to   \n";
+ std::cout << "      let the system relax,  using the 'apply' statement.                      \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
 }
 
