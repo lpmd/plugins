@@ -59,8 +59,8 @@ void RandomAtomModifier::ShowHelp() const
  std::cout << " enduse                                                                        \n";
  std::cout << " #Applying the plugin :                                                        \n";
  std::cout << " prepare randomatom type=replace percent=20 symbol=Cu                        \n\n";
- std::cout << "      The plugin is used to replace 10\% of the atoms of the simulation cell by\n";
- std::cout << "      copper (Cu) atoms.                                                       \n";
+ std::cout << "      The plugin is used to replace 10 percent of the atoms of the simulation  \n";
+ std::cout << "      cell by copper (Cu) atoms.                                               \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
 }
 
