@@ -182,13 +182,6 @@ directory .
        pkgconfig += liblpmd-2.0
     end
 
-    module dispvol.so
-       language = c++
-       sources = dispvol.cc
-       installpath = lib/lpmd
-       pkgconfig += liblpmd-2.0
-    end
-
     module dlpoly.so
        language = c++
        sources = dlpoly.cc
@@ -255,13 +248,6 @@ directory .
     module gupta.so
        language = c++
        sources = gupta.cc
-       installpath = lib/lpmd
-       pkgconfig += liblpmd-2.0
-    end
-
-    module hardspheres.so
-       language = c++
-       sources = hardspheres.cc
        installpath = lib/lpmd
        pkgconfig += liblpmd-2.0
     end
@@ -379,13 +365,6 @@ directory .
        pkgconfig += liblpmd-2.0
     end
 
-    module mobility.so
-       language = c++
-       sources = mobility.cc
-       installpath = lib/lpmd
-       pkgconfig += liblpmd-2.0
-    end
-
     module msd.so
        language = c++
        sources = msd.cc
@@ -438,13 +417,6 @@ directory .
     module osciforce.so
        language = c++
        sources = osciforce.cc
-       installpath = lib/lpmd
-       pkgconfig += liblpmd-2.0
-    end
-
-    module overlap.so
-       language = c++
-       sources = overlap.cc
        installpath = lib/lpmd
        pkgconfig += liblpmd-2.0
     end
