@@ -76,7 +76,7 @@ void ConeFilter::ShowHelp() const
  std::cout << "      This plugin is used to select a group of atoms in a conical region.      \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Options   >>                                                          \n";
- std::cout << "      long          : Set the long of the cone in [A].                         \n";
+ std::cout << "      bot           : Set the bottom position vector of the cone.              \n";
  std::cout << "      tip           : Set the tip position vector of the cone.                 \n";
  std::cout << "      alpha         : Set the alpha angle of the cone.                         \n";
  std::cout << "      beta          : Set internatl beta angle, by default is zero.            \n";
@@ -99,8 +99,6 @@ Selector<BasicParticleSet> & ConeFilter::CreateSelector()
  lpmd::Vector c = (*mycell)[2]; double mc = (*mycell)[2].Module();
  lpmd::Vector newtip(tip[0]*a/ma+tip[1]*b/mb+tip[2]*c/mc);
  lpmd::Vector newbot(bot[0]*a/ma+bot[1]*b/mb+bot[2]*c/mc);
- std::cerr << "newtip = " << newtip << '\n';
- std::cerr << "newbot = " << newbot << '\n';
  Cone cone_region(newtip, newbot, alpha, beta);
  if (selector != 0) delete selector;
  selector = new ConeSelector(cone_region);
