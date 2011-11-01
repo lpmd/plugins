@@ -28,10 +28,10 @@ void QuenchedMDModifier::ShowHelp() const
  std::cout << " Problems Report to = admin@lpmd.cl                                            \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
- std::cout << "      This plugin realize a quenched molecular dynamics process on the sample. \n";
- std::cout << "      That mean when a.v < 0 (with a the atomic acceleration, v the atomic     \n";
- std::cout << "      velocity and . the dot product) then the velocity of the atom will be set\n";
- std::cout << "      to zero. This procedure is frequently used to find structure of minimum  \n";
+ std::cout << "      This plugin performs a quenched molecular dynamics process on the sample.\n";
+ std::cout << "      It consists in evaluating, for every atom,  the dot product between its  \n";
+ std::cout << "      acceleration (a) and its velocity (v). If a.v < 0, v is set to zero.     \n";
+ std::cout << "      This procedure is frequently used to find the structure of minimum       \n";
  std::cout << "      energy of the system.                                                    \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Options   >>                                                          \n";
@@ -46,7 +46,7 @@ void QuenchedMDModifier::ShowHelp() const
  std::cout << " enduse                                                                        \n";
  std::cout << " #Applying the plugin :                                                        \n";
  std::cout << " apply quenchedmd start=0 each=1 end=1000                                    \n\n";
- std::cout << "      The plugin is used to... during the first 1000 steps.                    \n";
+ std::cout << "      The plugin is used to perform a quenched molecular dynamics in 1000 steps.\n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
 }
 

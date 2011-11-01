@@ -30,11 +30,12 @@ void MSD::ShowHelp() const
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
  std::cout << "      This plugin is used to calculate de mean square displacement (msd) of    \n";
- std::cout << "      the atoms.                                                               \n";
+ std::cout << "      the atoms. For more information, see S. Davis et al. Phys. Rev. B 84,    \n";
+ std::cout << "      064102 (2011).                                                           \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Options   >>                                                          \n";
- std::cout << "      rcutmin       : Sets ...                                                 \n";
- std::cout << "      rcutmax       : Sets ...                                                 \n";
+ std::cout << "      rcutmin       : Sets the minimum cutoff to calculate the mobility curve. \n";
+ std::cout << "      rcutmax       : Sets the maximum cutoff to calculate the mobility curve. \n";
  std::cout << "      zerocm        : ...                                                      \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " Example           >>                                                          \n";

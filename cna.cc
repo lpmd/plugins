@@ -101,7 +101,7 @@ void CommonNeighborAnalysis::ShowHelp() const
  std::cout << "                      to compare and try to determine what kind of structure   \n";
  std::cout << "                      is being analyzed.                                       \n";
  std::cout << "      mode          : Sets the output mode (full/statistics/defects).          \n";
- std::cout << "      species       : Sets the species to be analyzed (.....).                 \n";
+ std::cout << "      species       : Sets the species (pairs) to be analyzed (e.g. Ge-O).     \n";
  std::cout << "      output        : Output file.                                             \n";
  std::cout << "      filterout     : In mode=defects, indicates what atoms will be considered.\n";
  std::cout << "                      The CNA will be done only over the atoms that have the   \n";

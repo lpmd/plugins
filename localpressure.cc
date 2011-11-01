@@ -45,8 +45,8 @@ void LocalPressure::ShowHelp() const
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
  std::cout << "      This plugin is used to evaluate a pressure profile of the cell.          \n";
- std::cout << "      This split the cell in small cubes and evaluate the asociated pressure   \n";
- std::cout << "      in each of this small cube of the cell.                                  \n";
+ std::cout << "      The cell is subdivided in small parallelepipeds and the pressure is      \n";
+ std::cout << "      evaluated in each one of them.                                           \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Options   >>                                                          \n";
  std::cout << "      rcut          : Sets the cutoff radius for the evaluation.               \n";
@@ -70,7 +70,8 @@ void LocalPressure::ShowHelp() const
  std::cout << " enduse                                                                        \n";
  std::cout << " #Aplying plugin :                                                             \n";  
  std::cout << " property localpressure start=1 each=10 end=100                              \n\n";
- std::cout << "      The plugin is used to perform a pressure profile of the sample.          \n";
+ std::cout << "      The plugin is used to perform a pressure profile of the sample. In this  \n";
+ std::cout << "      case, the number of parallelepipeds is 15x15x15=3375.                    \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
 }
 

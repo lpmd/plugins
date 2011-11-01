@@ -28,7 +28,8 @@ void MoleculeCMModifier::ShowHelp() const
  std::cout << " Problems Report to = admin@lpmd.cl                                            \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
- std::cout << "      HELP NOT AVAILABLE YET                                                   \n";
+ std::cout << "      This plugin replaces all the atoms of each molecule (for example, H2) for\n";
+ std::cout << "      a single particle, located at the center of mass of the molecule.        \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Options   >>                                                          \n";
  std::cout << "      radius        :                                                          \n";
