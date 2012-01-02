@@ -84,6 +84,7 @@ void MSD::Evaluate(ConfigurationSet & hist, Potential & pot)
  DebugStream() << "-> First configuration has " << nat << " atoms\n";
  const Array<int> & elements = hist[0].Atoms().Elements();
  int nsp = elements.Size();
+ int * natsp = new int[nsp];
  double ** msd = new double*[(int)(N-1)/2];
  double ** J0 = new double*[(int)(N-1)/2];
  double ** J1 = new double*[(int)(N-1)/2];
@@ -106,7 +107,10 @@ void MSD::Evaluate(ConfigurationSet & hist, Potential & pot)
  for (int t=0;t<N;++t) noperiodic[t] = new Vector[nat];
  BasicParticleSet & scratch_atoms = scratch.Atoms();
  BasicCell & cell = scratch.Cell();
- for (long int i=0;i<nat;++i) noperiodic[0][i] = scratch_atoms[i].Position();
+ for (long int i=0;i<nat;++i)
+ {
+  noperiodic[0][i] = scratch_atoms[i].Position();
+ }
  for (int t=1;t<N;++t)
  {
   if (zerocm) ZeroCM(hist[t]);
@@ -131,6 +135,7 @@ void MSD::Evaluate(ConfigurationSet & hist, Potential & pot)
   {
    if (hist[0].Atoms()[i].Z() == elements[e1]) ne++;
   }
+  natsp[e1] = ne;
   for (int t0=0;t0<(int)(N-1)/2;t0++) // loop sobre todos los origenes
   {
    DebugStream() << "-> MSD: Processing time origin " << t0 << " of " << (int)(N-1)/2 << '\n';
@@ -184,7 +189,7 @@ void MSD::Evaluate(ConfigurationSet & hist, Potential & pot)
   int j = 0;
   for(int e1=0;e1<nsp;e1++)
   {
-   m.Set(j+1, i, msd[i][j]/double(nat*(N-1)/2));
+   m.Set(j+1, i, msd[i][j]/double(natsp[e1]*(N-1)/2));
    if (jmode)
    {
     double integ = J0[i][j]+J1[i][j]+Jr[i][j];
@@ -204,10 +209,13 @@ void MSD::Evaluate(ConfigurationSet & hist, Potential & pot)
   delete [] J1[i];
   delete [] Jr[i];
  }
+ std::cerr << "DEBUG " << elements[0] << " " << elements[1] << "\n";
+ std::cerr << "DEBUG " << natsp[0] << " " << natsp[1] << "\n";
  delete [] msd;
  delete [] J0;
  delete [] J1;
  delete [] Jr;
+ delete [] natsp;
 }
 
 // Esto se incluye para que el modulo pueda ser cargado dinamicamente
