@@ -93,7 +93,7 @@ void RandomAtomModifier::Apply(Simulation & conf)
   {
    mass += atoms[i].Mass();
   }
-  double density = mass/cell.Volume();
+  double dens = mass/cell.Volume();
   while(random.Size()<tochange)
   {
    int rnd = int(drand48()*atoms.Size());
@@ -106,23 +106,26 @@ void RandomAtomModifier::Apply(Simulation & conf)
    atoms.Delete(random[i]);
   }
   //adjust cell parameters to original density.
-  mass = 0.0e0;
-  for(int i=0;i<atoms.Size();++i)
+  if (density == "fixed")
   {
-   mass += atoms[i].Mass();
-  }
-  double newdens=0.5*density;
-  while(fabs(newdens-density)>1E-2)
-  {
-   if(newdens > density)
+   mass = 0.0e0;
+   for(int i=0;i<atoms.Size();++i)
    {
-    for (int j=0;j<3;++j) cell[j] = cell[j] + cell[j]*0.01;
+    mass += atoms[i].Mass();
    }
-   else if(newdens < density)
+   double newdens=0.5*dens;
+   while(fabs(newdens-dens)>1E-2)
    {
-    for (int j=0;j<3;++j) cell[j] = cell[j] - cell[j]*0.01;
+    if(newdens > dens)
+    {
+     for (int j=0;j<3;++j) cell[j] = cell[j] + cell[j]*0.01;
+    }
+    else if(newdens < dens)
+    {
+     for (int j=0;j<3;++j) cell[j] = cell[j] - cell[j]*0.01;
+    }
+    newdens = mass/cell.Volume();
    }
-   newdens = mass/cell.Volume();
   }
  }
  else
