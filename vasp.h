@@ -30,8 +30,7 @@ class VaspFormat: public lpmd::CellFormat, public lpmd::Plugin
   mutable bool first;
   std::string speclist;
   std::string numatoms;
-  lpmd::Array<std::string> satoms; // atomic symbols
-  lpmd::Array<std::string> nesp; // number of atom per spicies
+  mutable lpmd::Array<std::string> satoms; // atomic symbols
   mutable lpmd::Array<std::string> numesp; // number of atom per spicies
   std::string tp;  // formato posiciones (Direct/Cartesian)
   std::string ftype; // file type (POSCAR, CONTCAR, XDATCAR)

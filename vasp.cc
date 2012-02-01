@@ -96,7 +96,6 @@ bool VaspFormat::ReadCell(std::istream & is, Configuration & con) const
  BasicParticleSet & part = con.Atoms();
  BasicCell & cell = con.Cell();
  assert(part.Size()==0);
- if(speclist=="NULL") throw PluginError("vasp", "Error, you must pass a species list.");
  double scale=1.0e0;
  std::string tmp;
  Vector cv[3];
@@ -124,7 +123,47 @@ bool VaspFormat::ReadCell(std::istream & is, Configuration & con) const
  // For POSCAR/CONTCAR: Read and check out the amount of atoms for each species
  if (ftype=="poscar" || ftype=="contcar")  getline(is, tmp);
  RemoveUnnecessarySpaces(tmp);
- if (first && numatoms=="NULL") numesp = StringSplit(tmp,' ');
+ if (first && numatoms=="NULL") 
+ {
+  numesp = StringSplit(tmp,' ');
+  // Check if POSCAR file is from VASP 4.6 or VASP 5.2
+  if (ftype=="poscar" || ftype=="contcar")
+  {
+   double inpValue = 0.0;
+   bool isnumber=false,isnumber0=false;
+   for (int i=0; i<numesp.Size(); ++i) // Check that the numesp[i] are either all numbers, or all strings
+   {
+    inpValue=0.0;
+    std::istringstream inpStream(numesp[i]);
+    isnumber = (inpStream >> inpValue) ? 1: 0;
+    if (i>0 && isnumber!=isnumber0) throw PluginError("vasp", "Error, mixed type of variables on line 6 of POSCAR/CONTCAR file.");
+    isnumber0=isnumber;
+   }
+   if (!isnumber) // VASP 5.2
+   {
+    for (int i=0; i<numesp.Size(); ++i)
+    {
+     if (numesp[i]!=satoms[i])
+     {
+      ShowWarning("vasp", "Error, species given do not match with species found in the file. File's species assumed.");
+      satoms = numesp;
+      break;
+     } 
+    }
+    getline(is,tmp);
+    numesp = StringSplit(tmp,' ');
+
+   }
+   else // VASP 4.6
+   {
+    if(speclist=="NULL") throw PluginError("vasp", "Error, you must pass a species list.");
+   }
+  }
+  else // For XDATCAR files
+  {
+   if(speclist=="NULL") throw PluginError("vasp", "Error, you must pass a species list.");
+  }
+ }
 
  // Reads the type of atomic positions (Direct/Cartesian). In the case of 'selective dynamics', ignore it.
  std::string tipo="Direct";
