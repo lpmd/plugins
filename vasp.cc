@@ -29,8 +29,8 @@ VaspFormat::VaspFormat(std::string args): Plugin("vasp", "3.1")
  level = int(params["level"]);
  speclist = params["species"];
  numatoms = params["numatoms"];
- satoms = StringSplit(speclist,',');
- numesp = StringSplit(numatoms,',');
+ satoms = StringSplit(speclist,'-');
+ numesp = StringSplit(numatoms,'-');
  tp = params["type"];
  ftype = params["ftype"];
  rcell = params["replacecell"];
@@ -98,6 +98,7 @@ bool VaspFormat::ReadCell(std::istream & is, Configuration & con) const
  assert(part.Size()==0);
  double scale=1.0e0;
  std::string tmp;
+ std::string tipo="Direct";
  Vector cv[3];
  double x, y, z;
  if (first) getline(is,tmp);  // Read title/atoms for POSCAR/XDATCAR.
@@ -123,70 +124,98 @@ bool VaspFormat::ReadCell(std::istream & is, Configuration & con) const
  // For POSCAR/CONTCAR: Read and check out the amount of atoms for each species
  if (ftype=="poscar" || ftype=="contcar")  getline(is, tmp);
  RemoveUnnecessarySpaces(tmp);
- if (first && numatoms=="NULL") 
+ if (first) 
  {
-  numesp = StringSplit(tmp,' ');
+  lpmd::Array<std::string> thisline=StringSplit(tmp,' ');
   // Check if POSCAR file is from VASP 4.6 or VASP 5.2
   if (ftype=="poscar" || ftype=="contcar")
   {
    double inpValue = 0.0;
    bool isnumber=false,isnumber0=false;
-   for (int i=0; i<numesp.Size(); ++i) // Check that the numesp[i] are either all numbers, or all strings
+   // Check that in this line we have only numbers or only strings
+   for (int i=0; i<thisline.Size(); ++i) 
    {
     inpValue=0.0;
-    std::istringstream inpStream(numesp[i]);
+    std::istringstream inpStream(thisline[i]);
     isnumber = (inpStream >> inpValue) ? 1: 0;
     if (i>0 && isnumber!=isnumber0) throw PluginError("vasp", "Error, mixed type of variables on line 6 of POSCAR/CONTCAR file.");
     isnumber0=isnumber;
    }
+
+   //- Next cases should work even if species is not given -//
+   // 1st case
    if (!isnumber) // VASP 5.2
    {
-    for (int i=0; i<numesp.Size(); ++i)
+    for (int i=0; i<thisline.Size(); ++i) // Here, 'thisline' stores the atomic symbols
     {
-     if (numesp[i]!=satoms[i])
+     if (thisline[i]!=satoms[i])
      {
-      ShowWarning("vasp", "Error, species given do not match with species found in the file. File's species assumed.");
-      satoms = numesp;
+      ShowWarning("vasp", "Species given do not match with species found in the file. File's species assumed.");
+      satoms = thisline;
       break;
-     } 
+     }
     }
     getline(is,tmp);
-    numesp = StringSplit(tmp,' ');
-
+    thisline=StringSplit(tmp,' ');
+    for (int i=0; i<thisline.Size(); ++i) // Now 'thisline' stores the amount of atoms per species
+    {
+     if (thisline[i]!=numesp[i])
+     {
+      ShowWarning("vasp", "Amount of atoms per species does not match with the number of atoms per species found in the file. File's numbers assumed.");
+      numesp = thisline;
+      break;
+     }
+    }
    }
-   else // VASP 4.6
+   // 2nd case
+   else if (numatoms=="NULL" && isnumber) // VASP 4.6
    {
     if(speclist=="NULL") throw PluginError("vasp", "Error, you must pass a species list.");
+    else                 numesp = thisline;
+   }
+   // 3rd case
+   else if (numatoms!="NULL" && isnumber) // VASP 4.6
+   {
+    if(speclist=="NULL") throw PluginError("vasp", "Error, you must pass a species list.");
+    for (int i=0; i<thisline.Size(); ++i) // Here, 'thisline' stores the atomic symbols
+    {
+     if (thisline[i]!=numesp[i])
+     {
+      ShowWarning("vasp", "Number of atoms given do not match with number of atoms per species found in the file. Number of atoms from the file assumed.");
+      satoms = thisline;
+      break;
+     }
+    }
    }
   }
   else // For XDATCAR files
   {
    if(speclist=="NULL") throw PluginError("vasp", "Error, you must pass a species list.");
+   if (numatoms=="NULL") numesp = thisline;
   }
- }
 
- // Reads the type of atomic positions (Direct/Cartesian). In the case of 'selective dynamics', ignore it.
- std::string tipo="Direct";
- if (ftype=="poscar" || ftype=="contcar")
- {
-  getline(is,tmp);
-  RemoveUnnecessarySpaces(tmp);
-  if(tmp[0]=='s' || tmp[0]=='S') getline(is,tmp);
- 
-  if(tmp[0]=='c' || tmp[0]=='C') 
+  // Reads the type of atomic positions (Direct/Cartesian). In the case of 'selective dynamics', ignore it.
+  if (ftype=="poscar" || ftype=="contcar")
   {
-   tipo="Cartesian";
+   getline(is,tmp);
+   RemoveUnnecessarySpaces(tmp);
+   if(tmp[0]=='s' || tmp[0]=='S') getline(is,tmp);
+  
+   if(tmp[0]=='c' || tmp[0]=='C') 
+   {
+    tipo="Cartesian";
+   }
+   else if(tmp[0]=='d' || tmp[0]=='D')
+   {
+    tipo="Direct";
+   }
+   else ShowWarning("plugin vasp", "The type of cell couldn't be read correctly, type=\"Direct\" was assumed.");
   }
-  else if(tmp[0]=='d' || tmp[0]=='D')
+  else if (ftype=="xdatcar")
   {
-   tipo="Direct";
+   for (int i=0; i<5; ++i) {getline(is,tmp); first=false;}// skip unnecesary lines
   }
-  else ShowWarning("plugin vasp", "The type of cell couldn't be read correctly, type=\"Direct\" was assumed.");
- }
- else if (ftype=="xdatcar" && first)
- {
-  for (int i=0; i<5; ++i) {getline(is,tmp); first=false;}// skip unnecesary lines
- }
+ } // end if(first)
 
  // Check that the amount of atoms match.
  bool aff = numesp.Size()!=satoms.Size(); // For poscar and contcar, check that N("Si,O")=N("16,32")=2, for example.
@@ -200,6 +229,7 @@ bool VaspFormat::ReadCell(std::istream & is, Configuration & con) const
  {
   long int S=numesp.Size();
   if (ftype=="xdatcar" && numatoms=="NULL") S=1; // Assume one species if none is given.
+  else if (ftype=="xdatcar" && numatoms!="NULL")  S = numesp.Size();
   for(int i=0;i<S;++i)
   {
    std::string symbol=satoms[i];
