@@ -99,37 +99,42 @@ bool VaspFormat::ReadCell(std::istream & is, Configuration & con) const
  double scale=1.0e0;
  std::string tmp;
  std::string tipo="Direct";
+ lpmd::Array<std::string> thisline;
+ lpmd::Array<std::string> secondline;
  Vector cv[3];
  double x, y, z;
  if (first) getline(is,tmp);  // Read title/atoms for POSCAR/XDATCAR.
  if (is.eof()) return false; // no more configurations to read
  
- // Read Cell Vectors for POSCAR/CONTCAR files
- if (ftype=="poscar" || ftype=="contcar")
- {
-  getline(is, tmp);           // read scale factor
-  std::istringstream ost(tmp);
-  ost >> scale;
-  //Read cell vectors, cv[]
-  for (int i=0;i<3;++i)
-  {
-   getline(is, tmp);
-   std::istringstream vst(tmp);
-   vst >> x >> y >> z;
-   cv[i] = scale*Vector(x, y, z);
-   if ((*this)["replacecell"] == "true") cell[i] = cv[i];
-  }
- }
-
- // For POSCAR/CONTCAR: Read and check out the amount of atoms for each species
- if (ftype=="poscar" || ftype=="contcar")  getline(is, tmp);
- RemoveUnnecessarySpaces(tmp);
  if (first) 
  {
-  lpmd::Array<std::string> thisline=StringSplit(tmp,' ');
-  // Check if POSCAR file is from VASP 4.6 or VASP 5.2
+  RemoveUnnecessarySpaces(tmp);
+  thisline=StringSplit(tmp,' ');
+  secondline=StringSplit("",' ');
+  //--- The POSCAR case ---//
   if (ftype=="poscar" || ftype=="contcar")
   {
+   // Read Scale Factor
+   getline(is, tmp);
+   std::istringstream ost(tmp);
+   ost >> scale;
+
+   //Read cell vectors, cv[]
+   for (int i=0;i<3;++i)
+   {
+    getline(is, tmp);
+    std::istringstream vst(tmp);
+    vst >> x >> y >> z;
+    cv[i] = scale*Vector(x, y, z);
+    if ((*this)["replacecell"] == "true") cell[i] = cv[i];
+   }
+
+   // Read and check out the species
+   getline(is, tmp);
+   RemoveUnnecessarySpaces(tmp);
+   thisline=StringSplit(tmp,' ');
+  
+   // Check if POSCAR file is from VASP 4.6 or VASP 5.2
    double inpValue = 0.0;
    bool isnumber=false,isnumber0=false;
    // Check that in this line we have only numbers or only strings
@@ -150,7 +155,7 @@ bool VaspFormat::ReadCell(std::istream & is, Configuration & con) const
     {
      if (thisline[i]!=satoms[i])
      {
-      ShowWarning("vasp", "Species given do not match with species found in the file. File's species assumed.");
+      ShowWarning("vasp", "'species' does not match with the species found in the file. Assuming information read in the file.");
       satoms = thisline;
       break;
      }
@@ -161,7 +166,7 @@ bool VaspFormat::ReadCell(std::istream & is, Configuration & con) const
     {
      if (thisline[i]!=numesp[i])
      {
-      ShowWarning("vasp", "Amount of atoms per species does not match with the number of atoms per species found in the file. File's numbers assumed.");
+      ShowWarning("vasp", "'numatoms' does not match with the number of atoms per species found in the file. Assuming information read in the file.");
       numesp = thisline;
       break;
      }
@@ -187,16 +192,8 @@ bool VaspFormat::ReadCell(std::istream & is, Configuration & con) const
      }
     }
    }
-  }
-  else // For XDATCAR files
-  {
-   if(speclist=="NULL") throw PluginError("vasp", "Error, you must pass a species list.");
-   if (numatoms=="NULL") numesp = thisline;
-  }
-
-  // Reads the type of atomic positions (Direct/Cartesian). In the case of 'selective dynamics', ignore it.
-  if (ftype=="poscar" || ftype=="contcar")
-  {
+  
+   // Reads the type of atomic positions (Direct/Cartesian). In the case of 'selective dynamics', ignore it.
    getline(is,tmp);
    RemoveUnnecessarySpaces(tmp);
    if(tmp[0]=='s' || tmp[0]=='S') getline(is,tmp);
@@ -211,11 +208,89 @@ bool VaspFormat::ReadCell(std::istream & is, Configuration & con) const
    }
    else ShowWarning("plugin vasp", "The type of cell couldn't be read correctly, type=\"Direct\" was assumed.");
   }
+  //--- Now the XDATCAR case ---//
   else if (ftype=="xdatcar")
   {
-   for (int i=0; i<5; ++i) {getline(is,tmp); first=false;}// skip unnecesary lines
+   // Read the second line ('thisline' stores the first one)
+   getline(is,tmp);
+   RemoveUnnecessarySpaces(tmp);
+   secondline=StringSplit(tmp,' ');
+
+   if (secondline.Size()>1) // VASP 4.6
+   {
+    if(speclist=="NULL") throw PluginError("vasp", "Error, you must pass a species list.");
+    if (numatoms=="NULL") numesp = thisline;
+    for (int i=0; i<4; ++i) getline(is,tmp);// skip unnecesary lines
+   }
+   else                   // VASP 5.2
+   {
+    // Read the scale factor
+    std::istringstream ost(tmp);
+    ost >> scale;
+ 
+    //Read cell vectors, cv[]
+    for (int i=0;i<3;++i)
+    {
+     getline(is, tmp);
+     std::istringstream vst(tmp);
+     vst >> x >> y >> z;
+     cv[i] = scale*Vector(x, y, z);
+     if ((*this)["replacecell"] == "true") cell[i] = cv[i];
+    }
+    
+    // Read and check out the species
+    getline(is, tmp);
+    RemoveUnnecessarySpaces(tmp);
+    thisline=StringSplit(tmp,' ');
+   
+    // Check if POSCAR file is from VASP 4.6 or VASP 5.2
+    double inpValue = 0.0;
+    bool isnumber=false,isnumber0=false;
+    // Check that in this line we have only numbers or only strings
+    for (int i=0; i<thisline.Size(); ++i) 
+    {
+     inpValue=0.0;
+     std::istringstream inpStream(thisline[i]);
+     isnumber = (inpStream >> inpValue) ? 1: 0;
+     if (i>0 && isnumber!=isnumber0) throw PluginError("vasp", "Error, mixed type of variables on line 6 of XDATCAR file.");
+     isnumber0=isnumber;
+    }
+
+    //- Next cases should work even if species is not given -//
+    // 1st case
+    if (!isnumber)
+    {
+     for (int i=0; i<thisline.Size(); ++i) // Here, 'thisline' stores the atomic symbols
+     {
+      if (thisline[i]!=satoms[i])
+      {
+       ShowWarning("vasp", "'species' does not match with the species found in the file. Assuming information read in the file.");
+       satoms = thisline;
+       break;
+      }
+     }
+     getline(is,tmp);
+     thisline=StringSplit(tmp,' ');
+     for (int i=0; i<thisline.Size(); ++i) // Now 'thisline' stores the amount of atoms per species
+     {
+      if (thisline[i]!=numesp[i])
+      {
+       ShowWarning("vasp", "'numatoms' does not match with the number of atoms per species found in the file. Assuming information read in the file.");
+       numesp = thisline;
+       break;
+      }
+     }
+     getline(is,tmp); // Skip the blank line below the amount of atoms
+    }
+    // 2nd case
+    else
+    {
+     throw PluginError("vasp", "Error, this XDATCAR file is not properly written.");
+    }
+   }
+   first=false;
   }
- } // end if(first)
+ } // end of 'if(first)'
 
  // Check that the amount of atoms match.
  bool aff = numesp.Size()!=satoms.Size(); // For poscar and contcar, check that N("Si,O")=N("16,32")=2, for example.
@@ -228,8 +303,9 @@ bool VaspFormat::ReadCell(std::istream & is, Configuration & con) const
  else 
  {
   long int S=numesp.Size();
-  if (ftype=="xdatcar" && numatoms=="NULL") S=1; // Assume one species if none is given.
-  else if (ftype=="xdatcar" && numatoms!="NULL")  S = numesp.Size();
+  // For VASP 4.6: Assume one species if none is given.
+  if (ftype=="xdatcar" && numatoms=="NULL" && secondline.Size()>1) S=1; 
+
   for(int i=0;i<S;++i)
   {
    std::string symbol=satoms[i];
@@ -294,7 +370,6 @@ bool VaspFormat::ReadCell(std::istream & is, Configuration & con) const
   else if (ftype=="xdatcar")
   {
    getline(is,tmp);  // Read the blank space below the block and throw an error if it's not blank
-   if (!first && StringSplit(tmp,' ').Size()>2) throw PluginError("vasp", "Error, numatoms does not match with the actual number of atoms in the file.");
   }
  }
  con.SetTag(con, Tag("level"), 1);
@@ -365,7 +440,7 @@ void VaspFormat::WriteCell(std::ostream & out, Configuration & con) const
   {
    for (long int j=0;j<list[i].Size();++j)
    {
-    out << "  " << part[list[i][j]].Velocity() << '\n';
+    out << "  " << part[list[i][j]].Velocity() << '\n'; // In VASP, velocity units are the same as in LPMD (angstrom / fs )
    }
   }
  }
