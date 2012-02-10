@@ -220,7 +220,18 @@ bool VaspFormat::ReadCell(std::istream & is, Configuration & con) const
    if (secondline.Size()>1) // VASP 4.6
    {
     if(speclist=="NULL") throw PluginError("vasp", "Error, you must pass a species list.");
-    if (numatoms=="NULL") numesp = thisline;
+    if (numatoms=="NULL") numesp = StringSplit(thisline[0],' ');
+    else
+    {
+     int n = 0;
+     for (int i=0; i<numesp.Size(); ++i) n+=(int)atof(numesp[i].c_str());
+     int atoms = (int)atof(thisline[0].c_str()); 
+     if (n != atoms)
+     {
+       ShowWarning("vasp", "'numatoms' does not match with the total number of atoms found in the file. Assuming information read in the file.");
+       numesp = StringSplit(thisline[0],' ');
+     }
+    }
     for (int i=0; i<4; ++i) getline(is,tmp);// skip unnecesary lines
    }
    else                   // VASP 5.2
