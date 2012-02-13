@@ -9,6 +9,7 @@
 using namespace lpmd;
 
   void SkewStart(const int n, double x, double y, double z, Vector *centers);
+  void RandomCenters(const int n, double x, double y, double z, Vector *centers);
   void Replicate(OrthogonalCell & unitcell, ParticleSet & unitset, unsigned long nx, unsigned long ny, unsigned long nz);
   void Rotate(OrthogonalCell & unitcell, ParticleSet & unitset, Vector rotate);
   void ReplicateRotate(//
@@ -24,12 +25,14 @@ VoronoiGenerator::VoronoiGenerator(std::string args): Plugin("voronoi","2.0")
  DefineKeyword("type","sc");
  DefineKeyword("a","4.08"); // Default: Gold lattice constant
  DefineKeyword("grains","2");
+ DefineKeyword("cts","skew");
  // hasta aqui los valores por omision
  ProcessArguments(args); 
  spc = std::string(params["symbol"]);
  type = (*this)["type"];
  a = double(params["a"]);
  grains = int(params["grains"]);
+ cts = std::string(params["centers"]);
 }
 
 VoronoiGenerator::~VoronoiGenerator() { }
@@ -42,11 +45,12 @@ void VoronoiGenerator::ShowHelp() const
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Info      >>                                                          \n";
  std::cout << "      This plugin is used to generate three-dimensional polycrystals using a   \n";
- std::cout << "      Voronoi tessallation. Every grain is a perfect lattice, and the available\n";
- std::cout << "      lattices are BCC (base-centered cubic), FCC (face-centered cubic), HCP   \n";
- std::cout << "      (Hexagonal close-packed) and SC (simple cubic). The total number of atoms\n";
- std::cout << "      in the cell will vary, because the orientation of the grains is random.  \n";
- std::cout << "      and HCP lattices, NB=1 for SC lattice and NB=4 for the FCC lattice.      \n";
+ std::cout << "      Voronoi tessallation or random distribution. Every grain is a perfect    \n";
+ std::cout << "      lattice, and the available lattices are BCC (base-centered cubic), FCC   \n";
+ std::cout << "      (face-centered cubic), HCP(Hexagonal close-packed) and SC(simple cubic). \n";
+ std::cout << "      The total number of atoms in the cell will vary, because the orientation \n";
+ std::cout << "      of the grains is random. and HCP lattices, NB=1 for SC lattice and NB=4  \n";
+ std::cout << "      for the FCC lattice.                                                     \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " General Options   >>                                                          \n";
  std::cout << "      symbol  : Sets the atomic species to generate in the cell, like as Cu,   \n";
@@ -54,6 +58,8 @@ void VoronoiGenerator::ShowHelp() const
  std::cout << "      type    : Set the kind of crystaline grain (fcc, bcc, hcp and sc)        \n";
  std::cout << "      a       : Crystal constant of the cell (in angstrom).                    \n";
  std::cout << "      grains  : Number of grains to put in the final cell.                     \n";
+ std::cout << "      cts     : Set how the centers are distributed in the crystal, the values \n";
+ std::cout << "                allowed are skew(default) and random.                          \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " Example           >>                                                          \n";
  std::cout << " #Loading the plugin :                                                         \n";
@@ -126,7 +132,18 @@ void VoronoiGenerator::Generate(lpmd::Configuration & conf) const
  std::cout << " -> Unitary "<< type <<" cell replicated "<<nx<<" times in each axis..."<<std::endl;
 
  // CHOOSE CENTERS AND REPLICATE UNITARY CELLS
- SkewStart(grains, x, y, z, centers);
+ if(cts=="skew")
+ {
+  SkewStart(grains, x, y, z, centers);
+ }
+ else if(cts=="rand")
+ {
+  RandomCenters(grains, x, y, z, centers);
+ }
+ else
+ {
+  throw PluginError("voronoi", "The cts tag value wasn't identified.");
+ }
  for (int i=0; i<grains; ++i)
  {
   Vector rotate=2*M_PI*drand48()*e1+2*M_PI*drand48()*e2+2*M_PI*drand48()*e3;
@@ -218,6 +235,17 @@ void SkewStart(int n, double x, double y, double z, Vector *centers)
  for (long i=0;i<n;++i)
  {
   atomos[i].Position()=celda.FittedInside(celda.Cartesian(Vector(dx*double(i)+0.5, dy*double(i)+0.5, dz*double(i)+0.5)));
+  centers[i]=atomos[i].Position();
+ }
+}
+
+void RandomCenters(int n, double x, double y, double z, Vector *centers)
+{
+ OrthogonalCell celda(x, y, z);
+ ParticleSet atomos(n);
+ for (long i=0;i<n;++i)
+ {
+  atomos[i].Position()=celda.FittedInside(celda.Cartesian(Vector(drand48()*x, drand48()*y, drand48()*z)));
   centers[i]=atomos[i].Position();
  }
 }
