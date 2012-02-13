@@ -25,7 +25,7 @@ VoronoiGenerator::VoronoiGenerator(std::string args): Plugin("voronoi","2.0")
  DefineKeyword("type","sc");
  DefineKeyword("a","4.08"); // Default: Gold lattice constant
  DefineKeyword("grains","2");
- DefineKeyword("cts","skew");
+ DefineKeyword("centers","skew");
  // hasta aqui los valores por omision
  ProcessArguments(args); 
  spc = std::string(params["symbol"]);
