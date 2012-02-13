@@ -26,6 +26,7 @@ VoronoiGenerator::VoronoiGenerator(std::string args): Plugin("voronoi","2.0")
  DefineKeyword("a","4.08"); // Default: Gold lattice constant
  DefineKeyword("grains","2");
  DefineKeyword("centers","skew");
+ DefineKeyword("rperc","0.0");
  // hasta aqui los valores por omision
  ProcessArguments(args); 
  spc = std::string(params["symbol"]);
@@ -33,6 +34,7 @@ VoronoiGenerator::VoronoiGenerator(std::string args): Plugin("voronoi","2.0")
  a = double(params["a"]);
  grains = int(params["grains"]);
  cts = std::string(params["centers"]);
+ rperc = double(params["rperc"]);
 }
 
 VoronoiGenerator::~VoronoiGenerator() { }
@@ -60,6 +62,8 @@ void VoronoiGenerator::ShowHelp() const
  std::cout << "      grains  : Number of grains to put in the final cell.                     \n";
  std::cout << "      cts     : Set how the centers are distributed in the crystal, the values \n";
  std::cout << "                allowed are skew(default) and random.                          \n";
+ std::cout << "      rperc   : Set the percent of minimum allowed distace based on first      \n";
+ std::cout << "                neighbours. rmin = nn - (rperc/100)*nn                         \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " Example           >>                                                          \n";
  std::cout << " #Loading the plugin :                                                         \n";
@@ -152,6 +156,7 @@ void VoronoiGenerator::Generate(lpmd::Configuration & conf) const
  
  std::cout << " -> Replicated unitary cells were rotated and moved into the cell with Skew-Start method..."<<std::endl;
 
+ rmin = rmin - (rperc/100.0)*rmin;
  //-------------------- 1ST ELIMINATION -------------------//
  // OUTSIDE ELIMINATION: Eliminate the atoms out of the cell
  std::cout << " -> Eliminating atoms out of the cell..."<<std::endl;
@@ -168,6 +173,7 @@ void VoronoiGenerator::Generate(lpmd::Configuration & conf) const
 
  //-------------------- 2ND ELIMINATION -------------------//
  // INTERSECTIONS ELIMINATION
+ 
  std::cout<< " -> Separating grains..."<<std::endl;
  for (long int i=0; i<atoms.Size(); ++i)
  {
@@ -192,6 +198,7 @@ void VoronoiGenerator::Generate(lpmd::Configuration & conf) const
    if (eliminated) break;
   }
  }
+ 
  //-------------------- 3D ELIMINATION -------------------//
  // PAIRS ELIMINATION: NOW THAT THE CELL IS FULL OF CELLS FILLED WITH ATOMS, WE ELIMINATE THE CLOSEST ATOMS
  std::cout << " -> Eliminating closest atoms..."<<std::endl;

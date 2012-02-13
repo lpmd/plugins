@@ -30,8 +30,7 @@ class VoronoiGenerator: public lpmd::CellGenerator, public lpmd::Plugin
   std::string cts;     // how the centers of the grain are distributed
   double a;            // Lattice constant (size of the base cell of each grain)
   int grains;          // Number of cells (grains) in to put in the configuration
-
-
+  double rperc;        // Percentual variation of minimal distance allowed.
 };
 
 #endif
