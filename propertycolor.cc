@@ -45,7 +45,6 @@ PropertyColorModifier::PropertyColorModifier(std::string args): Plugin("property
   extheader = int(params["extheader"]);
  }
  else extfile = NULL;
- std::cerr << "Everything is ready!" << '\n';
 }
 
 PropertyColorModifier::~PropertyColorModifier() 
@@ -109,7 +108,6 @@ void PropertyColorModifier::Apply(Simulation & sim)
  //
  for (long int i=0;i<atoms.Size();++i)
  {
-  std::cerr << "COME IN" << '\n';
   double v = 0.0;
   // 
   // Por ahora seleccionamos aqui de donde sale el escalar para asignar el color
@@ -127,16 +125,8 @@ void PropertyColorModifier::Apply(Simulation & sim)
   else if (property == "external")
   {
    getline(*extfile, line);
-   std::cerr << " line = " << line << '\n';
-   if(column>=2)
-   {
-    Array<std::string> lspl = StringSplit(line);
-    v = strtod(lspl[column-1].c_str(), 0);
-   }
-   else
-   {
-    v = atof(line.c_str());
-   }
+   Array<std::string> lspl = StringSplit(line);
+   v = strtod(lspl[column-1].c_str(), 0);
   }
   else throw PluginError("propertycolor", "Cannot color atoms by property \""+property+"\"");
   double vnorm = (v-vmin)/(vmax-vmin);
