@@ -336,6 +336,7 @@ bool VaspFormat::ReadCell(std::istream & is, Configuration & con) const
     }
     else if (tipo=="Direct")
     {
+     for (int q=0; q<3; ++q) if (vtmp[q]<0) vtmp[q]=1+vtmp[q];
      vtmp = cell.Cartesian(vtmp); // Antes era: vtmp = vtmp[0]*cv[0]+vtmp[1]*cv[1]+vtmp[2]*cv[2];
      this_atom.Position() = vtmp;
     }
@@ -426,6 +427,24 @@ void VaspFormat::WriteCell(std::ostream & out, Configuration & con) const
   }
   out << '\n';
   out << tp << '\n';
+
+  // In cartesian coordinates |tmp> = ci |ei>, where ci=tmp[i]
+  // In the new basis, |tmp> = dj |vj> = dj vji |ei> = ci |ei>, where |vj> = cell[j]
+  // To know dj, we have to invert vji=cell[i][j] matrix (det!=0 if |vj> are L.I.)
+  long double det=0.0;
+  det += cell[0][0]*cell[1][1]*cell[2][2] + cell[1][0]*cell[2][1]*cell[0][2] + cell[2][0]*cell[0][1]*cell[1][2];
+  det -= cell[2][0]*cell[1][1]*cell[0][2] + cell[2][1]*cell[1][2]*cell[0][0] + cell[2][2]*cell[1][0]*cell[0][1];
+  long double A[3][3];
+  A[0][0] = (cell[1][1]*cell[2][2]-cell[2][1]*cell[1][2]);
+  A[0][1] =-(cell[1][0]*cell[2][2]-cell[2][0]*cell[1][2]);
+  A[0][2] = (cell[1][0]*cell[2][1]-cell[2][0]*cell[1][1]);
+  A[1][0] =-(cell[0][1]*cell[2][2]-cell[2][1]*cell[0][2]);
+  A[1][1] = (cell[0][0]*cell[2][2]-cell[2][0]*cell[0][2]);
+  A[1][2] =-(cell[0][0]*cell[2][1]-cell[2][0]*cell[0][1]);
+  A[2][0] = (cell[0][1]*cell[1][2]-cell[1][1]*cell[0][2]);
+  A[2][1] =-(cell[0][0]*cell[1][2]-cell[1][0]*cell[0][2]);
+  A[2][2] = (cell[0][0]*cell[1][1]-cell[1][0]*cell[0][1]);
+
   for(long i=0 ; i < list.Size() ; ++i)
   {
    for (long int j=0;j<list[i].Size();++j)
@@ -437,10 +456,12 @@ void VaspFormat::WriteCell(std::ostream & out, Configuration & con) const
     else if(tp=="Direct")
     {
      Vector tmp = part[list[i][j]].Position();
-     double lx = cell[0].Module();
-     double ly = cell[1].Module();
-     double lz = cell[2].Module();
-     tmp = Vector(tmp[0]/lx,tmp[1]/ly,tmp[2]/lz);
+     long double l0 = tmp[0], l1 = tmp[1], l2 = tmp[2];
+     for (int k=0; k<3; ++k)
+     {
+      tmp[k] = (A[k][0]*l0+A[k][1]*l1+A[k][2]*l2)/det;
+      if (tmp[k]<0) tmp[k]=1+tmp[k];
+     }
      out << "  " << tmp << '\n';
     }
    }
