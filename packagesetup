@@ -470,9 +470,9 @@ directory .
        pkgconfig += liblpmd-2.0
     end
 
-    module randomatom.so
+    module random.so
        language = c++
-       sources = randomatom.cc
+       sources = random.cc
        installpath = lib/lpmd
        pkgconfig += liblpmd-2.0
     end
@@ -480,13 +480,6 @@ directory .
     module rawbinary.so
        language = c++
        sources = rawbinary.cc
-       installpath = lib/lpmd
-       pkgconfig += liblpmd-2.0
-    end
-
-    module random.so
-       language = c++
-       sources = random.cc
        installpath = lib/lpmd
        pkgconfig += liblpmd-2.0
     end
