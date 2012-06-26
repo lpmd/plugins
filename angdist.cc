@@ -21,10 +21,10 @@ AngDist::AngDist(std::string args): Plugin("angdist", "2.0")
  //
  DefineKeyword("rcut","1");
  DefineKeyword("atoms");
- DefineKeyword("start");
- DefineKeyword("end");
- DefineKeyword("each");
- DefineKeyword("output");
+ DefineKeyword("start","0");
+ DefineKeyword("end","-1");
+ DefineKeyword("each","1");
+ DefineKeyword("output","angdist_output.dat");
  DefineKeyword("bins", "200");
  DefineKeyword("debug", "none");
  // 
