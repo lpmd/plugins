@@ -27,7 +27,7 @@ class DlPolyFormat: public lpmd::CellFormat, public lpmd::Plugin
 
  private:
   long int interval, *stepcnt;
-  int level, pbkey;
+  int level, pbkey, Nconfigs, Natoms;
   std::string ftype;
   bool rcell;
   double dt;
