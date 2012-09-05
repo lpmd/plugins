@@ -10,6 +10,7 @@
 
 #include <iostream>
 #include <string>
+#include <fstream>
 
 using namespace lpmd;
 
@@ -23,10 +24,7 @@ class IndexSelector: public Selector<BasicParticleSet>
     innerps.Clear();
     for (long int i=0;i<ps.Size();++i)
     {
-     for (long int j=0;j<index.Size();++j)
-     {
-      if (i==index[j]) innerps.Append(ps[i]);
-     }
+     if (index.Find(i) != -1) innerps.Append(ps[i]);
     } 
     return innerps;
    }
@@ -36,10 +34,7 @@ class IndexSelector: public Selector<BasicParticleSet>
     innerps.Clear();
     for (long int i=0;i<ps.Size();++i)
     {
-     for (long int j=0;j<index.Size();++j)
-     {
-      if (i!=index[j]) innerps.Append(ps[i]);
-     }
+     if (index.Find(i) == -1) innerps.Append(ps[i]);
     } 
     return innerps;
    }
@@ -58,30 +53,49 @@ IndexFilter::IndexFilter(std::string args): Plugin("index", "1.0"), selector(0)
  DefineKeyword("each", "1");
  DefineKeyword("index","0-1");
  DefineKeyword("except", "");
+ DefineKeyword("file", "");
  // hasta aqui los valores por omision
  ProcessArguments(args);
  start = int(params["start"]);
  end = int(params["end"]);
  each = int(params["each"]);
  std::string tmp = params["index"];
+ file = params["file"];
  except = params["except"];
- size_t found = std::string::npos - 1;
- int ct=-1;
- while(found!=std::string::npos)
+ if(file=="")
  {
-  ct++;
-  found=tmp.find(",");
+  size_t found = std::string::npos - 1;
+  int ct=-1;
+  while(found!=std::string::npos)
+  {
+   ct++;
+   found=tmp.find(",");
+  }
+  if (ct > 0) index = StringSplit(params["index"],',');
+  else if (ct == 0)
+  {
+   Array<std::string> limits = StringSplit(params["index"],'-');
+   if (limits.Size() != 2) throw PluginError("index", "Wrong specification of \"index\" range");
+   for (int i=atoi(limits[0].c_str());i<=atoi(limits[1].c_str());++i)
+       index.Append(ToString<int>(i));
+  }
  }
- if (ct > 0) index = StringSplit(params["index"],',');
- else if (ct == 0)
+ else if(file != "")
  {
-  Array<std::string> limits = StringSplit(params["index"],'-');
-  if (limits.Size() != 2) throw PluginError("index", "Wrong specification of \"index\" range");
-  for (int i=atoi(limits[0].c_str());i<=atoi(limits[1].c_str());++i)
-      index.Append(ToString<int>(i));
+  DebugStream() << "Reading from file = " << file << '\n';
+  std::ifstream inp(file.c_str());
+  if (!inp.good()) throw FileNotFound(file);
+  int idx=0;
+  std::string line;
+  while (!inp.eof())
+  {
+   getline(inp,line);
+   std::stringstream iss(line);
+   double tmp = atof(iss.str().c_str());
+   index.AppendUnique(ToString<double>(tmp));
+  } 
  }
- if (args != "dummyargument") 
-    DebugStream() << "-> Reading " << index.Size() << " indices to filter." << '\n';
+ DebugStream() << "-> Reading " << index.Size() << " indices to filter." << '\n';
 }
 
 IndexFilter::~IndexFilter() { delete selector; }
@@ -102,6 +116,8 @@ void IndexFilter::ShowHelp() const
  std::cout << "                      to be considered. The index of an atom corresponds to the\n";
  std::cout << "                      place in which the atom appears in the input file (the   \n";
  std::cout << "                      first lines will corespond to the atoms 1,2,3,4,etc.).   \n";
+ std::cout << "      file          : If is specified, the index are readed from a file.       \n";
+ std::cout << "                      the index must be in a column.                           \n";
  std::cout << "      start         : Determines in which step the plugin begins to be applied.\n";
  std::cout << "      end           : Determines in which step the plugin ceases to be applied.\n";
  std::cout << "      each          : Determines how often (each how many time-steps) the      \n";

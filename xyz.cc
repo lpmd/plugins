@@ -71,10 +71,12 @@ void XYZFormat::ShowHelp() const
  std::cout << "                      file in order to reallocate all atoms inside (true/false).\n";
  std::cout << "      external      : Sets if atoms outside the simulation cell have to be     \n";
  std::cout << "                      considered or not (ignore/consider).                     \n";
- std::cout << "                      ignore:   all atoms are shown, regardless if they are    \n";
+ std::cout << "                      ignore:   All atoms are shown, regardless if they are    \n";
  std::cout << "                                outside the simulation cell.                   \n";
- std::cout << "                      consider: if some atoms are outside the simulation cell, \n";
+ std::cout << "                      consider: If some atoms are outside the simulation cell, \n";
  std::cout << "                                the program shows a warning and quits.         \n";
+ std::cout << "                      delete:   Eliminate atoms outside the cell after read    \n";
+ std::cout << "                                process.                                       \n";
  std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n";
  std::cout << " Example           >>                                                          \n";
  std::cout << " #Loading the plugin :                                                         \n";
@@ -168,6 +170,7 @@ bool XYZFormat::ReadCell(std::istream & is, Configuration & sc) const
  if (coords == "centered") UnCenter(part,cell);
  if (external != "ignore")
  {
+  int dc=0; //Deleted counter.
   if (inside == "true")
   {
    //Reubica los atomos dentro de la celda.
@@ -183,9 +186,18 @@ bool XYZFormat::ReadCell(std::istream & is, Configuration & sc) const
    {
     if (!cell.IsInside(part[i].Position()))
     {
-     throw PluginError("xyz", "The atom["+ToString<int>(i)+"] was found outside the cell.");
+     if (external == "delete")
+     {
+      part.Delete(i);
+      dc++;
+     }
+     else
+     {
+      throw PluginError("xyz", "The atom["+ToString<int>(i)+"] was found outside the cell.");
+     }
     }
    }
+   if(external == "delete") DebugStream() << "-> Atoms deleted ouside the cell : " << dc << '\n';
   }
  }
  return true;

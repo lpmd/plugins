@@ -17,6 +17,9 @@ DisplaceModifier::DisplaceModifier(std::string args): Plugin("displace", "2.0")
  DefineKeyword("x", "1.0");
  DefineKeyword("y", "0.0");
  DefineKeyword("z", "0.0");
+ DefineKeyword("start", "0");
+ DefineKeyword("end", "-1");
+ DefineKeyword("each", "1");
  // 
  ProcessArguments(args);
  offset = Vector(double(params["x"]), double(params["y"]), double(params["z"]));

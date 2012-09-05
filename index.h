@@ -20,6 +20,7 @@ class IndexFilter: public lpmd::SystemFilter, public lpmd::Plugin
   lpmd::Selector<lpmd::BasicParticleSet> & CreateSelector(); 
 
  private:
+  std::string file;
   lpmd::Array<std::string> index;
   lpmd::Selector<lpmd::BasicParticleSet> * selector;
 };
