@@ -1,0 +1,23 @@
+
+@plugin settag : "The settag plugin sets the value of a given tag"
+@version 2.0
+@author "GNM <gnm.cl>"
+
+@parameter key (tag) as tkey : "The name of the tag to be set"
+@parameter value (boolean) as tvalue : "The boolean value to be assigned (true/false)"
+
+@slot Apply (modifier)
+{
+ Tag * tags = GetArray("tag");
+ if (tvalue)
+ {
+  LogMessage("DEBUG Tagging %ld atoms with tag %d\n", size, tkey);
+  for (long i=0;i<size;++i) SetTag(&tags[i], tkey);
+ }
+ else
+ {
+  LogMessage("DEBUG Untagging %ld atoms of tag %d\n", size, tkey);
+  for (long i=0;i<size;++i) UnsetTag(&tags[i], tkey);
+ }
+}
+

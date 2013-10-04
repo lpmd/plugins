@@ -1,0 +1,72 @@
+
+@plugin testplugin : "This is a test plugin."
+@version 1.0
+@author "GNM <gnm.cl>"
+
+@parameter foo (integer) default 0 : "Foo"
+
+// This is a fragment of a control file used as an example of the 
+// typical usage of the plugin
+@example
+ use testplugin
+     foo 42
+ enduse
+@end
+
+// This is a unit test which will be executed by running 'lpmd -T testplugin'
+@test "Testing the test plugin"
+
+ @beforetest
+   # Initialization code (Python) for the test
+   # should be placed here...
+ @end
+
+ @test
+   # The code (Python) for the test itself
+   # should be placed here...
+ @end
+
+ @aftertest
+   # Clean-up code (Python) to be executed
+   # after the test should be placed here...
+ @end
+
+@end
+
+//
+// The actual slots
+//
+@slot PrintAtoms (reader)
+{
+ Vector * pos = GetArray("pos");
+ for (long i=0;i<size;++i)
+ {
+  // To format a vector as a string, use the VectorFormat() macro
+  printf("Ar  %s\n", VectorFormat("%8.8f  %8.8f  %8.8f", pos[i]));
+ }
+}
+
+@slot Evaluate (reader)
+{
+ // Matrix objects will be used to return physical properties, 
+ // such as gdr or msd
+ // Memory for Matrix objects is dynamically allocated in the 
+ // Matrix "constructor"
+ Matrix mat = Matrix(3, 3);
+ assert (mat.columns == 3);
+ assert (mat.rows == 3);
+ mat[0][0] = 1;
+ mat[0][1] = 2;
+ mat[0][2] = 3;
+ // It is possible to use VectorLoop on a Matrix:
+ VectorLoop { mat[1] = Vector(4,5,6); }
+ mat[2][0] = 7;
+ mat[2][1] = 8;
+ mat[2][2] = 9;
+ mat.label[0] = "A";
+ mat.label[1] = "B";
+ mat.label[2] = "C";
+ return mat;
+ // The temporary Matrix object mat will be garbage-collected at the end
+}
+

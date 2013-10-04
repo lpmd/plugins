@@ -1,0 +1,66 @@
+
+@include pairpotential
+
+// This is the documentation for the plugin
+@plugin buckingham : "The buckingham plugin implements the Buckingham \
+  pair potential. V(r) = B1*exp(-r/rho) - B2/(r^6)"
+
+@author "GNM <gnm.cl>"
+@version 3.0
+
+// These are the parameters recognized by the plugin
+@parameter rho (real) unit angstrom default 1.0 : "Parameter rho"
+@parameter B1 (real) unit eV default 2.0 : "Parameter B1"
+@parameter B2 (real) unit eV*angstrom^6 default 1.0 : "Parameter B2"
+@parameter cutoff (real) unit eV default 8.5 : "Parameter cutoff"
+
+// This is a fragment of a control file used as an example of the 
+// typical usage of the plugin
+@example
+ use buckingham as BK1
+     rho 3.6
+     B1 1.05e-1
+     B2 23.5e-6
+     cutoff 9.0
+ enduse
+ potential Be Ar BK1
+@end
+
+// This is a unit test which will be executed by running 'lpmd -T lennardjones'
+@test "Testing the Buckingham potential"
+
+ @beforetest
+   # Initialization code (Python) for the test
+   # should be placed here...
+ @end
+
+ @test
+   # The code (Python) for the test itself
+   # should be placed here...
+ @end
+
+ @aftertest
+   # Clean-up code (Python) to be executed
+   # after the test should be placed here...
+ @end
+
+@end
+
+@function double PairEnergy (double r)
+{
+ double r6 = pow(sigma/r,6.0e0);
+ double T1 = B1*exp(-r/Ro);
+ double T2 = B2/r6
+ return T1-T2;
+}
+
+@function void PairForce (Vector r, Vector f)
+{
+ double rr = Module(r);
+ double r8 = pow(rr,8);
+ double f6 = 6*B2/r8;
+ double pe = B1*exp(-rr/Ro)/(Ro*rr)
+ double ff = f6 - pe;
+ VectorLoop { f = r*ff; }
+}
+

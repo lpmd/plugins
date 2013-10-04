@@ -1,0 +1,51 @@
+
+// This is the documentation for the plugin
+@plugin temperature : "The temperature plugin evaluates and fixes the temperature of the system."
+
+@parameter t (real) as temp units K : "The temperature to be applied to the system."
+
+@version 3.0
+@author "GNM <gnm@gnm.cl>"
+
+// This is a fragment of a control file used as an example of the 
+// typical usage of the plugin
+@example
+ prepare temperature t=300.0
+@end
+
+@slot Apply (modifier)
+{
+ double vmod = 3.0*KBOLTZMANN*temp/M, ti = 0.0e0;
+ Vector * vel = GetArray("vel");
+ for (long i=0;i<size;i++)
+ {
+  VectorLoop { vel[i] = vmod*(2.0*Random()-1.0); }
+  ti += 0.5*M*SquareModule(vel[i]);
+ }
+ ti *= KIN2EV;
+ ti /= ((3.0/2.0)*KBOLTZMANN*size);
+ double tf = sqrt(temp/ti);
+ ti = 0.0;
+ for (long i=0;i<size;i++)
+ {
+  VectorLoop { vel[i] *= tf; }
+  ti += 0.5*M*SquareModule(vel[i]);
+ }
+ ti *= KIN2EV;
+ ti /= ((3.0/2.0)*KBOLTZMANN*totalsize);
+ return ti;
+}
+
+@slot Evaluate (reader)
+{
+ Vector * vel = GetArray("vel");
+ double ti = 0.0e0;
+ for (long i=0;i<size;i++)
+ {
+  ti += 0.5*M*SquareModule(vel[i]);
+ }
+ ti *= KIN2EV;
+ ti /= ((3.0/2.0)*KBOLTZMANN*totalsize);
+ return ti;
+}
+

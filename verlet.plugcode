@@ -1,0 +1,103 @@
+
+// This is the documentation for the plugin
+@plugin verlet : "The verlet plugin performs the Verlet integration."
+@version 3.0
+@author "GNM <gnm@gnm.cl>"
+
+// These are the parameters recognized by the plugin
+@parameter dt (real) unit fs : "Time step for the integration"
+
+// This is a fragment of a control file used as an example of the 
+// typical usage of the plugin
+@example
+ use verlet
+     dt 0.4
+ enduse
+ integrator verlet
+@end
+
+// This is a unit test which will be executed by running 'lpmd -T verlet'
+@test "Testing Verlet integration"
+
+ @beforetest
+   # Initialization code (Python) for the test
+   # should be placed here...
+   print ('Running this before the test!')
+ @end
+
+ @test
+   # The code (Python) for the test itself
+   # should be placed here...
+   print ('This is the TEST itself!!')
+   assert True
+ @end
+
+ @aftertest
+   # Clean-up code (Python) to be executed
+   # after the test should be placed here...
+   print ('Running this AFTER the test!')
+ @end
+
+@end
+
+// This is a slot. Every plugin must have at least one
+// slot, which is a "method" that LPMD can call. The slots
+// are written in pure C99 but certain special variables and macros
+// are available to facilitate things
+@slot Initialize (modifier)
+{
+ Vector * pos, * vel, * oldpos;
+ GetArrays("pos vel aux0", &pos, &vel, &oldpos);
+// In traditional C99 you should have to write something like:
+// for (long i=0;i<size;++i)
+//  for (int q=0;q<3;++q) oldpos[i*3+q] = pos[i*3+q]-vel[i*3+q]*dt;
+// But now inside a slot you will be able to write:
+ for (long i=0;i<size;++i) 
+ {
+   VectorLoop 
+   { 
+    oldpos[i] = pos[i]-vel[i]*dt; 
+   }
+ }
+// Note that there's no 'q' loop, it is implicit
+// This is not slower than the traditional way (and faster than C++), 
+// because the same C code with double loop as before is automatically generated
+}
+
+// This is another slot.
+@slot Advance (modifier)
+{
+ Vector * pos, * vel, * acc, * oldpos;
+ double kinenerg = 0.0, K = 0.0;
+ Vector P, oldp, newpos, dr, cm; // Equivalent to double P[3], oldp[3], ...
+ GetArrays("pos vel acc aux0", &pos, &vel, &acc, &oldpos);
+ // Multiple instructions inside a VectorLoop are possible, but be
+ // careful with assignments which usually must be performed one loop each
+ VectorLoop { P = 0.0; cm = 0.0; }
+ for (long i=0;i<size;++i)
+ {
+  VectorLoop
+  {
+   // Here for example we can do everything in one VectorLoop,
+   // because there is no mixing of coordinates
+   oldp = oldpos[i];
+   newpos = 2.0*pos[i]-oldpos[i]+acc[i]*dt*dt;
+   oldpos[i] = pos[i];
+   pos[i] = newpos;
+   dr = pos[i]-oldp;
+  }
+  // Distance must be outside VectorLoop
+  Distance(dr, oldp, pos[i]);
+  VectorLoop 
+  {
+   vel[i] = dr/(2.0*dt);
+   P += vel[i];
+  }
+  // SquareModule must also be outside VectorLoop
+  K += 0.5*SquareModule(vel[i]);
+ }
+ VectorLoop { P *= M*KIN2EV; }
+ kinenerg = M*K*KIN2EV;
+ return kinenerg;
+}
+

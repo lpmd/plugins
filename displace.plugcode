@@ -1,0 +1,24 @@
+
+@plugin displace : "The displace plugin applies arbitrary \
+    displacements over the atomic positions"
+@version 3.0
+@author "GNM <gnm.cl>"
+
+// Vector is a valid type for a parameter, it means the control
+// file must supply the parameter as <x, y, z>
+@parameter r (Vector) unit angstrom : "The constant vector to be added to \
+   each atomic position"
+
+@example
+  prepare displace r=<0.1, 0.2, -0.15>
+@end
+
+@slot Apply (modifier)
+{
+ Vector * pos = GetArray("pos");
+ for (long i=0;i<size;++i)
+ { 
+  VectorLoop { pos[i] += r; }
+ }
+}
+

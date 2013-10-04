@@ -1,0 +1,64 @@
+
+@require parameter cutoff
+@require function PairForce
+@require function MBodForce
+@require function PairEnergy
+
+@slot UpdateForces (modifier)
+{
+ long * index;
+ Vector * acc;
+ double pot_energ = 0.0e0;
+ Vector pf, mb, dr;
+ GetArrays("acc index", &acc, &index);
+ //////////////////////////////////////////////////////////////
+ //Load Corrections in the begining of the simulation.       //
+ //Correction apply ONLY for suttonchen and gupta poential.  //
+ //and for HIGHLY HOMOGENEOUS systems.                       //
+ //////////////////////////////////////////////////////////////
+ if(initial==true)
+ {
+  double sinv = 0.0e0;
+  for (int i=0; i<totalsize; ++i)
+  {
+   double rhoi = 0.0e0;
+  }
+ }
+ //////////////////////////////////////////////////////////////
+ //Standard Loop                                             //
+ //////////////////////////////////////////////////////////////
+ for (long k=0;k<neighborlist.size;++k)
+ {
+  double r2 = (neighborlist.pair)[k].r2;
+  VectorLoop { dr = (neighborlist.pair)[k].dr; }
+  const long ia = (neighborlist.pair)[k].index_a;
+  const long ib = (neighborlist.pair)[k].index_b;
+  const long gia = index[ia];
+  const long gib = index[ib];
+  if (fabs(sqrt(r2)) < 0.001)
+  {
+   LogMessage("[Error] particles colliding! r=%8.8f", sqrt(r2));
+   LogMessage("        i=%ld, j=%ld (jlocal=%d)", ia, ib, (neighborlist.pair)[k].jlocal);
+   LogMessage("        gindex_i=%ld, gindex_j=%ld", gia, gib);
+  }
+  PairForce(dr, pf);
+  MBodForce(dr, rhoi, rhoj, mb);
+  if ((neighborlist.pair)[k].jlocal)
+  {
+   VectorLoop
+   {
+    acc[ia] += (pf+mb)*(FORCEFACTOR/M);
+    acc[ib] -= (pf+mb)*(FORCEFACTOR/M);
+   }
+   pot_energ += (PairEnergy(sqrt(r2)));
+  }
+  else
+  {
+   assert (ia < size);
+   VectorLoop { acc[ia] += pf*(FORCEFACTOR/M); }
+   pot_energ += (0.5e0*PairEnergy(sqrt(r2)));
+  }
+ }
+ return pot_energ;
+}
+

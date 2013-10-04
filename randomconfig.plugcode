@@ -1,0 +1,30 @@
+
+@plugin randomconfig : "The randomconfig plugin generates a configuration from random positions inside the cell"
+@version 1.0
+@author "GNM <gnm@gnm.cl>"
+
+@parameter n (integer) : "Number of atoms in the final configuration"
+
+// This is a fragment of a control file used as an example of the 
+// typical usage of the plugin
+@example
+ input randomconfig n=4000
+@end
+
+@slot Generate (modifier)
+{
+ Vector fv, cv;
+ mt_seed();
+ for (long k=0;k<n;k++)
+ {
+  VectorLoop
+  {
+   fv = Vector(Random(), Random(), Random()); // FIXME: RandomVector()?
+  }
+  Cartesian(fv, cv);
+  // As an easier alternative to using Allocate and SetArray, it is
+  // possible to use the macro AddAtom, which internally checks InsideNode()
+  AddAtom("pos index", cv, k);
+ }
+}
+

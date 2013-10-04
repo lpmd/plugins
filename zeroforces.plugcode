@@ -1,0 +1,24 @@
+
+// This is the documentation for the plugin
+@plugin zeroforces : "The zeroforces plugin resets the atomic forces to zero."
+
+@version 1.0
+@author "GNM <gnm@gnm.cl>"
+
+// This is a fragment of a control file used as an example of the 
+// typical usage of the plugin
+@example
+ use zeroforces
+ enduse
+ apply zeroforces
+@end
+
+@slot Apply (modifier)
+{
+ Vector * acc = GetArray("acc");
+ for (long i=0;i<size;i++)
+ {
+  VectorLoop { acc[i] = 0; }
+ }
+}
+

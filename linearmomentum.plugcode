@@ -1,0 +1,44 @@
+
+// This is the documentation for the plugin
+@plugin linearmomentum : "The linearmomentum plugin evaluates and fixes the linear momentum in the system."
+
+@version 1.0
+@author "GNM <gnm@gnm.cl>"
+
+// This is a fragment of a control file used as an example of the 
+// typical usage of the plugin
+@example
+ use linearmomentum
+ enduse
+
+ apply linearmomentum # as modifier
+ property linearmomentum # as property
+@end
+
+@slot Apply (modifier)
+{
+ Vector P;
+ Vector * vel = GetArray("vel");
+ VectorLoop { P = 0.0e0; }
+ for (long i=0;i<size;i++)
+ {
+  VectorLoop { P += M*vel[i]; }
+ }
+ for (long i=0;i<size;i++)
+ {
+  VectorLoop { vel[i] -= P/(M*size); }
+ }
+}
+
+@slot Evaluate (reader)
+{
+ Vector P;
+ Vector * vel = GetArray("vel");
+ VectorLoop { P = 0.0e0; }
+ for (long i=0;i<size;i++)
+ {
+  VectorLoop { P += M*vel[i]; }
+ }
+ return P;
+}
+

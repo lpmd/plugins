@@ -1,0 +1,54 @@
+
+@plugin minimumimage : "The minimumimage plugin implements the minimum image convention."
+@version 3.0
+@author "GNM <gnm.cl>"
+
+@parameter cutoff (real) unit angstrom : "Cutoff radius for the neighbor lists calculation"
+
+@slot UpdateCell (reader) 
+{ 
+
+}
+
+@slot BuildNeighborsList (reader)
+{
+ Vector * pos;
+ long * index;
+ GetArrays("pos index", &pos, &index);
+ long k = 0;
+ int maxneigh = 120;
+ AtomPair * nlist = Allocate(AtomPair, extsize*maxneigh);
+ Vector dr;
+ // Es sucio hacer una macro con variables "tomadas"
+ // de un ambito superior pero a falta de closures...
+ @macro SetNeighborPair(islocal)
+ {
+  assert (k < extsize*maxneigh);
+  nlist[k].r2 = r2;
+  VectorLoop { nlist[k].dr = dr; }
+  nlist[k].index_a = i;
+  nlist[k].index_b = j;
+  nlist[k].gindex_a = index[i]; // Global indices
+  nlist[k].gindex_b = index[j]; // Global indices
+  nlist[k].jlocal = islocal;
+  k++;
+ }
+ for (long i=0;i<size;++i)
+ {
+  for (long j=i+1;j<size;++j)
+  {
+   double r2 = Distance(dr, pos[i], pos[j]);
+   if (r2 < cutoff*cutoff) SetNeighborPair(1);
+  }
+ }
+ for (long i=0;i<size;++i)
+ {
+  for (long j=size;j<extsize;++j)
+  {
+   double r2 = Distance(dr, pos[i], pos[j]);
+   if (r2 < cutoff*cutoff) SetNeighborPair(0);
+  }
+ }
+ return NeighborList(nlist, k);
+}
+

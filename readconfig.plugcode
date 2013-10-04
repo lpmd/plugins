@@ -1,0 +1,14 @@
+
+#@require parameter filename
+@require function ReadHeader
+@require function ReadCell
+
+@slot Generate (modifier)
+{
+  if (masternode) fileptr = fopen(filename, "r");
+  //Header deberia leer los TAG
+  ReadHeader(filename.c_str());
+  //Lectura de la celda, numero de atomos, shape, y atomos.
+  ReadCell(filename.c_str());
+}
+

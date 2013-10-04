@@ -1,0 +1,73 @@
+
+// This is the documentation for the plugin
+@plugin index : "The index plugin performs filtering according to \
+  atomic indices."
+
+@version 2.0
+@author "GNM <gnm@gnm.cl>"
+
+// These are the parameters recognized by the plugin
+@parameter from (integer) as lower : "Starting index of the selection"
+@parameter to (integer) as upper   : "Ending index of the selection"
+
+// This is a fragment of a control file used as an example of the 
+// typical usage of the plugin
+@example
+ use index as bullet
+     from 0
+     to 99
+ enduse
+ apply some_tag over bullet
+@end
+
+// This is a unit test which will be executed by running 'lpmd -T index'
+@test "Testing filtering by index"
+
+ @beforetest
+   # Initialization code (Python) for the test
+   # should be placed here...
+ @end
+
+ @test
+   # The code (Python) for the test itself
+   # should be placed here...
+ @end
+
+ @aftertest
+   # Clean-up code (Python) to be executed
+   # after the test should be placed here...
+ @end
+
+@end
+
+// This is a slot. Every plugin must have at least one
+// slot, which is a "method" that LPMD can call. The slots
+// are written in pure C99 but certain special variables and macros
+// are available to facilitate things
+@slot Select (reader)
+{
+ // The GetArray macro is preferred if only 
+ // one array is to be initialized 
+ long * indices = GetArray("index");
+ // The GetArrays macro should be used to 
+ // initialize many arrays at once
+ // long * indices; Vector * pos; GetArrays("index pos", &indices, &pos);
+ 
+ // We should not use malloc and realloc directly, only Allocate
+ // The library itself will take care of deallocating, or one could
+ // call Deallocate(ptr) directly in certain cases
+ long * selection = Allocate(long, (upper-lower+1));
+ long s = 0;
+ // size is not declared, it is defined magically by LPMD to be the local size
+ // lower and upper are automatically declared and initialized with the values of 
+ // the parameters 'from' and 'to', respectively (note the "as" declaration)
+ for (long i=0;i<size;++i)
+ {
+  if ((indices[i] >= lower) && (indices[i] <= upper)) selection[s++] = i;
+ }
+ // Values for the task are returned as any other value in a C function
+ // but there will be some "constructors" for special types like AtomSelection,
+ // Matrix and NeighborList 
+ return AtomSelection(selection, s);
+}
+

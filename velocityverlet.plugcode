@@ -1,0 +1,73 @@
+
+// This is the documentation for the plugin
+@plugin velocityverlet : "The velocityverlet plugin performs the Velocity Verlet integration."
+@version 3.0
+@author "GNM <gnm@gnm.cl>"
+
+// These are the parameters recognized by the plugin
+@parameter dt (real) unit fs : "Time step for the integration"
+
+// This is a fragment of a control file used as an example of the 
+// typical usage of the plugin
+@example
+ use velocityverlet
+     dt 0.4
+ enduse
+ integrator velocityverlet
+@end
+
+// This is a unit test which will be executed by running 'lpmd -T verlet'
+@test "Testing Velocity Verlet integration"
+
+ @beforetest
+   # Initialization code (Python) for the test
+   # should be placed here...
+ @end
+
+ @test
+   # The code (Python) for the test itself
+   # should be placed here...
+ @end
+
+ @aftertest
+   # Clean-up code (Python) to be executed
+   # after the test should be placed here...
+ @end
+
+@end
+
+@slot AdvancePositions (modifier)
+{
+ Vector * pos, * vel, * acc, * acc0;
+ GetArrays("pos vel acc aux0", &pos, &vel, &acc, &acc0);
+ for (long i=0;i<size;++i)
+ {
+  VectorLoop
+  {
+   pos[i] += (vel[i]*dt+0.5*acc[i]*dt*dt);
+   acc0[i] = acc[i];
+  }
+ }
+}
+
+@slot AdvanceVelocities (modifier)
+{
+ double kinenerg = 0.0, K = 0.0;
+ Vector P;
+ Vector * vel, * acc, * acc0;
+ GetArrays("vel acc aux0", &vel, &acc, &acc0);
+ VectorLoop { P = 0.0e0; }
+ for (long i=0;i<size;++i)
+ {
+  VectorLoop
+  { 
+   vel[i] += 0.5*(acc0[i]+acc[i])*dt;
+   P += vel[i];
+  }
+  K += 0.5*SquareModule(vel[i]);
+ }
+ VectorLoop { P *= M*KIN2EV; }
+ kinenerg = M*K*KIN2EV;
+ return kinenerg;
+}
+

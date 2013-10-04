@@ -1,0 +1,180 @@
+
+@plugin linkedcell : "The linkedcell plugin implements the link-cell algorithm \
+   for calculating neighbor lists."
+@version 3.0
+@author "GNM <gnm.cl>"
+@parameter nx (integer) : "Number of grid elements along the X axis"
+@parameter ny (integer) : "Number of grid elements along the Y axis"
+@parameter nz (integer) : "Number of grid elements along the Z axis"
+@parameter cutoff (real) unit angstrom : "Cutoff radius for the neighbor lists"
+
+@global cells_inside (integer)
+@global kmax (integer)
+@global lcmin, lcbox (Vector)
+
+@global head (integer buffer)
+@global tail (integer buffer)
+@global atomlist (integer buffer)
+@global subcell (integer buffer)
+@global nlist (AtomPair buffer)
+
+@define WrapAround(i, n) = ((i >= n) ? (i % n) : ( (i < 0) ? ( ((-i % n) != 0) ? (n - (-i % n)) : 0 ) : i))
+@define unmedio = 0.5
+
+@example
+ use linkedcell
+     nx 15
+     ny 15
+     nz 15
+     cutoff 8.5
+ enduse
+ cellmanager linkedcell
+@end
+
+@slot Initialize(reader, private)
+{
+ Vector cell_min, cell_max;
+ double ext = 0.0e0;
+ if (nodes > 4) ext = 0.6*cutoff;                 // FIXME: This is black magic... :P
+ else if (nodes >= 2) ext = unmedio*cutoff;
+ Cell_GetLocalCell(aset, cell, cell_min, cell_max);
+ VectorLoop 
+ { 
+  lcbox = 2.0*ext+cell_max-cell_min;
+  lcmin = cell_min-ext;
+ }
+ lcbox[2] = cell_max[2]-cell_min[2];
+ lcmin[2] = cell_min[2];
+ double d = lcbox[0]/nx;
+ if (lcbox[1]/ny < d) d = lcbox[1]/ny;
+ if (lcbox[2]/nz < d) d = lcbox[2]/nz;
+ int side = (int)(ceil((cutoff/d)-unmedio));
+ if (side < 3) side = 3;
+ cells_inside = (2*side+1)*(2*side+1)*(2*side+1);
+ if (masternode)
+    fprintf(stderr, "Linkedcell using d=%f, ext=%8.8f, side=%d, neighboring cells=%ld\n", d, ext, side, cells_inside);
+ subcell = Allocate(long, nx*ny*nz*cells_inside, subcell);
+ int z[3];
+ for (int k=0;k<nz;++k)
+ {
+  for (int j=0;j<ny;++j)
+  {
+   for (int i=0;i<nx;++i)
+   {
+    int r = 0;
+    long q = k*(nx*ny)+j*nx+i;
+    for (int dz=-side;dz<=side;++dz)
+    {
+     for (int dy=-side;dy<=side;++dy)
+     {
+      for (int dx=-side;dx<=side;++dx)
+      {
+       z[0] = WrapAround(i+dx, nx);
+       z[1] = WrapAround(j+dy, ny);
+       z[2] = WrapAround(k+dz, nz);
+       long p = z[2]*(nx*ny)+z[1]*nx+z[0];
+       assert ((p >= 0) && (p < nx*ny*nz));
+       assert ((q*cells_inside+r >= 0) && (q*cells_inside+r < nx*ny*nz*cells_inside));
+       subcell[q*cells_inside+(r++)] = p;
+      }
+     }
+    }
+   }
+  }
+ }
+ head = Allocate(long, nx*ny*nz, head);
+ tail = Allocate(long, nx*ny*nz, tail);
+}
+
+@slot UpdateCell (reader)
+{
+ if (!head) 
+ {
+  kmax = (size*1.5)*50;                            // FIXME: Maximo de vecinos por atomo = 50
+  if (!nlist) nlist = Allocate(AtomPair, kmax+1);
+  Initialize();
+ }
+ Vector * pos = GetArray("pos");
+ atomlist = Allocate(long, extsize, atomlist);
+ for (long r=0;r<extsize;++r) atomlist[r] = -1;
+ for (long q=0;q<nx*ny*nz;++q) head[q] = tail[q] = -1;
+ for (long r=0;r<extsize;++r)
+ {
+  Vector fpos;
+  VectorLoop
+  {
+   fpos = (pos[r]-lcmin)/lcbox;
+   if (fpos < 0.0) fpos += 1.0;
+   else if (fpos >= 1.0) fpos -= 1.0;
+  }
+  Vector nv;
+  int iv[3];
+  VectorLoop { nv = Vector(nx, ny, nz); }
+  for (int qq=0;qq<3;++qq)
+  {
+   iv[qq] = WrapAround((int)(floor(nv[qq]*fpos[qq])), (int)(nv[qq]));
+  }
+  long q = iv[2]*(nx*ny)+iv[1]*nx+iv[0];
+  assert ((q >= 0) && (q < nx*ny*nz));
+  if (head[q] == -1) head[q] = tail[q] = r;
+  else
+  {
+   atomlist[tail[q]] = r;
+   tail[q] = r;
+  }
+  atomlist[r] = -1;
+ }
+}
+
+@slot BuildNeighborsList (reader)
+{
+ Vector * pos;
+ long * index;
+ GetArrays("pos index", &pos, &index);
+ long k = 0;
+ for (long i=0;i<size;++i)
+ {
+  Vector dr, fpos, nv;
+  int iv[3];
+  VectorLoop { nv = Vector(nx, ny, nz); }
+  VectorLoop { fpos = (pos[i]-lcmin)/lcbox; }
+  for (int qq=0;qq<3;++qq)
+  { 
+   iv[qq] = WrapAround((int)(floor(nv[qq]*fpos[qq])), (int)(nv[qq]));
+  }
+  long cind = iv[2]*(nx*ny)+iv[1]*nx+iv[0];
+  assert ((cind >= 0) && (cind < nx*ny*nz));
+  for (int c=0;c<cells_inside;++c)
+  {
+   assert (cind*cells_inside+c < nx*ny*nz*cells_inside);
+   int neighbor_cell = subcell[cind*cells_inside+c];
+   assert ((neighbor_cell >= 0) && (neighbor_cell < nx*ny*nz));
+   for (long j=head[neighbor_cell];j != -1;j=atomlist[j])
+   {
+    double r2 = Distance(dr, pos[i], pos[j]);
+    // Es sucio hacer una macro con variables "tomadas"
+    // de un ambito superior pero a falta de closures...
+    @macro SetNeighborPair(islocal)
+    {
+     assert (k < (kmax+1));
+     nlist[k].r2 = r2;
+     VectorLoop { nlist[k].dr = dr; }
+     nlist[k].index_a = i;
+     nlist[k].index_b = j;
+     nlist[k].gindex_a = index[i]; // Global indices
+     nlist[k].gindex_b = index[j]; // Global indices
+     nlist[k].jlocal = islocal;
+     k++;
+    }
+    if (j < size) // local atoms
+    {
+     if (j <= i) continue;
+     if (r2 < cutoff*cutoff) SetNeighborPair(1);
+    }
+    else if (r2 < cutoff*cutoff) SetNeighborPair(0);
+   }
+  }
+ }
+ return NeighborList(nlist, k);
+}
+
