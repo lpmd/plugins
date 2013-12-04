@@ -4,7 +4,7 @@
 
 name = lpmd-plugins
 fullname = 'LPMD plugins'
-version = 0.6.3
+version = 0.6.4
 author = 'GNM <gnm@gnm.cl>'
 prefix = /usr/local
 
@@ -12,7 +12,7 @@ language c++
 ifdef intel
    compiler = icpc
    linker = icpc
-   flags =-g -Wall -O3 -axSSE4.1 -parallel -diag-disable remark -finline-functions -DNDEBUG  -fPIC -lpthread -lguide
+   flags =-Wall -O3 -axSSE4.1 -parallel -diag-disable remark -finline-functions -DNDEBUG  -fPIC -lpthread -lguide
    ifdef openmp
     openmpflags = -openmp
    endif
@@ -505,6 +505,13 @@ directory .
        pkgconfig += liblpmd-2.0
     end
 
+    module searchfill.so
+       language = c++
+       sources = searchfill.cc
+       installpath = lib/lpmd
+       pkgconfig += liblpmd-2.0
+    end
+
     module setcolor.so
        language = c++
        sources = setcolor.cc
@@ -578,6 +585,13 @@ directory .
     module tag.so
        language = c++
        sources = tag.cc
+       installpath = lib/lpmd
+       pkgconfig += liblpmd-2.0
+    end
+
+    module tagsurface.so
+       language = c++
+       sources = tagsurface.cc
        installpath = lib/lpmd
        pkgconfig += liblpmd-2.0
     end

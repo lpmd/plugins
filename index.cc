@@ -64,15 +64,17 @@ IndexFilter::IndexFilter(std::string args): Plugin("index", "1.0"), selector(0)
  except = params["except"];
  if(file=="")
  {
-  size_t found = std::string::npos - 1;
+  size_t found = 0;
   int ct=-1;
-  while(found!=std::string::npos)
+  while((found = tmp.find(",",found,found+1))!=std::string::npos)
   {
    ct++;
-   found=tmp.find(",");
   }
-  if (ct > 0) index = StringSplit(params["index"],',');
-  else if (ct == 0)
+  if (ct >= 0) 
+  {
+   index = StringSplit(params["index"],',');
+  }
+  else
   {
    Array<std::string> limits = StringSplit(params["index"],'-');
    if (limits.Size() != 2) throw PluginError("index", "Wrong specification of \"index\" range");
@@ -92,7 +94,7 @@ IndexFilter::IndexFilter(std::string args): Plugin("index", "1.0"), selector(0)
    getline(inp,line);
    std::stringstream iss(line);
    double tmp = atof(iss.str().c_str());
-   index.AppendUnique(ToString<double>(tmp));
+   if (line!="") index.AppendUnique(ToString<double>(tmp));
   } 
  }
  DebugStream() << "-> Reading " << index.Size() << " indices to filter." << '\n';

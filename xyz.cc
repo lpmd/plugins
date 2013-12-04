@@ -167,7 +167,10 @@ bool XYZFormat::ReadCell(std::istream & is, Configuration & sc) const
   }
   for (long i=0;i<natoms;++i) part[i].Position() += (geocenter-(cm/totalmass));
  }
- if (coords == "centered") UnCenter(part,cell);
+ Vector cntrd(0.5,0.5,0.5);
+ Vector cntrdXY(0.5,0.5,0.0);
+ if (coords == "centered") UnCenter(part,cell,cntrd);
+ if (coords == "centeredXY") UnCenter(part,cell,cntrdXY);
  if (external != "ignore")
  {
   int dc=0; //Deleted counter.
