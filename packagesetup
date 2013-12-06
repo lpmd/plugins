@@ -88,6 +88,14 @@ directory .
        version = 1.0.0
     end
 
+    module crystal.so
+       language = plugcode
+       sources = crystal.plugcode
+       installpath = lib/lpmd
+       pkgconfig += liblpmd-3.0
+       version = 1.0.0
+    end
+
     module displace.so
        language = plugcode
        sources = displace.plugcode

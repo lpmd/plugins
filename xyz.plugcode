@@ -47,7 +47,7 @@
  {
   char * symbol=NULL; double X=0.0e0,Y=0.0e0,Z=0.0e0;
   fscanf(fileptr, "%s %lf %lf %lf", symbol, &X, &Y, &Z);
-  AddAtom("sym pos index", symbol, Vector(X, Y, Z), i);  
+  AddAtom("sym pos index", 25, Vector(X, Y, Z), i);  
  }
 }
 
