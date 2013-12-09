@@ -40,14 +40,16 @@
 @slot Generate (modifier)
 {
  fileptr = fopen(filename,"r");
- int N=0;char * title=NULL;
+ int N=0; char tmp[100];
  fscanf(fileptr, "%i", &N);
- fscanf(fileptr, "%s", title);
+ fscanf(fileptr, "%s", tmp); //FIXME Problem without a tile.
  for(int i=0; i<N ; ++i)
  {
-  char * symbol=NULL; double X=0.0e0,Y=0.0e0,Z=0.0e0;
-  fscanf(fileptr, "%s %lf %lf %lf", symbol, &X, &Y, &Z);
-  AddAtom("sym pos index", 25, Vector(X, Y, Z), i);  
+  double X=0.0e0,Y=0.0e0,Z=0.0e0;
+  fscanf(fileptr, "%s %lf %lf %lf", tmp, &X, &Y, &Z);
+  AddAtom("sym pos index", 0, Vector(X, Y, Z), i);
+//  ParseTagKeyword("Cu", 1);
+//  SetTag("symbol", 29);
  }
 }
 
