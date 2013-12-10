@@ -1,5 +1,6 @@
 
-@plugin fcc : "The fcc plugin generates a face centered cubic (FCC) crystal cell"
+@plugin crystal : "The crystal plugin generates a crystalline stuctre of the type\n
+                   fcc, bcc, hcp, or single cubic."
 @author "GNM <gnm.cl>"
 @version 3.0
 
@@ -7,18 +8,19 @@
 @parameter ny (integer) : "Number of repetitions along the Y axis"
 @parameter nz (integer) : "Number of repetitions along the Z axis"
 @parameter a (real) unit angstrom : "Lattice parameter"
-@parameter type (string) : "Type of crystalline structure."
+@parameter type (string) : "Type of crystalline structure. Allowed types are bcc, fcc, sc, and hcp."
 
 // This is a fragment of a control file used as an example of the 
 // typical usage of the plugin
 @example
  input fcc a=5.260 nx=7 ny=7 nz=7
+ input bcc a=4.320 nx=5 ny=5 nz=8
 @end
 
 @slot Generate (modifier)
 {
  long cind = 0;
- if (strcmp(type,"fcc")==0 || strcmp(type,"FCC")==0)
+ if (strcmp(type,"fcc")==0 || strcmp(type,"FCC")==0)//TODO:Check why not at origin.
  {
   for (int k=0;k<nz;k++)
   {
