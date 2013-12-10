@@ -27,6 +27,8 @@
  //////////////////////////////////////////////////////////////
  //Standard Loop                                             //
  //////////////////////////////////////////////////////////////
+ //FIXME The full neighbor list must be used in some specific loops
+ //      at metallic systems.
  for (long k=0;k<neighborlist.size;++k)
  {
   double r2 = (neighborlist.pair)[k].r2;
