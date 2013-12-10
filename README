@@ -1,11 +1,73 @@
 
-lpmd-plugins
-============
+lpmd-plugins package
+====================
+====================
 
-Is the source folder of the availables plugins distributed with
+Thise package provide the source files of a plugin set, distributed with
 the lpmd package.
 
-Documentation, guidelines, manuals and more information is also
+The plugins are fundamental to use in simulations of molecular dynamics as 
+well in analysis of results. For more information about how lpmd is divided
+and why, visit the website http://www.lpmd.cl/modularity
+
+The plugins packages are divided in ten main categories :
+
+1) In/Out
+2) Cell Generators
+3) Cell Managers
+4) Filters
+5) Modifiers
+6) Visualizers
+7) Potentials
+8) Integrators
+9) Temporal Properties
+10) Instantaneous Properties
+
+In/Out
+------
+
+These are the plugins that control the load of external file load and save process. 
+For example xyz, lpmd, pdb, etc.
+
+Cell Generators
+---------------
+
+These plugins build structures from a set of specific instruction. An example of these 
+are crystal (to build fcc, bcc, hcp, and sc structures), voronoi, etc.
+
+Cell Managers
+-------------
+
+Cell Managers are an specific set of plugins that can control how the simulation cell 
+is divided during the execution of lpmd. Examples of these plugins are minimumimage, 
+linkedcell, binarycell, etc.
+
+Filters
+-------
+
+Filters are a set of plugins that allow us to 'filter' a specific set of atoms. The
+highlight use is mainly during analysis process. Some examples of these plugins are
+box, etc.
+
+Modifiers
+---------
+
+This plugins allow us to modify the simulation cell during the execution. It is
+possible modify not only atoms but cell structure also. Examples of these plugins are
+.
+
+Visualizers
+-----------
+Potentials
+----------
+Integrators
+-----------
+Temporal Properties
+-------------------
+Instantaneous Properties
+------------------------
+
+Documentation, guidelines, manuals and more information is fully
 available in 
 
 http://www.lpmd.cl

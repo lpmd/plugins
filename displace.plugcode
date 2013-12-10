@@ -1,8 +1,8 @@
-
 @plugin displace : "The displace plugin applies arbitrary \
-    displacements over the atomic positions"
+   displacements over the atomic positions."
+
 @version 3.0
-@author "GNM <gnm.cl>"
+@author "Sergio Davis <sdavis@gnm.cl>"
 
 // Vector is a valid type for a parameter, it means the control
 // file must supply the parameter as <x, y, z>

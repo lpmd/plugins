@@ -72,6 +72,14 @@ directory .
        version = 1.0.0
     end
 
+    module beeman.so
+       language = plugcode
+       sources = beeman.plugcode
+       instsallpath = lib/lpmd
+       pkgconfig += liblpmd-3.0
+       version = 1.0.0
+    end
+
     module buckingham.so
        language = plugcode
        sources = buckingham.plugcode
@@ -99,14 +107,6 @@ directory .
     module displace.so
        language = plugcode
        sources = displace.plugcode
-       installpath = lib/lpmd
-       pkgconfig += liblpmd-3.0
-       version = 1.0.0
-    end
-
-    module fcc.so
-       language = plugcode
-       sources = fcc.plugcode
        installpath = lib/lpmd
        pkgconfig += liblpmd-3.0
        version = 1.0.0
