@@ -331,6 +331,19 @@ directory .
        libraries += -lz
     end
 
+    ifdef lpvisual
+     module lpvisual.so
+        language = c++
+        sources = display.cc lpvisual.cc
+        installpath = lib/lpmd
+        pkgconfig += liblpmd-2.0
+        libraries += -lm -lGL -lGLU -lglut -lX11
+        ifdef ati
+         libraries += -L/usr/lib/fglrx
+        endif
+     end
+    endif
+
     module mcy.so
        language = c++
        sources = mcy.cc
