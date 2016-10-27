@@ -273,6 +273,14 @@ directory .
        pkgconfig += liblpmd-2.0
     end
 
+    module lammps.so
+       language = c++
+       sources = lammps.cc
+       installpath = lib/lpmd
+       pkgconfig += liblpmd-2.0
+       libraries += -lz
+    end
+
     module lcbinary.so
        language = c++
        sources = lcbinary.cc
