@@ -168,6 +168,13 @@ directory .
        pkgconfig += liblpmd-2.0
     end
 
+    module drbeeman.so
+       language = c++
+       sources = drbeeman.cc
+       installpath = lib/lpmd
+       pkgconfig += liblpmd-2.0
+    end
+
     module density.so
        language = c++
        sources = density.cc
