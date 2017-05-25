@@ -114,16 +114,31 @@ void CordNumFunc::Evaluate(lpmd::Configuration & con, Potential & pot)
   int ne1=0;
   for (unsigned long int j=0;j<N;j++) {if (atoms[j].Z()==e1) ne1++;}
   //Comienzan las iteraciones.
+  double nr2;
   for (unsigned long int j=0;j<N;j++)
   {
    if(atoms[j].Z()==e1)
    {
     lpmd::NeighborList & nlist = con.Neighbors(j,true,rcut);
+    std::cout << " nlist.Size() = " << nlist.Size() << '\n';
+    std::cout << " atoms[j].ID() = " << atoms[j].ID() << '\n';
+
+    std::cout << "(" ;
     for(long int k=0;k<nlist.Size();++k)
     {
      const lpmd::AtomPair & nn = nlist[k];
+     std::cout << nn.j->ID() << "-";
+    }
+    std::cout << ")\n";
+   
+    for(long int k=0;k<nlist.Size();++k)
+    {
+     const lpmd::AtomPair & nn = nlist[k];
+     std::cout << "<<nn.j->ID()-" << nn.j->ID() << ">> ";
      if(nn.j->Z()==e2)
      {
+      nr2 = nn.r2;
+      std::cout << "\nnr2 = " << nn.r2 << "id " << nn.j->ID() << '\n';
       if(nn.r2<rcut*rcut)
       {
        int in=(long)floor(sqrt(nn.r2)/dr);
@@ -131,13 +146,20 @@ void CordNumFunc::Evaluate(lpmd::Configuration & con, Potential & pot)
       }
      }
     }
+    std::cout << "\ndr = " << dr << '\n';
+    std::cout << "e1 = " << e1 << " e2 = " << e2 << '\n';
+    std::cout << "atomo " << j << " have " << '\n';
+    for(int p=0;p<nb;++p)
+    {
+	    std::cout<<"histo[" << s << "][" << p << "] = " << histo [s][p] << '\n';
+    }
    }
   }
   for(int k=0;k<nb;++k)
   {
    for(int j=0;j<k;j++)
    {
-    cnfun[s][k]+=(histo[s][j]/ne1);
+    cnfun[s][k]+=(histo[s][j]/(ne1));
    }
   }
   s++;
