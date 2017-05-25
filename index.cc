@@ -119,7 +119,7 @@ void IndexFilter::ShowHelp() const
  std::cout << "                      place in which the atom appears in the input file (the   \n";
  std::cout << "                      first lines will corespond to the atoms 1,2,3,4,etc.).   \n";
  std::cout << "      file          : If is specified, the index are readed from a file.       \n";
- std::cout << "                      the index must be in a column.                           \n";
+ std::cout << "                      the index must be in a single column.                    \n";
  std::cout << "      start         : Determines in which step the plugin begins to be applied.\n";
  std::cout << "      end           : Determines in which step the plugin ceases to be applied.\n";
  std::cout << "      each          : Determines how often (each how many time-steps) the      \n";

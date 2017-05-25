@@ -13,6 +13,12 @@ using namespace lpmd;
 
 QuenchedMDModifier::QuenchedMDModifier(std::string args): Plugin("quenchedmd", "2.0")
 {
+ ParamList & params=(*this);
+ //
+ DefineKeyword("start", "0");
+ DefineKeyword("end", "-1");
+ DefineKeyword("each", "1");
+
  ProcessArguments(args);
  start = int((*this)["start"]);
  end = int((*this)["end"]);
