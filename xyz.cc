@@ -24,6 +24,7 @@ XYZFormat::XYZFormat(std::string args): Plugin("xyz", "2.0")
  DefineKeyword("zerocm", "false");
  DefineKeyword("external", "consider");
  DefineKeyword("replacecell", "false");
+ DefineKeyword("precout", "8");
  // hasta aqui los valores por omision
  ProcessArguments(args);
  readfile = writefile = params["file"];
@@ -34,6 +35,7 @@ XYZFormat::XYZFormat(std::string args): Plugin("xyz", "2.0")
  external = params["external"];
  rcell = params["replacecell"];
  zerocm = params["zerocm"];
+ precout = int(params["precout"]);
 }
 
 XYZFormat::~XYZFormat() { delete linecounter; }
@@ -250,15 +252,15 @@ void XYZFormat::WriteCell(std::ostream & out, Configuration & sc) const
  out << '\n';
  if (level == 0)
  {
-  for(long int i=0;i<part.Size();i++) out << part[i].Symbol() << " " << part[i].Position() << std::endl;
+  for(long int i=0;i<part.Size();i++) out << part[i].Symbol() << std::fixed << std::setprecision(precout) << " " << part[i].Position() << std::endl;
  }
  else if (level == 1)
  {
-  for (long int i=0;i<part.Size();i++) out << part[i].Symbol() << " " << part[i].Position() << " " << part[i].Velocity() << std::endl;
+  for (long int i=0;i<part.Size();i++) out << part[i].Symbol() << std::fixed << std::setprecision(precout) << " " << part[i].Position() << " " << part[i].Velocity() << std::endl;
  }
  else if (level == 2)
  {
-  for (long int i=0;i<part.Size();i++) out << part[i].Symbol() << " " << part[i].Position() << " " << part[i].Velocity() << " " << part[i].Acceleration() << std::endl;
+  for (long int i=0;i<part.Size();i++) out << part[i].Symbol() << std::fixed << std::setprecision(precout) << " " << part[i].Position() << " " << part[i].Velocity() << " " << part[i].Acceleration() << std::endl;
  }
 }
 

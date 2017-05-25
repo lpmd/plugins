@@ -9,6 +9,8 @@
 #include <lpmd/plugin.h>
 #include <lpmd/simulation.h>
 
+#include <iomanip>
+
 class XYZFormat: public lpmd::CellFormat, public lpmd::Plugin
 {
  public:
@@ -32,6 +34,7 @@ class XYZFormat: public lpmd::CellFormat, public lpmd::Plugin
   bool rcell;
   std::string coords, inside;
   std::string external, zerocm;
+  long int precout;
 };
 
 #endif
