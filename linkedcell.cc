@@ -201,7 +201,7 @@ void LinkedCell::UpdateCell(Configuration & conf)
   double d = cell[0].Module()/double(nx);
   if (cell[1].Module()/double(ny) < d) d = cell[1].Module()/double(ny);
   if (cell[2].Module()/double(nz) < d) d = cell[2].Module()/double(nz);
-  int side = int(ceil((cutoff/d)-0.5));
+  int side = int(ceil((cutoff/d)-1.0));
   cells_inside = (2*side+1)*(2*side+1)*(2*side+1);
   DebugStream() << "-> Using " << cells_inside << " neighboring subcells\n";
   subcell = new int[(nx*ny*nz)*cells_inside];
@@ -229,29 +229,7 @@ void LinkedCell::UpdateCell(Configuration & conf)
  for (long q=0;q<nx*ny*nz;++q) head[q] = tail[q] = -1;
  for (long r=0;r<atoms.Size();++r)
  {
-	 UpdateAtom(conf, r);
-	 /*
-  full_list_half[r].Clear();
-  full_list_full[r].Clear();
-  const Vector fpos = cell.Fractional(atoms[r].Position());
-  //
-  int i = WrapAround(int(floor(nx*fpos[0])), nx);
-  int j = WrapAround(int(floor(ny*fpos[1])), ny);
-  int k = WrapAround(int(floor(nz*fpos[2])), nz);
-  long q = k*(nx*ny)+j*nx+i;
-  indexc[r] = ( ((q >= 0) && (q < nx*ny*nz)) ? q : -1 );
-  q = indexc[r];
-  if (q >= 0)
-  {
-   if (head[q] == -1) head[q] = tail[q] = r;
-   else 
-   {
-    atomlist[tail[q]] = r;
-    tail[q] = r;   
-   }
-  }
-  atomlist[r] = -1;
-  */
+  UpdateAtom(conf, r);
  }
 }
 
