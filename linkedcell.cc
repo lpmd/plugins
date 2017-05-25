@@ -145,7 +145,7 @@ void LinkedCell::UpdateCell(Configuration & conf)
   double minx = cell[0].Module();
   double miny = cell[1].Module();
   double minz = cell[2].Module();
-  double fnn = (cutoff/2.5); //NOTE : Approximated value.
+  double fnn = (cutoff/2.0); //NOTE : Approximated value.
   int n = 1;
   while(true)
   {
