@@ -110,6 +110,15 @@ void LinkedCell::UpdateCell(Configuration & conf)
 {
  BasicParticleSet & atoms = conf.Atoms();
  BasicCell & cell = conf.Cell();
+ //IMPORTANT WARNING MESSAGES IN LINKEDCELL USE
+ double Lmin = cell[0].Module();
+ if (Lmin > cell[1].Module()) Lmin = cell[1].Module();
+ if (Lmin > cell[2].Module()) Lmin = cell[2].Module();
+ if (cutoff > Lmin/2.0)
+ {
+  ShowWarning("linkedcell", "Is using a cutoff larger than half the cell size="+ToString(Lmin/2.0)+" please consider to replicate the cell (or reduce the cutoff) before do this analysis or simulation.\n");
+  return;
+ }
  if (atoms.Size() != last_atoms_size) 
  {
   if (indexc != 0) delete [] indexc;
@@ -265,6 +274,7 @@ void LinkedCell::BuildNeighborList(Configuration & conf, long i, NeighborList & 
  BasicCell & cell = conf.Cell();
  nlist.Clear();
  long cind = indexc[i];
+ //IMPORTANT WARNING MESSAGES IN THE USE OF LINKEDCELL
  if (cind < 0)
  { 
   // atom was marked as outside the box
