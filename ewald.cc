@@ -70,6 +70,9 @@ void Ewald::BuildKPointMesh(Configuration & conf)
  K[1] = (2*M_PI/(Dot(R[1],Cross(R[2],R[0]))))*Cross(R[2],R[0]);
  K[2] = (2*M_PI/(Dot(R[2],Cross(R[0],R[1]))))*Cross(R[0],R[1]);
  kpoints = new std::vector<Vector>;
+ std::cerr << "alpha = " << alpha << '\n';
+ std::cerr << "rcut = " << rcut << '\n';
+ std::cerr << "kcut = " << kcut << '\n';
  int nrep = kmax;
  for (int pp=0;pp<=nrep;++pp)
   for (int qq=(pp == 0 ? 0 : -nrep);qq<=nrep;++qq)
@@ -90,38 +93,37 @@ void Ewald::BuildKPointMesh(Configuration & conf)
 void Ewald::RealSpace(Configuration & conf, double & e)
 {
  BasicParticleSet & atoms = conf.Atoms();
- double ep, e0;
+ double ep;//, e0;
  const double Q2a2EV = GlobalSession["q2a2ev"];
  const double Q2a2FORCE = GlobalSession["q2a2force"];
 
- e0 = 1.1/Q2a2EV;
+// e0 = 1.1/Q2a2EV;
  ep = 0.0;
-#ifdef _OPENMP
-#pragma omp parallel for reduction ( +: ep )
-#endif 
+//#ifdef _OPENMP
+//#pragma omp parallel for reduction ( +: ep )
+//#endif 
  for (long int i=0;i<atoms.Size();++i)
  {
   NeighborList nlist;
   conf.GetCellManager().BuildNeighborList(conf, i, nlist, false, rcut);
+  const double qi = atoms[i].Charge();
   for (long int j=0;j<nlist.Size();++j)
   {
    AtomPair & nn = nlist[j];
    if (nn.r2 < rcut*rcut)
    {
-    const double qi = atoms[i].Charge();
     const double qj = nn.j->Charge();
     double rmod = sqrt(nn.r2);
     Vector ff;
     ep += qi*qj*erfc(alpha*rmod)/rmod;
-    ff = (nn.rij)*(1.0/rmod);
-    ff = ff*qi*qj*(erfc(alpha*rmod)/rmod + 2.0*(alpha/sqrt(M_PI))*exp(-alpha*alpha*rmod*rmod));
-    ff = ff*(-1.0/rmod);
+    ff = (nn.rij)*(1.0/(rmod*rmod));
+    ff = -1.0*ff*qi*qj*(erfc(alpha*rmod)/rmod + 2.0*(alpha/sqrt(M_PI))*exp(-alpha*alpha*rmod*rmod));
     atoms[i].Acceleration() += ff*(Q2a2FORCE/atoms[i].Mass());
     nn.j->Acceleration() -= ff*(Q2a2FORCE/nn.j->Mass());
    }
   }
  }
- e0 = ep;
+ //e0 = ep;
  e = ep*Q2a2EV;
 }
 
@@ -133,9 +135,10 @@ void Ewald::ReciprocalSpace(Configuration & conf, double & e)
  const double Q2a2FORCE = GlobalSession["q2a2force"];
  double ep = 0.0;
  if (kpoints == NULL) BuildKPointMesh(conf);
-#ifdef _OPENMP
-#pragma omp parallel for
-#endif
+ //BuildKPointMesh(conf);
+//#ifdef _OPENMP
+//#pragma omp parallel for
+//#endif
  for (unsigned int nk=0;nk<kpoints->size();++nk)
  {
   const Vector & k = (*kpoints)[nk];
@@ -204,7 +207,7 @@ double Ewald::energy(Configuration & conf)
  throw PluginError("ewald", "This shouldn\'t happen");
 }
 
-double AtomEnergy(lpmd::Configuration & conf, long i)
+double Ewald::AtomEnergy(lpmd::Configuration & conf, long i)
 {
  ShowWarning("ewald", "Potential::AtomEnergy not defined (yet) for ewald");
  return 0.0;
